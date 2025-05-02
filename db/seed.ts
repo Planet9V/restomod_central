@@ -1,5 +1,6 @@
 import { db } from "./index";
 import * as schema from "@shared/schema";
+import { eq } from "drizzle-orm";
 
 async function seed() {
   try {
@@ -7,15 +8,104 @@ async function seed() {
     
     // Hero content
     console.log("Creating hero content...");
-    await db.insert(schema.heroContent).values({
-      title: "Engineering Meets Artistry",
-      subtitle: "Meticulously crafted restomods that combine precision engineering with concourse-level aesthetics. The perfect fusion of classic soul and modern performance.",
-      imageUrl: "https://images.unsplash.com/photo-1611566026373-c6c8da0945b8?q=80&w=2000&auto=format&fit=crop"
-    });
+    const existingHero = await db.query.heroContent.findFirst();
+    if (!existingHero) {
+      await db.insert(schema.heroContent).values({
+        title: "Engineering Meets Artistry",
+        subtitle: "Meticulously crafted restomods that combine precision engineering with concourse-level aesthetics. The perfect fusion of classic soul and modern performance.",
+        imageUrl: "https://images.unsplash.com/photo-1611566026373-c6c8da0945b8?q=80&w=2000&auto=format&fit=crop"
+      });
+    }
 
     // Projects
     console.log("Creating projects...");
-    await db.insert(schema.projects).values([
+    
+    // Check for F100 project
+    const f100Project = await db.query.projects.findFirst({
+      where: eq(schema.projects.slug, "1953-ford-f100")
+    });
+    
+    if (!f100Project) {
+      console.log("Adding 1953 Ford F100 project...");
+      await db.insert(schema.projects).values({
+        title: "1953 Ford F100",
+        subtitle: "Iconic American Pickup Reborn with Modern Performance & Luxury",
+        slug: "1953-ford-f100",
+        description: "Our 1953 Ford F100 restomod masterfully blends the iconic styling of this legendary American truck with state-of-the-art engineering and premium craftsmanship. Every detail has been meticulously reimagined to create a one-of-a-kind vehicle that honors its heritage while delivering modern performance and luxury.",
+        category: "trucks-4x4s",
+        imageUrl: "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=1600&auto=format&fit=crop",
+        galleryImages: [
+          "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=1600&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1531086623190-a3bd615e55b5?q=80&w=1600&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1596649299486-4cdea56fd59d?q=80&w=1600&auto=format&fit=crop"
+        ],
+        specs: {
+          performance: "Ford 5.0L Coyote V8, 460 HP",
+          transmission: "6-Speed Automatic",
+          suspension: "Fat Man Fabrications Mustang II Front, 4-Link Rear",
+          buildTime: "3,200 Hours",
+          brakes: "4-Wheel Disc with Power Assist",
+          wheels: "20-inch Billet Specialties Custom"
+        },
+        features: [
+          "Custom chassis with modern coilover suspension",
+          "Power rack-and-pinion steering",
+          "Vintage Air climate control system",
+          "Premium leather interior with modern appointments",
+          "Custom bed with polished wood planking",
+          "Hidden modern audio system with smartphone integration",
+          "LED lighting with period-correct appearance"
+        ],
+        clientQuote: "This F100 is everything I dreamed of - pure American classic styling with modern driving characteristics. It's a masterpiece that turns heads everywhere it goes.",
+        clientName: "Thomas Richardson",
+        clientLocation: "Austin, Texas",
+        featured: true
+      });
+      
+      // Update the other featured project to non-featured
+      await db.update(schema.projects)
+        .set({ featured: false })
+        .where(eq(schema.projects.slug, "1967-mustang-fastback"));
+    }
+    
+    // Add additional seed data if needed
+    const existingProjects = await db.query.projects.findMany();
+    if (existingProjects.length === 0) {
+      await db.insert(schema.projects).values([
+      {
+        title: "1953 Ford F100",
+        subtitle: "Iconic American Pickup Reborn with Modern Performance & Luxury",
+        slug: "1953-ford-f100",
+        description: "Our 1953 Ford F100 restomod masterfully blends the iconic styling of this legendary American truck with state-of-the-art engineering and premium craftsmanship. Every detail has been meticulously reimagined to create a one-of-a-kind vehicle that honors its heritage while delivering modern performance and luxury.",
+        category: "trucks-4x4s",
+        imageUrl: "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=1600&auto=format&fit=crop",
+        galleryImages: [
+          "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=1600&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1531086623190-a3bd615e55b5?q=80&w=1600&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1596649299486-4cdea56fd59d?q=80&w=1600&auto=format&fit=crop"
+        ],
+        specs: {
+          performance: "Ford 5.0L Coyote V8, 460 HP",
+          transmission: "6-Speed Automatic",
+          suspension: "Fat Man Fabrications Mustang II Front, 4-Link Rear",
+          buildTime: "3,200 Hours",
+          brakes: "4-Wheel Disc with Power Assist",
+          wheels: "20-inch Billet Specialties Custom"
+        },
+        features: [
+          "Custom chassis with modern coilover suspension",
+          "Power rack-and-pinion steering",
+          "Vintage Air climate control system",
+          "Premium leather interior with modern appointments",
+          "Custom bed with polished wood planking",
+          "Hidden modern audio system with smartphone integration",
+          "LED lighting with period-correct appearance"
+        ],
+        clientQuote: "This F100 is everything I dreamed of - pure American classic styling with modern driving characteristics. It's a masterpiece that turns heads everywhere it goes.",
+        clientName: "Thomas Richardson",
+        clientLocation: "Austin, Texas",
+        featured: true
+      },
       {
         title: "1967 Mustang Fastback",
         subtitle: "The perfect blend of iconic styling with contemporary performance and comfort.",
@@ -47,7 +137,7 @@ async function seed() {
         clientQuote: "The attention to detail and engineering excellence exceeded all expectations. It's the perfect blend of classic style and modern performance.",
         clientName: "Robert Maxwell",
         clientLocation: "Portland, Oregon",
-        featured: true
+        featured: false
       },
       {
         title: "1969 Chevrolet Camaro",
@@ -281,10 +371,13 @@ async function seed() {
         featured: false
       }
     ]);
+    }
 
     // Testimonials
     console.log("Creating testimonials...");
-    await db.insert(schema.testimonials).values([
+    const existingTestimonials = await db.query.testimonials.findMany();
+    if (existingTestimonials.length === 0) {
+      await db.insert(schema.testimonials).values([
       {
         quote: "The attention to detail and engineering excellence that McKenney & Skinny's put into my '67 Mustang exceeded all expectations. It's the perfect blend of classic style and modern performance.",
         authorName: "Robert Maxwell",
@@ -307,7 +400,9 @@ async function seed() {
 
     // Team members
     console.log("Creating team members...");
-    await db.insert(schema.teamMembers).values([
+    const existingTeamMembers = await db.query.teamMembers.findMany();
+    if (existingTeamMembers.length === 0) {
+      await db.insert(schema.teamMembers).values([
       {
         name: "James McKenney",
         position: "Founder & Engineering Director",
@@ -337,10 +432,13 @@ async function seed() {
         order: 4
       }
     ]);
+    }
 
     // Companies
     console.log("Creating companies...");
-    await db.insert(schema.companies).values([
+    const existingCompanies = await db.query.companies.findMany();
+    if (existingCompanies.length === 0) {
+      await db.insert(schema.companies).values([
       {
         name: "McKenney Engineering & Design",
         description: [
@@ -360,10 +458,13 @@ async function seed() {
         order: 2
       }
     ]);
+    }
 
     // Engineering features
     console.log("Creating engineering features...");
-    await db.insert(schema.engineeringFeatures).values([
+    const existingFeatures = await db.query.engineeringFeatures.findMany();
+    if (existingFeatures.length === 0) {
+      await db.insert(schema.engineeringFeatures).values([
       {
         title: "Engineering Excellence",
         description: "Advanced chassis design, systems integration, and performance optimization using cutting-edge tools and methodologies. Every vehicle is virtually prototyped before fabrication begins.",
@@ -383,10 +484,13 @@ async function seed() {
         order: 3
       }
     ]);
+    }
 
     // Process steps
     console.log("Creating process steps...");
-    await db.insert(schema.processSteps).values([
+    const existingSteps = await db.query.processSteps.findMany();
+    if (existingSteps.length === 0) {
+      await db.insert(schema.processSteps).values([
       {
         title: "Initial Consultation & Vision",
         description: "We begin with in-depth discussions about your dream vehicle. What inspires you? What level of performance do you desire? How will you use the vehicle? This crucial phase sets the foundation for our design approach.",
@@ -416,10 +520,13 @@ async function seed() {
         order: 4
       }
     ]);
+    }
 
     // Market data
     console.log("Creating market data...");
-    await db.insert(schema.marketData).values({
+    const existingMarketData = await db.query.marketData.findFirst();
+    if (!existingMarketData) {
+      await db.insert(schema.marketData).values({
       marketGrowthData: [
         { year: 2018, value: 100 },
         { year: 2019, value: 115 },
@@ -450,10 +557,10 @@ async function seed() {
       ],
       roi: "+42%"
     });
+    }
 
     console.log("Database seeding completed successfully!");
-  }
-  catch (error) {
+  } catch (error) {
     console.error("Error seeding database:", error);
   }
 }
