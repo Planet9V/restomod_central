@@ -3,13 +3,28 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { type Project } from "@shared/schema";
 
-interface FeaturedProjectData extends Omit<Project, 'createdAt'> {
+// Define the interface without extending Project to avoid type conflicts
+interface FeaturedProjectData {
+  id: number;
+  title: string;
+  subtitle: string;
+  slug: string;
+  description: string;
+  category: string;
+  imageUrl: string;
+  galleryImages: string[];
+  specs: Record<string, string>;
+  features: string[];
+  clientQuote?: string | null;
+  clientName?: string | null;
+  clientLocation?: string | null;
+  historicalInfo?: Record<string, string> | null;
+  featured: boolean;
+  createdAt: string | Date;
   award?: {
     title: string;
     subtitle: string;
   };
-  historicalInfo?: Record<string, string>;
-  createdAt: string | Date;
 }
 
 const FeaturedProject = () => {
@@ -100,6 +115,8 @@ const FeaturedProject = () => {
             <div className="mb-8 reveal">
               <h3 className="text-2xl font-medium mb-2 font-playfair">{project.title}</h3>
               <p className="text-charcoal/80 mb-4">{project.subtitle}</p>
+              
+              {/* Technical specifications */}
               <div className="grid grid-cols-2 gap-6 mb-6">
                 {Object.entries(project.specs).map(([key, value], index) => (
                   <div key={index}>
@@ -110,6 +127,21 @@ const FeaturedProject = () => {
                   </div>
                 ))}
               </div>
+              
+              {/* Historical information section */}
+              {project.historicalInfo && (
+                <div className="mt-6 p-4 bg-charcoal/5 rounded-sm">
+                  <h4 className="text-sm uppercase font-medium mb-3 text-burgundy tracking-wider">Historical Significance</h4>
+                  <div className="space-y-2 text-sm">
+                    {Object.entries(project.historicalInfo).map(([key, value], index) => (
+                      <div key={index} className="pb-2 last:pb-0">
+                        <span className="block font-medium capitalize mb-1">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                        <p className="text-charcoal/80">{value}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
             <Link href={`/projects/${project.slug}`} className="inline-flex items-center text-burgundy hover:text-burgundy/80 font-medium reveal">
                 View Project Details

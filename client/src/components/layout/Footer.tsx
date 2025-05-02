@@ -75,10 +75,8 @@ const Footer = () => {
               <ul className="space-y-3 text-offwhite/70">
                 {section.links.map((link) => (
                   <li key={link.name}>
-                    <Link href={link.href}>
-                      <a className="hover:text-gold transition-colors duration-200">
-                        {link.name}
-                      </a>
+                    <Link href={link.href} className="hover:text-gold transition-colors duration-200">
+                      {link.name}
                     </Link>
                   </li>
                 ))}
