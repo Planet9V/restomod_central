@@ -4,6 +4,7 @@ import * as storage from "./storage";
 import { z } from "zod";
 import { contactSubmissionsInsertSchema } from "@shared/schema";
 import * as aiApi from "./api/ai";
+import * as researchApi from "./api/research";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // API routes prefix
@@ -172,6 +173,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // AI configurator recommendation
   app.post(`${apiPrefix}/ai/configurator-recommendation`, aiApi.getConfiguratorRecommendation);
+
+  // AI research endpoints
+  app.get(`${apiPrefix}/research/vehicle`, researchApi.getVehicleResearch);
+  app.get(`${apiPrefix}/research/part`, researchApi.getPartResearch);
 
   const httpServer = createServer(app);
   return httpServer;
