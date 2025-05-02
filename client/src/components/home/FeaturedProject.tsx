@@ -12,10 +12,14 @@ interface FeaturedProjectData extends Omit<Project, 'createdAt'> {
 }
 
 const FeaturedProject = () => {
-  const { data: featuredProject, isLoading } = useQuery<FeaturedProjectData>({
+  const { data: featuredProject, isLoading, error } = useQuery<FeaturedProjectData>({
     queryKey: ['/api/projects/featured'],
     staleTime: Infinity,
   });
+  
+  console.log('Featured project data:', featuredProject);
+  console.log('Loading state:', isLoading);
+  console.log('Error:', error);
 
   // Initialize reveal animation on scroll
   useEffect(() => {
