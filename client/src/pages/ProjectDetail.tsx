@@ -3,12 +3,29 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Check } from "lucide-react";
 import { useEffect } from "react";
+import { type Project } from "@shared/schema";
+
+interface ProjectDetailData extends Partial<Project> {
+  title: string;
+  subtitle: string;
+  description: string;
+  imageUrl: string;
+  galleryImages: string[];
+  specs: Record<string, string>;
+  features: string[];
+  historicalInfo?: Record<string, string>;
+  client?: {
+    quote: string;
+    name: string;
+    location: string;
+  };
+}
 
 const ProjectDetail = () => {
   const { id } = useParams();
   const [_, navigate] = useLocation();
 
-  const { data: project, isLoading, isError } = useQuery({
+  const { data: project, isLoading, isError } = useQuery<ProjectDetailData>({
     queryKey: [`/api/projects/${id}`],
     staleTime: Infinity,
   });
@@ -50,7 +67,7 @@ const ProjectDetail = () => {
   }
 
   // Fallback data if API doesn't return
-  const projectData = project || {
+  const projectData: ProjectDetailData = project || {
     title: "1967 Mustang Fastback",
     subtitle: "The perfect blend of iconic styling with contemporary performance and comfort.",
     description: "This 1967 Mustang Fastback represents the pinnacle of our engineering-meets-artistry approach. Every aspect of this vehicle has been meticulously reimagined while preserving the soul and character of the original design.",
@@ -76,6 +93,14 @@ const ProjectDetail = () => {
       "Power steering and brakes",
       "LED lighting with original appearance",
     ],
+    historicalInfo: {
+      significance: "The 1967 Mustang Fastback is one of the most iconic American muscle cars ever produced. It represents the evolution of the original pony car into a true performance vehicle.",
+      originalSpecs: "Originally equipped with engines ranging from a 200 cubic-inch inline-six to the powerful 390 cubic-inch V8 producing 320 horsepower. The car featured a four-speed manual or three-speed automatic transmission.",
+      designElements: "The fastback roofline introduced in 1965 became an instant classic, creating one of the most recognizable profiles in automotive history. The design has influenced countless vehicles since its introduction.",
+      productionNumbers: "Ford produced approximately 472,000 Mustangs in 1967, with about 71,000 being fastback models.",
+      collectibility: "Due to their starring role in films like 'Bullitt' and 'Gone in 60 Seconds,' pristine 1967 Fastbacks can fetch $100,000-$150,000 at auction, with exceptionally rare or historically significant examples commanding even higher prices.",
+      culturalImpact: "The 1967 Mustang Fastback helped cement the Mustang's place in American car culture and has become a symbol of 1960s automotive design excellence."
+    },
     client: {
       quote: "The attention to detail and engineering excellence exceeded all expectations. It's the perfect blend of classic style and modern performance.",
       name: "Robert Maxwell",
@@ -126,7 +151,7 @@ const ProjectDetail = () => {
 
             <h3 className="font-playfair text-2xl font-medium mb-4">Specifications</h3>
             <div className="grid grid-cols-2 gap-6 mb-8">
-              {Object.entries(projectData.specs).map(([key, value]) => (
+              {Object.entries(projectData.specs).map(([key, value]: [string, string]) => (
                 <div key={key}>
                   <h4 className="text-sm uppercase tracking-wider text-charcoal/60 mb-1">
                     {key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}
@@ -138,7 +163,7 @@ const ProjectDetail = () => {
 
             <h3 className="font-playfair text-2xl font-medium mb-4">Features</h3>
             <ul className="space-y-2 mb-8">
-              {projectData.features.map((feature, index) => (
+              {projectData.features.map((feature: string, index: number) => (
                 <li key={index} className="flex items-start">
                   <Check className="h-5 w-5 text-burgundy mr-2 mt-0.5 flex-shrink-0" />
                   <span>{feature}</span>
@@ -146,6 +171,24 @@ const ProjectDetail = () => {
               ))}
             </ul>
 
+            {/* Historical Information Section */}
+            {projectData.historicalInfo && Object.keys(projectData.historicalInfo).length > 0 && (
+              <div className="my-8">
+                <h3 className="font-playfair text-2xl font-medium mb-4">Historical Significance</h3>
+                <div className="border-l-4 border-burgundy pl-4 space-y-4 mb-8">
+                  {Object.entries(projectData.historicalInfo).map(([key, value]: [string, string], index: number) => (
+                    <div key={index}>
+                      <h4 className="font-medium text-lg capitalize">
+                        {key.replace(/([A-Z])/g, ' $1').trim()}
+                      </h4>
+                      <p className="text-charcoal/80">{value}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Client Testimonial */}
             {projectData.client && (
               <div className="bg-charcoal p-6 rounded-sm text-white mt-8">
                 <svg
@@ -165,7 +208,7 @@ const ProjectDetail = () => {
           </div>
 
           <div className="space-y-6 reveal">
-            {projectData.galleryImages.map((image, index) => (
+            {projectData.galleryImages.map((image: string, index: number) => (
               <img
                 key={index}
                 src={image}
