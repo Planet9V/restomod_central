@@ -1,9 +1,18 @@
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { type Project } from "@shared/schema";
+
+interface FeaturedProjectData extends Omit<Project, 'createdAt'> {
+  award?: {
+    title: string;
+    subtitle: string;
+  };
+  createdAt: string | Date;
+}
 
 const FeaturedProject = () => {
-  const { data: featuredProject, isLoading } = useQuery({
+  const { data: featuredProject, isLoading } = useQuery<FeaturedProjectData>({
     queryKey: ['/api/projects/featured'],
     staleTime: Infinity,
   });
@@ -37,21 +46,36 @@ const FeaturedProject = () => {
 
   // Fallback data if API doesn't return
   const project = featuredProject || {
+    id: 0,
     title: "1967 Mustang Fastback",
     subtitle: "The perfect blend of iconic styling with contemporary performance and comfort.",
+    slug: "1967-mustang-fastback",
+    description: "This 1967 Mustang Fastback represents the pinnacle of our engineering-meets-artistry approach.",
+    category: "american-muscle",
     imageUrl: "https://images.unsplash.com/photo-1588127333419-b9d7de223dcf?q=80&w=1600&auto=format&fit=crop",
-    specs: [
-      { label: "Performance", value: "435 HP Coyote V8" },
-      { label: "Transmission", value: "6-Speed Manual" },
-      { label: "Suspension", value: "Custom Engineered IRS" },
-      { label: "Build Time", value: "2,400 Hours" }
+    galleryImages: [
+      "https://images.unsplash.com/photo-1588127333419-b9d7de223dcf?q=80&w=1600&auto=format&fit=crop",
     ],
+    specs: {
+      performance: "435 HP Coyote V8",
+      transmission: "6-Speed Manual",
+      suspension: "Custom Engineered IRS",
+      buildTime: "2,400 Hours"
+    },
+    features: [
+      "Modern fuel injection system with custom ECU tuning",
+      "Climate control system with vintage-look controls"
+    ],
+    featured: true,
+    createdAt: new Date().toISOString(),
+    clientQuote: "The attention to detail is amazing.",
+    clientName: "John Smith",
+    clientLocation: "Austin, TX",
     award: {
       title: "2023 Grand National Roadster Show",
       subtitle: "Best in Class Award Winner"
-    },
-    slug: "1967-mustang-fastback"
-  };
+    }
+  } as FeaturedProjectData;
 
   return (
     <section id="featured" className="py-24 bg-offwhite text-charcoal overflow-hidden">
@@ -65,18 +89,17 @@ const FeaturedProject = () => {
               <h3 className="text-2xl font-medium mb-2 font-playfair">{project.title}</h3>
               <p className="text-charcoal/80 mb-4">{project.subtitle}</p>
               <div className="grid grid-cols-2 gap-6 mb-6">
-                {project.specs.map((spec, index) => (
+                {Object.entries(project.specs).map(([key, value], index) => (
                   <div key={index}>
                     <h4 className="text-sm uppercase tracking-wider text-charcoal/60 mb-1">
-                      {spec.label}
+                      {key}
                     </h4>
-                    <p className="font-medium">{spec.value}</p>
+                    <p className="font-medium">{value}</p>
                   </div>
                 ))}
               </div>
             </div>
-            <Link href={`/projects/${project.slug}`}>
-              <a className="inline-flex items-center text-burgundy hover:text-burgundy/80 font-medium reveal">
+            <Link href={`/projects/${project.slug}`} className="inline-flex items-center text-burgundy hover:text-burgundy/80 font-medium reveal">
                 View Project Details
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -90,7 +113,6 @@ const FeaturedProject = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-              </a>
             </Link>
           </div>
           <div className="lg:w-1/2 reveal">

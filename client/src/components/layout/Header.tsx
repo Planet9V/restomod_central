@@ -28,27 +28,21 @@ const Header = () => {
     >
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
         <div className="flex items-center">
-          <Link href="/">
-            <a className="flex items-center space-x-2">
-              <span className="text-2xl font-playfair font-bold tracking-tight">
-                McKenney <span className="text-gold">&</span> Skinny's
-              </span>
-            </a>
+          <Link href="/" className="flex items-center space-x-2">
+            <span className="text-2xl font-playfair font-bold tracking-tight">
+              McKenney <span className="text-gold">&</span> Skinny's
+            </span>
           </Link>
         </div>
         
         <div className="hidden md:flex items-center space-x-8 text-sm font-medium tracking-wide uppercase">
           {NAV_LINKS.map((link) => (
-            <Link key={link.href} href={link.href}>
-              <a className="hover:text-gold transition-colors duration-200">
-                {link.name}
-              </a>
+            <Link key={link.href} href={link.href} className="hover:text-gold transition-colors duration-200">
+              {link.name}
             </Link>
           ))}
-          <Link href="#contact">
-            <a className="bg-burgundy hover:bg-opacity-90 transition-all duration-200 px-6 py-3 rounded-sm">
-              Consultation
-            </a>
+          <Link href="#contact" className="bg-burgundy hover:bg-opacity-90 transition-all duration-200 px-6 py-3 rounded-sm">
+            Consultation
           </Link>
         </div>
         
@@ -81,22 +75,21 @@ const Header = () => {
         }`}
       >
         {NAV_LINKS.map((link) => (
-          <Link key={link.href} href={link.href}>
-            <a
-              className="block py-3 text-sm font-medium tracking-wide uppercase hover:text-gold transition-colors duration-200"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              {link.name}
-            </a>
-          </Link>
-        ))}
-        <Link href="#contact">
-          <a
+          <Link 
+            key={link.href} 
+            href={link.href}
             className="block py-3 text-sm font-medium tracking-wide uppercase hover:text-gold transition-colors duration-200"
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            Consultation
-          </a>
+            {link.name}
+          </Link>
+        ))}
+        <Link 
+          href="#contact"
+          className="block py-3 text-sm font-medium tracking-wide uppercase hover:text-gold transition-colors duration-200"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          Consultation
         </Link>
       </div>
     </header>
