@@ -33,6 +33,7 @@ export const projects = pgTable("projects", {
   clientQuote: text("client_quote"),
   clientName: text("client_name"),
   clientLocation: text("client_location"),
+  historicalInfo: jsonb("historical_info").$type<Record<string, string>>(),
   featured: boolean("featured").default(false),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });

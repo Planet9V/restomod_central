@@ -4,11 +4,12 @@ import { PROJECT_CATEGORIES } from "@/lib/constants";
 import SectionHeading from "@/components/ui/section-heading";
 import ProjectCard from "@/components/ui/project-card";
 import { Link } from "wouter";
+import { type Project } from "@shared/schema";
 
 const ProjectGallery = () => {
   const [activeCategory, setActiveCategory] = useState("all");
 
-  const { data: projects, isLoading } = useQuery({
+  const { data: projects, isLoading } = useQuery<Project[]>({
     queryKey: ['/api/projects'],
     staleTime: Infinity,
   });
@@ -16,7 +17,7 @@ const ProjectGallery = () => {
   // Filter projects by category
   const filteredProjects = activeCategory === 'all'
     ? projects
-    : projects?.filter(project => project.category === activeCategory);
+    : projects?.filter((project: Project) => project.category === activeCategory);
 
   return (
     <section id="projects" className="py-24 bg-offwhite text-charcoal">
@@ -49,10 +50,10 @@ const ProjectGallery = () => {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 reveal">
             {/* Fallback to empty array if API call fails */}
-            {(filteredProjects || []).map((project) => (
+            {(filteredProjects || []).map((project: Project) => (
               <ProjectCard
                 key={project.id}
-                id={project.id}
+                id={String(project.id)}
                 title={project.title}
                 subtitle={project.subtitle}
                 imageUrl={project.imageUrl}
@@ -111,10 +112,8 @@ const ProjectGallery = () => {
         )}
         
         <div className="text-center mt-12 reveal">
-          <Link href="/projects">
-            <a className="inline-block border border-charcoal text-charcoal hover:bg-charcoal hover:text-white transition-colors duration-200 px-8 py-4 text-sm uppercase tracking-wider font-medium">
-              View All Projects
-            </a>
+          <Link href="/projects" className="inline-block border border-charcoal text-charcoal hover:bg-charcoal hover:text-white transition-colors duration-200 px-8 py-4 text-sm uppercase tracking-wider font-medium">
+            View All Projects
           </Link>
         </div>
       </div>

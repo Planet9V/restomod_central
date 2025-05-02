@@ -8,6 +8,7 @@ interface FeaturedProjectData extends Omit<Project, 'createdAt'> {
     title: string;
     subtitle: string;
   };
+  historicalInfo?: Record<string, string>;
   createdAt: string | Date;
 }
 
@@ -78,6 +79,13 @@ const FeaturedProject = () => {
     award: {
       title: "2023 Grand National Roadster Show",
       subtitle: "Best in Class Award Winner"
+    },
+    historicalInfo: {
+      significance: "The 1967 Mustang Fastback is one of the most iconic American muscle cars ever produced",
+      originalSpecs: "Originally equipped with a range of engine options including the 289 V8",
+      designElements: "The fastback roofline defined the late 60s muscle car aesthetic",
+      productionNumbers: "Over 75,000 fastback models were produced in 1967",
+      collectability: "Pristine examples can fetch over $100,000 at auction"
     }
   } as FeaturedProjectData;
 
