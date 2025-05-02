@@ -1,129 +1,143 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
+import dotenv from 'dotenv';
 
-// Helper function to make research requests to Perplexity API
+dotenv.config();
+
+interface PerplexityRequestMessages {
+  role: "system" | "user" | "assistant";
+  content: string;
+}
+
+interface PerplexityRequest {
+  model: string;
+  messages: PerplexityRequestMessages[];
+  temperature?: number;
+  max_tokens?: number;
+  top_p?: number;
+  stream?: boolean;
+  frequency_penalty?: number;
+  presence_penalty?: number;
+}
+
 async function getPerplexityResearch(query: string, type: 'vehicle' | 'part'): Promise<any> {
-  try {
-    const apiKey = process.env.PERPLEXITY_API_KEY;
-    if (!apiKey) {
-      throw new Error('PERPLEXITY_API_KEY environment variable is not set');
-    }
+  const PERPLEXITY_API_KEY = process.env.PERPLEXITY_API_KEY;
+  
+  if (!PERPLEXITY_API_KEY) {
+    throw new Error('PERPLEXITY_API_KEY is not defined in the environment variables');
+  }
 
-    // Set up a system prompt based on the query type
-    let systemPrompt = "";
-    
-    if (type === 'vehicle') {
-      systemPrompt = "You are an automotive research expert specializing in classic cars and restomods. Find high-quality, authentic images of the specific classic car model being requested. Return only publicly available, high-resolution images from legitimate sources (auction sites, car magazines, restoration shops). Include accurate information about the specific model, notable features, and what makes this particular classic car special. Format the response as a JSON object with 'images' array (at least 5 image URLs) and 'details' object (year, make, model, bodyStyle, keyFeatures, historyHighlights, valueRange).";
-    } else {
-      systemPrompt = "You are an automotive parts specialist for classic car restoration and restomodding. Find high-quality, authentic images of the specific car part being requested. Return only publicly available, high-resolution images from legitimate sources (parts vendors, restoration shops, car manufacturers). Include accurate specifications, compatibility information, and quality considerations. Format the response as a JSON object with 'images' array (at least 3 image URLs) and 'specs' object (dimensions, material, fitment, manufacturerInfo, priceRange, qualityNotes).";
-    }
+  const promptInstructions = type === 'vehicle' 
+    ? `You are a classic car expert helping with a restomod project. Provide detailed information about the following vehicle: ${query}.
+
+Return a JSON object with the following structure:
+{
+  "details": {key factual details about the vehicle, including years produced, original engine, horsepower, etc},
+  "images": [array of URLs to high-quality, authentic images of the vehicle - include at least 6 image URLs, ensure they're high-resolution, no mockups or AI-generated images]
+}`
+    : `You are a classic car parts expert helping with a restomod project. Provide detailed information about the following part: ${query}.
+
+Return a JSON object with the following structure:
+{
+  "specs": {key factual specifications about this part},
+  "images": [array of URLs to high-quality, authentic images of the part - include at least 6 image URLs, ensure they're high-resolution real photographs, no mockups or AI-generated images]
+}`;
+
+  try {
+    const messages: PerplexityRequestMessages[] = [
+      {
+        role: "system",
+        content: "You are an expert in classic car restoration and engine swaps. Only respond with valid JSON. Include many high-quality authentic image URLs from the web. Never fabricate or generate images."
+      },
+      {
+        role: "user",
+        content: promptInstructions
+      }
+    ];
+
+    const perplexityRequest: PerplexityRequest = {
+      model: "llama-3.1-sonar-small-128k-online",
+      messages,
+      temperature: 0.1, // Low temperature for factual responses
+      max_tokens: 2000,
+      top_p: 0.9,
+      stream: false,
+      frequency_penalty: 0,
+      presence_penalty: 0
+    };
 
     const response = await fetch('https://api.perplexity.ai/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${PERPLEXITY_API_KEY}`
       },
-      body: JSON.stringify({
-        model: "llama-3.1-sonar-small-128k-online",
-        messages: [
-          {
-            role: "system",
-            content: systemPrompt
-          },
-          {
-            role: "user",
-            content: query
-          }
-        ],
-        temperature: 0.2,
-        top_p: 0.9,
-        search_domain_filter: ["perplexity.ai"],
-        return_images: false,
-        return_related_questions: false,
-        search_recency_filter: "month",
-        top_k: 0,
-        stream: false,
-        presence_penalty: 0,
-        frequency_penalty: 1
-      })
+      body: JSON.stringify(perplexityRequest)
     });
 
     if (!response.ok) {
-      throw new Error(`Perplexity API request failed with status: ${response.status}`);
+      const errorData = await response.text();
+      console.error('Perplexity API error:', errorData);
+      throw new Error(`Perplexity API request failed with status ${response.status}: ${errorData}`);
     }
 
     const data = await response.json();
-    const content = data.choices[0].message.content;
     
-    // Extract the JSON from the response content
+    // Parse the JSON from the content field
     try {
-      // Handle if the API wraps JSON in code blocks or has additional text
-      const jsonMatch = content.match(/```json\s*([\s\S]*?)\s*```/) || 
-                        content.match(/```\s*([\s\S]*?)\s*```/) ||
-                        content.match(/({[\s\S]*})/); // Find JSON-like structure
-      
-      const jsonContent = jsonMatch ? jsonMatch[1] : content;
-      const parsedData = JSON.parse(jsonContent);
-      
+      const content = data.choices[0].message.content;
+      const parsedContent = JSON.parse(content);
       return {
-        status: 'success',
-        data: parsedData,
+        data: parsedContent,
         citations: data.citations || []
       };
-    } catch (e) {
-      console.error('Error parsing JSON from Perplexity response:', e);
-      return {
-        status: 'error',
-        message: 'Failed to parse JSON from research data',
-        rawContent: content
-      };
+    } catch (error) {
+      console.error('Error parsing JSON response:', error);
+      throw new Error('Failed to parse AI response');
     }
   } catch (error) {
-    console.error('Error calling Perplexity API for research:', error);
+    console.error('Error calling Perplexity API:', error);
     throw error;
   }
 }
 
-// Handler for vehicle research
 export async function getVehicleResearch(req: Request, res: Response) {
   try {
     const { model } = req.query;
     
-    if (!model) {
-      return res.status(400).json({ error: 'Vehicle model is required' });
+    if (!model || typeof model !== 'string') {
+      return res.status(400).json({ error: 'Model name is required' });
     }
-
-    const query = `Research and provide detailed information and high-quality images for this classic car model: ${model}. Include at least 5 high-quality images showing different angles and a comprehensive overview of its history, key features, and value.`;
     
-    const researchData = await getPerplexityResearch(query, 'vehicle');
-    return res.json(researchData);
+    const researchData = await getPerplexityResearch(model, 'vehicle');
+    res.json(researchData);
   } catch (error) {
-    console.error('Error in getVehicleResearch:', error);
-    return res.status(500).json({ 
-      error: 'Failed to get vehicle research',
+    console.error('Error in vehicle research API:', error);
+    res.status(500).json({ 
+      error: 'Failed to perform vehicle research',
       message: error instanceof Error ? error.message : 'Unknown error'
     });
   }
 }
 
-// Handler for part research
 export async function getPartResearch(req: Request, res: Response) {
   try {
     const { part, model } = req.query;
     
-    if (!part) {
+    if (!part || typeof part !== 'string') {
       return res.status(400).json({ error: 'Part name is required' });
     }
-
-    const modelContext = model ? ` for a ${model}` : '';
-    const query = `Research and provide detailed information and high-quality images for ${part}${modelContext} in the context of classic car restoration or restomodding. Include at least 3 high-quality images and comprehensive specifications.`;
+    
+    // Include model name in the query if provided
+    const query = model && typeof model === 'string' 
+      ? `${part} for ${model}` 
+      : part;
     
     const researchData = await getPerplexityResearch(query, 'part');
-    return res.json(researchData);
+    res.json(researchData);
   } catch (error) {
-    console.error('Error in getPartResearch:', error);
-    return res.status(500).json({ 
-      error: 'Failed to get part research',
+    console.error('Error in part research API:', error);
+    res.status(500).json({ 
+      error: 'Failed to perform part research',
       message: error instanceof Error ? error.message : 'Unknown error'
     });
   }

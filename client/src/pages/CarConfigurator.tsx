@@ -3,12 +3,14 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, ArrowRight, Info, Settings, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, Info, Settings, Check, Search } from "lucide-react";
 import VideoHeader from "@/components/layout/VideoHeader";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { apiRequest } from "@/lib/queryClient";
+import ResearchPanel from "@/components/configurator/ResearchPanel";
+import PartResearchPanel from "@/components/configurator/PartResearchPanel";
 
 const CarConfigurator = () => {
   // Configuration state
@@ -39,6 +41,13 @@ const CarConfigurator = () => {
   // AI recommendation state
   const [isLoadingAI, setIsLoadingAI] = useState<boolean>(false);
   const [aiRecommendation, setAiRecommendation] = useState<string>("");
+  
+  // Research panel state
+  const [showVehicleResearch, setShowVehicleResearch] = useState<boolean>(false);
+  const [showPartResearch, setShowPartResearch] = useState<boolean>(false);
+  const [selectedPart, setSelectedPart] = useState<string>("");
+  const [realVehicleImage, setRealVehicleImage] = useState<string>("");
+  const [realPartImage, setRealPartImage] = useState<string>("");
   
   // Car models data
   const models = [
@@ -548,49 +557,81 @@ const CarConfigurator = () => {
       case 1: // Model Selection
         return (
           <div className="space-y-8">
-            <h2 className="text-3xl font-playfair font-bold">Select Your Classic Model</h2>
+            <div className="flex justify-between items-center">
+              <h2 className="text-3xl font-playfair font-bold">Select Your Classic Model</h2>
+              <Button 
+                variant="outline" 
+                className="flex items-center gap-2"
+                onClick={() => setShowVehicleResearch(!showVehicleResearch)}
+              >
+                <Search className="w-4 h-4" />
+                {showVehicleResearch ? "Hide Research" : "Research Real Examples"}
+              </Button>
+            </div>
             <p className="text-charcoal/80">Choose the iconic vehicle you want to transform into a modern masterpiece.</p>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {models.map((model) => (
-                <Card 
-                  key={model.id} 
-                  className={`overflow-hidden cursor-pointer transition-all hover:shadow-lg ${selectedModel === model.id ? 'ring-2 ring-burgundy' : ''}`}
-                  onClick={() => handleModelSelect(model.id)}
-                >
-                  <div className="relative h-48 overflow-hidden">
-                    <img 
-                      src={model.image} 
-                      alt={model.name} 
-                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" 
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                      <h3 className="text-white text-xl font-bold">{model.name}</h3>
-                    </div>
-                  </div>
-                  <CardContent className="p-6">
-                    <p className="text-charcoal/80 mb-2">{model.description}</p>
-                    <div className="flex justify-between items-end mt-4">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-6">
-                          <div>
-                            <p className="text-xs font-medium text-charcoal/60">BASE POWER</p>
-                            <p className="font-medium">{model.baseHp} hp</p>
-                          </div>
-                          <div>
-                            <p className="text-xs font-medium text-charcoal/60">0-60 MPH</p>
-                            <p className="font-medium">{model.baseAcceleration}s</p>
-                          </div>
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+              <div className={`col-span-1 ${showVehicleResearch ? 'xl:col-span-2' : 'xl:col-span-3'}`}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {models.map((model) => (
+                    <Card 
+                      key={model.id} 
+                      className={`overflow-hidden cursor-pointer transition-all hover:shadow-lg ${selectedModel === model.id ? 'ring-2 ring-burgundy' : ''}`}
+                      onClick={() => {
+                        handleModelSelect(model.id);
+                        if (showVehicleResearch) {
+                          setRealVehicleImage(""); // Reset previously selected image
+                        }
+                      }}
+                    >
+                      <div className="relative h-48 overflow-hidden">
+                        <img 
+                          src={realVehicleImage && selectedModel === model.id ? realVehicleImage : model.image} 
+                          alt={model.name} 
+                          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" 
+                        />
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                          <h3 className="text-white text-xl font-bold">{model.name}</h3>
                         </div>
                       </div>
-                      <div>
-                        <p className="text-xs font-medium text-charcoal/60">STARTING FROM</p>
-                        <p className="text-burgundy font-bold text-xl">{formatPrice(model.price)}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                      <CardContent className="p-6">
+                        <p className="text-charcoal/80 mb-2">{model.description}</p>
+                        <div className="flex justify-between items-end mt-4">
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-6">
+                              <div>
+                                <p className="text-xs font-medium text-charcoal/60">BASE POWER</p>
+                                <p className="font-medium">{model.baseHp} hp</p>
+                              </div>
+                              <div>
+                                <p className="text-xs font-medium text-charcoal/60">0-60 MPH</p>
+                                <p className="font-medium">{model.baseAcceleration}s</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div>
+                            <p className="text-xs font-medium text-charcoal/60">STARTING FROM</p>
+                            <p className="text-burgundy font-bold text-xl">{formatPrice(model.price)}</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Research Panel */}
+              {showVehicleResearch && selectedModel && (
+                <div className="col-span-1">
+                  <ResearchPanel 
+                    modelId={selectedModel}
+                    modelName={getSelectedModelData()?.name || ""}
+                    onImageSelect={(imageUrl) => {
+                      setRealVehicleImage(imageUrl);
+                    }}
+                  />
+                </div>
+              )}
             </div>
           </div>
         );
@@ -636,45 +677,83 @@ const CarConfigurator = () => {
       case 3: // Engine Selection
         return (
           <div className="space-y-8">
-            <div className="flex items-center gap-4">
-              <h2 className="text-3xl font-playfair font-bold">Power & Performance</h2>
-              <Badge variant="outline" className="bg-charcoal/10 text-charcoal">
-                {getSelectedModelData()?.name} {selectedConfig.bodyType}
-              </Badge>
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-4">
+                <h2 className="text-3xl font-playfair font-bold">Power & Performance</h2>
+                <Badge variant="outline" className="bg-charcoal/10 text-charcoal">
+                  {getSelectedModelData()?.name} {selectedConfig.bodyType}
+                </Badge>
+              </div>
+              <Button 
+                variant="outline" 
+                className="flex items-center gap-2"
+                onClick={() => {
+                  setShowPartResearch(!showPartResearch);
+                  setSelectedPart("engine");
+                }}
+              >
+                <Search className="w-4 h-4" />
+                {showPartResearch ? "Hide Research" : "Research Real Engines"}
+              </Button>
             </div>
             <p className="text-charcoal/80">Select the heart of your restomod - the engine that will deliver the performance you desire.</p>
             
-            <div className="grid grid-cols-1 gap-4">
-              {getCompatibleEngines().map((engine) => (
-                <Card 
-                  key={engine.id} 
-                  className={`overflow-hidden cursor-pointer transition-all ${selectedConfig.engineType === engine.id ? 'ring-2 ring-burgundy' : ''}`}
-                  onClick={() => handleEngineSelect(engine.id)}
-                >
-                  <CardContent className="p-6">
-                    <div className="flex flex-col md:flex-row md:items-center gap-6 justify-between">
-                      <div>
-                        <h3 className="text-xl font-bold mb-1">{engine.name}</h3>
-                        <p className="text-charcoal/80 mb-3">{engine.description}</p>
-                        <div className="flex items-center gap-4">
-                          <Badge variant="secondary">{engine.power}</Badge>
-                          <span className="text-sm text-charcoal/60">Compatible with your {getSelectedModelData()?.name}</span>
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+              <div className={`col-span-1 ${showPartResearch ? 'xl:col-span-2' : 'xl:col-span-3'}`}>
+                <div className="grid grid-cols-1 gap-4">
+                  {getCompatibleEngines().map((engine) => (
+                    <Card 
+                      key={engine.id} 
+                      className={`overflow-hidden cursor-pointer transition-all ${selectedConfig.engineType === engine.id ? 'ring-2 ring-burgundy' : ''}`}
+                      onClick={() => handleEngineSelect(engine.id)}
+                    >
+                      <CardContent className="p-6">
+                        <div className="flex flex-col md:flex-row md:items-center gap-6 justify-between">
+                          <div className="flex gap-4 items-center">
+                            {realPartImage && selectedConfig.engineType === engine.id && (
+                              <div className="hidden md:block w-24 h-24 shrink-0 rounded-md overflow-hidden bg-charcoal/5">
+                                <img src={realPartImage} alt={engine.name} className="w-full h-full object-cover" />
+                              </div>
+                            )}
+                            <div>
+                              <h3 className="text-xl font-bold mb-1">{engine.name}</h3>
+                              <p className="text-charcoal/80 mb-3">{engine.description}</p>
+                              <div className="flex items-center gap-4">
+                                <Badge variant="secondary">{engine.power}</Badge>
+                                <span className="text-sm text-charcoal/60">Compatible with your {getSelectedModelData()?.name}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex flex-col items-end">
+                            <p className="text-burgundy font-bold text-xl mb-2">+ {formatPrice(engine.price)}</p>
+                            <Button 
+                              variant="outline" 
+                              className={selectedConfig.engineType === engine.id ? "bg-burgundy text-white hover:bg-burgundy/90" : ""}
+                              onClick={() => handleEngineSelect(engine.id)}
+                            >
+                              Select Engine
+                            </Button>
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex flex-col items-end">
-                        <p className="text-burgundy font-bold text-xl mb-2">+ {formatPrice(engine.price)}</p>
-                        <Button 
-                          variant="outline" 
-                          className={selectedConfig.engineType === engine.id ? "bg-burgundy text-white hover:bg-burgundy/90" : ""}
-                          onClick={() => handleEngineSelect(engine.id)}
-                        >
-                          Select Engine
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Part Research Panel */}
+              {showPartResearch && selectedPart === "engine" && (
+                <div className="col-span-1">
+                  <PartResearchPanel 
+                    partType="Engine"
+                    partName={engineOptions.find(e => e.id === selectedConfig.engineType)?.name || "V8 Engine"}
+                    modelName={getSelectedModelData()?.name}
+                    onImageSelect={(imageUrl) => {
+                      setRealPartImage(imageUrl);
+                    }}
+                  />
+                </div>
+              )}
             </div>
           </div>
         );

@@ -1,61 +1,107 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Settings, Wrench, Layers } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Settings, Car, Wrench, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 const ConfiguratorCTA = () => {
   return (
-    <section className="py-20 bg-charcoal">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-5xl mx-auto text-center">
-          <div className="flex justify-center space-x-2 mb-6">
-            <div className="bg-gold/20 p-3 rounded-full">
-              <Settings className="h-10 w-10 text-gold" />
-            </div>
-            <div className="bg-gold/20 p-3 rounded-full">
-              <Wrench className="h-10 w-10 text-gold" />
-            </div>
-            <div className="bg-gold/20 p-3 rounded-full">
-              <Layers className="h-10 w-10 text-gold" />
-            </div>
+    <section className="py-16 md:py-24 px-6 bg-charcoal/5">
+      <div className="container mx-auto max-w-6xl">
+        <div className="flex flex-col md:flex-row gap-12 items-center">
+          <div className="md:w-1/2">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="text-center md:text-left"
+            >
+              <h2 className="text-3xl md:text-4xl font-playfair font-bold mb-6">
+                Design Your Dream Restomod
+              </h2>
+              <p className="text-lg text-charcoal/80 mb-8">
+                Bring your vision to life with our advanced interactive configurator. 
+                Customize every detail from power to aesthetics with expert AI-enhanced guidance.
+              </p>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 mb-10">
+                <div className="p-4 rounded-md bg-white shadow-sm text-center">
+                  <div className="flex justify-center mb-3">
+                    <Car className="h-6 w-6 text-burgundy" />
+                  </div>
+                  <h3 className="font-bold mb-1">Classic Models</h3>
+                  <p className="text-sm text-charcoal/70">Iconic vehicles ready for transformation</p>
+                </div>
+                
+                <div className="p-4 rounded-md bg-white shadow-sm text-center">
+                  <div className="flex justify-center mb-3">
+                    <Wrench className="h-6 w-6 text-burgundy" />
+                  </div>
+                  <h3 className="font-bold mb-1">Modern Power</h3>
+                  <p className="text-sm text-charcoal/70">Performance engine and drivetrain options</p>
+                </div>
+                
+                <div className="p-4 rounded-md bg-white shadow-sm text-center">
+                  <div className="flex justify-center mb-3">
+                    <Settings className="h-6 w-6 text-burgundy" />
+                  </div>
+                  <h3 className="font-bold mb-1">AI Assistance</h3>
+                  <p className="text-sm text-charcoal/70">Expert recommendations and research</p>
+                </div>
+              </div>
+              
+              <Link href="/car-configurator">
+                <Button className="bg-burgundy hover:bg-burgundy/90 text-white font-medium px-8 py-6">
+                  Start Building Your Restomod <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </motion.div>
           </div>
           
-          <h2 className="text-4xl md:text-5xl font-playfair font-bold text-white mb-6">
-            Build Your Dream Restomod
-          </h2>
-          
-          <p className="text-xl text-white/80 mb-10 max-w-3xl mx-auto">
-            Our AI-enhanced configurator allows you to create a custom restomod with K.I.T.T.-like AI integration. 
-            Design your perfect vehicle with cutting-edge technology and classic style.
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <div className="bg-charcoal/40 p-8 rounded-sm text-center">
-              <h3 className="text-gold font-bold text-2xl mb-3">Select Your Model</h3>
-              <p className="text-white/70">
-                Choose from our curated collection of iconic classic vehicles as your starting point.
-              </p>
-            </div>
-            
-            <div className="bg-charcoal/40 p-8 rounded-sm text-center">
-              <h3 className="text-gold font-bold text-2xl mb-3">Customize Everything</h3>
-              <p className="text-white/70">
-                From powertrains to interior details, tailor every aspect to your exact specifications.
-              </p>
-            </div>
-            
-            <div className="bg-charcoal/40 p-8 rounded-sm text-center">
-              <h3 className="text-gold font-bold text-2xl mb-3">AI-Enhanced Experience</h3>
-              <p className="text-white/70">
-                Add advanced AI integration for a futuristic driving experience with personalized features.
-              </p>
-            </div>
-          </div>
-          
-          <Link href="/car-configurator">
-            <Button className="bg-gold hover:bg-gold/90 text-charcoal px-10 py-6 text-lg">
-              Start Building Your Restomod
-            </Button>
-          </Link>
+          <motion.div 
+            className="md:w-1/2"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            viewport={{ once: true }}
+          >
+            <Card className="overflow-hidden border-none shadow-lg">
+              <div className="relative aspect-[4/3] overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1590008790423-a7bfa99417f9?q=80&w=2070&auto=format&fit=crop" 
+                  alt="Custom car configurator interface" 
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent">
+                  <div className="absolute bottom-0 left-0 p-6">
+                    <div className="inline-block rounded-full px-3 py-1 text-xs font-medium bg-burgundy/90 text-white mb-4">
+                      NEW: AI-Enhanced Experience
+                    </div>
+                    <h3 className="text-white text-xl md:text-2xl font-bold mb-2">
+                      Interactive Configurator
+                    </h3>
+                    <p className="text-white/80 max-w-xs">
+                      Powered by our authentic research system with real vehicle images and specifications
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <CardContent className="p-6">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="text-sm text-charcoal/70">Starting from</p>
+                    <p className="text-xl font-bold text-burgundy">$75,000</p>
+                  </div>
+                  <Link href="/car-configurator">
+                    <Button variant="outline" className="border-burgundy text-burgundy hover:bg-burgundy/5">
+                      Explore Options
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
       </div>
     </section>
