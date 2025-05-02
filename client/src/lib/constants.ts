@@ -15,6 +15,7 @@ export const NAV_LINKS = [
   { name: 'Process', href: '/#process' },
   { name: 'About Us', href: '/#about' },
   { name: 'Resources', href: '/resources' },
+  { name: 'Archive', href: '/vehicle-archive' },
   { name: 'Insights', href: '/#insights' },
 ];
 
@@ -147,6 +148,7 @@ export const FOOTER_LINKS = [
       { name: 'Process', href: '/#process' },
       { name: 'About Us', href: '/#about' },
       { name: 'Resources', href: '/resources' },
+      { name: 'Vehicle Archive', href: '/vehicle-archive' },
       { name: 'Insights', href: '/#insights' },
       { name: 'Contact', href: '/#contact' },
     ],

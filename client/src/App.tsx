@@ -8,6 +8,7 @@ import Home from "@/pages/Home";
 import ProjectDetail from "@/pages/ProjectDetail";
 import ProjectsPage from "@/pages/ProjectsPage";
 import Resources from "@/pages/Resources";
+import VehicleArchive from "@/pages/VehicleArchive";
 import NotFound from "@/pages/not-found";
 
 // Layout components
@@ -21,6 +22,7 @@ function Router() {
       <Route path="/projects" component={ProjectsPage} />
       <Route path="/projects/:id" component={ProjectDetail} />
       <Route path="/resources" component={Resources} />
+      <Route path="/vehicle-archive" component={VehicleArchive} />
       <Route component={NotFound} />
     </Switch>
   );
