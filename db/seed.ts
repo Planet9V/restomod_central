@@ -31,7 +31,7 @@ async function seed() {
         title: "1953 Ford F100",
         subtitle: "Iconic American Pickup Reborn with Modern Performance & Luxury",
         slug: "1953-ford-f100",
-        description: "Our 1953 Ford F100 restomod masterfully blends the iconic styling of this legendary American truck with state-of-the-art engineering and premium craftsmanship. Every detail has been meticulously reimagined to create a one-of-a-kind vehicle that honors its heritage while delivering modern performance and luxury.",
+        description: "Our 1953 Ford F100 restomod masterfully blends the iconic styling of this legendary American truck with state-of-the-art engineering and premium craftsmanship. Introduced during Ford's 50th anniversary celebrations, the F100 marked a pivotal shift in truck design with its wider cab, improved suspension, and robust frame. Our restoration honors this historical significance while integrating modern performance, luxury, and technology.",
         category: "trucks-4x4s",
         imageUrl: "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=1600&auto=format&fit=crop",
         galleryImages: [
@@ -40,25 +40,39 @@ async function seed() {
           "https://images.unsplash.com/photo-1596649299486-4cdea56fd59d?q=80&w=1600&auto=format&fit=crop"
         ],
         specs: {
-          performance: "Ford 5.0L Coyote V8, 460 HP",
-          transmission: "6-Speed Automatic",
-          suspension: "Fat Man Fabrications Mustang II Front, 4-Link Rear",
-          buildTime: "3,200 Hours",
-          brakes: "4-Wheel Disc with Power Assist",
-          wheels: "20-inch Billet Specialties Custom"
+          engine: "Ford 5.0L Coyote V8, 460 HP",
+          transmission: "6-Speed Automatic with Overdrive",
+          suspension: "Custom Fat Man Fabrications Mustang II Front, 4-Link Rear",
+          buildTime: "3,600 Hours",
+          brakes: "Wilwood 4-Wheel Power Disc Brakes",
+          wheels: "20-inch Billet Specialties Custom Alloys",
+          tires: "Michelin Pilot Sport",
+          paint: "Custom Metallic Lunar Blue with Clear Coat",
+          interior: "Tan Bridge of Weir Scottish Leather"
         },
         features: [
-          "Custom chassis with modern coilover suspension",
-          "Power rack-and-pinion steering",
-          "Vintage Air climate control system",
-          "Premium leather interior with modern appointments",
-          "Custom bed with polished wood planking",
+          "Custom Art Morrison chassis with modern coilover suspension",
+          "Power rack-and-pinion steering with modern geometry",
+          "Vintage Air climate control system with digital controls",
+          "Premium leather interior with heated and cooled seats",
+          "Custom bed with hand-finished teak wood planking",
+          "Retro-look digital gauges with modern functionality",
           "Hidden modern audio system with smartphone integration",
-          "LED lighting with period-correct appearance"
+          "LED lighting with period-correct appearance",
+          "Sound deadening and thermal insulation throughout",
+          "Power windows and central locking with remote",
+          "Modern fuel injection with custom ECU mapping"
         ],
-        clientQuote: "This F100 is everything I dreamed of - pure American classic styling with modern driving characteristics. It's a masterpiece that turns heads everywhere it goes.",
+        clientQuote: "This F100 is everything I dreamed of - pure American classic styling with modern driving characteristics. The level of detail throughout is astonishing, and it drives like a modern vehicle while maintaining all the character of the original. It's a masterpiece that turns heads everywhere it goes.",
         clientName: "Thomas Richardson",
         clientLocation: "Austin, Texas",
+        historicalInfo: {
+          significance: "The 1953 Ford F100 marked the beginning of the F100 series and was part of Ford's 50th anniversary celebration. It replaced the post-war F1 model with a modernized pickup that combined durability with comfort and style.",
+          originalSpecs: "Originally offered with a 239 cubic-inch flathead V8 or 239 cubic-inch inline-six engine, three-speed manual transmission, and drum brakes. The truck featured a wider cab, improved suspension, and increased payload capacity compared to its predecessors.",
+          designElements: "The F100's bold front end, clamshell bonnet, and clean body lines have influenced truck design for decades. Its styling themes have been adopted by numerous automotive companies worldwide, including Nissan, Mitsubishi, GMC, and Toyota.",
+          productionNumbers: "Over 1 million first-generation F100 trucks (1953-1956) were produced, making it one of the most successful truck launches in automotive history.",
+          collectability: "Pristine original F100s can fetch $20,000 to $100,000 depending on condition and authenticity, while premium restomods like ours can exceed $200,000 due to their meticulous craftsmanship and modern upgrades."
+        },
         featured: true
       });
       

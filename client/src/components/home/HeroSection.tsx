@@ -2,8 +2,15 @@ import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 
+interface HeroData {
+  id: number;
+  title: string;
+  subtitle: string;
+  imageUrl: string;
+}
+
 const HeroSection = () => {
-  const { data: heroData } = useQuery({
+  const { data: heroData } = useQuery<HeroData>({
     queryKey: ['/api/hero'],
     staleTime: Infinity,
   });
@@ -36,37 +43,31 @@ const HeroSection = () => {
             {subtitle}
           </p>
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-            <Link href="#projects">
-              <a className="bg-burgundy hover:bg-opacity-90 text-white px-8 py-4 text-center text-sm uppercase tracking-wider font-medium transition-all duration-200">
-                Explore Our Collection
-              </a>
+            <Link href="#projects" className="bg-burgundy hover:bg-opacity-90 text-white px-8 py-4 text-center text-sm uppercase tracking-wider font-medium transition-all duration-200">
+              Explore Our Collection
             </Link>
-            <Link href="#process">
-              <a className="bg-transparent border border-white hover:border-gold hover:text-gold text-white px-8 py-4 text-center text-sm uppercase tracking-wider font-medium transition-all duration-200">
-                Discover Our Process
-              </a>
+            <Link href="#process" className="bg-transparent border border-white hover:border-gold hover:text-gold text-white px-8 py-4 text-center text-sm uppercase tracking-wider font-medium transition-all duration-200">
+              Discover Our Process
             </Link>
           </div>
         </motion.div>
       </div>
       <div className="absolute bottom-10 left-0 right-0 z-20 flex justify-center">
-        <Link href="#featured">
-          <a className="animate-bounce">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-10 w-10 text-offwhite"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </a>
+        <Link href="#featured" className="animate-bounce">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-10 w-10 text-offwhite"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
         </Link>
       </div>
     </section>
