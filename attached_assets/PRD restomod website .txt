@@ -1,0 +1,255 @@
+Website Product Requirements Document: McKenney & Skinny's Bespoke Restomods
+I. Introduction
+A. Purpose of this Document
+This Product Requirements Document (PRD) outlines the strategic vision, functional requirements, design specifications, and content strategy for the official website of the joint venture between McKenney Engineering & Design and Skinny's Rod and Custom. The primary objective of this website is to serve as the premier digital platform for attracting, engaging, and converting the ideal customer persona (ICP) for high-end, bespoke automotive restomods, typically valued at $150,000 USD and above. This document will guide the design, development, and content creation process to ensure the final website effectively communicates the unique value proposition of the joint venture and maximizes marketing opportunities within the target luxury automotive segment.
+B. The Joint Venture: Engineering Meets Artistry
+The foundation of this venture lies in the synergistic combination of two distinct yet complementary entities:
+ * McKenney Engineering & Design: Brings a legacy of precision engineering, multi-discipline design capabilities (potentially including civil, electrical, structural, and mechanical expertise), and experience in complex project delivery and construction management. Their proficiency may extend to advanced tools like Building Information Modeling (BIM) and sophisticated process management, ensuring a rigorous, data-driven approach to vehicle systems integration and performance optimization.
+ * Skinny's Rod and Custom: Contributes decades of hands-on experience in classic car customization, street rod building, bodywork, fabrication, and achieving show-quality finishes. Their expertise lies in the art of transforming classic vehicles, understanding automotive aesthetics, and delivering on the unique vision of each client.
+This unique fusion – Engineering Meets Artistry – forms the core brand identity. The website must effectively communicate how McKenney's engineering rigor elevates the performance, reliability, and integration of modern systems within classic vehicles, while Skinny's craftsmanship ensures the preservation of classic soul and the achievement of concourse-level aesthetics.
+C. Website Goals & Objectives
+The website must achieve the following primary goals:
+ * Brand Establishment: Clearly define and communicate the unique value proposition of the McKenney & Skinny's joint venture within the high-end restomod market.
+ * Ideal Customer Attraction: Attract qualified leads matching the defined Ideal Customer Persona (ICP) through targeted content, design, and SEO strategies.
+ * Trust & Credibility Building: Showcase expertise, craftsmanship, engineering capability, and past successes to build confidence with discerning buyers undertaking significant investments.
+ * Lead Generation & Consultation Facilitation: Convert website visitors into qualified leads by providing clear pathways to request consultations and begin the bespoke build process.
+ * Marketing Platform: Serve as the central hub for all digital marketing efforts, supporting SEO, content marketing, and social media integration.
+II. Target Audience: The High-End Restomod Buyer (Ideal Customer Persona - ICP)
+Understanding the target audience is paramount to designing an effective website. The ICP for this joint venture is a discerning individual seeking a unique blend of classic automotive style and modern performance, comfort, and reliability.
+A. Demographics
+ * Age: Primarily 40-65+, encompassing Gen X and Baby Boomers, who often have nostalgic connections to cars from the 1950s-1980s. However, a significant and growing segment includes Millennials (and even Gen Z) who appreciate classic aesthetics but demand modern drivability and are increasingly entering their peak earning years. The average collector car owner age is around 54-56.
+ * Gender: Predominantly male (over 80-90%), although female interest and ownership are growing.
+ * Income: Affluent, typically with household incomes well above average, often exceeding $150,000 annually, necessary to support a hobby with average spending around $12,000 (though high-end builds far exceed this) and view cars potentially as investments. All income groups are represented in the broader collector market, but high-end restomods necessitate significant disposable income.
+ * Education: Often college-educated (over 80%), potentially correlating with higher income levels and an appreciation for engineering and design detail.
+ * Location: While the initial focus may leverage the Kansas base  and surrounding Midwest region (Missouri, Oklahoma, Nebraska, Colorado) , the target market is national, potentially international, mirroring competitors like Singer and ICON. Geographic concentrations of classic car enthusiasts exist, notably in regions like the Southeast and Great Lakes, often tied to car culture events. However, the website must appeal broadly. Domestic vehicles dominate US collector interest.
+B. Psychographics & Motivations
+ * Values: Appreciate craftsmanship, quality, exclusivity, performance, reliability, and attention to detail. Value authenticity in design intent, even with modern upgrades.
+ * Lifestyle: Often busy professionals or retirees with disposable income and a passion for automobiles. View classic cars as more than transportation – a hobby, passion, status symbol, or investment. Enjoy driving their vehicles, not just storing them.
+ * Motivations:
+   * Nostalgia: Recapturing feelings or aesthetics from their youth, often tied to specific "dream cars".
+   * Performance & Drivability: Desire the classic look but want modern power, handling, braking, and reliability for enjoyable driving experiences.
+   * Comfort & Convenience: Seek modern amenities like air conditioning, power steering/brakes, advanced audio/infotainment.
+   * Uniqueness & Personalization: Want a vehicle that reflects their individual taste and stands out; restomods offer high levels of customization.
+   * Investment Potential: Some view high-end restomods or rare classics as tangible assets that can appreciate.
+   * Sense of Accomplishment/Community: Enjoy the process, the technical aspects, and sharing their passion with others.
+C. Buying Behavior & Needs
+ * Research Process: Primarily research online (visiting websites, forums, social media) but value expertise and prefer purchasing from outlets offering meaningful conversations. They scrutinize details, history, and build quality. YouTube and Instagram are significant interaction points, especially for younger demographics.
+ * Decision Factors: Build quality, reputation of the builder, engineering integrity, component quality, aesthetic execution, performance specifications, personalization options, transparency of the process, and ultimately, trust.
+ * Needs from a Website: High-quality visuals showcasing craftsmanship and detail, clear explanation of the build process and engineering integration, evidence of expertise (past projects, team bios), easy ways to initiate contact and consultation, transparency regarding capabilities and potentially timelines/investment level.
+Table 1: Ideal Customer Persona (ICP) Summary - "The Discerning Enthusiast"
+| Category | Details | Supporting Snippets |
+|---|---|---|
+| Demographics | Age: 40-65+ (Gen X/Boomer core, Millennial/Gen Z growth). Gender: Predominantly Male. Income: Affluent ($150k+ HHI). Education: College Educated. Location: National/International (Initial Midwest focus). |  |
+| Psychographics | Values: Craftsmanship, Quality, Exclusivity, Performance, Reliability, Detail. Lifestyle: Passionate hobbyist, enjoys driving, views cars as more than transport (passion/investment). |  |
+| Motivations | Nostalgia, Modern Performance/Drivability, Comfort/Convenience, Uniqueness/Personalization, Investment Potential, Community/Accomplishment. |  |
+| Buying Behavior | Researches extensively online (websites, forums, social media). Values expertise & personal interaction. Scrutinizes build quality, history, reputation. |  |
+| Website Needs | High-quality visuals, clear process explanation, proof of expertise, easy contact, transparency. |  |
+III. Competitive Landscape & Benchmarking
+Analysis of key competitors and aspirational brands in the high-end restomod and custom builder space provides crucial context for positioning and feature requirements.
+A. Key Competitors & Benchmark Websites
+ * Singer Vehicle Design (SingerReimagined.com): Ultra-luxury tier, focused exclusively on Porsche 911 reimagination. Website is minimalist, highly visual, emphasizing philosophy and artistry. Strengths: Exceptional brand prestige, stunning visuals conveying concourse quality. Weaknesses: Opaque regarding process, timelines, pricing, and after-sales support; relies heavily on brand mystique. Focuses on "reimagining" rather than "restomod".
+ * ICON 4x4 (Icon4x4.com): High-end, focuses on classic 4x4s (Bronco, FJ, Thriftmaster trucks) with rugged-luxury aesthetic. Website has strong visuals, clear model differentiation, and effectively separates inventory/projects from custom commissions. Strengths: Distinct niche, strong visual identity, showcases customization well through examples. Weaknesses: Vague on specific build timelines and warranty/support details. Configurator functionality noted as potentially weak.
+ * Ringbrothers (Ringbrothers.com): Premier builder focused on American muscle cars, known for innovative design and billet parts. Website effectively balances showcasing stunning builds with a robust e-commerce platform for their parts line. Strengths: Strong brand recognition, excellent visuals, clear structure separating builds/parts, effective parts e-commerce. Weaknesses: Information on custom build timelines, process details, and warranty is limited or requires direct inquiry.
+ * Velocity Restorations (VelocityRestorations.com): Focuses on specific models (Bronco, F-Series, Blazer, Scout, Mustang) with a "Re-Engineered Classic™" approach. Website clearly differentiates inventory sales from custom builds. Strengths: Clear presentation of inventory with pricing, explicit mention of build timelines (e.g., 14 weeks for customization), strong visuals, clear CTAs. Weaknesses: May lack the ultra-bespoke feel of Singer or ICON; model range is more defined.
+ * Other High-End Builders (General): Shops like Roadster Shop (chassis focus, strong visuals) , Alfaholics (Alfa Romeo focus) , Eagle E-Types (Jaguar focus) , Classic Recreations , Kindig-It Design , etc., demonstrate the importance of specialization, high-quality presentation, and storytelling. Many operate primarily through reputation and direct contact, with websites serving as portfolios.
+B. Key Takeaways & Opportunities for McKenney & Skinny's
+ * Visual Excellence is Non-Negotiable: All top competitors utilize exceptional photography and videography to convey quality and desirability. The JV website must meet or exceed this standard.
+ * Process Transparency is a Differentiator: Many competitors are vague about their build process, timelines, and pricing. Providing clear, detailed information about the unique engineering-infused process can build significant trust and justify premium pricing. This becomes a luxury signal itself, showing confidence and meticulousness.
+ * Warranty & Support Matters: Explicitly addressing after-sales support and warranty, often overlooked by competitors , is a critical opportunity to build confidence for high-value purchases.
+ * Balance Inspiration and Information: The website needs to inspire with stunning visuals of completed builds (like Singer/ICON) but also provide clear information about the process, the JV's expertise, and how to engage (like Velocity/Ringbrothers).
+ * Highlight the JV Synergy: No competitor explicitly blends deep engineering expertise (McKenney's potential CAD/BIM/systems integration) with dedicated hot rod artistry (Skinny's) in the same way. This unique selling proposition must be central to the website's narrative and visuals.
+IV. Website Design & Branding
+The website's design must immediately convey luxury, precision, craftsmanship, and the unique blend of engineering and artistry.
+A. Overall Style & Aesthetic
+ * Concept: "Engineered Elegance." A blend of modern sophistication with subtle nods to classic automotive design and high-quality materials. Clean, uncluttered, and professional, allowing the vehicles and craftsmanship to be the heroes.
+ * Inspiration: Draw inspiration from luxury automotive brands (beyond restomodders – e.g., Porsche, Bentley websites), high-end watchmaking sites (like Singer Reimagined ), and architectural design firms, focusing on their use of space, typography, and high-quality imagery. The aesthetic should feel premium, trustworthy, and technically proficient.
+B. Color Palette & Typography
+ * Color Palette:
+   * Primary: Deep Charcoal/Near-Black (#222222 or similar), Crisp White/Off-White (#FFFFFF / #F8F8F8). Provides a sophisticated, high-contrast foundation.
+   * Secondary: Muted Metallic Silver/Grey (#A0A0A0 or similar). Used for subtle accents, dividing lines, or background elements to add depth without distraction.
+   * Accent: A single, carefully chosen accent color. Options:
+     * Deep Teal (#00796B): Evokes precision, quality, and a touch of uniqueness.
+     * Burnt Orange (#BF5700): Suggests classic leather, warmth, and passion, connecting to the craft aspect.
+       The chosen accent should be used sparingly for CTAs, key highlights, and subtle branding elements.
+ * Typography:
+   * Primary Font (Headings, Key Titles): A sophisticated Serif font (e.g., Playfair Display, Cormorant Garamond, Merriweather). Conveys elegance, tradition, and artistry. Must be highly readable at larger sizes.
+   * Secondary Font (Body Text, Captions, UI Elements): A clean, highly legible Sans-serif font (e.g., Montserrat, Lato, Open Sans, Roboto). Ensures readability for detailed descriptions and technical information, conveying modernity and engineering precision. Font pairing must be harmonious and reinforce the "Engineering Meets Artistry" theme.
+C. Visual Content Strategy: Photography & Videography Requirements
+Visuals are the most critical element for showcasing the quality and appeal of the builds. The strategy must go beyond standard car photography to tell the unique JV story.
+ * Mandate Professional Quality: All photography and videography must be high-resolution, professionally shot, and edited to a consistent, high-end aesthetic.
+ * Showcase Craftsmanship & Detail (Concourse Level):
+   * Utilize macro shots and extreme close-ups focusing on material textures (leather grain, wood patterns, metal finishes), stitching details, flawless paint reflections, panel gaps, engine component finishing, and intricate assembly points.
+   * Employ cinematic lighting techniques (soft, directional light) to emphasize form, texture, and finish, avoiding harsh reflections unless intentional for effect.
+ * Highlight Engineering Integration:
+   * Include shots revealing the underlying engineering – chassis details, suspension components, engine bay layout, wiring neatness, integration of modern tech.
+   * Consider subtle graphic overlays or "exploded views" (potentially in video or interactive elements) to illustrate key engineering features without cluttering the primary aesthetic.
+ * Evoke Emotion & Lifestyle:
+   * Capture dynamic driving footage (video and stills) on scenic roads or potentially a track, conveying the enhanced driving experience.
+   * Include "beauty shots" in evocative settings that match the vehicle's character (e.g., urban sophistication, open road freedom).
+   * If possible, feature owners interacting with their completed vehicles (subtly, focusing on the car).
+ * Document the Process:
+   * Capture high-quality visuals of the entire build process: McKenney's design/engineering phase (CAD screens, team discussions), Skinny's fabrication/bodywork/paint/assembly stages. These visuals are crucial for the "Our Process" section and ongoing content marketing (blog/social).
+   * Visually narrate the JV synergy: Show McKenney and Skinny's teams collaborating, engineers inspecting fabrication, craftsmen assembling engineered components. This directly supports the core brand message.
+ * Consistency: Maintain a consistent visual style, color grading, and quality across all website photography and videography.
+V. Core Page Requirements & Content Strategy
+Each page must be meticulously crafted to serve its purpose within the user journey and reinforce the brand message.
+A. Homepage: The Digital Handshake
+ * Purpose: Immediately establish the brand, convey the unique value proposition ("Engineering Meets Artistry"), showcase the quality of work, and guide users to key information.
+ * Content & Layout:
+   * Hero Section: Full-width, high-impact video or rotating carousel of stunning photos featuring flagship builds. Compelling headline (e.g., "Bespoke Restomods. Engineered Artistry.") and concise sub-headline introducing the McKenney & Skinny's JV. Clear primary CTA (e.g., "Explore Our Creations," "Begin Your Consultation").
+   * Introduction: Brief (2-3 sentences) text outlining the JV's mission – combining engineering precision with custom craftsmanship for the ultimate classic driving experience.
+   * Portfolio Teaser: Visually engaging section showcasing 3-4 diverse, high-quality completed builds with thumbnail images, brief descriptions, and links to the full portfolio or individual case studies.
+   * Process Overview: Short section highlighting the key phases (Consultation, Engineering, Craftsmanship, Delivery) with icons or brief text, linking to the full "Our Process" page. Emphasize the engineering integration.
+   * About Us Snippet: Introduce the partners (McKenney & Skinny's) briefly, emphasizing their combined expertise, linking to the full "About Us" page.
+   * Call to Action Section: Dedicated section near the bottom reinforcing the value proposition and prompting consultation requests.
+ * Structure: Follow logical flow principles, guiding the user from brand introduction to specific offerings.
+B. About Us: The Joint Venture Story & Partner Expertise
+ * Purpose: Build trust and credibility by detailing the background, expertise, and philosophy of the joint venture and its founding partners.
+ * Content & Layout:
+   * The Partnership Story: Narrate the origin of the JV. Why did McKenney and Skinny's decide to collaborate? What shared vision drives them? Emphasize the complementary skills.
+   * McKenney Engineering & Design Profile: Detail McKenney's relevant history, engineering disciplines (mechanical, electrical, structural, potentially CAD/BIM, systems integration), notable achievements, and commitment to precision and problem-solving. Use professional, corporate-style visuals if available.
+   * Skinny's Rod and Custom Profile: Detail Skinny's history in street rod/custom building (since age 13), passion for classics, focus on quality craftsmanship, body/frame expertise, and potentially highlight past award-winning or notable builds. Use visuals showcasing workshop artistry.
+   * Meet the Team: Feature high-quality photos and brief biographies of the key founders/leaders (e.g., Jim "Skinny" Neill, Mark Stephens, key McKenney personnel involved). Personalizes the brand and builds connection.
+   * Our Philosophy/Values: Reiterate the commitment to "Engineering Meets Artistry," precision, quality, client collaboration, and preserving automotive heritage while enhancing performance.
+   * Facility Showcase: Include professional photos of the workshop/facilities, highlighting cleanliness, organization, and specialized equipment (both engineering and fabrication areas).
+C. Our Process: Detailing the Engineering-Infused Custom Build Journey
+ * Purpose: Demystify the bespoke build process, highlight the unique engineering integration, build trust through transparency, manage expectations regarding timelines and investment, and showcase the value delivered. This section is crucial for justifying the premium price point and differentiating from less transparent competitors.
+ * Content & Layout: Structure chronologically, using clear headings, concise text, and supporting visuals (photos/videos from the build process).
+   * 1. Consultation & Vision: Describe the initial client engagement – understanding desires, vehicle selection (client-provided or sourced), defining goals (performance, aesthetics, usage), budget discussion. Emphasize collaborative approach.
+   * 2. Design & Engineering (The McKenney Advantage): Detail this critical phase. Explain how McKenney's team applies engineering principles:
+     * Digital Prototyping: Use of CAD/CAE for planning component placement, system integration, stress analysis, ensuring optimal fit and function before fabrication begins.
+     * Component Selection: Rigorous selection of modern powertrain (LS, Coyote swaps mentioned ), suspension, braking, electrical systems based on performance goals and reliability.
+     * Systems Integration: Planning how modern electronics, HVAC, safety features integrate seamlessly with the classic vehicle architecture.
+     * Performance Simulation (Optional): Mention if simulations are used to predict handling, aerodynamics, etc.
+   * 3. Craftsmanship & Build (The Skinny's Artistry): Detail the hands-on build phase led by Skinny's:
+     * Disassembly & Preparation: Meticulous teardown, media blasting, structural assessment.
+     * Chassis & Fabrication: Modifications or selection of custom chassis (e.g., Art Morrison , Roadster Shop ), metal fabrication, panel alignment, ensuring perfect gaps and fitment.
+     * Bodywork & Paint: Achieving show-quality finishes, meticulous prep, color application, clear coat, cut and polish.
+     * Assembly: Careful reassembly of all components, wiring, plumbing, interior installation. Showcase attention to detail in routing, fasteners, etc..
+   * 4. Quality Assurance & Testing: Describe the rigorous testing protocols – dyno tuning, road testing, systems checks, final fit-and-finish inspection. Emphasize ensuring reliability and performance meet engineered specifications.
+   * 5. Delivery & Handover: Outline the client experience upon completion – final walkthrough, documentation, celebrating the finished masterpiece.
+   * Timelines & Investment: Address this directly and transparently. Acknowledge that timelines vary significantly based on project complexity (donor car condition, extent of modifications, component availability). Provide a typical range (e.g., "12-24 months depending on scope") or explain the process for developing a project-specific timeline during consultation. Similarly, address investment level – state a starting point for full builds (e.g., "Bespoke builds typically start at $250,000," aligning with high-end market data ) and emphasize that the final cost depends on the detailed specification. Frame this transparency as part of the premium service.
+   * Warranty & After-Sales Support: Crucially, dedicate a subsection to this. Clearly state the warranty provided on craftsmanship and potentially key components. Outline available after-sales support, maintenance advice, or services. This addresses a major gap in competitor communication and builds significant long-term value perception.
+D. Portfolio/Gallery: Showcasing Masterpieces
+ * Purpose: Provide visual proof of capability, showcase the quality and diversity of work, inspire potential clients, and demonstrate expertise with target vehicle eras (1950s-1980s focus initially).
+ * Content & Layout:
+   * Featured Builds Section: Select 2-4 exceptional projects to feature as detailed case studies. Each case study should include:
+     * Compelling Title & Introduction: Briefly introduce the vehicle and the project's vision.
+     * High-Quality Gallery: Extensive photo gallery (15+ images) showing exterior, interior, engine bay, undercarriage, and detail shots. Include professional video if available.
+     * The Story: Narrative describing the client's goals, the specific vehicle, challenges overcome, and key features.
+     * Engineering & Craftsmanship Highlights: Specifically call out unique engineering solutions provided by McKenney and specific craftsmanship details executed by Skinny's. Connect features back to the JV's value proposition.
+   * Past Projects Gallery: A filterable gallery showcasing a wider range of completed builds.
+     * Filtering: Allow users to filter by Make (Ford, Chevy, Dodge, etc.), Model, and potentially Year Range or Build Style (e.g., Pro-Touring, Restomod). Prioritize vehicles from the 1950s-1980s based on market trends and initial focus.
+     * Individual Entries: Each project needs a high-quality thumbnail, vehicle make/model/year, a brief descriptive title, and link to a dedicated page with 5-10 high-quality images and a short paragraph description.
+E. Insights Hub (Blog): Establishing Thought Leadership & SEO Value
+ * Purpose: Demonstrate ongoing expertise, attract organic search traffic through valuable content, engage the enthusiast community, and provide fresh content for social media sharing.
+ * Content Strategy: Publish regular (e.g., monthly or bi-monthly) high-quality articles, deep-dives, and updates. Leverage expertise from both McKenney and Skinny's teams.
+ * Initial Content Topic Ideas:
+Table 2: Initial Insights Hub Content Ideas
+| Title | Description | Target Keywords | Snippet Relevance |
+|---|---|---|---|
+| The Engineering Behind the Perfect Stance: Modern Suspension in Classic Muscle | Deep dive into suspension geometry, component selection (coilovers, sway bars, etc.), and engineering considerations for achieving optimal handling and appearance in restomods. | restomod suspension, pro-touring suspension, classic car handling, muscle car upgrades |  |
+| Integrating Modern Power: LS & Coyote Swaps Done Right | Explores the technical challenges and solutions for seamlessly integrating modern V8 engines (LS, Coyote) into classic chassis, covering wiring, cooling, fuel systems, and ECU tuning. | LS swap classic car, Coyote swap Mustang, restomod engine swap, modern V8 conversion |  |
+| Beyond the Shine: The Meticulous Body & Paint Process for Concourse-Level Restomods | Details the steps involved in achieving flawless bodywork and paint – metal prep, panel gapping, block sanding, paint application techniques, cut/polish for a deep finish. | custom car paint, restomod bodywork, show car finish, classic car restoration paint |  |
+| Restomod vs. Restoration: Understanding Value in Today's Market | Analyzes the evolving classic car market, discussing the pros and cons of restomodding versus stock restoration concerning drivability, usability, and potential resale value. | restomod value, classic car investment, restoration vs restomod, collector car market trends |  |
+| Midwest Muscle: Scenes from the | Event recap featuring photos and highlights from participation in a major regional car show, showcasing community involvement and local car culture. | Kansas car show, Missouri car show, Midwest classic cars, |  |
+| The Rise of the '80s Classics: Why Cars from the Radwood Era Are Gaining Traction | Discusses the increasing popularity and collectibility of vehicles from the 1980s and early 1990s, exploring the driving factors and potential for restomodding. | 80s classic cars, Radwood cars, emerging classics, youngtimer restomod |  |
+| Designing Your Dream Drive: The Bespoke Consultation Process | Walks potential clients through the initial consultation phase, emphasizing how their vision is translated into an actionable engineering and design plan. | custom car design, restomod consultation, bespoke car build, automotive design process |  |
+F. Contact & Consultation: Facilitating the First Conversation
+ * Purpose: Make it easy for qualified prospects to initiate contact and request a consultation.
+ * Content & Layout:
+   * Contact Information: Clearly display phone number, email address, and the physical address of the primary Kansas facility. Include business hours.
+   * Contact Form: Professional, user-friendly form. Required fields: Name, Email, Phone. Optional fields: Vehicle of Interest (Make/Model/Year), Brief Project Description/Vision, How Did You Hear About Us?. Keep it concise to avoid friction.
+   * Map: Embed an interactive map showing the facility location.
+   * Reassurance: Briefly reiterate the value proposition and the collaborative nature of the consultation process. Set expectations for response time.
+G. Website Copy: Tone of Voice and Key Messaging Framework
+ * Tone of Voice: Sophisticated, Authoritative, Passionate, Precise, Trustworthy, Exclusive. The language should reflect the high level of engineering and craftsmanship involved. Avoid overly casual slang but convey genuine passion for classic automobiles. Blend technical accuracy with evocative descriptions of the driving experience and aesthetic appeal.
+ * Key Messaging: Consistently weave these themes throughout the website copy:
+   * "Engineering Meets Artistry" (The core JV differentiator)
+   * "Bespoke Automotive Restomods"
+   * "Modern Performance, Classic Soul"
+   * "Precision Engineered, Masterfully Crafted"
+   * "The Ultimate Driving Experience, Reimagined"
+   * "Uncompromising Quality & Attention to Detail"
+ * Quality: Copy must be impeccably written, grammatically perfect, and free of typos. Professional copywriting and editing are essential.
+VI. Marketing Integration & Lead Generation
+The website serves as the foundation for attracting and capturing leads.
+A. Search Engine Optimization (SEO) Strategy (On-Page & Local Focus)
+ * Goal: Achieve high visibility in search engine results for relevant keywords, attracting the ICP organically.
+ * Keyword Strategy: Target a mix of broad and specific keywords:
+   * Core Terms: "restomod builder," "pro-touring cars," "custom classic cars," "high-end auto restoration," "bespoke car builds."
+   * Vehicle Specific: "[Make Model] restomod" (e.g., "Camaro restomod," "Mustang pro-touring," "Chevelle restomod," "classic truck restomod"). Focus initially on popular 50s-80s American muscle and trucks.
+   * Feature Specific: "LS swap classic car," "Coyote swap," "custom car chassis," "vintage air conditioning install."
+   * Branded: "McKenney Skinny's," "McKenney restomod," "Skinny's custom cars."
+   * Geographic: "Kansas custom car builder," "Midwest restomod shop," "Missouri pro-touring," "Oklahoma classic car restoration," etc..
+ * On-Page SEO: Implement best practices: Optimize title tags, meta descriptions, header tags (H1, H2, H3) , image alt text, and internal linking structure. Ensure content naturally incorporates target keywords.
+ * Technical SEO: Ensure fast loading speed, mobile-friendliness (responsive design), clean URL structure, and implement schema markup (LocalBusiness, AutomotiveBusiness, potentially Product/Service schema) to provide context for search engines.
+ * Local SEO:
+   * Optimize a Google Business Profile (GBP) for the Kansas location , ensuring complete information, high-quality photos, service descriptions, and active review management.
+   * Build citations in relevant local and automotive directories.
+   * Target local keywords prominently on the website (contact page, service area mentions).
+   * Leverage the "Kansas Advantage": While targeting nationally, highlight the benefits of the central US location. This could relate to potentially streamlined logistics for vehicle transport compared to coastal builders, accessibility for clients across the Midwest, and a connection to the strong regional automotive manufacturing base and car culture. Feature content about local/regional car shows and events attended (e.g., Starbird Tulsa Show, Ol' Marais River Run, events in KS, MO, OK) to demonstrate local engagement.
+ * Link Building: Develop a strategy to acquire high-quality backlinks from reputable automotive publications, blogs, partner websites (e.g., parts suppliers), and potentially features on luxury lifestyle sites.
+B. Calls-to-Action (CTAs) Map & Lead Capture Mechanisms
+ * Strategy: Place clear, compelling CTAs strategically throughout the user journey.
+ * Primary CTAs (High Intent):
+   * "Request a Consultation" (Homepage Hero, Contact Page, Process Page End, About Page)
+   * "Begin Your Bespoke Build" (Portfolio Pages, Process Page)
+   * "Contact Our Team" (Header/Footer, Contact Page)
+ * Secondary CTAs (Lower Intent/Exploration):
+   * "Explore Our Process" (Homepage, About Page)
+   * "View Our Portfolio" / "See Featured Builds" (Homepage, About Page)
+   * "Learn More About" (Relevant sections)
+   * "Read Our Insights" / "Visit the Blog" (Homepage Footer, Dedicated Nav Link)
+   * "Subscribe for Updates" (Footer, Blog Sidebar - for newsletter/content updates)
+ * Lead Capture:
+   * Contact Form (Primary): Capture essential info (Name, Email, Phone, Interest Area). Integrate with a CRM system for efficient lead management and follow-up.
+   * Newsletter Signup (Secondary): Capture emails for nurturing through content marketing.
+   * Phone Number: Prominently display for direct calls.
+C. Social Media Integration Strategy
+ * Platforms: Focus on visually driven platforms where the ICP is active:
+   * Instagram: Essential for high-quality photos and short videos (Reels) showcasing builds, details, and behind-the-scenes content. Link in bio directs to website. Consider embedding feed on website.
+   * YouTube: Ideal for longer-form content like build documentaries, process explanations, driving footage, and event coverage.
+   * Facebook: Useful for community building, event promotion, sharing blog content, and targeted advertising.
+   * LinkedIn (Potential): For showcasing engineering expertise, B2B partnerships, and company news.
+ * Content: Repurpose website visuals (photos, videos, blog snippets). Create platform-specific content (e.g., Reels, Stories). Focus on showcasing craftsmanship, engineering, and the lifestyle associated with owning these vehicles.
+ * Integration: Include clear links/icons to social profiles on the website header/footer. Enable social sharing for blog posts/portfolio items.
+VII. Technical & Functional Specifications
+A. Platform Recommendations & Rationale
+ * Recommendation: A flexible and scalable Content Management System (CMS) such as WordPress.org (self-hosted) with a custom-developed theme or a highly customizable premium theme framework. Alternatively, a Headless CMS (like Contentful, Sanity) coupled with a modern front-end framework (like React, Vue, or Next.js) could be considered for maximum design flexibility and performance, though development complexity is higher.
+ * Rationale:
+   * WordPress: Offers excellent SEO capabilities, vast plugin ecosystem for functionality (forms, galleries, SEO tools), ease of content updates for the client's team (especially for the blog), large developer community, and scalability. A custom theme ensures unique branding and avoids limitations of off-the-shelf templates.
+   * Headless CMS: Provides greater front-end design freedom, potentially better performance, and future-proofing for multi-channel content delivery. Requires more specialized development expertise.
+   * Avoid: Basic website builders (Wix, Squarespace) lack the customization, performance, and advanced SEO control needed for a high-end brand competing in this space.
+B. Performance, Accessibility, and Security Standards
+ * Performance: Target fast loading times (e.g., Largest Contentful Paint under 2.5 seconds). Optimize images, leverage browser caching, use efficient code, and consider Content Delivery Network (CDN) implementation. Site speed is critical for user experience and SEO.
+ * Accessibility: Adhere to Web Content Accessibility Guidelines (WCAG) 2.1 Level AA standards. Ensure proper heading structure , image alt text, keyboard navigation, color contrast, and compatibility with assistive technologies.
+ * Mobile Responsiveness: The website must be fully responsive and provide an optimal viewing experience across all devices (desktops, tablets, smartphones).
+ * Security: Implement standard security best practices: HTTPS (SSL certificate), secure hosting, regular software updates and backups, protection against common web vulnerabilities (e.g., XSS, SQL injection), and secure form handling.
+VIII. Conclusion & Implementation Roadmap
+A. Summary of Core Requirements
+This website must serve as the definitive digital representation of the McKenney & Skinny's joint venture. Success hinges on effectively communicating the unique "Engineering Meets Artistry" value proposition to a discerning, high-net-worth clientele. Key requirements include:
+ * Premium Design: A sophisticated, visually stunning aesthetic reflecting luxury and precision.
+ * Compelling Content: High-quality photography/videography showcasing concourse-level detail and the build process, coupled with clear, authoritative copy.
+ * ICP Focus: Tailored messaging and user experience addressing the motivations and needs of the target restomod buyer.
+ * Transparency & Trust: Detailed explanation of the engineering-infused build process, including realistic discussions of timelines, investment, and explicit warranty/support information.
+ * Robust Functionality: Intuitive navigation, effective lead capture mechanisms, strong SEO foundation (local and national), and seamless mobile experience.
+ * JV Narrative: Consistently reinforcing the synergy between McKenney's engineering and Skinny's craftsmanship throughout the site.
+B. Phased Rollout Recommendations (Optional)
+If budget or time constraints necessitate a phased approach, the following is recommended:
+ * Phase 1: Foundation (Launch MVP)
+   * Core Pages: Homepage, About Us (JV story, partner intros), Our Process (overview, emphasizing engineering), Contact Page (with functional form), Initial Portfolio (2-3 featured case studies).
+   * Essential Branding: Logo, color palette, typography implemented.
+   * Core SEO: Basic on-page optimization, GBP setup.
+   * Functionality: Mobile responsive, secure, functional contact form.
+ * Phase 2: Expansion & Optimization
+   * Full Portfolio Build-out: Add comprehensive Past Projects gallery with filtering.
+   * Insights Hub Launch: Implement blog functionality and publish initial set of articles (Table 2).
+   * Advanced Process Details: Add more visual depth (process videos/photos) and refine timeline/investment/warranty sections on the "Our Process" page.
+   * Enhanced SEO: Implement full keyword strategy, local SEO buildout, begin link-building efforts.
+   * Social Media Integration: Embed feeds, implement sharing buttons.
+ * Phase 3: Ongoing Growth
+   * Regular Content Creation: Consistent publishing schedule for Insights Hub.
+   * Performance Monitoring & Optimization: Analyze website traffic and lead data to refine strategy.
+   * Potential Future Features: Interactive configurator elements, client login portal (for build progress), expanded e-commerce (if merchandise is planned).
+Executing this PRD will result in a powerful digital asset that not only showcases the exceptional capabilities of the McKenney & Skinny's joint venture but also effectively attracts and converts the high-end clientele necessary for its success.
