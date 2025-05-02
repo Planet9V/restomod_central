@@ -8,6 +8,7 @@ import MarketInsights from "@/components/home/MarketInsights";
 import AboutUs from "@/components/home/AboutUs";
 import Testimonials from "@/components/home/Testimonials";
 import ContactSection from "@/components/home/ContactSection";
+import ConfiguratorCTA from "@/components/home/ConfiguratorCTA";
 
 const Home = () => {
   // Initialize scroll reveal animations
@@ -39,6 +40,7 @@ const Home = () => {
       <EngineeringMeetsArtistry />
       <ProjectGallery />
       <ProcessSection />
+      <ConfiguratorCTA />
       <MarketInsights />
       <AboutUs />
       <Testimonials />

@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import * as storage from "./storage";
 import { z } from "zod";
 import { contactSubmissionsInsertSchema } from "@shared/schema";
+import * as aiApi from "./api/ai";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // API routes prefix
@@ -168,6 +169,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to submit contact form" });
     }
   });
+
+  // AI configurator recommendation
+  app.post(`${apiPrefix}/ai/configurator-recommendation`, aiApi.getConfiguratorRecommendation);
 
   const httpServer = createServer(app);
   return httpServer;

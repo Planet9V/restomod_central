@@ -16,6 +16,7 @@ export const NAV_LINKS = [
   { name: 'About Us', href: '/#about' },
   { name: 'Resources', href: '/resources' },
   { name: 'Archive', href: '/vehicle-archive' },
+  { name: 'Build Your Restomod', href: '/car-configurator' },
   { name: 'Insights', href: '/#insights' },
 ];
 
@@ -149,6 +150,7 @@ export const FOOTER_LINKS = [
       { name: 'About Us', href: '/#about' },
       { name: 'Resources', href: '/resources' },
       { name: 'Vehicle Archive', href: '/vehicle-archive' },
+      { name: 'Build Your Restomod', href: '/car-configurator' },
       { name: 'Insights', href: '/#insights' },
       { name: 'Contact', href: '/#contact' },
     ],
