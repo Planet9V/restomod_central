@@ -11,10 +11,11 @@ export const COLORS = {
 
 // Navigation links for header and footer
 export const NAV_LINKS = [
-  { name: 'Our Projects', href: '#projects' },
-  { name: 'Process', href: '#process' },
-  { name: 'About Us', href: '#about' },
-  { name: 'Insights', href: '#insights' },
+  { name: 'Our Projects', href: '/projects' },
+  { name: 'Process', href: '/#process' },
+  { name: 'About Us', href: '/#about' },
+  { name: 'Resources', href: '/resources' },
+  { name: 'Insights', href: '/#insights' },
 ];
 
 // Project categories
@@ -142,11 +143,12 @@ export const FOOTER_LINKS = [
   {
     title: 'Quick Links',
     links: [
-      { name: 'Our Projects', href: '#projects' },
-      { name: 'Process', href: '#process' },
-      { name: 'About Us', href: '#about' },
-      { name: 'Insights', href: '#insights' },
-      { name: 'Contact', href: '#contact' },
+      { name: 'Our Projects', href: '/projects' },
+      { name: 'Process', href: '/#process' },
+      { name: 'About Us', href: '/#about' },
+      { name: 'Resources', href: '/resources' },
+      { name: 'Insights', href: '/#insights' },
+      { name: 'Contact', href: '/#contact' },
     ],
   },
   {
