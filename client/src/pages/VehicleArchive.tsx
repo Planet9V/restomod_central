@@ -353,6 +353,7 @@ const VehicleArchive = () => {
         hashtag="Restomod"
         imageSrc="https://images.luxuryautodirect.com/19997/1967-ford-mustang-restomod-3.jpg"
         videoSrc="https://cdn.videvo.net/videvo_files/video/premium/video0229/large_watermarked/902-1_902-2040_preview.mp4"
+        showNavigation={false} // Don't show navigation to avoid duplicates with main header
       />
 
       {/* Content Section */}

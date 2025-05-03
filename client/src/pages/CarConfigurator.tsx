@@ -1342,6 +1342,7 @@ const CarConfigurator = () => {
         hashtag="EngineeredArtistry"
         videoSrc="https://cdn.videvo.net/videvo_files/video/premium/video0290/large_watermarked/902-2_902-2923-PD2_preview.mp4"
         imageSrc="https://images.luxuryautodirect.com/19997/1967-ford-mustang-restomod-3.jpg"
+        showNavigation={false} // Don't show navigation to avoid duplicates with main header
       />
       
       {/* Main Content */}
