@@ -8,6 +8,7 @@ interface VideoHeaderProps {
   title: string;
   subtitle?: string;
   hashtag?: string;
+  showNavigation?: boolean; // Whether to show the navigation menu
 }
 
 const VideoHeader = ({
@@ -15,7 +16,8 @@ const VideoHeader = ({
   imageSrc,
   title,
   subtitle,
-  hashtag
+  hashtag,
+  showNavigation = false // Default to false to avoid duplicate navigation
 }: VideoHeaderProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVideoPaused, setIsVideoPaused] = useState(false);
@@ -74,10 +76,12 @@ const VideoHeader = ({
         {/* Overlay for better text visibility */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
         
-        {/* Navigation */}
-        <div className="absolute top-0 left-0 right-0">
-          <Navigation isTransparent={!isScrolled} isDarkMode={true} hasConsultationButton={false} />
-        </div>
+        {/* Navigation - Only show if showNavigation is true */}
+        {showNavigation && (
+          <div className="absolute top-0 left-0 right-0">
+            <Navigation isTransparent={!isScrolled} isDarkMode={true} hasConsultationButton={false} />
+          </div>
+        )}
         
         {/* Video Controls - Porsche inspired */}
         {videoSrc && (
