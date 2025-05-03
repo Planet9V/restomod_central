@@ -2,7 +2,168 @@ import { db } from "@db";
 import * as schema from "@shared/schema";
 import { eq, like, desc, asc } from "drizzle-orm";
 import { z } from "zod";
-import { zod as drizzleZod } from "drizzle-zod";
+import { createInsertSchema } from "drizzle-zod";
+
+// Type for update operations
+type UpdateData<T> = Partial<T>;
+
+// ========== ADMIN CRUD OPERATIONS ==========
+
+// Projects CRUD
+export const createProject = async (data: z.infer<typeof schema.projectsInsertSchema>) => {
+  const [project] = await db.insert(schema.projects)
+    .values(data)
+    .returning();
+  return project;
+};
+
+export const updateProject = async (id: number, data: UpdateData<z.infer<typeof schema.projectsInsertSchema>>) => {
+  const existing = await db.query.projects.findFirst({
+    where: eq(schema.projects.id, id)
+  });
+  
+  if (!existing) {
+    throw new Error('Project not found');
+  }
+  
+  const [updated] = await db.update(schema.projects)
+    .set(data)
+    .where(eq(schema.projects.id, id))
+    .returning();
+  
+  return updated;
+};
+
+export const deleteProject = async (id: number) => {
+  const existing = await db.query.projects.findFirst({
+    where: eq(schema.projects.id, id)
+  });
+  
+  if (!existing) {
+    throw new Error('Project not found');
+  }
+  
+  await db.delete(schema.projects)
+    .where(eq(schema.projects.id, id));
+  
+  return true;
+};
+
+// Testimonials CRUD
+export const createTestimonial = async (data: z.infer<typeof schema.testimonialsInsertSchema>) => {
+  const [testimonial] = await db.insert(schema.testimonials)
+    .values(data)
+    .returning();
+  return testimonial;
+};
+
+export const updateTestimonial = async (id: number, data: UpdateData<z.infer<typeof schema.testimonialsInsertSchema>>) => {
+  const existing = await db.query.testimonials.findFirst({
+    where: eq(schema.testimonials.id, id)
+  });
+  
+  if (!existing) {
+    throw new Error('Testimonial not found');
+  }
+  
+  const [updated] = await db.update(schema.testimonials)
+    .set(data)
+    .where(eq(schema.testimonials.id, id))
+    .returning();
+  
+  return updated;
+};
+
+export const deleteTestimonial = async (id: number) => {
+  const existing = await db.query.testimonials.findFirst({
+    where: eq(schema.testimonials.id, id)
+  });
+  
+  if (!existing) {
+    throw new Error('Testimonial not found');
+  }
+  
+  await db.delete(schema.testimonials)
+    .where(eq(schema.testimonials.id, id));
+  
+  return true;
+};
+
+// Team Members CRUD
+export const createTeamMember = async (data: z.infer<typeof schema.teamMembersInsertSchema>) => {
+  const [teamMember] = await db.insert(schema.teamMembers)
+    .values(data)
+    .returning();
+  return teamMember;
+};
+
+export const updateTeamMember = async (id: number, data: UpdateData<z.infer<typeof schema.teamMembersInsertSchema>>) => {
+  const existing = await db.query.teamMembers.findFirst({
+    where: eq(schema.teamMembers.id, id)
+  });
+  
+  if (!existing) {
+    throw new Error('Team member not found');
+  }
+  
+  const [updated] = await db.update(schema.teamMembers)
+    .set(data)
+    .where(eq(schema.teamMembers.id, id))
+    .returning();
+  
+  return updated;
+};
+
+export const deleteTeamMember = async (id: number) => {
+  const existing = await db.query.teamMembers.findFirst({
+    where: eq(schema.teamMembers.id, id)
+  });
+  
+  if (!existing) {
+    throw new Error('Team member not found');
+  }
+  
+  await db.delete(schema.teamMembers)
+    .where(eq(schema.teamMembers.id, id));
+  
+  return true;
+};
+
+// Company Info
+export const updateCompany = async (id: number, data: UpdateData<z.infer<typeof schema.companiesInsertSchema>>) => {
+  const existing = await db.query.companies.findFirst({
+    where: eq(schema.companies.id, id)
+  });
+  
+  if (!existing) {
+    throw new Error('Company not found');
+  }
+  
+  const [updated] = await db.update(schema.companies)
+    .set(data)
+    .where(eq(schema.companies.id, id))
+    .returning();
+  
+  return updated;
+};
+
+// Hero Content
+export const updateHeroContent = async (id: number, data: UpdateData<z.infer<typeof schema.heroContentInsertSchema>>) => {
+  const existing = await db.query.heroContent.findFirst({
+    where: eq(schema.heroContent.id, id)
+  });
+  
+  if (!existing) {
+    throw new Error('Hero content not found');
+  }
+  
+  const [updated] = await db.update(schema.heroContent)
+    .set(data)
+    .where(eq(schema.heroContent.id, id))
+    .returning();
+  
+  return updated;
+};
 
 // Projects
 export const getProjects = async () => {
