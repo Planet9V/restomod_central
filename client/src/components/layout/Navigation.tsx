@@ -59,13 +59,7 @@ const Navigation = ({
                   location === link.href ? "w-full" : ""
                 }`}></span>
               </Link>
-              {/* Subtle tooltip on hover - Porsche style */}
-              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                <div className="bg-charcoal/90 text-white text-xs py-1 px-2 rounded-sm whitespace-nowrap">
-                  {link.name}
-                </div>
-                <div className="w-2 h-2 bg-charcoal/90 transform rotate-45 absolute -top-1 left-1/2 -translate-x-1/2"></div>
-              </div>
+              {/* We're removing the tooltip that was causing the appearance of a duplicate menu */}
             </div>
           ))}
         </div>
