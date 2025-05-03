@@ -7,10 +7,14 @@ import * as aiApi from "./api/ai";
 import * as researchApi from "./api/research";
 import { generateCarImage } from "./api/gemini";
 import * as perplexityApi from "./api/perplexity";
+import { setupAuth, isAuthenticated, isAdmin } from "./auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // API routes prefix
   const apiPrefix = "/api";
+  
+  // Setup authentication routes
+  setupAuth(app);
 
   // Hero content
   app.get(`${apiPrefix}/hero`, async (req, res) => {
@@ -187,6 +191,252 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get(`${apiPrefix}/perplexity/car-info`, perplexityApi.getCarInformation);
   app.get(`${apiPrefix}/perplexity/part-info`, perplexityApi.getPartInformation);
   app.post(`${apiPrefix}/perplexity/configuration`, perplexityApi.getConfigurationRecommendations);
+  
+  // ========== ADMIN API ROUTES ==========
+  // These routes are protected and require admin authentication
+  
+  // Admin Projects CRUD
+  app.post(`${apiPrefix}/admin/projects`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const project = await storage.createProject(req.body);
+      res.status(201).json(project);
+    } catch (error) {
+      console.error("Error creating project:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          message: "Validation error", 
+          errors: error.errors.map(e => ({ path: e.path.join('.'), message: e.message }))
+        });
+      }
+      res.status(500).json({ message: "Failed to create project" });
+    }
+  });
+  
+  app.put(`${apiPrefix}/admin/projects/:id`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const projectId = parseInt(id);
+      
+      if (isNaN(projectId)) {
+        return res.status(400).json({ message: "Invalid project ID" });
+      }
+      
+      const project = await storage.updateProject(projectId, req.body);
+      res.json(project);
+    } catch (error) {
+      console.error("Error updating project:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          message: "Validation error", 
+          errors: error.errors.map(e => ({ path: e.path.join('.'), message: e.message }))
+        });
+      }
+      if ((error as Error).message === 'Project not found') {
+        return res.status(404).json({ message: "Project not found" });
+      }
+      res.status(500).json({ message: "Failed to update project" });
+    }
+  });
+  
+  app.delete(`${apiPrefix}/admin/projects/:id`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const projectId = parseInt(id);
+      
+      if (isNaN(projectId)) {
+        return res.status(400).json({ message: "Invalid project ID" });
+      }
+      
+      await storage.deleteProject(projectId);
+      res.status(204).end();
+    } catch (error) {
+      console.error("Error deleting project:", error);
+      if ((error as Error).message === 'Project not found') {
+        return res.status(404).json({ message: "Project not found" });
+      }
+      res.status(500).json({ message: "Failed to delete project" });
+    }
+  });
+  
+  // Admin Testimonials CRUD
+  app.post(`${apiPrefix}/admin/testimonials`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const testimonial = await storage.createTestimonial(req.body);
+      res.status(201).json(testimonial);
+    } catch (error) {
+      console.error("Error creating testimonial:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          message: "Validation error", 
+          errors: error.errors.map(e => ({ path: e.path.join('.'), message: e.message }))
+        });
+      }
+      res.status(500).json({ message: "Failed to create testimonial" });
+    }
+  });
+  
+  app.put(`${apiPrefix}/admin/testimonials/:id`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const testimonialId = parseInt(id);
+      
+      if (isNaN(testimonialId)) {
+        return res.status(400).json({ message: "Invalid testimonial ID" });
+      }
+      
+      const testimonial = await storage.updateTestimonial(testimonialId, req.body);
+      res.json(testimonial);
+    } catch (error) {
+      console.error("Error updating testimonial:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          message: "Validation error", 
+          errors: error.errors.map(e => ({ path: e.path.join('.'), message: e.message }))
+        });
+      }
+      if ((error as Error).message === 'Testimonial not found') {
+        return res.status(404).json({ message: "Testimonial not found" });
+      }
+      res.status(500).json({ message: "Failed to update testimonial" });
+    }
+  });
+  
+  app.delete(`${apiPrefix}/admin/testimonials/:id`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const testimonialId = parseInt(id);
+      
+      if (isNaN(testimonialId)) {
+        return res.status(400).json({ message: "Invalid testimonial ID" });
+      }
+      
+      await storage.deleteTestimonial(testimonialId);
+      res.status(204).end();
+    } catch (error) {
+      console.error("Error deleting testimonial:", error);
+      if ((error as Error).message === 'Testimonial not found') {
+        return res.status(404).json({ message: "Testimonial not found" });
+      }
+      res.status(500).json({ message: "Failed to delete testimonial" });
+    }
+  });
+  
+  // Admin Hero Content Update
+  app.put(`${apiPrefix}/admin/hero/:id`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const heroId = parseInt(id);
+      
+      if (isNaN(heroId)) {
+        return res.status(400).json({ message: "Invalid hero content ID" });
+      }
+      
+      const heroContent = await storage.updateHeroContent(heroId, req.body);
+      res.json(heroContent);
+    } catch (error) {
+      console.error("Error updating hero content:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          message: "Validation error", 
+          errors: error.errors.map(e => ({ path: e.path.join('.'), message: e.message }))
+        });
+      }
+      if ((error as Error).message === 'Hero content not found') {
+        return res.status(404).json({ message: "Hero content not found" });
+      }
+      res.status(500).json({ message: "Failed to update hero content" });
+    }
+  });
+  
+  // Admin Team Members CRUD
+  app.post(`${apiPrefix}/admin/team`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const teamMember = await storage.createTeamMember(req.body);
+      res.status(201).json(teamMember);
+    } catch (error) {
+      console.error("Error creating team member:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          message: "Validation error", 
+          errors: error.errors.map(e => ({ path: e.path.join('.'), message: e.message }))
+        });
+      }
+      res.status(500).json({ message: "Failed to create team member" });
+    }
+  });
+  
+  app.put(`${apiPrefix}/admin/team/:id`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const teamMemberId = parseInt(id);
+      
+      if (isNaN(teamMemberId)) {
+        return res.status(400).json({ message: "Invalid team member ID" });
+      }
+      
+      const teamMember = await storage.updateTeamMember(teamMemberId, req.body);
+      res.json(teamMember);
+    } catch (error) {
+      console.error("Error updating team member:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          message: "Validation error", 
+          errors: error.errors.map(e => ({ path: e.path.join('.'), message: e.message }))
+        });
+      }
+      if ((error as Error).message === 'Team member not found') {
+        return res.status(404).json({ message: "Team member not found" });
+      }
+      res.status(500).json({ message: "Failed to update team member" });
+    }
+  });
+  
+  app.delete(`${apiPrefix}/admin/team/:id`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const teamMemberId = parseInt(id);
+      
+      if (isNaN(teamMemberId)) {
+        return res.status(400).json({ message: "Invalid team member ID" });
+      }
+      
+      await storage.deleteTeamMember(teamMemberId);
+      res.status(204).end();
+    } catch (error) {
+      console.error("Error deleting team member:", error);
+      if ((error as Error).message === 'Team member not found') {
+        return res.status(404).json({ message: "Team member not found" });
+      }
+      res.status(500).json({ message: "Failed to delete team member" });
+    }
+  });
+  
+  // Admin Company Info Update
+  app.put(`${apiPrefix}/admin/companies/:id`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const companyId = parseInt(id);
+      
+      if (isNaN(companyId)) {
+        return res.status(400).json({ message: "Invalid company ID" });
+      }
+      
+      const company = await storage.updateCompany(companyId, req.body);
+      res.json(company);
+    } catch (error) {
+      console.error("Error updating company:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          message: "Validation error", 
+          errors: error.errors.map(e => ({ path: e.path.join('.'), message: e.message }))
+        });
+      }
+      if ((error as Error).message === 'Company not found') {
+        return res.status(404).json({ message: "Company not found" });
+      }
+      res.status(500).json({ message: "Failed to update company" });
+    }
+  });
 
   const httpServer = createServer(app);
   return httpServer;
