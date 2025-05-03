@@ -7,59 +7,59 @@
 export const VehicleImages = {
   // Projects
   '1953-ford-f100': {
-    main: 'https://images.unsplash.com/photo-1561694748-bca86b1ac585?q=80&w=1600&auto=format&fit=crop',
+    main: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=1600&auto=format&fit=crop',
     gallery: [
-      'https://images.unsplash.com/photo-1561694748-bca86b1ac585?q=80&w=1600&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1569013389100-08ba362908e5?q=80&w=1600&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1531086623190-a3bd615e55b5?q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1541348263662-e068662d82af?q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1533106418989-88406c7cc8ca?q=80&w=1600&auto=format&fit=crop',
     ]
   },
   '1967-ford-mustang': {
-    main: 'https://images.unsplash.com/photo-1588127333419-b9d7de223dcf?q=80&w=1600&auto=format&fit=crop',
+    main: 'https://images.unsplash.com/photo-1533106418989-88406c7cc8ca?q=80&w=1600&auto=format&fit=crop',
     gallery: [
-      'https://images.unsplash.com/photo-1588127333419-b9d7de223dcf?q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1533106418989-88406c7cc8ca?q=80&w=1600&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=1600&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1583267746897-2cf66319ef97?q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1611016186353-9af58c69a533?q=80&w=1600&auto=format&fit=crop',
     ]
   },
   '1968-chevrolet-camaro': {
-    main: 'https://images.unsplash.com/photo-1587825045776-39a3c73756b2?q=80&w=1600&auto=format&fit=crop',
+    main: 'https://images.unsplash.com/photo-1553440569-bcc63803a83d?q=80&w=1600&auto=format&fit=crop',
     gallery: [
-      'https://images.unsplash.com/photo-1587825045776-39a3c73756b2?q=80&w=1600&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1603386329225-868361163bbe?q=80&w=1600&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1565043589224-4d1b8b0dd85f?q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1553440569-bcc63803a83d?q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1502877338535-766e1452684a?q=80&w=1600&auto=format&fit=crop',
     ]
   },
   '1966-chevrolet-chevelle': {
     main: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=1600&auto=format&fit=crop',
     gallery: [
       'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=1600&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1566889240233-fe8e57d3df9e?q=80&w=1600&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1544407160-0a2b8f616b8a?q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=1600&auto=format&fit=crop',
     ]
   },
   '1951-ford-f1': {
-    main: 'https://images.unsplash.com/photo-1591194693359-0f89ed5569a2?q=80&w=1600&auto=format&fit=crop',
+    main: 'https://images.unsplash.com/photo-1596649299486-4cdea56fd59d?q=80&w=1600&auto=format&fit=crop',
     gallery: [
-      'https://images.unsplash.com/photo-1591194693359-0f89ed5569a2?q=80&w=1600&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1603385020333-d50650fa0d3e?q=80&w=1600&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1578209258428-5a5e455c8d69?q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1596649299486-4cdea56fd59d?q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1534093607318-f025413f49cb?q=80&w=1600&auto=format&fit=crop',
     ]
   },
 };
 
 // Process section images
 export const ProcessImages = {
-  consultation: 'https://images.unsplash.com/photo-1577412647305-991150c7d163?q=80&w=1600&auto=format&fit=crop',
-  design: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1600&auto=format&fit=crop',
-  fabrication: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=1600&auto=format&fit=crop',
-  finishing: 'https://images.unsplash.com/photo-1594818379496-da1e345d0ded?q=80&w=1600&auto=format&fit=crop'
+  consultation: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=1600&auto=format&fit=crop',
+  design: 'https://images.unsplash.com/photo-1523726491678-bf852e717f6a?q=80&w=1600&auto=format&fit=crop',
+  fabrication: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1600&auto=format&fit=crop',
+  finishing: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1600&auto=format&fit=crop'
 };
 
 // About section images
 export const AboutImages = {
-  skinnys: 'https://images.unsplash.com/photo-1504222490345-c075b6008014?q=80&w=1600&auto=format&fit=crop',
-  engineering: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?q=80&w=1600&auto=format&fit=crop'
+  skinnys: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=1600&auto=format&fit=crop',
+  engineering: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1600&auto=format&fit=crop'
 };
 
 // Team member images
