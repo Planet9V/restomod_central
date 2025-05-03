@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { NAV_LINKS } from "@/lib/constants";
+import { useAuth } from "@/hooks/use-auth";
+import { Lock, User } from "lucide-react";
 
 interface NavigationProps {
   isTransparent?: boolean;
@@ -15,6 +17,7 @@ const Navigation = ({
 }: NavigationProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [location] = useLocation();
+  const { user, isAdmin, isAuthenticated, logoutMutation } = useAuth();
   
   // Determine text color based on dark mode
   const textColorClass = isDarkMode ? "text-white" : "text-charcoal";

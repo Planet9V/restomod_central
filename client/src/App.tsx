@@ -3,6 +3,8 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
 import { Toaster } from "@/components/ui/toaster";
 import { useEffect, useState } from "react";
+import { AuthProvider } from "@/hooks/use-auth";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 
 // Pages
 import Home from "@/pages/Home";
@@ -12,6 +14,8 @@ import Resources from "@/pages/Resources";
 import ArticleDetail from "@/pages/ArticleDetail";
 import VehicleArchive from "@/pages/VehicleArchive";
 import CarConfigurator from "@/pages/CarConfigurator";
+import AuthPage from "@/pages/AuthPage";
+import AdminDashboard from "@/pages/AdminDashboard";
 import NotFound from "@/pages/not-found";
 
 // Layout components
@@ -46,6 +50,10 @@ function Router() {
         <Route path="/resources/:slug" component={ArticleDetail} />
         <Route path="/vehicle-archive" component={VehicleArchive} />
         <Route path="/car-configurator" component={CarConfigurator} />
+        <Route path="/auth" component={AuthPage} />
+        <Route path="/admin">
+          {() => <ProtectedRoute component={AdminDashboard} adminOnly />}
+        </Route>
         <Route component={NotFound} />
       </Switch>
     </PageTransition>
@@ -55,15 +63,17 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="relative">
-        <div className="grain-overlay"></div>
-        <Header />
-        <main>
-          <Router />
-        </main>
-        <Footer />
-      </div>
-      <Toaster />
+      <AuthProvider>
+        <div className="relative">
+          <div className="grain-overlay"></div>
+          <Header />
+          <main>
+            <Router />
+          </main>
+          <Footer />
+        </div>
+        <Toaster />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

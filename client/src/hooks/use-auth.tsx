@@ -52,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     queryFn: async () => {
       if (!token) return null;
       try {
-        const res = await apiRequest('GET', '/api/auth/me', null, {
+        const res = await fetch('/api/auth/me', {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) {
@@ -75,7 +75,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Login mutation
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginCredentials) => {
-      const res = await apiRequest('POST', '/api/auth/login', credentials);
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(credentials)
+      });
       if (!res.ok) {
         const error = await res.json();
         throw new Error(error.error || 'Login failed');
