@@ -68,6 +68,38 @@ const Navigation = ({
         
         {/* Right side CTA and mobile menu */}
         <div className="flex items-center">
+          {/* Authentication buttons */}
+          <div className="hidden md:flex items-center mr-4">
+            {isAuthenticated ? (
+              <div className="flex items-center space-x-4">
+                {isAdmin && (
+                  <Link 
+                    href="/admin" 
+                    className={`${textColorClass} hover:text-gold transition-all duration-300 flex items-center`}
+                  >
+                    <Lock size={16} className="mr-1" />
+                    <span>Admin</span>
+                  </Link>
+                )}
+                <button
+                  onClick={() => logoutMutation.mutate()}
+                  className={`${textColorClass} hover:text-gold transition-all duration-300 flex items-center`}
+                >
+                  <User size={16} className="mr-1" />
+                  <span>Logout</span>
+                </button>
+              </div>
+            ) : (
+              <Link 
+                href="/auth" 
+                className={`${textColorClass} hover:text-gold transition-all duration-300 flex items-center`}
+              >
+                <Lock size={16} className="mr-1" />
+                <span>Admin Login</span>
+              </Link>
+            )}
+          </div>
+
           {/* Desktop consultation button with micro-interactions */}
           {hasConsultationButton && (
             <div className="hidden md:block relative group mr-4">
@@ -170,13 +202,84 @@ const Navigation = ({
             </div>
           ))}
           
+          {/* Authentication options */}
+          <div 
+            className="overflow-hidden mt-4"
+            style={{ 
+              transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(-20px)',
+              opacity: isMobileMenuOpen ? 1 : 0,
+              transition: `transform 0.5s ease ${0.1 + NAV_LINKS.length * 0.1}s, opacity 0.5s ease ${0.1 + NAV_LINKS.length * 0.1}s`
+            }}
+          >
+            {isAuthenticated ? (
+              <div className="flex flex-col space-y-4">
+                {isAdmin && (
+                  <Link 
+                    href="/admin"
+                    className="text-white text-2xl font-playfair font-bold hover:text-gold transition-all duration-300 group flex items-center"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Lock className="mr-2" />
+                    <span className="relative">
+                      Admin Dashboard
+                      <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
+                    </span>
+                    <svg 
+                      className="w-5 h-5 ml-2 transform transition-transform duration-300 opacity-0 group-hover:opacity-100 group-hover:translate-x-1" 
+                      xmlns="http://www.w3.org/2000/svg" 
+                      fill="none" 
+                      viewBox="0 0 24 24" 
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                )}
+                <button 
+                  className="text-white text-2xl font-playfair font-bold hover:text-gold transition-all duration-300 group flex items-center text-left"
+                  onClick={() => {
+                    logoutMutation.mutate();
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  <User className="mr-2" />
+                  <span className="relative">
+                    Logout
+                    <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
+                  </span>
+                </button>
+              </div>
+            ) : (
+              <Link 
+                href="/auth"
+                className="text-white text-2xl font-playfair font-bold hover:text-gold transition-all duration-300 group flex items-center"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <Lock className="mr-2" />
+                <span className="relative">
+                  Admin Login
+                  <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
+                </span>
+                <svg 
+                  className="w-5 h-5 ml-2 transform transition-transform duration-300 opacity-0 group-hover:opacity-100 group-hover:translate-x-1" 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            )}
+          </div>
+
           {hasConsultationButton && (
             <div 
               className="overflow-hidden mt-4"
               style={{ 
                 transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(-20px)',
                 opacity: isMobileMenuOpen ? 1 : 0,
-                transition: `transform 0.5s ease ${0.1 + NAV_LINKS.length * 0.1}s, opacity 0.5s ease ${0.1 + NAV_LINKS.length * 0.1}s`
+                transition: `transform 0.5s ease ${0.1 + NAV_LINKS.length * 0.1 + 0.1}s, opacity 0.5s ease ${0.1 + NAV_LINKS.length * 0.1 + 0.1}s`
               }}
             >
               <Link 
