@@ -28,12 +28,20 @@ const Navigation = ({
     <nav className={`w-full z-50 transition-all duration-300 ${bgClass}`}>
       {/* Main navigation bar - Porsche style */}
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        {/* Logo area */}
-        <Link href="/" className="flex items-center space-x-2">
-          <span className={`text-xl font-playfair font-bold tracking-tight ${textColorClass}`}>
-            McKenney <span className="text-gold">&</span> Skinny's
-          </span>
-        </Link>
+        {/* Logo area with premium hover effects */}
+        <div className="relative group">
+          <Link href="/" className="flex items-center space-x-2">
+            <span className={`text-xl font-playfair font-bold tracking-tight ${textColorClass} transition-all duration-300 group-hover:text-gold relative`}>
+              <span className="transition-transform duration-300 inline-block group-hover:scale-105">McKenney</span> 
+              <span className="text-gold transition-all duration-300 inline-block group-hover:scale-110 group-hover:rotate-3">&</span> 
+              <span className="transition-transform duration-300 inline-block group-hover:scale-105">Skinny's</span>
+              {/* Enhanced hover indicator */}
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold opacity-0 group-hover:opacity-100 group-hover:w-full transition-all duration-500"></span>
+            </span>
+          </Link>
+          {/* Subtle shine animation on hover */}
+          <span className="absolute inset-0 w-0 opacity-0 group-hover:opacity-20 group-hover:w-full bg-gradient-to-r from-transparent via-white to-transparent transition-all duration-700 transform -skew-x-12 -translate-x-full group-hover:translate-x-full"></span>
+        </div>
         
         {/* Desktop Navigation - center aligned links with micro-interactions */}
         <div className="hidden md:flex items-center justify-center flex-1 space-x-8 text-sm font-medium tracking-wide uppercase">
