@@ -115,7 +115,7 @@ export const getEngineeringData = async () => {
   
   return {
     title: "Engineering Meets Artistry",
-    description: "Our unique joint venture combines McKenney's precision engineering with Skinny's meticulous craftsmanship, creating vehicles that perform as brilliantly as they look.",
+    description: "At Skinny's Rod and Custom, we blend precision engineering with meticulous craftsmanship, backed by our McKenney Engineering division, creating vehicles that perform as brilliantly as they look.",
     imageUrl: "https://images.unsplash.com/photo-1583508805133-8fd01e208e57?q=80&w=1600&auto=format&fit=crop",
     features
   };
@@ -130,7 +130,7 @@ export const getProcessData = async () => {
     warranty: {
       title: "Our Commitment to Quality",
       description: [
-        "Every McKenney & Skinny's restomod is covered by our comprehensive 2-year warranty on craftsmanship and integration, with additional component warranties from our premium partners.",
+        "Every Skinny's Rod and Custom vehicle is covered by our comprehensive 2-year warranty on craftsmanship and integration, with additional component warranties from our premium partners.",
         "Our support doesn't end at delivery — we provide ongoing maintenance, service, and advice to ensure your investment continues to perform flawlessly for years to come."
       ]
     }
