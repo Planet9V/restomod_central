@@ -5,6 +5,7 @@ import { z } from "zod";
 import { contactSubmissionsInsertSchema } from "@shared/schema";
 import * as aiApi from "./api/ai";
 import * as researchApi from "./api/research";
+import { generateCarImage } from "./api/gemini";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // API routes prefix
@@ -177,6 +178,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // AI research endpoints
   app.get(`${apiPrefix}/research/vehicle`, researchApi.getVehicleResearch);
   app.get(`${apiPrefix}/research/part`, researchApi.getPartResearch);
+
+  // Gemini image generation endpoint
+  app.post(`${apiPrefix}/gemini/generate-image`, generateCarImage);
 
   const httpServer = createServer(app);
   return httpServer;
