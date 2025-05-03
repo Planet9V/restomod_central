@@ -6,6 +6,7 @@ import { contactSubmissionsInsertSchema } from "@shared/schema";
 import * as aiApi from "./api/ai";
 import * as researchApi from "./api/research";
 import { generateCarImage } from "./api/gemini";
+import * as perplexityApi from "./api/perplexity";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // API routes prefix
@@ -181,6 +182,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Gemini image generation endpoint
   app.post(`${apiPrefix}/gemini/generate-image`, generateCarImage);
+
+  // Perplexity API endpoints
+  app.get(`${apiPrefix}/perplexity/car-info`, perplexityApi.getCarInformation);
+  app.get(`${apiPrefix}/perplexity/part-info`, perplexityApi.getPartInformation);
+  app.post(`${apiPrefix}/perplexity/configuration`, perplexityApi.getConfigurationRecommendations);
 
   const httpServer = createServer(app);
   return httpServer;
