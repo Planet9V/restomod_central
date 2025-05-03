@@ -548,6 +548,7 @@ const CarConfigurator = () => {
       case 8: return !!selectedConfig.interior; // Additional options
       case 9: return true; // AI recommendations (can always view)
       case 10: return true; // Summary (can always view)
+      case 11: return true; // Research (can always view)
       default: return false;
     }
   };
@@ -1314,6 +1315,16 @@ const CarConfigurator = () => {
                 </Card>
               </div>
             </div>
+          </div>
+        );
+        
+      case 11: // Research & AI
+        return (
+          <div className="space-y-8">
+            <h2 className="text-3xl font-playfair font-bold">AI-Powered Research Portal</h2>
+            <p className="text-charcoal/80">Explore detailed information about classic cars and parts using our AI research capabilities.</p>
+            
+            <ConfiguratorDashboard />
           </div>
         );
         
