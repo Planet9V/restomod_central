@@ -5,14 +5,18 @@ import SectionHeading from "@/components/ui/section-heading";
 import ProjectCard from "@/components/ui/project-card";
 import { Link } from "wouter";
 import { type Project } from "@shared/schema";
+import { imageService } from "@/services/imageService";
 
 const ProjectGallery = () => {
   const [activeCategory, setActiveCategory] = useState("all");
 
-  const { data: projects, isLoading } = useQuery<Project[]>({
+  const { data: rawProjects, isLoading } = useQuery<Project[]>({
     queryKey: ['/api/projects'],
     staleTime: Infinity,
   });
+  
+  // Apply image service to update project images
+  const projects = rawProjects ? imageService.updateProjectsImages(rawProjects as any[]) : [];
 
   // Filter projects by category
   const filteredProjects = activeCategory === 'all'

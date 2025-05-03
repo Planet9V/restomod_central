@@ -4,6 +4,7 @@ import { PROJECT_CATEGORIES } from "@/lib/constants";
 import ProjectCard from "@/components/ui/project-card";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "wouter";
+import { imageService } from "@/services/imageService";
 
 const ProjectsPage = () => {
   const [activeCategory, setActiveCategory] = useState("all");
@@ -30,10 +31,13 @@ const ProjectsPage = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const { data: projects, isLoading } = useQuery({
+  const { data: rawProjects, isLoading } = useQuery({
     queryKey: ['/api/projects'],
     staleTime: Infinity,
   });
+  
+  // Apply image service to update project images
+  const projects = rawProjects ? imageService.updateProjectsImages(rawProjects as any[]) : [];
 
   // Filter projects by category
   const filteredProjects = activeCategory === 'all'
@@ -180,7 +184,7 @@ const ProjectsPage = () => {
             Ready to Create Your Dream Vehicle?
           </h2>
           <p className="mb-6 text-white/80 max-w-2xl mx-auto">
-            Let's discuss how McKenney & Skinny's can bring your vision to life with our unique combination of engineering excellence and master craftsmanship.
+            Let's discuss how Skinny's Rod and Custom can bring your vision to life with our unique combination of engineering excellence and master craftsmanship.
           </p>
           <Link href="/#contact" className="inline-block bg-burgundy hover:bg-burgundy/90 transition-colors duration-200 px-8 py-4 text-sm uppercase tracking-wider font-medium">
             Request a Consultation
