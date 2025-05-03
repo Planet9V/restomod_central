@@ -940,7 +940,7 @@ const CarConfigurator = () => {
               {additionalOptions.map((option) => (
                 <Card 
                   key={option.id} 
-                  className={`cursor-pointer transition-all ${selectedConfig.options.includes(option.id) ? 'ring-2 ring-burgundy' : ''}`}
+                  className={`cursor-pointer transition-all ${selectedConfig.options.includes(option.id) ? 'ring-2 ring-burgundy bg-burgundy/5' : 'hover:bg-gray-50'}`}
                   onClick={() => toggleAdditionalOption(option.id)}
                 >
                   <CardContent className="p-4 flex justify-between items-center">
@@ -950,8 +950,8 @@ const CarConfigurator = () => {
                     </div>
                     <div className="flex items-center gap-3">
                       <p className="text-burgundy font-bold">{formatPrice(option.price)}</p>
-                      <div className={`w-6 h-6 rounded-full flex items-center justify-center ${selectedConfig.options.includes(option.id) ? 'bg-burgundy text-white' : 'border border-charcoal/30'}`}>
-                        {selectedConfig.options.includes(option.id) && <Check className="w-4 h-4" />}
+                      <div className={`w-8 h-8 rounded-md flex items-center justify-center ${selectedConfig.options.includes(option.id) ? 'bg-burgundy text-white' : 'bg-gray-100 border-2 border-gray-300'}`}>
+                        {selectedConfig.options.includes(option.id) && <Check className="w-5 h-5" />}
                       </div>
                     </div>
                   </CardContent>
@@ -971,7 +971,7 @@ const CarConfigurator = () => {
                 {aiFeatureOptions.map((feature) => (
                   <Card 
                     key={feature.id} 
-                    className={`cursor-pointer transition-all ${selectedConfig.aiFeatures.includes(feature.id) ? 'ring-2 ring-burgundy' : ''}`}
+                    className={`cursor-pointer transition-all ${selectedConfig.aiFeatures.includes(feature.id) ? 'ring-2 ring-burgundy bg-burgundy/5' : 'hover:bg-gray-50'}`}
                     onClick={() => toggleAiFeature(feature.id)}
                   >
                     <CardContent className="p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -981,8 +981,8 @@ const CarConfigurator = () => {
                       </div>
                       <div className="flex items-center gap-3">
                         <p className="text-burgundy font-bold">{formatPrice(feature.price)}</p>
-                        <div className={`w-6 h-6 rounded-full flex items-center justify-center ${selectedConfig.aiFeatures.includes(feature.id) ? 'bg-burgundy text-white' : 'border border-charcoal/30'}`}>
-                          {selectedConfig.aiFeatures.includes(feature.id) && <Check className="w-4 h-4" />}
+                        <div className={`w-8 h-8 rounded-md flex items-center justify-center ${selectedConfig.aiFeatures.includes(feature.id) ? 'bg-burgundy text-white' : 'bg-gray-100 border-2 border-gray-300'}`}>
+                          {selectedConfig.aiFeatures.includes(feature.id) && <Check className="w-5 h-5" />}
                         </div>
                       </div>
                     </CardContent>
