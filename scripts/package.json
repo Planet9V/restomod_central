@@ -1,0 +1,10 @@
+{
+  "name": "image-validation",
+  "version": "1.0.0",
+  "description": "Image validation scripts",
+  "main": "validate-images.js",
+  "type": "module",
+  "scripts": {
+    "validate": "node validate-images.js"
+  }
+}
