@@ -1,8 +1,13 @@
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Loader2, Image, Info } from "lucide-react";
-import useResearch from "@/hooks/use-research";
+import React, { useState, useEffect } from 'react';
+import useResearch from '@/hooks/use-research';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { InfoIcon, Image as ImageIcon, Lightbulb, BarChart4, History, RefreshCw, Car } from 'lucide-react';
+import GeneratedImageDisplay from './GeneratedImageDisplay';
 
 interface ResearchPanelProps {
   modelId: string;
@@ -11,15 +16,14 @@ interface ResearchPanelProps {
 }
 
 const ResearchPanel = ({ modelId, modelName, onImageSelect }: ResearchPanelProps) => {
-  const { getVehicleResearch, results, isLoading } = useResearch();
-  const [selectedImage, setSelectedImage] = useState<string>("");
+  const { getVehicleResearch, data, status, error } = useResearch();
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  // Fetch vehicle research when model changes
   useEffect(() => {
-    if (modelId && modelName) {
+    if (modelName) {
       getVehicleResearch({ model: modelName });
     }
-  }, [modelId, modelName]);
+  }, [modelName]);
 
   const handleImageSelect = (imageUrl: string) => {
     setSelectedImage(imageUrl);
@@ -28,89 +32,331 @@ const ResearchPanel = ({ modelId, modelName, onImageSelect }: ResearchPanelProps
     }
   };
 
-  // Prepare data for display
-  const vehicleImages = results.data?.data?.images || [];
-  const vehicleDetails = results.data?.data?.details || {};
+  const handleRefresh = () => {
+    getVehicleResearch({ model: modelName });
+  };
 
   return (
-    <Card className="overflow-hidden">
-      <CardHeader className="bg-charcoal/5 pb-2">
-        <CardTitle className="text-xl font-bold flex items-center gap-2">
-          <Image className="w-5 h-5 text-burgundy" /> Real Vehicle Reference
-        </CardTitle>
+    <Card className="w-full h-full overflow-hidden">
+      <CardHeader className="pb-3">
+        <div className="flex justify-between items-center">
+          <CardTitle className="text-lg font-semibold flex items-center gap-2">
+            <Car className="h-4 w-4" /> 
+            {modelName}
+          </CardTitle>
+          <Button variant="outline" size="sm" onClick={handleRefresh}>
+            <RefreshCw className="h-3 w-3 mr-2" /> Refresh
+          </Button>
+        </div>
         <CardDescription>
-          Authentic images and details sourced by our AI research system
+          Research and information about this classic model
         </CardDescription>
       </CardHeader>
-      <CardContent className="p-4">
-        {isLoading ? (
-          <div className="flex flex-col items-center justify-center p-12">
-            <Loader2 className="w-8 h-8 text-burgundy animate-spin mb-4" />
-            <p className="text-sm text-charcoal/70">Researching {modelName}...</p>
-          </div>
-        ) : results.data ? (
-          <div className="space-y-6">
-            {/* Image Gallery */}
-            <div>
-              <h3 className="font-medium text-sm mb-2">Reference Images</h3>
-              <div className="grid grid-cols-3 gap-2">
-                {vehicleImages.slice(0, 6).map((imageUrl: string, index: number) => (
-                  <div 
-                    key={index} 
-                    className={`aspect-video bg-charcoal/5 rounded-sm overflow-hidden cursor-pointer hover:opacity-90 transition-opacity border-2 ${selectedImage === imageUrl ? 'border-burgundy' : 'border-transparent'}`}
-                    onClick={() => handleImageSelect(imageUrl)}
-                  >
-                    <img 
-                      src={imageUrl} 
-                      alt={`${modelName} reference ${index + 1}`} 
-                      className="w-full h-full object-cover" 
-                      onError={(e) => {
-                        // Handle image loading errors
-                        (e.target as HTMLImageElement).src = "https://via.placeholder.com/300x200?text=Image+Unavailable";
-                      }}
-                    />
+      
+      <Tabs defaultValue="info">
+        <div className="px-4">
+          <TabsList className="w-full">
+            <TabsTrigger value="info" className="flex-1">
+              <InfoIcon className="h-4 w-4 mr-2" /> Information
+            </TabsTrigger>
+            <TabsTrigger value="history" className="flex-1">
+              <History className="h-4 w-4 mr-2" /> History
+            </TabsTrigger>
+            <TabsTrigger value="visualize" className="flex-1">
+              <ImageIcon className="h-4 w-4 mr-2" /> Visualize
+            </TabsTrigger>
+            <TabsTrigger value="market" className="flex-1">
+              <BarChart4 className="h-4 w-4 mr-2" /> Market
+            </TabsTrigger>
+            <TabsTrigger value="recommendations" className="flex-1">
+              <Lightbulb className="h-4 w-4 mr-2" /> Recommendations
+            </TabsTrigger>
+          </TabsList>
+        </div>
+
+        <TabsContent value="info" className="mt-0">
+          <CardContent className="pt-4">
+            <ScrollArea className="h-[60vh] pr-4">
+              {status === 'loading' && (
+                <div className="flex items-center justify-center h-[200px]">
+                  <div className="animate-pulse text-center">
+                    <p>Loading vehicle information...</p>
                   </div>
-                ))}
-              </div>
-              {selectedImage && (
-                <div className="mt-4">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="w-full"
-                    onClick={() => onImageSelect && onImageSelect(selectedImage)}
-                  >
-                    Use Selected Image
-                  </Button>
                 </div>
               )}
-            </div>
-            
-            {/* Vehicle Details */}
-            {vehicleDetails && Object.keys(vehicleDetails).length > 0 && (
-              <div className="mt-4 pt-4 border-t border-charcoal/10">
-                <h3 className="font-medium text-sm mb-2 flex items-center gap-1">
-                  <Info className="w-4 h-4 text-burgundy" /> Vehicle Details
-                </h3>
-                <div className="space-y-2 text-sm">
-                  {Object.entries(vehicleDetails).map(([key, value]) => (
-                    <div key={key} className="grid grid-cols-3 gap-2">
-                      <span className="text-charcoal/70 capitalize col-span-1">
-                        {key.replace(/([A-Z])/g, ' $1').trim()}
-                      </span>
-                      <span className="col-span-2">{String(value)}</span>
+
+              {status === 'error' && (
+                <Alert variant="destructive">
+                  <AlertTitle>Error</AlertTitle>
+                  <AlertDescription>
+                    {error instanceof Error ? error.message : 'Failed to load vehicle information'}
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              {status === 'success' && data && (
+                <div className="space-y-4">
+                  {data.overview && (
+                    <div>
+                      <h3 className="text-lg font-medium">Overview</h3>
+                      <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
+                        {data.overview}
+                      </p>
                     </div>
-                  ))}
+                  )}
+
+                  {data.specifications && (
+                    <div className="mt-6">
+                      <h3 className="text-lg font-medium">Original Specifications</h3>
+                      <div className="mt-2 grid grid-cols-1 gap-2">
+                        {Object.entries(data.specifications).map(([key, value]) => (
+                          <div key={key} className="flex">
+                            <span className="w-1/3 text-sm font-medium">{key}:</span>
+                            <span className="w-2/3 text-sm">{value as string}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center p-12 text-center">
-            <p className="text-charcoal/70 mb-4">Select a vehicle model to see authentic reference images and details.</p>
+              )}
+            </ScrollArea>
+          </CardContent>
+        </TabsContent>
+
+        <TabsContent value="history" className="mt-0">
+          <CardContent className="pt-4">
+            <ScrollArea className="h-[60vh] pr-4">
+              {status === 'loading' && (
+                <div className="flex items-center justify-center h-[200px]">
+                  <div className="animate-pulse text-center">
+                    <p>Loading historical information...</p>
+                  </div>
+                </div>
+              )}
+
+              {status === 'success' && data && (
+                <div className="space-y-6">
+                  {data.history && (
+                    <div>
+                      <h3 className="text-lg font-medium">Vehicle History</h3>
+                      <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
+                        {data.history}
+                      </p>
+                    </div>
+                  )}
+
+                  {data.keyMoments && (
+                    <div>
+                      <h3 className="text-lg font-medium">Key Historical Moments</h3>
+                      <div className="mt-2 space-y-3">
+                        {Array.isArray(data.keyMoments) ? (
+                          data.keyMoments.map((moment, index) => (
+                            <div key={index} className="p-3 bg-muted rounded-md">
+                              <p className="text-sm">{moment}</p>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="p-3 bg-muted rounded-md">
+                            <p className="text-sm">{data.keyMoments as string}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {data.notableExamples && (
+                    <div>
+                      <h3 className="text-lg font-medium">Notable Examples</h3>
+                      <div className="mt-2 space-y-3">
+                        {Array.isArray(data.notableExamples) ? (
+                          data.notableExamples.map((example, index) => (
+                            <div key={index} className="p-3 bg-muted rounded-md">
+                              <p className="text-sm">{example}</p>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="p-3 bg-muted rounded-md">
+                            <p className="text-sm">{data.notableExamples as string}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </ScrollArea>
+          </CardContent>
+        </TabsContent>
+
+        <TabsContent value="visualize" className="mt-0">
+          <CardContent className="pt-4">
+            <div className="grid grid-cols-1 gap-4">
+              <GeneratedImageDisplay 
+                car={modelName}
+                onImageLoaded={handleImageSelect}
+              />
+            </div>
+          </CardContent>
+        </TabsContent>
+
+        <TabsContent value="market" className="mt-0">
+          <CardContent className="pt-4">
+            <ScrollArea className="h-[60vh] pr-4">
+              {status === 'loading' && (
+                <div className="flex items-center justify-center h-[200px]">
+                  <div className="animate-pulse text-center">
+                    <p>Loading market data...</p>
+                  </div>
+                </div>
+              )}
+
+              {status === 'success' && data && (
+                <div className="space-y-6">
+                  {data.marketTrends && (
+                    <div>
+                      <h3 className="text-lg font-medium">Market Trends</h3>
+                      <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
+                        {data.marketTrends}
+                      </p>
+                    </div>
+                  )}
+
+                  {data.valueRange && (
+                    <div>
+                      <h3 className="text-lg font-medium">Current Value Range</h3>
+                      <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
+                        {data.valueRange}
+                      </p>
+                    </div>
+                  )}
+
+                  {data.factorsAffectingValue && (
+                    <div>
+                      <h3 className="text-lg font-medium">Factors Affecting Value</h3>
+                      <div className="mt-2 space-y-3">
+                        {Array.isArray(data.factorsAffectingValue) ? (
+                          data.factorsAffectingValue.map((factor, index) => (
+                            <div key={index} className="p-3 bg-muted rounded-md">
+                              <p className="text-sm">{factor}</p>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="p-3 bg-muted rounded-md">
+                            <p className="text-sm">{data.factorsAffectingValue as string}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {data.investmentPotential && (
+                    <div>
+                      <h3 className="text-lg font-medium">Investment Potential</h3>
+                      <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
+                        {data.investmentPotential}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </ScrollArea>
+          </CardContent>
+        </TabsContent>
+
+        <TabsContent value="recommendations" className="mt-0">
+          <CardContent className="pt-4">
+            <ScrollArea className="h-[60vh] pr-4">
+              {status === 'loading' && (
+                <div className="flex items-center justify-center h-[200px]">
+                  <div className="animate-pulse text-center">
+                    <p>Loading recommendations...</p>
+                  </div>
+                </div>
+              )}
+
+              {status === 'success' && data && (
+                <div className="space-y-6">
+                  {data.commonUpgrades && (
+                    <div>
+                      <h3 className="text-lg font-medium">Common Upgrades</h3>
+                      <div className="mt-2 space-y-3">
+                        {Array.isArray(data.commonUpgrades) ? (
+                          data.commonUpgrades.map((upgrade, index) => (
+                            <div key={index} className="p-3 bg-muted rounded-md">
+                              <p className="text-sm">{upgrade}</p>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="p-3 bg-muted rounded-md">
+                            <p className="text-sm">{data.commonUpgrades as string}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {data.restomodOptions && (
+                    <div>
+                      <h3 className="text-lg font-medium">Restomod Options</h3>
+                      <div className="mt-2 space-y-3">
+                        {Array.isArray(data.restomodOptions) ? (
+                          data.restomodOptions.map((option, index) => (
+                            <div key={index} className="p-3 bg-muted rounded-md">
+                              <p className="text-sm">{option}</p>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="p-3 bg-muted rounded-md">
+                            <p className="text-sm">{data.restomodOptions as string}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {data.recommendedParts && (
+                    <div>
+                      <h3 className="text-lg font-medium">Recommended Parts</h3>
+                      <div className="mt-2 space-y-3">
+                        {Array.isArray(data.recommendedParts) ? (
+                          data.recommendedParts.map((part, index) => (
+                            <div key={index} className="p-3 bg-muted rounded-md">
+                              <p className="text-sm">{part}</p>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="p-3 bg-muted rounded-md">
+                            <p className="text-sm">{data.recommendedParts as string}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </ScrollArea>
+          </CardContent>
+        </TabsContent>
+      </Tabs>
+
+      <CardFooter className="flex justify-end p-4 pt-2">
+        {selectedImage && (
+          <div className="w-full">
+            <Separator className="mb-4" />
+            <div className="flex justify-between items-center">
+              <p className="text-sm text-muted-foreground">Image generated for {modelName}</p>
+              <Button 
+                size="sm" 
+                onClick={() => onImageSelect && onImageSelect(selectedImage)}
+                disabled={!selectedImage}
+              >
+                Use This Image
+              </Button>
+            </div>
           </div>
         )}
-      </CardContent>
+      </CardFooter>
     </Card>
   );
 };

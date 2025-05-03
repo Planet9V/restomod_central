@@ -24,153 +24,122 @@ interface ResearchResults {
   error: Error | null;
 }
 
-const cache: Record<string, any> = {};
+/**
+ * Custom hook for fetching vehicle and part research data
+ */
+export function useResearch(options: UseResearchOptions = {}) {
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [data, setData] = useState<any | null>(null);
+  const [error, setError] = useState<Error | null>(null);
 
-const useResearch = (options: UseResearchOptions = {}) => {
-  const { cacheResults = true, onSuccess, onError } = options;
-  const [results, setResults] = useState<ResearchResults>({
-    status: 'idle',
-    data: null,
-    error: null,
-  });
+  // Simple in-memory cache
+  const cache: Record<string, any> = {};
 
   const getCacheKey = (type: ResearchType, params: VehicleResearchParams | PartResearchParams) => {
     if (type === 'vehicle') {
       return `vehicle:${(params as VehicleResearchParams).model}`;
     } else {
       const { part, model } = params as PartResearchParams;
-      return `part:${part}${model ? `:${model}` : ''}`;
+      return `part:${part}:${model || 'general'}`;
     }
   };
 
   const getVehicleResearch = async (params: VehicleResearchParams) => {
-    const { model } = params;
-    if (!model) {
-      throw new Error('Vehicle model is required');
-    }
-
     const cacheKey = getCacheKey('vehicle', params);
-    if (cacheResults && cache[cacheKey]) {
-      setResults({
-        status: 'success',
-        data: cache[cacheKey],
-        error: null,
-      });
-      onSuccess?.(cache[cacheKey]);
+    
+    // Return cached data if available and caching is enabled
+    if (options.cacheResults && cache[cacheKey]) {
+      setData(cache[cacheKey]);
+      setStatus('success');
+      options.onSuccess?.(cache[cacheKey]);
       return cache[cacheKey];
     }
-
+    
+    setStatus('loading');
+    setError(null);
+    
     try {
-      setResults({
-        ...results,
-        status: 'loading',
-      });
-
-      const queryParams = new URLSearchParams({
-        model,
-      }).toString();
-
-      const responseData = await apiRequest<any>(`/api/research/vehicle?${queryParams}`);
-
-      if (cacheResults) {
-        cache[cacheKey] = responseData;
+      const result = await apiRequest(`/research/vehicle?model=${encodeURIComponent(params.model)}`);
+      
+      // Cache the result if caching is enabled
+      if (options.cacheResults) {
+        cache[cacheKey] = result;
       }
-
-      setResults({
-        status: 'success',
-        data: responseData,
-        error: null,
-      });
-
-      onSuccess?.(responseData);
-      return responseData;
-    } catch (error) {
-      const errorObj = error instanceof Error ? error : new Error('Failed to fetch vehicle research');
-      setResults({
-        status: 'error',
-        data: null,
-        error: errorObj,
-      });
-
-      onError?.(errorObj);
+      
+      setData(result);
+      setStatus('success');
+      options.onSuccess?.(result);
+      return result;
+    } catch (err) {
+      const errorObj = err instanceof Error ? err : new Error('Failed to fetch vehicle research');
+      setError(errorObj);
+      setStatus('error');
+      options.onError?.(errorObj);
       throw errorObj;
     }
   };
 
   const getPartResearch = async (params: PartResearchParams) => {
-    const { part, model } = params;
-    if (!part) {
-      throw new Error('Part name is required');
-    }
-
     const cacheKey = getCacheKey('part', params);
-    if (cacheResults && cache[cacheKey]) {
-      setResults({
-        status: 'success',
-        data: cache[cacheKey],
-        error: null,
-      });
-      onSuccess?.(cache[cacheKey]);
+    
+    // Return cached data if available and caching is enabled
+    if (options.cacheResults && cache[cacheKey]) {
+      setData(cache[cacheKey]);
+      setStatus('success');
+      options.onSuccess?.(cache[cacheKey]);
       return cache[cacheKey];
     }
-
+    
+    setStatus('loading');
+    setError(null);
+    
     try {
-      setResults({
-        ...results,
-        status: 'loading',
-      });
-
-      const queryParams = new URLSearchParams({
-        part,
-        ...(model ? { model } : {}),
-      }).toString();
-
-      const responseData = await apiRequest<any>(`/api/research/part?${queryParams}`);
-
-      if (cacheResults) {
-        cache[cacheKey] = responseData;
+      let url = `/research/part?part=${encodeURIComponent(params.part)}`;
+      if (params.model) {
+        url += `&model=${encodeURIComponent(params.model)}`;
       }
-
-      setResults({
-        status: 'success',
-        data: responseData,
-        error: null,
-      });
-
-      onSuccess?.(responseData);
-      return responseData;
-    } catch (error) {
-      const errorObj = error instanceof Error ? error : new Error('Failed to fetch part research');
-      setResults({
-        status: 'error',
-        data: null,
-        error: errorObj,
-      });
-
-      onError?.(errorObj);
+      
+      const result = await apiRequest(url);
+      
+      // Cache the result if caching is enabled
+      if (options.cacheResults) {
+        cache[cacheKey] = result;
+      }
+      
+      setData(result);
+      setStatus('success');
+      options.onSuccess?.(result);
+      return result;
+    } catch (err) {
+      const errorObj = err instanceof Error ? err : new Error('Failed to fetch part research');
+      setError(errorObj);
+      setStatus('error');
+      options.onError?.(errorObj);
       throw errorObj;
     }
   };
 
   const clearCache = (type?: ResearchType, params?: VehicleResearchParams | PartResearchParams) => {
     if (type && params) {
+      // Clear specific entry
       const cacheKey = getCacheKey(type, params);
       delete cache[cacheKey];
     } else {
       // Clear all cache
-      Object.keys(cache).forEach(key => delete cache[key]);
+      Object.keys(cache).forEach(key => {
+        delete cache[key];
+      });
     }
   };
 
   return {
-    results,
+    status,
+    data,
+    error,
     getVehicleResearch,
     getPartResearch,
     clearCache,
-    isLoading: results.status === 'loading',
-    isSuccess: results.status === 'success',
-    isError: results.status === 'error',
   };
-};
+}
 
 export default useResearch;
