@@ -3,100 +3,145 @@
  * This script checks all image URLs in the application to ensure they are valid
  */
 
-import fetch from 'node-fetch';
-import { readFile } from 'fs/promises';
+import fs from 'fs/promises';
+import path from 'path';
+import https from 'https';
 
-// Function to extract image URLs from client/src/data/images.ts
+/**
+ * Extract all image URLs from images.ts file
+ */
 async function extractImageUrls() {
-  const data = await readFile('client/src/data/images.ts', 'utf8');
-  
-  // Use regex to extract all image URLs
-  const urlRegex = /https:\/\/images\.unsplash\.com\/[\w\d\-\?\=\&\;\.\%\/_]+/g;
-  return [...new Set(data.match(urlRegex) || [])];
+  try {
+    const imagesFilePath = path.join(process.cwd(), '..', 'client/src/data/images.ts');
+    const fileContent = await fs.readFile(imagesFilePath, 'utf-8');
+    
+    // Regular expression to find all Unsplash image URLs
+    const urlRegex = /https:\/\/images\.unsplash\.com\/[^\s'"]+/g;
+    const imageUrls = fileContent.match(urlRegex) || [];
+    
+    // Remove duplicates
+    return [...new Set(imageUrls)];
+  } catch (error) {
+    console.error('Error during extraction:', error);
+    return [];
+  }
 }
 
-// Main function
+/**
+ * Main function to validate all images
+ */
 async function main() {
-  // Extract all image URLs from the images.ts file
   console.log('Extracting image URLs from client/src/data/images.ts...');
-  const uniqueImages = await extractImageUrls();
-  console.log(`Found ${uniqueImages.length} unique image URLs.\n`);
   
-  // Validate all extracted images
-  const validationResults = await validateAllImages(uniqueImages);
-  
-  // Log a summary table of validation results
-  console.log('\nImage Validation Summary:');
-  console.log('-'.repeat(100));
-  console.log('| Status | Image URL                                                      | Image Type      |');
-  console.log('-'.repeat(100));
-  
-  validationResults.forEach(({url, isValid}) => {
-    const status = isValid ? '✅ Valid' : '❌ Invalid';
-    const type = getImageType(url);
-    console.log(`| ${status.padEnd(8)} | ${url.substring(0, 60).padEnd(60)} | ${type.padEnd(15)} |`);
-  });
-  
-  console.log('-'.repeat(100));
-  
-  return validationResults;
+  try {
+    const imageUrls = await extractImageUrls();
+    console.log(`Found ${imageUrls.length} unique image URLs to validate.`);
+    
+    if (imageUrls.length === 0) {
+      console.log('No image URLs found. Exiting.');
+      process.exit(0);
+    }
+    
+    const results = await validateAllImages(imageUrls);
+    
+    const validCount = results.filter(r => r.valid).length;
+    const invalidCount = results.length - validCount;
+    
+    console.log('\nValidation Results:');
+    console.log(`Total URLs: ${results.length}`);
+    console.log(`Valid URLs: ${validCount}`);
+    console.log(`Invalid URLs: ${invalidCount}`);
+    
+    if (invalidCount > 0) {
+      console.log('\nInvalid URLs:');
+      results.filter(r => !r.valid).forEach(result => {
+        console.log(`- ${result.url} (${result.error || 'Unknown error'})`);
+      });
+    }
+  } catch (error) {
+    console.error('Error during validation:', error);
+  }
 }
 
-// Function to identify the type of image from its URL
+/**
+ * Determine the image type from URL
+ */
 function getImageType(url) {
-  if (url.includes('photo-15')) return 'Car';
-  if (url.includes('photo-16')) return 'Car Interior';
-  if (url.includes('photo-17')) return 'Engine';
-  if (url.includes('photo-18')) return 'Restoration';
-  if (url.includes('photo-19')) return 'Workshop';
-  if (url.includes('photo-15') && url.includes('truck')) return 'Truck';
+  if (url.includes('photo-')) {
+    const segments = url.split('/');
+    const photoSegment = segments.find(s => s.startsWith('photo-'));
+    if (photoSegment) {
+      const idPart = photoSegment.split('-').pop();
+      if (idPart && idPart.length >= 10) {
+        return 'Unsplash';
+      }
+    }
+  }
   return 'Unknown';
 }
 
-// Function to check if an image URL is valid
+/**
+ * Check if an image URL is valid by making a HEAD request
+ */
 async function checkImageUrl(url) {
-  try {
-    const response = await fetch(url, { method: 'HEAD' });
-    return response.ok;
-  } catch (error) {
-    return false;
-  }
+  return new Promise((resolve) => {
+    const timeoutId = setTimeout(() => {
+      resolve({ url, valid: false, error: 'Request timeout' });
+    }, 5000);
+    
+    const req = https.request(url, { method: 'HEAD' }, (res) => {
+      clearTimeout(timeoutId);
+      const statusCode = res.statusCode;
+      const contentType = res.headers['content-type'] || '';
+      const contentLength = res.headers['content-length'] || 0;
+      
+      if (statusCode >= 200 && statusCode < 300 && contentType.includes('image')) {
+        resolve({ url, valid: true, contentType, contentLength });
+      } else if (statusCode >= 300 && statusCode < 400 && res.headers.location) {
+        // Follow redirects (maximum 1 level)
+        checkImageUrl(res.headers.location).then(resolve);
+      } else {
+        resolve({
+          url,
+          valid: false,
+          error: `Invalid response: status=${statusCode}, contentType=${contentType}`
+        });
+      }
+    });
+    
+    req.on('error', (error) => {
+      clearTimeout(timeoutId);
+      resolve({ url, valid: false, error: error.message });
+    });
+    
+    req.end();
+  });
 }
 
-// Check all images and report results
+/**
+ * Validate all image URLs in parallel with rate limiting
+ */
 async function validateAllImages(imageUrls) {
+  const batchSize = 5; // Process 5 URLs at a time to avoid rate limiting
   const results = [];
-  let validCount = 0;
-  let invalidCount = 0;
   
-  console.log('Validating image URLs...');
-  
-  for (const url of imageUrls) {
-    process.stdout.write(`Checking ${url.substring(0, 40)}... `);
-    const isValid = await checkImageUrl(url);
-    results.push({ url, isValid });
+  for (let i = 0; i < imageUrls.length; i += batchSize) {
+    const batch = imageUrls.slice(i, i + batchSize);
+    const batchResults = await Promise.all(batch.map(url => {
+      console.log(`Checking: ${url}`);
+      return checkImageUrl(url);
+    }));
     
-    if (isValid) {
-      validCount++;
-      process.stdout.write('✅\n');
-    } else {
-      invalidCount++;
-      process.stdout.write('❌\n');
+    results.push(...batchResults);
+    
+    // Wait a bit between batches to avoid rate limiting
+    if (i + batchSize < imageUrls.length) {
+      await new Promise(resolve => setTimeout(resolve, 1000));
     }
   }
-  
-  console.log('\nResults:');
-  console.log(`✅ Valid images: ${validCount}`);
-  console.log(`❌ Invalid images: ${invalidCount}`);
   
   return results;
 }
 
-// Run the main function
-main()
-  .then(() => {
-    console.log('Image validation complete.');
-  })
-  .catch(error => {
-    console.error('Error during validation:', error);
-  });
+// Run the validation
+main();

@@ -1,10 +1,12 @@
 {
   "name": "image-validation",
   "version": "1.0.0",
-  "description": "Image validation scripts",
+  "description": "Image validation script for Skinny's Rod and Custom",
   "main": "validate-images.js",
   "type": "module",
   "scripts": {
     "validate": "node validate-images.js"
-  }
+  },
+  "author": "Skinny's Rod and Custom",
+  "license": "ISC"
 }

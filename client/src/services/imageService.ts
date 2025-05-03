@@ -1,18 +1,11 @@
 import { VehicleImages, ProcessImages, AboutImages, TeamImages, FallbackImage } from '@/data/images';
+import { Project } from '@shared/schema';
 
 // Define types based on the image configuration
 type VehicleSlug = keyof typeof VehicleImages;
 type ProcessKey = keyof typeof ProcessImages;
 type AboutKey = keyof typeof AboutImages;
 type TeamMemberKey = keyof typeof TeamImages;
-
-// Project interface - use a minimal version of what we need
-interface ProjectWithImages {
-  slug?: string;
-  imageUrl?: string;
-  galleryImages?: string[];
-  [key: string]: any; // Allow other properties
-}
 
 /**
  * Image Service for Skinny's Rod and Custom
@@ -24,14 +17,16 @@ class ImageService {
    * @param project The project object from the database
    * @returns Project with updated images
    */
-  updateProjectImages(project: any): any {
+  updateProjectImages(project: Project): Project {
     if (!project) return project;
     
     // Return early if there's no slug
     if (!project.slug) return project;
     
-    const vehicleConfig = VehicleImages[project.slug];
-    if (!vehicleConfig) return project;
+    // Check if the slug is a valid vehicle slug
+    if (!(project.slug in VehicleImages)) return project;
+    
+    const vehicleConfig = VehicleImages[project.slug as VehicleSlug];
     
     // Create a new object to avoid mutating the original
     return {
@@ -46,7 +41,7 @@ class ImageService {
    * @param projects Array of projects from the database
    * @returns Array of projects with updated images
    */
-  updateProjectsImages(projects: any[]): any[] {
+  updateProjectsImages(projects: Project[]): Project[] {
     if (!projects || !Array.isArray(projects)) return projects;
     
     return projects.map(project => this.updateProjectImages(project));
@@ -58,8 +53,12 @@ class ImageService {
    * @returns Main image URL
    */
   getVehicleMainImage(slug: string): string {
-    const vehicle = VehicleImages[slug];
-    return vehicle?.main || FallbackImage;
+    // Check if the slug is a valid vehicle slug
+    if (!(slug in VehicleImages)) {
+      return FallbackImage;
+    }
+    
+    return VehicleImages[slug as VehicleSlug].main;
   }
   
   /**
@@ -68,8 +67,12 @@ class ImageService {
    * @returns Array of gallery image URLs
    */
   getVehicleGalleryImages(slug: string): string[] {
-    const vehicle = VehicleImages[slug];
-    return vehicle?.gallery || [FallbackImage];
+    // Check if the slug is a valid vehicle slug
+    if (!(slug in VehicleImages)) {
+      return [FallbackImage];
+    }
+    
+    return VehicleImages[slug as VehicleSlug].gallery || [FallbackImage];
   }
   
   /**
