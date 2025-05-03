@@ -151,13 +151,21 @@ export async function getPartInformation(req: Request, res: Response) {
   try {
     const { part, model } = req.query;
     
-    if (!part) {
-      return res.status(400).json({ error: 'Part name is required' });
+    if (!part || typeof part !== 'string') {
+      return res.status(400).json({ error: 'Part name is required as a string' });
+    }
+    
+    // Check if API key is available
+    if (!PERPLEXITY_API_KEY) {
+      return res.status(500).json({ 
+        error: 'Perplexity API key is not configured',
+        details: 'Please set the PERPLEXITY_API_KEY environment variable'
+      });
     }
     
     let promptContent = `I need detailed information about ${part} for classic cars.`;
     
-    if (model) {
+    if (model && typeof model === 'string') {
       promptContent = `I need detailed information about ${part} specifically for the ${model} classic car.`;
     }
     
@@ -209,7 +217,7 @@ export async function getPartInformation(req: Request, res: Response) {
       });
     }
     
-    const data = await response.json();
+    const data = await response.json() as PerplexityResponse;
     
     if (data.choices && data.choices.length > 0 && 
         data.choices[0].message && 
@@ -248,17 +256,25 @@ export async function getConfigurationRecommendations(req: Request, res: Respons
   try {
     const { model, budget, focus } = req.body;
     
-    if (!model) {
-      return res.status(400).json({ error: 'Car model is required' });
+    if (!model || typeof model !== 'string') {
+      return res.status(400).json({ error: 'Car model is required as a string' });
+    }
+    
+    // Check if API key is available
+    if (!PERPLEXITY_API_KEY) {
+      return res.status(500).json({ 
+        error: 'Perplexity API key is not configured',
+        details: 'Please set the PERPLEXITY_API_KEY environment variable'
+      });
     }
     
     let promptContent = `I need detailed recommendations for a restomod build of a ${model}.`;
     
-    if (budget) {
+    if (budget && (typeof budget === 'string' || typeof budget === 'number')) {
       promptContent += ` The total budget is approximately ${budget}.`;
     }
     
-    if (focus) {
+    if (focus && typeof focus === 'string') {
       promptContent += ` The build should focus primarily on ${focus}.`;
     }
     
@@ -311,7 +327,7 @@ export async function getConfigurationRecommendations(req: Request, res: Respons
       });
     }
     
-    const data = await response.json();
+    const data = await response.json() as PerplexityResponse;
     
     if (data.choices && data.choices.length > 0 && 
         data.choices[0].message && 
