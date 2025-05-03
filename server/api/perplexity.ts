@@ -66,6 +66,8 @@ export async function getCarInformation(req: Request, res: Response) {
       });
     }
     
+    console.log(`Processing Perplexity API request for model: ${model}`);
+    
     const perplexityRequest: PerplexityRequest = {
       model: "llama-3.1-sonar-small-128k-online",
       messages: [
@@ -94,46 +96,62 @@ export async function getCarInformation(req: Request, res: Response) {
       presence_penalty: 0
     };
     
-    const response = await fetch(PERPLEXITY_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${PERPLEXITY_API_KEY}`
-      },
-      body: JSON.stringify(perplexityRequest)
-    });
-    
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Perplexity API error:', errorText);
-      return res.status(response.status).json({ 
-        error: 'Error fetching car information from Perplexity API',
-        details: errorText
+    try {
+      console.log('Sending request to Perplexity API');
+      const response = await fetch(PERPLEXITY_API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${PERPLEXITY_API_KEY}`
+        },
+        body: JSON.stringify(perplexityRequest)
       });
-    }
-    
-    const data = await response.json() as PerplexityResponse;
-    
-    if (data.choices && data.choices.length > 0 && 
-        data.choices[0].message && 
-        data.choices[0].message.content) {
       
-      // Process the response into structured sections
-      const content = data.choices[0].message.content;
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Perplexity API error:', errorText);
+        return res.status(response.status).json({ 
+          error: 'Error fetching car information from Perplexity API',
+          details: errorText
+        });
+      }
       
-      // Return the structured data
-      return res.json({
-        success: true,
-        content,
-        citations: data.citations || [],
-        model: data.model
+      const data = await response.json() as PerplexityResponse;
+      
+      if (data.choices && data.choices.length > 0 && 
+          data.choices[0].message && 
+          data.choices[0].message.content) {
+        
+        // Process the response into structured sections
+        const content = data.choices[0].message.content;
+        console.log('Successfully received Perplexity response');
+        
+        // Return the structured data
+        return res.json({
+          success: true,
+          content,
+          citations: data.citations || [],
+          model: data.model
+        });
+      }
+      
+      console.error('No valid content in Perplexity response');
+      return res.status(500).json({ 
+        error: 'No valid content found in Perplexity response', 
+        responseData: data 
       });
+    } catch (fetchError) {
+      console.error('Error during Perplexity API fetch:', fetchError);
+      
+      // Create research results for fallback
+      const fallbackData = {
+        success: false,
+        error: 'Error connecting to Perplexity API',
+        message: fetchError instanceof Error ? fetchError.message : 'Unknown error',
+      };
+      
+      return res.status(500).json(fallbackData);
     }
-    
-    return res.status(500).json({ 
-      error: 'No valid content found in Perplexity response', 
-      responseData: data 
-    });
     
   } catch (error) {
     console.error('Error fetching car information:', error);
@@ -162,6 +180,8 @@ export async function getPartInformation(req: Request, res: Response) {
         details: 'Please set the PERPLEXITY_API_KEY environment variable'
       });
     }
+    
+    console.log(`Processing Perplexity API request for part: ${part}${model ? ` for model ${model}` : ''}`);
     
     let promptContent = `I need detailed information about ${part} for classic cars.`;
     
@@ -199,46 +219,62 @@ export async function getPartInformation(req: Request, res: Response) {
       presence_penalty: 0
     };
     
-    const response = await fetch(PERPLEXITY_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${PERPLEXITY_API_KEY}`
-      },
-      body: JSON.stringify(perplexityRequest)
-    });
-    
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Perplexity API error:', errorText);
-      return res.status(response.status).json({ 
-        error: 'Error fetching part information from Perplexity API',
-        details: errorText
+    try {
+      console.log('Sending request to Perplexity API for part info');
+      const response = await fetch(PERPLEXITY_API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${PERPLEXITY_API_KEY}`
+        },
+        body: JSON.stringify(perplexityRequest)
       });
-    }
-    
-    const data = await response.json() as PerplexityResponse;
-    
-    if (data.choices && data.choices.length > 0 && 
-        data.choices[0].message && 
-        data.choices[0].message.content) {
       
-      // Process the response into structured sections
-      const content = data.choices[0].message.content;
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Perplexity API error for part info:', errorText);
+        return res.status(response.status).json({ 
+          error: 'Error fetching part information from Perplexity API',
+          details: errorText
+        });
+      }
       
-      // Return the structured data
-      return res.json({
-        success: true,
-        content,
-        citations: data.citations || [],
-        model: data.model
+      const data = await response.json() as PerplexityResponse;
+      
+      if (data.choices && data.choices.length > 0 && 
+          data.choices[0].message && 
+          data.choices[0].message.content) {
+        
+        // Process the response into structured sections
+        const content = data.choices[0].message.content;
+        console.log('Successfully received Perplexity response for part info');
+        
+        // Return the structured data
+        return res.json({
+          success: true,
+          content,
+          citations: data.citations || [],
+          model: data.model
+        });
+      }
+      
+      console.error('No valid content in Perplexity response for part info');
+      return res.status(500).json({ 
+        error: 'No valid content found in Perplexity response', 
+        responseData: data 
       });
+    } catch (fetchError) {
+      console.error('Error during Perplexity API fetch for part info:', fetchError);
+      
+      // Create research results for fallback
+      const fallbackData = {
+        success: false,
+        error: 'Error connecting to Perplexity API',
+        message: fetchError instanceof Error ? fetchError.message : 'Unknown error',
+      };
+      
+      return res.status(500).json(fallbackData);
     }
-    
-    return res.status(500).json({ 
-      error: 'No valid content found in Perplexity response', 
-      responseData: data 
-    });
     
   } catch (error) {
     console.error('Error fetching part information:', error);

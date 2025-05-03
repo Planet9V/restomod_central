@@ -181,9 +181,12 @@ export function useResearch(options: UseResearchOptions = {}) {
     try {
       // First try the Perplexity endpoint which will have more detailed information
       try {
+        console.log(`Requesting vehicle research for model: ${params.model}`);
         const result = await apiRequest(`/perplexity/car-info?model=${encodeURIComponent(params.model)}`);
         
-        if (result.success && result.content) {
+        // Check if we got a successful response with content
+        if (result && result.success && result.content) {
+          console.log('Successfully received Perplexity data for vehicle');
           // Process the response into a structured format
           const processedData = processPerplexityResponse(result.content);
           
@@ -196,29 +199,48 @@ export function useResearch(options: UseResearchOptions = {}) {
           setStatus('success');
           options.onSuccess?.(processedData);
           return processedData;
+        } else {
+          console.warn('Perplexity API returned invalid response:', result);
+          throw new Error('Invalid response from Perplexity API');
         }
       } catch (perplexityError) {
         console.warn('Perplexity API error, falling back to research API:', perplexityError);
+        
+        // Fallback to the original research endpoint
+        console.log('Trying fallback research API...');
+        const fallbackResult = await apiRequest(`/research/vehicle?model=${encodeURIComponent(params.model)}`);
+        
+        if (fallbackResult) {
+          console.log('Successfully received fallback data for vehicle');
+          // Cache the result if caching is enabled
+          if (options.cacheResults) {
+            cache[cacheKey] = fallbackResult;
+          }
+          
+          setData(fallbackResult);
+          setStatus('success');
+          options.onSuccess?.(fallbackResult);
+          return fallbackResult;
+        } else {
+          throw new Error('Failed to get data from fallback API');
+        }
       }
-      
-      // Fallback to the original research endpoint
-      const result = await apiRequest(`/research/vehicle?model=${encodeURIComponent(params.model)}`);
-      
-      // Cache the result if caching is enabled
-      if (options.cacheResults) {
-        cache[cacheKey] = result;
-      }
-      
-      setData(result);
-      setStatus('success');
-      options.onSuccess?.(result);
-      return result;
     } catch (err) {
+      console.error('All vehicle research attempts failed:', err);
       const errorObj = err instanceof Error ? err : new Error('Failed to fetch vehicle research');
       setError(errorObj);
       setStatus('error');
       options.onError?.(errorObj);
-      throw errorObj;
+      
+      // Create fallback data structure with minimal information
+      const fallbackData = {
+        overview: `Information about ${params.model} is currently unavailable. Please try again later.`,
+        specifications: {},
+        error: errorObj.message
+      };
+      
+      setData(fallbackData);
+      return fallbackData;
     }
   };
 
@@ -244,9 +266,12 @@ export function useResearch(options: UseResearchOptions = {}) {
           url += `&model=${encodeURIComponent(params.model)}`;
         }
         
+        console.log(`Requesting part research for: ${params.part}${params.model ? ` (${params.model})` : ''}`);
         const result = await apiRequest(url);
         
-        if (result.success && result.content) {
+        // Check if we got a successful response with content
+        if (result && result.success && result.content) {
+          console.log('Successfully received Perplexity data for part');
           // Process the response into a structured format
           const processedData = processPerplexityResponse(result.content);
           
@@ -259,34 +284,53 @@ export function useResearch(options: UseResearchOptions = {}) {
           setStatus('success');
           options.onSuccess?.(processedData);
           return processedData;
+        } else {
+          console.warn('Perplexity API returned invalid response for part:', result);
+          throw new Error('Invalid response from Perplexity API');
         }
       } catch (perplexityError) {
         console.warn('Perplexity API error, falling back to research API:', perplexityError);
+        
+        // Fallback to the original research endpoint
+        let url = `/research/part?part=${encodeURIComponent(params.part)}`;
+        if (params.model) {
+          url += `&model=${encodeURIComponent(params.model)}`;
+        }
+        
+        console.log('Trying fallback research API for part...');
+        const fallbackResult = await apiRequest(url);
+        
+        if (fallbackResult) {
+          console.log('Successfully received fallback data for part');
+          // Cache the result if caching is enabled
+          if (options.cacheResults) {
+            cache[cacheKey] = fallbackResult;
+          }
+          
+          setData(fallbackResult);
+          setStatus('success');
+          options.onSuccess?.(fallbackResult);
+          return fallbackResult;
+        } else {
+          throw new Error('Failed to get data from fallback API');
+        }
       }
-      
-      // Fallback to the original research endpoint
-      let url = `/research/part?part=${encodeURIComponent(params.part)}`;
-      if (params.model) {
-        url += `&model=${encodeURIComponent(params.model)}`;
-      }
-      
-      const result = await apiRequest(url);
-      
-      // Cache the result if caching is enabled
-      if (options.cacheResults) {
-        cache[cacheKey] = result;
-      }
-      
-      setData(result);
-      setStatus('success');
-      options.onSuccess?.(result);
-      return result;
     } catch (err) {
+      console.error('All part research attempts failed:', err);
       const errorObj = err instanceof Error ? err : new Error('Failed to fetch part research');
       setError(errorObj);
       setStatus('error');
       options.onError?.(errorObj);
-      throw errorObj;
+      
+      // Create fallback data structure with minimal information
+      const fallbackData = {
+        overview: `Information about ${params.part}${params.model ? ` for ${params.model}` : ''} is currently unavailable. Please try again later.`,
+        specifications: {},
+        error: errorObj.message
+      };
+      
+      setData(fallbackData);
+      return fallbackData;
     }
   };
 
