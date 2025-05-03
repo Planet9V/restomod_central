@@ -64,16 +64,16 @@ export const PROCESS_STEPS = [
 // Engineering features
 export const ENGINEERING_FEATURES = [
   {
-    id: 'engineering-excellence',
-    title: 'Engineering Excellence',
-    description: 'Advanced chassis design, systems integration, and performance optimization using cutting-edge tools and methodologies. Every vehicle is virtually prototyped before fabrication begins.',
-    icon: 'Settings'
-  },
-  {
     id: 'master-craftsmanship',
     title: 'Master Craftsmanship',
     description: 'Decades of hands-on expertise in metal fabrication, bodywork, paint, and interior craftsmanship. Each panel is hand-shaped and fitted with precision that exceeds factory standards.',
     icon: 'Mic'
+  },
+  {
+    id: 'engineering-excellence',
+    title: 'Engineering Excellence',
+    description: 'Our McKenney Engineering division provides advanced chassis design, systems integration, and performance optimization using cutting-edge tools and methodologies.',
+    icon: 'Settings'
   },
   {
     id: 'collaborative-process',

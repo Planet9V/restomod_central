@@ -21,8 +21,8 @@ const ConfiguratorCTA = () => {
                 Design Your Dream Restomod
               </h2>
               <p className="text-lg text-charcoal/80 mb-8">
-                Bring your vision to life with our advanced interactive configurator. 
-                Customize every detail from power to aesthetics with expert AI-enhanced guidance.
+                Bring your vision to life with Skinny's Rod and Custom interactive configurator. 
+                Customize every detail from power to aesthetics with expert AI-enhanced guidance from our McKenney Engineering division.
               </p>
               
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 mb-10">

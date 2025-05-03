@@ -12,8 +12,8 @@ const EngineeringMeetsArtistry = () => {
   // Use API data if available, fallback to constants
   const features = engineeringData?.features || ENGINEERING_FEATURES;
   const imageUrl = engineeringData?.imageUrl || "https://images.unsplash.com/photo-1583508805133-8fd01e208e57?q=80&w=1600&auto=format&fit=crop";
-  const title = engineeringData?.title || "Engineering Meets Artistry";
-  const description = engineeringData?.description || "Our unique joint venture combines McKenney's precision engineering with Skinny's meticulous craftsmanship, creating vehicles that perform as brilliantly as they look.";
+  const title = engineeringData?.title || "Craftsmanship Meets Technology";
+  const description = engineeringData?.description || "At Skinny's Rod and Custom, we combine traditional craftsmanship with cutting-edge technology through our McKenney Engineering division, creating vehicles that perform as brilliantly as they look.";
 
   return (
     <section className="py-24 bg-charcoal text-offwhite">
