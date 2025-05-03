@@ -62,7 +62,7 @@ const AboutUs = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           title="Our Story"
-          description="Skinny's Rod and Custom has been delivering exceptional craftsmanship in restoration and custom builds for over 25 years, combining traditional techniques with modern engineering through our McKenney division."
+          description="Skinny's Rod and Custom has been delivering exceptional craftsmanship in hot rods, restoration and custom builds for over 25 years. We combine traditional techniques with modern engineering expertise to create truly exceptional vehicles."
         />
         
         <div className="grid md:grid-cols-2 gap-16">
