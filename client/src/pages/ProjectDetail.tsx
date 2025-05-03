@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Check } from "lucide-react";
 import { useEffect } from "react";
 import { type Project } from "@shared/schema";
+import { imageService } from "@/services/imageService";
 
 interface ProjectDetailData extends Partial<Project> {
   title: string;
@@ -25,10 +26,13 @@ const ProjectDetail = () => {
   const { id } = useParams();
   const [_, navigate] = useLocation();
 
-  const { data: project, isLoading, isError } = useQuery<ProjectDetailData>({
+  const { data: rawProject, isLoading, isError } = useQuery<ProjectDetailData>({
     queryKey: [`/api/projects/${id}`],
     staleTime: Infinity,
   });
+  
+  // Apply image service to update project images
+  const project = rawProject ? imageService.updateProjectImages(rawProject) : null;
 
   // Initialize scroll reveal animations
   useEffect(() => {
