@@ -159,9 +159,16 @@ const Resources = () => {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button variant="link" className="text-burgundy p-0 hover:text-burgundy/80">
-                  Read More <ArrowRight className="ml-1 h-4 w-4" />
-                </Button>
+                <Link href={`/resources/${resource.id === 1 ? 'understanding-restomod-value' : 
+                                resource.id === 2 ? 'mechanical-authenticity' : 
+                                resource.id === 3 ? 'collectors-guide-documentation' : 
+                                resource.id === 4 ? 'evolution-of-resto-modding' : 
+                                resource.id === 5 ? 'materials-science-in-restoration' : 
+                                'concours-vs-restomod'}`}>
+                  <Button variant="link" className="text-burgundy p-0 hover:text-burgundy/80">
+                    Read More <ArrowRight className="ml-1 h-4 w-4" />
+                  </Button>
+                </Link>
               </CardFooter>
             </Card>
           ))}
