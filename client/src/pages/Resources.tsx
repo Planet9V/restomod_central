@@ -177,9 +177,9 @@ const Resources = () => {
         {/* Subscription Section */}
         <div className="bg-burgundy/10 rounded-sm p-8 mt-16">
           <div className="text-center">
-            <h2 className="font-playfair text-2xl font-bold mb-4">Stay Updated on Restomod Trends</h2>
+            <h2 className="font-playfair text-2xl font-bold mb-4">Stay Updated with Skinny's Rod and Custom</h2>
             <p className="text-charcoal/80 max-w-2xl mx-auto mb-6">
-              Subscribe to our monthly newsletter to receive the latest articles, guides, and industry insights on restomod techniques, market trends, and historical vehicles.
+              Subscribe to our monthly newsletter to receive the latest articles, guides, and industry insights on hot rod techniques, market trends, and restoration projects from Skinny's Rod and Custom.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
               <input

@@ -222,12 +222,12 @@ const ContactSection = () => {
               <div className="aspect-w-16 aspect-h-9 mb-6">
                 <img
                   src="https://images.unsplash.com/photo-1597762470488-3877b1f538c6?q=80&w=1600&auto=format&fit=crop"
-                  alt="McKenney & Skinny's workshop"
+                  alt="Skinny's Rod and Custom workshop"
                   className="w-full h-64 object-cover rounded-sm shadow-lg"
                 />
               </div>
               <div className="mb-8">
-                <p className="mb-2 font-medium">McKenney & Skinny's Bespoke Restomods</p>
+                <p className="mb-2 font-medium">Skinny's Rod and Custom</p>
                 <address className="not-italic text-charcoal/80">
                   {CONTACT_INFO.address.line1}<br />
                   {CONTACT_INFO.address.line2}<br />
