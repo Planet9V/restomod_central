@@ -11,15 +11,6 @@ const AboutUs = () => {
   // Default data if API fails
   const companyInfo = aboutData?.companies || [
     {
-      id: "mckenney",
-      name: "McKenney Engineering & Design",
-      description: [
-        "Founded by James McKenney, a mechanical engineer with a passion for automotive design, McKenney Engineering brings rigorous engineering principles to classic vehicle design.",
-        "Their expertise in systems integration, performance optimization, and advanced CAD/CAM techniques ensures every vehicle performs as good as it looks."
-      ],
-      image: "https://images.unsplash.com/photo-1560253023-3ec5d502959f?q=80&w=1600&auto=format&fit=crop"
-    },
-    {
       id: "skinnys",
       name: "Skinny's Rod and Custom",
       description: [
@@ -27,21 +18,30 @@ const AboutUs = () => {
         "Skinny's team of artisans specializes in bodywork, fabrication, paint, and interior work that showcases the soul and character of classic vehicles while achieving concourse-level finishes."
       ],
       image: "https://images.unsplash.com/photo-1559760434-0981df057e83?q=80&w=1600&auto=format&fit=crop"
+    },
+    {
+      id: "mckenney",
+      name: "McKenney Engineering",
+      description: [
+        "Working in partnership with Skinny's, the McKenney Engineering division brings rigorous engineering principles to classic vehicle design.",
+        "Their expertise in systems integration, performance optimization, and advanced CAD/CAM techniques ensures every vehicle performs as good as it looks."
+      ],
+      image: "https://images.unsplash.com/photo-1560253023-3ec5d502959f?q=80&w=1600&auto=format&fit=crop"
     }
   ];
 
   const teamMembers = aboutData?.team || [
     {
-      id: 1,
-      name: "James McKenney",
-      position: "Founder & Engineering Director",
-      image: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=300&auto=format&fit=crop"
-    },
-    {
       id: 2,
       name: "Dave \"Skinny\" Johnson",
       position: "Founder & Master Builder",
       image: "https://images.unsplash.com/photo-1566753323558-f4e0952af115?q=80&w=300&auto=format&fit=crop"
+    },
+    {
+      id: 1,
+      name: "James McKenney",
+      position: "Engineering Director",
+      image: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=300&auto=format&fit=crop"
     },
     {
       id: 3,
@@ -62,7 +62,7 @@ const AboutUs = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           title="Our Story"
-          description="The union of McKenney Engineering & Design and Skinny's Rod and Custom brings together decades of expertise in precision engineering and automotive craftsmanship."
+          description="Skinny's Rod and Custom has been delivering exceptional craftsmanship in restoration and custom builds for over 25 years, combining traditional techniques with modern engineering through our McKenney division."
         />
         
         <div className="grid md:grid-cols-2 gap-16">

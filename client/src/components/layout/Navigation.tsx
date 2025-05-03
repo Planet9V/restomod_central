@@ -32,9 +32,8 @@ const Navigation = ({
         <div className="relative group">
           <Link href="/" className="flex items-center space-x-2">
             <span className={`text-xl font-playfair font-bold tracking-tight ${textColorClass} transition-all duration-300 group-hover:text-gold relative`}>
-              <span className="transition-transform duration-300 inline-block group-hover:scale-105">McKenney</span> 
-              <span className="text-gold transition-all duration-300 inline-block group-hover:scale-110 group-hover:rotate-3">&</span> 
               <span className="transition-transform duration-300 inline-block group-hover:scale-105">Skinny's</span>
+              <span className="transition-transform duration-300 inline-block group-hover:scale-105"> Rod and Custom</span>
               {/* Enhanced hover indicator */}
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold opacity-0 group-hover:opacity-100 group-hover:w-full transition-all duration-500"></span>
             </span>
@@ -211,7 +210,7 @@ const Navigation = ({
           <div className="flex justify-between items-center">
             <div className="text-white">
               <p className="text-xl font-bold">Get in touch</p>
-              <p className="text-sm mt-2 text-gold">contact@mckenneyandskinnys.com</p>
+              <p className="text-sm mt-2 text-gold">info@skinnysrodandcustom.com</p>
             </div>
             <button 
               onClick={() => setIsMobileMenuOpen(false)}

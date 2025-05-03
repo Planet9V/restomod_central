@@ -48,7 +48,7 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-8 mb-12">
           {/* Brand section */}
           <div>
-            <h4 className="font-playfair text-xl mb-6">McKenney & Skinny's</h4>
+            <h4 className="font-playfair text-xl mb-6">Skinny's Rod and Custom</h4>
             <p className="text-offwhite/70 mb-6">
               Engineering meets artistry in every bespoke restomod we create.
             </p>
@@ -113,7 +113,7 @@ const Footer = () => {
         {/* Footer bottom */}
         <div className="border-t border-offwhite/20 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-offwhite/60 mb-4 md:mb-0">
-            &copy; {new Date().getFullYear()} McKenney & Skinny's Bespoke Restomods. All rights reserved.
+            &copy; {new Date().getFullYear()} Skinny's Rod and Custom. All rights reserved.
           </p>
           <div className="flex space-x-6 text-sm text-offwhite/60">
             {LEGAL_LINKS.map((link) => (

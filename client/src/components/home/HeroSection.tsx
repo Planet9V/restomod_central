@@ -16,8 +16,8 @@ const HeroSection = () => {
   });
 
   const heroBackground = heroData?.imageUrl || "https://images.unsplash.com/photo-1611566026373-c6c8da0945b8?q=80&w=2000&auto=format&fit=crop";
-  const title = heroData?.title || "Engineering Meets Artistry";
-  const subtitle = heroData?.subtitle || "Meticulously crafted restomods that combine precision engineering with concourse-level aesthetics. The perfect fusion of classic soul and modern performance.";
+  const title = heroData?.title || "Skinny's Rod and Custom";
+  const subtitle = heroData?.subtitle || "Meticulously crafted hot rods and restomods by master builders with over 25 years of experience. The perfect fusion of classic soul and modern performance.";
 
   return (
     <section className="relative h-screen">

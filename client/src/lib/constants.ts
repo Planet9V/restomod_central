@@ -125,7 +125,7 @@ export const CONTACT_INFO = {
     line2: 'Kansas City, MO 64108',
   },
   phone: '+1 (816) 555-1234',
-  email: 'info@mckenneyandskinny.com',
+  email: 'info@skinnysrodandcustom.com',
   hours: [
     { day: 'Monday - Friday', hours: '9:00 AM - 6:00 PM' },
     { day: 'Saturday', hours: '10:00 AM - 4:00 PM' },
