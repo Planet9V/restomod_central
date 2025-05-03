@@ -186,167 +186,165 @@ export default function AdminDashboard() {
   const closeEditDialog = () => setEditingProject(null);
 
   return (
-    <div className="flex min-h-screen bg-muted/10">
+    <div className="admin-layout flex">
       {/* Sidebar */}
-      <div className="w-64 bg-card border-r border-border">
-        <div className="p-4 border-b border-border">
+      <div className="admin-sidebar">
+        <div className="admin-sidebar-header">
           <h2 className="text-xl font-bold">Admin Dashboard</h2>
-          <p className="text-sm text-muted-foreground mt-1">Skinny's Rod and Custom</p>
+          <p className="text-sm text-[var(--admin-sidebar-muted)] mt-1">Skinny's Rod and Custom</p>
         </div>
         
-        <div className="p-4">
-          <div className="flex items-center space-x-2 mb-6 pb-4 border-b border-border">
-            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
-              {user?.username.charAt(0).toUpperCase()}
-            </div>
-            <div>
-              <p className="font-medium">{user?.username}</p>
-              <p className="text-xs text-muted-foreground">{user?.email}</p>
-            </div>
+        <div className="admin-sidebar-user">
+          <div className="admin-sidebar-avatar">
+            {user?.username.charAt(0).toUpperCase()}
           </div>
-          
-          <nav className="space-y-1">
-            <Button 
-              variant="ghost" 
-              className="w-full justify-start" 
-              onClick={() => navigate('/')}
-            >
-              <Home className="mr-2 h-4 w-4" />
-              Front Site
-            </Button>
-            
-            <Button 
-              variant={activeTab === 'projects' ? 'secondary' : 'ghost'} 
-              className="w-full justify-start" 
-              onClick={() => setActiveTab('projects')}
-            >
-              <Car className="mr-2 h-4 w-4" />
-              Projects
-            </Button>
-            
-            <Button 
-              variant={activeTab === 'team' ? 'secondary' : 'ghost'} 
-              className="w-full justify-start" 
-              onClick={() => setActiveTab('team')}
-            >
-              <Users className="mr-2 h-4 w-4" />
-              Team
-            </Button>
-            
-            <Button 
-              variant={activeTab === 'settings' ? 'secondary' : 'ghost'} 
-              className="w-full justify-start" 
-              onClick={() => setActiveTab('settings')}
-            >
-              <Settings className="mr-2 h-4 w-4" />
-              Settings
-            </Button>
-            
-            <Button 
-              variant="ghost" 
-              className="w-full justify-start text-destructive" 
-              onClick={handleLogout}
-              disabled={logoutMutation.isPending}
-            >
-              <LogOut className="mr-2 h-4 w-4" />
-              Logout
-            </Button>
-          </nav>
+          <div>
+            <p className="font-medium">{user?.username}</p>
+            <p className="text-xs text-[var(--admin-sidebar-muted)]">{user?.email}</p>
+          </div>
         </div>
+        
+        <nav className="admin-sidebar-nav">
+          <button 
+            className="admin-sidebar-link" 
+            onClick={() => navigate('/')}
+          >
+            <Home className="h-5 w-5" />
+            <span>Front Site</span>
+          </button>
+          
+          <button 
+            className={`admin-sidebar-link ${activeTab === 'projects' ? 'active' : ''}`} 
+            onClick={() => setActiveTab('projects')}
+          >
+            <Car className="h-5 w-5" />
+            <span>Projects</span>
+          </button>
+          
+          <button 
+            className={`admin-sidebar-link ${activeTab === 'team' ? 'active' : ''}`}
+            onClick={() => setActiveTab('team')}
+          >
+            <Users className="h-5 w-5" />
+            <span>Team</span>
+          </button>
+          
+          <button 
+            className={`admin-sidebar-link ${activeTab === 'settings' ? 'active' : ''}`}
+            onClick={() => setActiveTab('settings')}
+          >
+            <Settings className="h-5 w-5" />
+            <span>Settings</span>
+          </button>
+          
+          <button 
+            className="admin-sidebar-link bg-red-600/10 text-red-600 hover:bg-red-600/20" 
+            onClick={handleLogout}
+            disabled={logoutMutation.isPending}
+          >
+            <LogOut className="h-5 w-5" />
+            <span>{logoutMutation.isPending ? 'Logging out...' : 'Logout'}</span>
+          </button>
+        </nav>
       </div>
       
       {/* Main Content */}
-      <div className="flex-1 p-8">
+      <div className="admin-content">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full">
           <TabsContent value="projects" className="mt-0 h-full">
-            <div className="flex justify-between items-center mb-6">
+            <div className="admin-section-header">
               <div>
                 <h1 className="text-3xl font-bold tracking-tight">Projects</h1>
-                <p className="text-muted-foreground">Manage your restomod projects</p>
+                <p className="text-[var(--admin-muted)]">Manage your restomod projects</p>
               </div>
-              <Button>
+              <button className="admin-button-primary flex items-center">
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Add Project
-              </Button>
+              </button>
             </div>
             
             {projectsLoading ? (
               <div className="flex justify-center items-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                <Loader2 className="w-8 h-8 animate-spin text-[var(--admin-primary)]" />
               </div>
             ) : projects && projects.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {projects.map((project) => (
-                  <Card key={project.id}>
-                    <CardHeader className="pb-2">
-                      <CardTitle>{project.title}</CardTitle>
-                      <CardDescription>{project.subtitle}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="aspect-video rounded-md bg-muted mb-2 overflow-hidden">
+                  <div className="admin-card group" key={project.id}>
+                    <div className="admin-card-header">
+                      <h3 className="admin-card-title">{project.title}</h3>
+                      <p className="admin-card-description">{project.subtitle}</p>
+                    </div>
+                    <div className="admin-card-content">
+                      <div className="admin-image-container mb-3">
                         <img 
                           src={project.imageUrl} 
                           alt={project.title} 
-                          className="w-full h-full object-cover"
+                          className="admin-image"
                         />
                       </div>
                       <div className="flex justify-between items-center mt-4">
-                        <div className="text-sm text-muted-foreground">
-                          {project.category}
+                        <div className="text-sm text-[var(--admin-muted)]">
+                          <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-[var(--admin-accent)]/10 text-[var(--admin-accent)]">
+                            {project.category}
+                          </span>
+                          {project.featured && (
+                            <span className="ml-2 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-[var(--admin-primary)]/10 text-[var(--admin-primary)]">
+                              Featured
+                            </span>
+                          )}
                         </div>
                         <div className="flex space-x-2">
-                          <Button 
-                            size="sm" 
-                            variant="outline"
+                          <button 
+                            className="admin-button-outline py-1 px-3 text-sm flex items-center"
                             onClick={() => setEditingProject(project)}
                           >
-                            <Edit className="mr-1 h-3 w-3" />
+                            <Edit className="mr-1.5 h-3 w-3" />
                             Edit
-                          </Button>
-                          <Button 
-                            size="sm" 
-                            variant="destructive"
+                          </button>
+                          <button 
+                            className="admin-button-destructive py-1 px-3 text-sm flex items-center"
                             onClick={() => setProjectToDelete(project)}
                           >
-                            <Trash2 className="mr-1 h-3 w-3" />
+                            <Trash2 className="mr-1.5 h-3 w-3" />
                             Delete
-                          </Button>
+                          </button>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12 border rounded-md">
-                <AlertCircle className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+              <div className="text-center py-12 border rounded-md bg-white">
+                <AlertCircle className="mx-auto h-12 w-12 text-[var(--admin-muted)] mb-4" />
                 <h3 className="text-lg font-medium">No projects found</h3>
-                <p className="text-muted-foreground">Add a new project to get started.</p>
+                <p className="text-[var(--admin-muted)]">Add a new project to get started.</p>
               </div>
             )}
             
             {/* Edit Project Dialog */}
             <Dialog open={!!editingProject} onOpenChange={(open) => !open && closeEditDialog()}>
-              <DialogContent className="sm:max-w-[600px]">
-                <DialogHeader>
-                  <DialogTitle>Edit Project</DialogTitle>
-                  <DialogDescription>
+              <DialogContent className="sm:max-w-[600px] bg-[var(--admin-card-bg)] border-[var(--admin-card-border)]">
+                <DialogHeader className="border-b border-[var(--admin-card-border)] pb-4">
+                  <DialogTitle className="text-lg font-bold">Edit Project</DialogTitle>
+                  <DialogDescription className="text-[var(--admin-muted)]">
                     Make changes to the project information below.
                   </DialogDescription>
                 </DialogHeader>
                 
                 <Form {...editProjectForm}>
-                  <form onSubmit={editProjectForm.handleSubmit(handleEditProject)} className="space-y-6">
+                  <form onSubmit={editProjectForm.handleSubmit(handleEditProject)} className="space-y-6 pt-4">
                     <FormField
                       control={editProjectForm.control}
                       name="title"
                       render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Title</FormLabel>
+                        <FormItem className="admin-form-group">
+                          <FormLabel className="admin-form-label">Title</FormLabel>
                           <FormControl>
-                            <Input placeholder="1967 Mustang Fastback" {...field} />
+                            <Input className="admin-form-input" placeholder="1967 Mustang Fastback" {...field} />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="admin-form-error" />
                         </FormItem>
                       )}
                     />
@@ -355,12 +353,12 @@ export default function AdminDashboard() {
                       control={editProjectForm.control}
                       name="subtitle"
                       render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Subtitle</FormLabel>
+                        <FormItem className="admin-form-group">
+                          <FormLabel className="admin-form-label">Subtitle</FormLabel>
                           <FormControl>
-                            <Input placeholder="Iconic American Muscle" {...field} />
+                            <Input className="admin-form-input" placeholder="Iconic American Muscle" {...field} />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="admin-form-error" />
                         </FormItem>
                       )}
                     />
@@ -369,12 +367,12 @@ export default function AdminDashboard() {
                       control={editProjectForm.control}
                       name="category"
                       render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Category</FormLabel>
+                        <FormItem className="admin-form-group">
+                          <FormLabel className="admin-form-label">Category</FormLabel>
                           <FormControl>
-                            <Input placeholder="muscle-cars" {...field} />
+                            <Input className="admin-form-input" placeholder="muscle-cars" {...field} />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="admin-form-error" />
                         </FormItem>
                       )}
                     />
@@ -383,16 +381,16 @@ export default function AdminDashboard() {
                       control={editProjectForm.control}
                       name="description"
                       render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Description</FormLabel>
+                        <FormItem className="admin-form-group">
+                          <FormLabel className="admin-form-label">Description</FormLabel>
                           <FormControl>
                             <Textarea 
+                              className="admin-form-textarea"
                               placeholder="Describe the project..."
-                              className="min-h-[120px]"
                               {...field} 
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="admin-form-error" />
                         </FormItem>
                       )}
                     />
@@ -401,12 +399,12 @@ export default function AdminDashboard() {
                       control={editProjectForm.control}
                       name="imageUrl"
                       render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Image URL</FormLabel>
+                        <FormItem className="admin-form-group">
+                          <FormLabel className="admin-form-label">Image URL</FormLabel>
                           <FormControl>
-                            <Input placeholder="https://example.com/image.jpg" {...field} />
+                            <Input className="admin-form-input" placeholder="https://example.com/image.jpg" {...field} />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="admin-form-error" />
                         </FormItem>
                       )}
                     />
@@ -415,18 +413,18 @@ export default function AdminDashboard() {
                       control={editProjectForm.control}
                       name="featured"
                       render={({ field }) => (
-                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                        <FormItem className="admin-form-group flex flex-row items-start space-x-3 space-y-0 rounded-md border border-[var(--admin-form-border)] p-4 bg-[var(--admin-form-bg)]">
                           <FormControl>
                             <input
                               type="checkbox"
-                              className="form-checkbox h-4 w-4 mt-1"
+                              className="admin-form-checkbox"
                               checked={field.value}
                               onChange={field.onChange}
                             />
                           </FormControl>
                           <div className="space-y-1 leading-none">
-                            <FormLabel>Featured Project</FormLabel>
-                            <FormDescription>
+                            <FormLabel className="admin-form-label m-0">Featured Project</FormLabel>
+                            <FormDescription className="text-[var(--admin-muted)]">
                               Featured projects appear in the homepage hero section.
                             </FormDescription>
                           </div>
@@ -434,10 +432,11 @@ export default function AdminDashboard() {
                       )}
                     />
                     
-                    <DialogFooter>
-                      <Button type="button" variant="outline" onClick={closeEditDialog}>Cancel</Button>
-                      <Button 
+                    <DialogFooter className="border-t border-[var(--admin-card-border)] pt-4 mt-6">
+                      <button type="button" className="admin-button-outline" onClick={closeEditDialog}>Cancel</button>
+                      <button 
                         type="submit" 
+                        className="admin-button-primary"
                         disabled={updateProjectMutation.isPending || !editProjectForm.formState.isDirty}
                       >
                         {updateProjectMutation.isPending ? (
@@ -448,7 +447,7 @@ export default function AdminDashboard() {
                         ) : (
                           'Save Changes'
                         )}
-                      </Button>
+                      </button>
                     </DialogFooter>
                   </form>
                 </Form>
@@ -457,18 +456,23 @@ export default function AdminDashboard() {
             
             {/* Delete Project Dialog */}
             <AlertDialog open={!!projectToDelete} onOpenChange={(open) => !open && closeDeleteDialog()}>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
+              <AlertDialogContent className="bg-[var(--admin-card-bg)] border-[var(--admin-card-border)]">
+                <AlertDialogHeader className="border-b border-[var(--admin-card-border)] pb-4">
+                  <AlertDialogTitle className="text-lg font-bold">Are you sure?</AlertDialogTitle>
+                  <AlertDialogDescription className="text-[var(--admin-muted)]">
                     This action cannot be undone. This will permanently delete the project from the database.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel onClick={closeDeleteDialog}>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
+                <AlertDialogFooter className="pt-4">
+                  <button
+                    onClick={closeDeleteDialog}
+                    className="admin-button-outline"
+                  >
+                    Cancel
+                  </button>
+                  <button
                     onClick={handleDeleteProject}
-                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    className="admin-button-destructive"
                     disabled={deleteProjectMutation.isPending}
                   >
                     {deleteProjectMutation.isPending ? (
@@ -479,60 +483,89 @@ export default function AdminDashboard() {
                     ) : (
                       'Delete'
                     )}
-                  </AlertDialogAction>
+                  </button>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
           </TabsContent>
           
           <TabsContent value="team" className="mt-0 h-full">
-            <div className="flex justify-between items-center mb-6">
+            <div className="admin-section-header">
               <div>
                 <h1 className="text-3xl font-bold tracking-tight">Team</h1>
-                <p className="text-muted-foreground">Manage team members</p>
+                <p className="text-[var(--admin-muted)]">Manage team members</p>
               </div>
-              <Button>
+              <button className="admin-button-primary flex items-center">
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Add Team Member
-              </Button>
+              </button>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* Team member cards will go here */}
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle>Dave Johnson</CardTitle>
-                  <CardDescription>Founder & Master Builder</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex justify-end space-x-2 mt-4">
-                    <Button size="sm" variant="outline">Edit</Button>
-                    <Button size="sm" variant="destructive">Delete</Button>
+              <div className="admin-card">
+                <div className="admin-card-header">
+                  <h3 className="admin-card-title">Dave Johnson</h3>
+                  <p className="admin-card-description">Founder & Master Builder</p>
+                </div>
+                <div className="admin-card-content">
+                  <div className="flex items-center justify-between">
+                    <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-[var(--admin-accent)]/10 text-[var(--admin-accent)]">
+                      Leadership
+                    </span>
+                    <div className="flex space-x-2">
+                      <button className="admin-button-outline py-1 px-3 text-sm flex items-center">
+                        <Edit className="mr-1.5 h-3 w-3" />
+                        Edit
+                      </button>
+                      <button className="admin-button-destructive py-1 px-3 text-sm flex items-center">
+                        <Trash2 className="mr-1.5 h-3 w-3" />
+                        Delete
+                      </button>
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </div>
           </TabsContent>
           
           <TabsContent value="settings" className="mt-0 h-full">
-            <div className="flex justify-between items-center mb-6">
+            <div className="admin-section-header">
               <div>
                 <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
-                <p className="text-muted-foreground">Manage website settings</p>
+                <p className="text-[var(--admin-muted)]">Manage website settings</p>
               </div>
             </div>
             
-            <Card>
-              <CardHeader>
-                <CardTitle>Hero Section</CardTitle>
-                <CardDescription>Update the main homepage hero section</CardDescription>
-              </CardHeader>
-              <CardContent>
+            <div className="admin-card mb-6">
+              <div className="admin-card-header">
+                <h3 className="admin-card-title">Hero Section</h3>
+                <p className="admin-card-description">Update the main homepage hero section</p>
+              </div>
+              <div className="admin-card-content">
                 <div className="flex justify-end">
-                  <Button variant="outline">Edit Content</Button>
+                  <button className="admin-button-outline flex items-center">
+                    <Edit className="mr-2 h-4 w-4" />
+                    Edit Content
+                  </button>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
+            
+            <div className="admin-card">
+              <div className="admin-card-header">
+                <h3 className="admin-card-title">Company Information</h3>
+                <p className="admin-card-description">Update your business details</p>
+              </div>
+              <div className="admin-card-content">
+                <div className="flex justify-end">
+                  <button className="admin-button-outline flex items-center">
+                    <Edit className="mr-2 h-4 w-4" />
+                    Edit Information
+                  </button>
+                </div>
+              </div>
+            </div>
           </TabsContent>
         </Tabs>
       </div>
