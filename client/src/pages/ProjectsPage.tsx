@@ -121,11 +121,9 @@ const ProjectsPage = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back link */}
         <div className="mb-8">
-          <Link href="/">
-            <a className="inline-flex items-center text-burgundy hover:text-burgundy/80 font-medium">
-              <ArrowLeft className="h-5 w-5 mr-2" />
-              Back to Home
-            </a>
+          <Link href="/" className="inline-flex items-center text-burgundy hover:text-burgundy/80 font-medium">
+            <ArrowLeft className="h-5 w-5 mr-2" />
+            Back to Home
           </Link>
         </div>
 
@@ -184,10 +182,8 @@ const ProjectsPage = () => {
           <p className="mb-6 text-white/80 max-w-2xl mx-auto">
             Let's discuss how McKenney & Skinny's can bring your vision to life with our unique combination of engineering excellence and master craftsmanship.
           </p>
-          <Link href="/#contact">
-            <a className="inline-block bg-burgundy hover:bg-burgundy/90 transition-colors duration-200 px-8 py-4 text-sm uppercase tracking-wider font-medium">
-              Request a Consultation
-            </a>
+          <Link href="/#contact" className="inline-block bg-burgundy hover:bg-burgundy/90 transition-colors duration-200 px-8 py-4 text-sm uppercase tracking-wider font-medium">
+            Request a Consultation
           </Link>
         </div>
       </div>
