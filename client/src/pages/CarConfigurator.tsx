@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, ArrowRight, Info, Settings, Check, Search } from "lucide-react";
 import VideoHeader from "@/components/layout/VideoHeader";
@@ -950,8 +951,8 @@ const CarConfigurator = () => {
                     </div>
                     <div className="flex items-center gap-3">
                       <p className="text-burgundy font-bold">{formatPrice(option.price)}</p>
-                      <div className={`w-8 h-8 rounded-md flex items-center justify-center ${selectedConfig.options.includes(option.id) ? 'bg-burgundy text-white' : 'bg-gray-100 border-2 border-gray-300'}`}>
-                        {selectedConfig.options.includes(option.id) && <Check className="w-5 h-5" />}
+                      <div className="w-5 h-5 border-2 border-burgundy rounded flex items-center justify-center bg-white">
+                        {selectedConfig.options.includes(option.id) && <Check className="w-3 h-3 text-burgundy" />}
                       </div>
                     </div>
                   </CardContent>
@@ -981,8 +982,8 @@ const CarConfigurator = () => {
                       </div>
                       <div className="flex items-center gap-3">
                         <p className="text-burgundy font-bold">{formatPrice(feature.price)}</p>
-                        <div className={`w-8 h-8 rounded-md flex items-center justify-center ${selectedConfig.aiFeatures.includes(feature.id) ? 'bg-burgundy text-white' : 'bg-gray-100 border-2 border-gray-300'}`}>
-                          {selectedConfig.aiFeatures.includes(feature.id) && <Check className="w-5 h-5" />}
+                        <div className="w-5 h-5 border-2 border-burgundy rounded flex items-center justify-center bg-white">
+                          {selectedConfig.aiFeatures.includes(feature.id) && <Check className="w-3 h-3 text-burgundy" />}
                         </div>
                       </div>
                     </CardContent>
