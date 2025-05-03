@@ -11,6 +11,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { apiRequest } from "@/lib/queryClient";
 import ResearchPanel from "@/components/configurator/ResearchPanel";
 import PartResearchPanel from "@/components/configurator/PartResearchPanel";
+import ConfiguratorDashboard from "@/components/configurator/ConfiguratorDashboard";
 
 const CarConfigurator = () => {
   // Configuration state
@@ -1341,7 +1342,7 @@ const CarConfigurator = () => {
             onValueChange={(value) => canNavigateToStep(parseInt(value)) && setStep(parseInt(value))}
             className="w-full"
           >
-            <TabsList className="grid grid-cols-10 w-full">
+            <TabsList className="grid grid-cols-11 w-full">
               <TabsTrigger 
                 value="1" 
                 className={`text-xs sm:text-sm ${!canNavigateToStep(1) ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -1411,6 +1412,12 @@ const CarConfigurator = () => {
                 disabled={!canNavigateToStep(10)}
               >
                 Summary
+              </TabsTrigger>
+              <TabsTrigger 
+                value="11" 
+                className="text-xs sm:text-sm flex items-center gap-1"
+              >
+                <SearchIcon className="w-3 h-3" /> Research
               </TabsTrigger>
             </TabsList>
           </Tabs>

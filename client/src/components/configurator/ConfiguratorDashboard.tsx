@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { SearchIcon, Settings2, Info, Tool, Car } from 'lucide-react';
+import { SearchIcon, Settings2, Info, Wrench, Car } from 'lucide-react';
 import GeneratedImageDisplay from './GeneratedImageDisplay';
 import VehicleResearchDetails from './VehicleResearchDetails';
 import PartResearchDetails from './PartResearchDetails';
@@ -228,7 +228,7 @@ const ConfiguratorDashboard: React.FC<ConfiguratorDashboardProps> = ({ className
                 <Card className="bg-muted/50">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-base flex items-center">
-                      <Tool className="h-4 w-4 mr-2" />
+                      <Wrench className="h-4 w-4 mr-2" />
                       Parts Information
                     </CardTitle>
                   </CardHeader>

@@ -7,7 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { InfoIcon, DollarSign, TrendingUp, History, Settings, Tool, Car } from 'lucide-react';
+import { InfoIcon, DollarSign, TrendingUp, History, Settings, Wrench, Car } from 'lucide-react';
 
 interface VehicleResearchDetailsProps {
   modelName: string;
@@ -105,7 +105,7 @@ const VehicleResearchDetails: React.FC<VehicleResearchDetailsProps> = ({
               <Settings className="h-4 w-4 mr-1" /> Upgrades
             </TabsTrigger>
             <TabsTrigger value="specs" className="text-xs">
-              <Tool className="h-4 w-4 mr-1" /> Specs
+              <Wrench className="h-4 w-4 mr-1" /> Specs
             </TabsTrigger>
           </TabsList>
           

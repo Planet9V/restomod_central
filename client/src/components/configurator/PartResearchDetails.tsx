@@ -7,7 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { InfoIcon, DollarSign, Settings, Tool, HardDrive, CheckCircle } from 'lucide-react';
+import { InfoIcon, DollarSign, Settings, Wrench, HardDrive, CheckCircle } from 'lucide-react';
 
 interface PartResearchDetailsProps {
   partName: string;
@@ -104,7 +104,7 @@ const PartResearchDetails: React.FC<PartResearchDetailsProps> = ({
               <Settings className="h-4 w-4 mr-1" /> Upgrades
             </TabsTrigger>
             <TabsTrigger value="specs" className="text-xs">
-              <Tool className="h-4 w-4 mr-1" /> Specs
+              <Wrench className="h-4 w-4 mr-1" /> Specs
             </TabsTrigger>
           </TabsList>
           
