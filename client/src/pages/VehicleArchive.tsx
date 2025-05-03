@@ -371,9 +371,9 @@ const VehicleArchive = () => {
         </div>
 
         {/* Vehicle Display */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 gap-10">
           {/* Left Column - Image and Basic Info */}
-          <div className="md:col-span-1">
+          <div className="w-full">
             <div className="rounded-sm overflow-hidden mb-6">
               <img 
                 src={currentVehicle.mainImage} 
@@ -419,8 +419,8 @@ const VehicleArchive = () => {
             </div>
           </div>
           
-          {/* Middle Column - Historical Information */}
-          <div className="md:col-span-1">
+          {/* Historical Information */}
+          <div className="w-full">
             <Card className="h-full">
               <CardHeader>
                 <CardTitle className="font-playfair text-2xl">Historical Information</CardTitle>
@@ -444,8 +444,8 @@ const VehicleArchive = () => {
             </Card>
           </div>
           
-          {/* Right Column - Pricing Trends and Value Factors */}
-          <div className="md:col-span-1">
+          {/* Pricing Trends and Value Factors */}
+          <div className="w-full">
             <Card className="mb-8">
               <CardHeader>
                 <CardTitle className="font-playfair text-2xl">Market Value Trends</CardTitle>
