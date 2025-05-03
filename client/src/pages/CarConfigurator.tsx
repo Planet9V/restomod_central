@@ -375,13 +375,7 @@ const CarConfigurator = () => {
       Based on this configuration, can you recommend any modifications, improvements, or alternatives that would enhance the driving experience, performance, or value of this restomod build? Please keep your response concise and specific to this particular configuration.`;
       
       // Make the API call
-      const response = await apiRequest<{ recommendation: string }>('/api/ai/configurator-recommendation', { 
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ prompt })
-      });
+      const response = await apiRequest<{ recommendation: string }>('POST', '/api/ai/configurator-recommendation', { prompt });
       
       if (response && response.recommendation) {
         setAiRecommendation(response.recommendation);

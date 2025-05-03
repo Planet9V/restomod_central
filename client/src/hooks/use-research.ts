@@ -182,7 +182,7 @@ export function useResearch(options: UseResearchOptions = {}) {
       // First try the Perplexity endpoint which will have more detailed information
       try {
         console.log(`Requesting vehicle research for model: ${params.model}`);
-        const result = await apiRequest(`/perplexity/car-info?model=${encodeURIComponent(params.model)}`);
+        const result = await apiRequest('GET', `/api/perplexity/car-info?model=${encodeURIComponent(params.model)}`);
         
         // Check if we got a successful response with content
         if (result && result.success && result.content) {
@@ -208,7 +208,7 @@ export function useResearch(options: UseResearchOptions = {}) {
         
         // Fallback to the original research endpoint
         console.log('Trying fallback research API...');
-        const fallbackResult = await apiRequest(`/research/vehicle?model=${encodeURIComponent(params.model)}`);
+        const fallbackResult = await apiRequest('GET', `/api/research/vehicle?model=${encodeURIComponent(params.model)}`);
         
         if (fallbackResult) {
           console.log('Successfully received fallback data for vehicle');
@@ -261,13 +261,13 @@ export function useResearch(options: UseResearchOptions = {}) {
     try {
       // Try the Perplexity endpoint first for more detailed information
       try {
-        let url = `/perplexity/part-info?part=${encodeURIComponent(params.part)}`;
+        let url = `/api/perplexity/part-info?part=${encodeURIComponent(params.part)}`;
         if (params.model) {
           url += `&model=${encodeURIComponent(params.model)}`;
         }
         
         console.log(`Requesting part research for: ${params.part}${params.model ? ` (${params.model})` : ''}`);
-        const result = await apiRequest(url);
+        const result = await apiRequest('GET', url);
         
         // Check if we got a successful response with content
         if (result && result.success && result.content) {
@@ -292,13 +292,13 @@ export function useResearch(options: UseResearchOptions = {}) {
         console.warn('Perplexity API error, falling back to research API:', perplexityError);
         
         // Fallback to the original research endpoint
-        let url = `/research/part?part=${encodeURIComponent(params.part)}`;
+        let url = `/api/research/part?part=${encodeURIComponent(params.part)}`;
         if (params.model) {
           url += `&model=${encodeURIComponent(params.model)}`;
         }
         
         console.log('Trying fallback research API for part...');
-        const fallbackResult = await apiRequest(url);
+        const fallbackResult = await apiRequest('GET', url);
         
         if (fallbackResult) {
           console.log('Successfully received fallback data for part');
