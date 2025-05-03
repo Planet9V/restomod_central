@@ -1417,7 +1417,7 @@ const CarConfigurator = () => {
                 value="11" 
                 className="text-xs sm:text-sm flex items-center gap-1"
               >
-                <SearchIcon className="w-3 h-3" /> Research
+                <Search size={12} /> Research
               </TabsTrigger>
             </TabsList>
           </Tabs>
