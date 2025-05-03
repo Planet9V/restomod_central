@@ -51,9 +51,7 @@ function Router() {
         <Route path="/vehicle-archive" component={VehicleArchive} />
         <Route path="/car-configurator" component={CarConfigurator} />
         <Route path="/auth" component={AuthPage} />
-        <Route path="/admin">
-          {() => <ProtectedRoute component={AdminDashboard} adminOnly />}
-        </Route>
+        <Route path="/admin" component={() => <ProtectedRoute component={AdminDashboard} adminOnly />} />
         <Route component={NotFound} />
       </Switch>
     </PageTransition>
