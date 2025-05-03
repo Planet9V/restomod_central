@@ -68,9 +68,9 @@ const ConfiguratorDashboard: React.FC<ConfiguratorDashboardProps> = ({ className
   };
 
   return (
-    <div className={`grid grid-cols-1 lg:grid-cols-3 gap-6 ${className}`}>
-      {/* Left column - Image and search */}
-      <div className="col-span-1">
+    <div className={`grid grid-cols-1 gap-6 ${className}`}>
+      {/* Search and configuration panel */}
+      <div className="w-full">
         <Card className="mb-6">
           <CardHeader>
             <CardTitle className="flex items-center">
@@ -188,8 +188,8 @@ const ConfiguratorDashboard: React.FC<ConfiguratorDashboardProps> = ({ className
         </Card>
       </div>
       
-      {/* Center and right columns - Research details */}
-      <div className="col-span-1 lg:col-span-2">
+      {/* Research details panel */}
+      <div className="w-full">
         {activeTab === 'vehicle' && selectedCar ? (
           <VehicleResearchDetails modelName={selectedCar} />
         ) : activeTab === 'part' && selectedPart ? (

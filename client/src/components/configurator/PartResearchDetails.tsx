@@ -186,11 +186,11 @@ const PartResearchDetails: React.FC<PartResearchDetailsProps> = ({
                   <div>
                     <h4 className="text-base font-medium mb-2">Technical Specifications</h4>
                     <div className="bg-muted rounded-md p-4">
-                      <dl className="grid grid-cols-1 gap-2">
+                      <dl className="grid grid-cols-1 gap-3">
                         {Object.entries(partData.specifications).map(([key, value]) => (
-                          <div key={key} className="grid grid-cols-2">
-                            <dt className="font-semibold">{key}:</dt>
-                            <dd>{value as string}</dd>
+                          <div key={key}>
+                            <dt className="font-semibold mb-1">{key}:</dt>
+                            <dd className="ml-2">{value as string}</dd>
                           </div>
                         ))}
                       </dl>
