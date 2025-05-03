@@ -115,7 +115,7 @@ const Resources = () => {
               <Button
                 key={category}
                 variant={category === "All" ? "default" : "outline"}
-                className="rounded-full px-5"
+                className="rounded-sm px-5 bg-charcoal text-white hover:bg-burgundy border-0"
               >
                 {category}
               </Button>
@@ -152,7 +152,7 @@ const Resources = () => {
                   {resource.description}
                 </CardDescription>
                 <div className="mt-4">
-                  <span className="inline-block bg-charcoal/10 text-charcoal/80 px-3 py-1 text-xs rounded-full">
+                  <span className="inline-block bg-charcoal/10 text-charcoal/80 px-3 py-1 text-xs rounded-sm">
                     {resource.category}
                   </span>
                   <span className="ml-2 text-xs text-charcoal/60">{resource.readTime}</span>
@@ -187,7 +187,7 @@ const Resources = () => {
                 placeholder="Your email address"
                 className="rounded-sm px-4 py-2 border border-charcoal/20 flex-grow"
               />
-              <Button className="bg-burgundy hover:bg-burgundy/90 text-white">
+              <Button className="bg-burgundy hover:bg-burgundy/90 text-white rounded-sm border-0">
                 Subscribe
               </Button>
             </div>
