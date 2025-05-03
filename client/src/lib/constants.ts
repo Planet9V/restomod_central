@@ -72,7 +72,7 @@ export const ENGINEERING_FEATURES = [
   {
     id: 'engineering-excellence',
     title: 'Engineering Excellence',
-    description: 'Our McKenney Engineering division provides advanced chassis design, systems integration, and performance optimization using cutting-edge tools and methodologies.',
+    description: 'Our engineering team provides advanced chassis design, systems integration, and performance optimization using cutting-edge tools and methodologies.',
     icon: 'Settings'
   },
   {

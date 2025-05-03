@@ -50,7 +50,7 @@ const Footer = () => {
           <div>
             <h4 className="font-playfair text-xl mb-6">Skinny's Rod and Custom</h4>
             <p className="text-offwhite/70 mb-6">
-              Engineering meets artistry in every bespoke restomod we create.
+              Precision craftsmanship in every hot rod and custom build we create.
             </p>
             <div className="flex space-x-4">
               {SOCIAL_LINKS.map((social) => (
