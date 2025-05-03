@@ -3,7 +3,7 @@ import { db } from '../db';
 import { users, InsertUser } from '../shared/schema';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
-import * as jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 // JWT secret key
 const JWT_SECRET = process.env.JWT_SECRET || 'skinnyrod-secret-key';
