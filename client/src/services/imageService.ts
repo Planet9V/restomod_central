@@ -1,5 +1,19 @@
 import { VehicleImages, ProcessImages, AboutImages, TeamImages, FallbackImage } from '@/data/images';
 
+// Define types based on the image configuration
+type VehicleSlug = keyof typeof VehicleImages;
+type ProcessKey = keyof typeof ProcessImages;
+type AboutKey = keyof typeof AboutImages;
+type TeamMemberKey = keyof typeof TeamImages;
+
+// Project interface - use a minimal version of what we need
+interface ProjectWithImages {
+  slug?: string;
+  imageUrl?: string;
+  galleryImages?: string[];
+  [key: string]: any; // Allow other properties
+}
+
 /**
  * Image Service for Skinny's Rod and Custom
  * Provides methods to get images for various parts of the application
