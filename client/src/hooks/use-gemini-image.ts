@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { apiRequest } from '@/lib/queryClient';
+import { getCarImage, getPartImage } from '@/components/configurator/fallback-images';
 
 type ImageStyle = 'realistic' | 'vintage' | 'blueprint' | 'modern';
 
@@ -64,16 +65,38 @@ export function useGeminiImage() {
   
   /**
    * Generate car image with optional style
+   * Falls back to stock image library if generation fails
    */
   const generateCarImage = async (carModel: string, style: ImageStyle = 'realistic') => {
-    return generateImage({ car: carModel, style });
+    const result = await generateImage({ car: carModel, style });
+    
+    if (!result) {
+      // If generation failed, use a fallback image
+      const fallbackUrl = getCarImage(carModel);
+      setImageUrl(fallbackUrl);
+      setPrompt(`Fallback image for ${carModel}`);
+      return fallbackUrl;
+    }
+    
+    return result;
   };
   
   /**
    * Generate part image with optional car model and style
+   * Falls back to stock image library if generation fails
    */
   const generatePartImage = async (partName: string, carModel?: string, style: ImageStyle = 'realistic') => {
-    return generateImage({ part: partName, car: carModel, style });
+    const result = await generateImage({ part: partName, car: carModel, style });
+    
+    if (!result) {
+      // If generation failed, use a fallback image
+      const fallbackUrl = getPartImage(partName);
+      setImageUrl(fallbackUrl);
+      setPrompt(`Fallback image for ${partName}${carModel ? ` (${carModel})` : ''}`);
+      return fallbackUrl;
+    }
+    
+    return result;
   };
   
   /**

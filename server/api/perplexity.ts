@@ -9,6 +9,30 @@ interface PerplexityRequestMessages {
   content: string;
 }
 
+interface PerplexityMessage {
+  role: string;
+  content: string;
+}
+
+interface PerplexityChoice {
+  index: number;
+  finish_reason: string;
+  message: PerplexityMessage;
+}
+
+interface PerplexityResponse {
+  id: string;
+  model: string;
+  created: number;
+  choices: PerplexityChoice[];
+  citations?: string[];
+  usage: {
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+  };
+}
+
 interface PerplexityRequest {
   model: string;
   messages: PerplexityRequestMessages[];
@@ -30,8 +54,16 @@ export async function getCarInformation(req: Request, res: Response) {
   try {
     const { model } = req.query;
     
-    if (!model) {
+    if (!model || typeof model !== 'string') {
       return res.status(400).json({ error: 'Car model is required' });
+    }
+    
+    // Check if API key is available
+    if (!PERPLEXITY_API_KEY) {
+      return res.status(500).json({ 
+        error: 'Perplexity API key is not configured',
+        details: 'Please set the PERPLEXITY_API_KEY environment variable'
+      });
     }
     
     const perplexityRequest: PerplexityRequest = {
@@ -80,7 +112,7 @@ export async function getCarInformation(req: Request, res: Response) {
       });
     }
     
-    const data = await response.json();
+    const data = await response.json() as PerplexityResponse;
     
     if (data.choices && data.choices.length > 0 && 
         data.choices[0].message && 

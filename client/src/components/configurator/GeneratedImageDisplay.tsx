@@ -5,6 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, RefreshCw, Image as ImageIcon } from 'lucide-react';
+import { getCarImage, getPartImage } from './fallback-images';
 
 type ImageStyle = 'realistic' | 'vintage' | 'blueprint' | 'modern';
 
@@ -50,10 +51,22 @@ const GeneratedImageDisplay: React.FC<GeneratedImageDisplayProps> = ({
   const generateImage = async () => {
     if (!car && !part) return;
 
-    if (part) {
-      await generatePartImage(part, car, activeStyle);
-    } else if (car) {
-      await generateCarImage(car, activeStyle);
+    try {
+      if (part) {
+        await generatePartImage(part, car, activeStyle);
+      } else if (car) {
+        await generateCarImage(car, activeStyle);
+      }
+    } catch (error) {
+      console.warn('Image generation failed, using fallback image', error);
+      // Use fallback image if generation fails
+      if (part) {
+        const fallbackUrl = getPartImage(part);
+        if (onImageLoaded) onImageLoaded(fallbackUrl);
+      } else if (car) {
+        const fallbackUrl = getCarImage(car);
+        if (onImageLoaded) onImageLoaded(fallbackUrl);
+      }
     }
   };
 
