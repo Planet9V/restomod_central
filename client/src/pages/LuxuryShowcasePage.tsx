@@ -1,20 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRoute } from 'wouter';
 import { useLuxuryShowcase } from '@/hooks/use-luxury-showcase';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { HelpCircle, Loader2, ChevronRight, ChevronLeft, Star, PlayCircle, FastForward, Calendar, Clock } from 'lucide-react';
+import { HelpCircle, Loader2, ChevronRight, ChevronLeft, Star, PlayCircle, FastForward, Calendar, Clock, ChevronDown, ArrowRight } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import { format } from 'date-fns';
+import { motion } from 'framer-motion';
 
 export default function LuxuryShowcasePage() {
   const [, params] = useRoute('/showcases/:slug');
   const { data: showcase, isLoading, error } = useLuxuryShowcase(params?.slug || '');
   const [selectedTab, setSelectedTab] = useState('overview');
   const [activeGalleryIndex, setActiveGalleryIndex] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
+  const heroRef = useRef<HTMLDivElement>(null);
   
   // Query to get project data if a projectId is linked to this showcase
   const { data: projectData } = useQuery({
@@ -26,6 +29,16 @@ export default function LuxuryShowcasePage() {
     },
     enabled: !!showcase?.projectId,
   });
+
+  // Handle scroll effects
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Handle gallery navigation
   const nextImage = () => {
@@ -40,6 +53,13 @@ export default function LuxuryShowcasePage() {
     setActiveGalleryIndex((prev) => 
       prev === 0 ? showcase.galleryImages.length - 1 : prev - 1
     );
+  };
+  
+  const scrollToContent = () => {
+    const contentSection = document.getElementById('showcase-content');
+    if (contentSection) {
+      contentSection.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   if (isLoading) {
@@ -75,11 +95,11 @@ export default function LuxuryShowcasePage() {
   return (
     <div className="bg-background">
       {/* Hero Section */}
-      <div className="relative h-[70vh] overflow-hidden">
+      <div ref={heroRef} className="relative h-screen overflow-hidden">
         {showcase.videoUrl ? (
           <div className="absolute inset-0 w-full h-full bg-black">
             <video 
-              className="w-full h-full object-cover opacity-80" 
+              className="w-full h-full object-cover opacity-90" 
               autoPlay 
               loop 
               muted 
@@ -87,206 +107,233 @@ export default function LuxuryShowcasePage() {
             >
               <source src={showcase.videoUrl} type="video/mp4" />
             </video>
-            <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-90"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background opacity-90"></div>
           </div>
         ) : (
-          <div 
+          <motion.div 
             className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${showcase.heroImage})` }}
+            style={{ 
+              backgroundImage: `url(${showcase.heroImage})`, 
+              backgroundPosition: `center ${scrollY * 0.5}px` 
+            }}
+            initial={{ scale: 1 }}
+            animate={{ scale: 1 + (scrollY * 0.0002) }}
           >
-            <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-90"></div>
-          </div>
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background opacity-90"></div>
+          </motion.div>
         )}
 
-        <div className="container mx-auto px-4 h-full flex flex-col justify-end pb-16 relative z-10">
-          <div className="max-w-5xl">
+        <div className="container mx-auto px-4 h-full flex flex-col justify-end pb-32 relative z-10">
+          <motion.div 
+            className="max-w-5xl"
+            initial={{ opacity: 1, y: 0 }}
+            animate={{ opacity: 1 - (scrollY * 0.003), y: scrollY * 0.5 }}
+          >
             {showcase.featured && (
               <Badge variant="secondary" className="bg-amber-500 text-white border-none mb-4">
                 <Star className="h-3 w-3 mr-2 fill-current" />
                 Featured Showcase
               </Badge>
             )}
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-4">
+            <h1 className="text-4xl md:text-7xl font-bold tracking-tight text-white mb-6">
               {showcase.title}
             </h1>
-            <p className="text-xl md:text-2xl text-white/90 max-w-3xl">
+            <p className="text-xl md:text-3xl text-white/90 max-w-3xl mb-8">
               {showcase.subtitle}
             </p>
-          </div>
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="rounded-none border-white text-white hover:bg-white/20 group"
+              onClick={scrollToContent}
+            >
+              <span>Explore Further</span>
+              <ChevronDown className="ml-2 h-5 w-5 transition-transform group-hover:translate-y-1" />
+            </Button>
+          </motion.div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-12">
-        <div className="flex flex-col lg:flex-row gap-12">
-          {/* Main Content */}
-          <div className="flex-grow">
-            <Tabs value={selectedTab} onValueChange={setSelectedTab}>
-              <TabsList className="w-full border-b rounded-none justify-start mb-8">
-                <TabsTrigger value="overview" className="text-lg">
-                  Overview
-                </TabsTrigger>
-                <TabsTrigger value="specifications" className="text-lg">
-                  Specifications
-                </TabsTrigger>
-                <TabsTrigger value="gallery" className="text-lg">
-                  Gallery
-                </TabsTrigger>
-              </TabsList>
+      <div id="showcase-content" className="pt-24">
+        <div className="container mx-auto px-4 py-12">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold mb-6">The Ultimate Restomod Experience</h2>
+            <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
+              {showcase.shortDescription}
+            </p>
+          </div>
+          
+          <div className="flex flex-col lg:flex-row gap-12">
+            {/* Main Content */}
+            <div className="flex-grow">
+              <Tabs value={selectedTab} onValueChange={setSelectedTab}>
+                <TabsList className="w-full border-b rounded-none justify-start mb-8">
+                  <TabsTrigger value="overview" className="text-lg">
+                    Overview
+                  </TabsTrigger>
+                  <TabsTrigger value="specifications" className="text-lg">
+                    Specifications
+                  </TabsTrigger>
+                  <TabsTrigger value="gallery" className="text-lg">
+                    Gallery
+                  </TabsTrigger>
+                </TabsList>
 
-              <TabsContent value="overview" className="pt-4">
-                <div className="prose prose-lg dark:prose-invert max-w-none mb-8">
-                  <p className="text-xl leading-relaxed mb-6">{showcase.description}</p>
+                <TabsContent value="overview" className="pt-4">
+                  <div className="prose prose-lg dark:prose-invert max-w-none mb-8">
+                    <p className="text-xl leading-relaxed mb-6">{showcase.description}</p>
 
-                  {/* Detail sections */}
-                  {showcase.detailSections
-                    .sort((a, b) => a.order - b.order)
-                    .map((section, index) => (
-                      <div key={index} className="my-12">
-                        <h2 className="text-3xl font-bold mb-6">{section.title}</h2>
-                        
-                        {section.image && (
-                          <div className="my-6">
-                            <img 
-                              src={section.image} 
-                              alt={section.title} 
-                              className="rounded-lg w-full h-auto object-cover max-h-[500px]"
-                            />
-                          </div>
-                        )}
-                        
-                        <div 
-                          className="prose prose-lg dark:prose-invert max-w-none"
-                          dangerouslySetInnerHTML={{ __html: section.content }}
-                        />
-                      </div>
-                    ))
-                  }
-                </div>
-              </TabsContent>
-
-              <TabsContent value="specifications" className="pt-4">
-                {showcase.specifications.map((specGroup, index) => (
-                  <div key={index} className="mb-10">
-                    <h2 className="text-2xl font-bold mb-4">{specGroup.category}</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
-                      {specGroup.items.map((spec, i) => (
-                        <div 
-                          key={i} 
-                          className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-800"
-                        >
-                          <span className="font-medium">{spec.label}</span>
-                          <span className="text-muted-foreground">{spec.value}</span>
+                    {/* Detail sections */}
+                    {showcase.detailSections
+                      .sort((a, b) => a.order - b.order)
+                      .map((section, index) => (
+                        <div key={index} className="my-12">
+                          <h2 className="text-3xl font-bold mb-6">{section.title}</h2>
+                          
+                          {section.image && (
+                            <div className="my-6">
+                              <img 
+                                src={section.image} 
+                                alt={section.title} 
+                                className="rounded-lg w-full h-auto object-cover max-h-[500px]"
+                              />
+                            </div>
+                          )}
+                          
+                          <div 
+                            className="prose prose-lg dark:prose-invert max-w-none"
+                            dangerouslySetInnerHTML={{ __html: section.content }}
+                          />
                         </div>
-                      ))}
+                      ))
+                    }
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="specifications" className="pt-4">
+                  {showcase.specifications.map((specGroup, index) => (
+                    <div key={index} className="mb-10">
+                      <h2 className="text-2xl font-bold mb-4">{specGroup.category}</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
+                        {specGroup.items.map((spec, i) => (
+                          <div 
+                            key={i} 
+                            className="flex justify-between py-2 border-b border-gray-200 dark:border-gray-800"
+                          >
+                            <span className="font-medium">{spec.label}</span>
+                            <span className="text-muted-foreground">{spec.value}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </TabsContent>
+                  ))}
+                </TabsContent>
 
-              <TabsContent value="gallery" className="pt-4">
-                <div className="relative overflow-hidden rounded-lg">
-                  <div className="aspect-[16/9] bg-muted">
-                    <img 
-                      src={showcase.galleryImages[activeGalleryIndex]}
-                      alt={`${showcase.title} - Image ${activeGalleryIndex + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  
-                  <div className="absolute inset-0 flex items-center justify-between px-4">
-                    <Button 
-                      variant="secondary" 
-                      size="icon" 
-                      className="rounded-full bg-black/40 text-white hover:bg-black/60"
-                      onClick={prevImage}
-                    >
-                      <ChevronLeft className="h-6 w-6" />
-                    </Button>
-                    <Button 
-                      variant="secondary" 
-                      size="icon" 
-                      className="rounded-full bg-black/40 text-white hover:bg-black/60"
-                      onClick={nextImage}
-                    >
-                      <ChevronRight className="h-6 w-6" />
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-4 md:grid-cols-6 gap-2 mt-4">
-                  {showcase.galleryImages.map((image, index) => (
-                    <div 
-                      key={index} 
-                      className={`cursor-pointer aspect-square rounded-md overflow-hidden border-2 ${activeGalleryIndex === index ? 'border-primary' : 'border-transparent'}`}
-                      onClick={() => setActiveGalleryIndex(index)}
-                    >
+                <TabsContent value="gallery" className="pt-4">
+                  <div className="relative overflow-hidden rounded-lg">
+                    <div className="aspect-[16/9] bg-muted">
                       <img 
-                        src={image} 
-                        alt={`Thumbnail ${index + 1}`} 
+                        src={showcase.galleryImages[activeGalleryIndex]}
+                        alt={`${showcase.title} - Image ${activeGalleryIndex + 1}`}
                         className="w-full h-full object-cover"
                       />
                     </div>
-                  ))}
-                </div>
-              </TabsContent>
-            </Tabs>
-          </div>
+                    
+                    <div className="absolute inset-0 flex items-center justify-between px-4">
+                      <Button 
+                        variant="secondary" 
+                        size="icon" 
+                        className="rounded-full bg-black/40 text-white hover:bg-black/60"
+                        onClick={prevImage}
+                      >
+                        <ChevronLeft className="h-6 w-6" />
+                      </Button>
+                      <Button 
+                        variant="secondary" 
+                        size="icon" 
+                        className="rounded-full bg-black/40 text-white hover:bg-black/60"
+                        onClick={nextImage}
+                      >
+                        <ChevronRight className="h-6 w-6" />
+                      </Button>
+                    </div>
+                  </div>
 
-          {/* Sidebar */}
-          <div className="lg:w-1/3 space-y-8">
-            {showcase.videoUrl && (
-              <div className="rounded-lg overflow-hidden border mb-6">
-                <div className="aspect-video relative group">
-                  <img 
-                    src={showcase.heroImage} 
-                    alt="Video thumbnail"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/50 transition-all">
-                    <a 
-                      href={showcase.videoUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-white"
-                    >
-                      <PlayCircle className="h-16 w-16" />
-                    </a>
+                  <div className="grid grid-cols-4 md:grid-cols-6 gap-2 mt-4">
+                    {showcase.galleryImages.map((image, index) => (
+                      <div 
+                        key={index} 
+                        className={`cursor-pointer aspect-square rounded-md overflow-hidden border-2 ${activeGalleryIndex === index ? 'border-primary' : 'border-transparent'}`}
+                        onClick={() => setActiveGalleryIndex(index)}
+                      >
+                        <img 
+                          src={image} 
+                          alt={`Thumbnail ${index + 1}`} 
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </div>
+
+            {/* Sidebar */}
+            <div className="lg:w-1/3 space-y-8">
+              {showcase.videoUrl && (
+                <div className="rounded-lg overflow-hidden border mb-6">
+                  <div className="aspect-video relative group">
+                    <img 
+                      src={showcase.heroImage} 
+                      alt="Video thumbnail"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/50 transition-all">
+                      <a 
+                        href={showcase.videoUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-white"
+                      >
+                        <PlayCircle className="h-16 w-16" />
+                      </a>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <FastForward className="h-4 w-4" />
+                      <span>Watch showcase video</span>
+                    </div>
                   </div>
                 </div>
-                <div className="p-4">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <FastForward className="h-4 w-4" />
-                    <span>Watch showcase video</span>
+              )}
+
+              {showcase.publishedAt && (
+                <div className="rounded-lg border p-4">
+                  <h3 className="font-medium mb-2">Publication Information</h3>
+                  <div className="text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Calendar className="h-4 w-4" />
+                      <span>Published: {format(new Date(showcase.publishedAt), 'MMMM d, yyyy')}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4" />
+                      <span>Last updated: {format(new Date(showcase.createdAt), 'MMMM d, yyyy')}</span>
+                    </div>
                   </div>
                 </div>
+              )}
+
+              {/* Call to Action */}
+              <div className="rounded-lg border bg-primary/5 p-6">
+                <h3 className="text-xl font-semibold mb-2">Interested in this build?</h3>
+                <p className="text-muted-foreground mb-4">
+                  Contact us to learn more about this showcase or to discuss creating your own custom restomod project.
+                </p>
+                <Button className="w-full" asChild>
+                  <a href="/contact">Get in Touch</a>
+                </Button>
               </div>
-            )}
-
-            {showcase.publishedAt && (
-              <div className="rounded-lg border p-4">
-                <h3 className="font-medium mb-2">Publication Information</h3>
-                <div className="text-sm text-muted-foreground">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Calendar className="h-4 w-4" />
-                    <span>Published: {format(new Date(showcase.publishedAt), 'MMMM d, yyyy')}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4" />
-                    <span>Last updated: {format(new Date(showcase.createdAt), 'MMMM d, yyyy')}</span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Call to Action */}
-            <div className="rounded-lg border bg-primary/5 p-6">
-              <h3 className="text-xl font-semibold mb-2">Interested in this build?</h3>
-              <p className="text-muted-foreground mb-4">
-                Contact us to learn more about this showcase or to discuss creating your own custom restomod project.
-              </p>
-              <Button className="w-full" asChild>
-                <a href="/contact">Get in Touch</a>
-              </Button>
             </div>
           </div>
         </div>
