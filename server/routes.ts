@@ -547,52 +547,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ========== CAR CONFIGURATOR API ROUTES ==========
   
   // Car Models API routes
-  app.get(`${apiPrefix}/configurator/models`, configuratorApi.getAllCarModels);
-  app.get(`${apiPrefix}/configurator/models/:id`, configuratorApi.getCarModelById);
-  app.get(`${apiPrefix}/configurator/models/slug/:slug`, configuratorApi.getCarModelBySlug);
-  app.post(`${apiPrefix}/admin/configurator/models`, isAuthenticated, isAdmin, configuratorApi.createCarModel);
-  app.put(`${apiPrefix}/admin/configurator/models/:id`, isAuthenticated, isAdmin, configuratorApi.updateCarModel);
-  app.delete(`${apiPrefix}/admin/configurator/models/:id`, isAuthenticated, isAdmin, configuratorApi.deleteCarModel);
+  app.get(`${apiPrefix}/configurator/car-models`, configuratorApi.getCarModels);
+  app.get(`${apiPrefix}/configurator/car-models/:id`, configuratorApi.getCarModelById);
+  app.post(`${apiPrefix}/configurator/car-models`, isAuthenticated, isAdmin, configuratorApi.createCarModel);
+  app.put(`${apiPrefix}/configurator/car-models/:id`, isAuthenticated, isAdmin, configuratorApi.updateCarModel);
+  app.delete(`${apiPrefix}/configurator/car-models/:id`, isAuthenticated, isAdmin, configuratorApi.deleteCarModel);
   
   // Engine Options API routes
-  app.get(`${apiPrefix}/configurator/engines`, configuratorApi.getAllEngineOptions);
-  app.get(`${apiPrefix}/configurator/engines/compatible/:modelId`, configuratorApi.getCompatibleEngineOptions);
-  app.post(`${apiPrefix}/admin/configurator/engines`, isAuthenticated, isAdmin, configuratorApi.createEngineOption);
-  app.put(`${apiPrefix}/admin/configurator/engines/:id`, isAuthenticated, isAdmin, configuratorApi.updateEngineOption);
-  app.delete(`${apiPrefix}/admin/configurator/engines/:id`, isAuthenticated, isAdmin, configuratorApi.deleteEngineOption);
+  app.get(`${apiPrefix}/configurator/engines`, configuratorApi.getEngineOptions);
+  app.get(`${apiPrefix}/configurator/engines/:id`, configuratorApi.getEngineOptionById);
+  app.post(`${apiPrefix}/configurator/engines`, isAuthenticated, isAdmin, configuratorApi.createEngineOption);
+  app.put(`${apiPrefix}/configurator/engines/:id`, isAuthenticated, isAdmin, configuratorApi.updateEngineOption);
+  app.delete(`${apiPrefix}/configurator/engines/:id`, isAuthenticated, isAdmin, configuratorApi.deleteEngineOption);
   
   // Transmission Options API routes
-  app.get(`${apiPrefix}/configurator/transmissions`, configuratorApi.getAllTransmissionOptions);
-  app.get(`${apiPrefix}/configurator/transmissions/compatible/:modelId/:engineId?`, configuratorApi.getCompatibleTransmissionOptions);
-  app.post(`${apiPrefix}/admin/configurator/transmissions`, isAuthenticated, isAdmin, configuratorApi.createTransmissionOption);
-  app.put(`${apiPrefix}/admin/configurator/transmissions/:id`, isAuthenticated, isAdmin, configuratorApi.updateTransmissionOption);
-  app.delete(`${apiPrefix}/admin/configurator/transmissions/:id`, isAuthenticated, isAdmin, configuratorApi.deleteTransmissionOption);
+  app.get(`${apiPrefix}/configurator/transmissions`, configuratorApi.getTransmissionOptions);
+  app.get(`${apiPrefix}/configurator/transmissions/:id`, configuratorApi.getTransmissionOptionById);
+  app.post(`${apiPrefix}/configurator/transmissions`, isAuthenticated, isAdmin, configuratorApi.createTransmissionOption);
+  app.put(`${apiPrefix}/configurator/transmissions/:id`, isAuthenticated, isAdmin, configuratorApi.updateTransmissionOption);
+  app.delete(`${apiPrefix}/configurator/transmissions/:id`, isAuthenticated, isAdmin, configuratorApi.deleteTransmissionOption);
   
   // Color Options API routes
-  app.get(`${apiPrefix}/configurator/colors`, configuratorApi.getAllColorOptions);
-  app.get(`${apiPrefix}/configurator/colors/compatible/:modelId`, configuratorApi.getCompatibleColorOptions);
-  app.post(`${apiPrefix}/admin/configurator/colors`, isAuthenticated, isAdmin, configuratorApi.createColorOption);
-  app.put(`${apiPrefix}/admin/configurator/colors/:id`, isAuthenticated, isAdmin, configuratorApi.updateColorOption);
-  app.delete(`${apiPrefix}/admin/configurator/colors/:id`, isAuthenticated, isAdmin, configuratorApi.deleteColorOption);
+  app.get(`${apiPrefix}/configurator/colors`, configuratorApi.getColorOptions);
+  app.get(`${apiPrefix}/configurator/colors/:id`, configuratorApi.getColorOptionById);
+  app.post(`${apiPrefix}/configurator/colors`, isAuthenticated, isAdmin, configuratorApi.createColorOption);
+  app.put(`${apiPrefix}/configurator/colors/:id`, isAuthenticated, isAdmin, configuratorApi.updateColorOption);
+  app.delete(`${apiPrefix}/configurator/colors/:id`, isAuthenticated, isAdmin, configuratorApi.deleteColorOption);
   
   // Wheel Options API routes
-  app.get(`${apiPrefix}/configurator/wheels`, configuratorApi.getAllWheelOptions);
+  app.get(`${apiPrefix}/configurator/wheels`, configuratorApi.getWheelOptions);
+  app.get(`${apiPrefix}/configurator/wheels/:id`, configuratorApi.getWheelOptionById);
+  app.post(`${apiPrefix}/configurator/wheels`, isAuthenticated, isAdmin, configuratorApi.createWheelOption);
+  app.put(`${apiPrefix}/configurator/wheels/:id`, isAuthenticated, isAdmin, configuratorApi.updateWheelOption);
+  app.delete(`${apiPrefix}/configurator/wheels/:id`, isAuthenticated, isAdmin, configuratorApi.deleteWheelOption);
   
-  // Interior Options API routes
-  app.get(`${apiPrefix}/configurator/interiors`, configuratorApi.getAllInteriorOptions);
-  
-  // AI Options API routes
-  app.get(`${apiPrefix}/configurator/ai-options`, configuratorApi.getAllAiOptions);
-  
-  // Additional Options API routes
-  app.get(`${apiPrefix}/configurator/additional-options`, configuratorApi.getAllAdditionalOptions);
-  
-  // User Configurations API routes
-  app.get(`${apiPrefix}/configurator/configurations`, isAuthenticated, configuratorApi.getAllUserConfigurations);
-  app.get(`${apiPrefix}/configurator/configurations/user/:userId`, isAuthenticated, configuratorApi.getUserConfigurations);
-  app.post(`${apiPrefix}/configurator/configurations`, isAuthenticated, configuratorApi.createUserConfiguration);
-  app.put(`${apiPrefix}/configurator/configurations/:id`, isAuthenticated, configuratorApi.updateUserConfiguration);
-  app.delete(`${apiPrefix}/configurator/configurations/:id`, isAuthenticated, configuratorApi.deleteUserConfiguration);
+  // Future API routes for interior options, AI options, additional options, and user configurations will be added later
+
 
   // ========== RESEARCH ARTICLES API ROUTES ==========
   

@@ -1,545 +1,348 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { CarModel } from '@shared/schema';
-import { Pencil, Trash2, Plus, ChevronDown, Search, Check, X } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { apiRequest, queryClient } from '@/lib/queryClient';
-import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Plus, Edit, Trash2, Loader2 } from 'lucide-react';
+import { CarModel } from '@shared/schema';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { apiRequest, queryClient } from '@/lib/queryClient';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Badge } from '@/components/ui/badge';
-import { Label } from '@/components/ui/label';
-import { Loader2 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { z } from 'zod';
 
-// Form schema for car model
-const formSchema = z.object({
-  name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
-  slug: z.string().min(2, { message: 'Slug must be at least 2 characters' }),
-  description: z.string().min(10, { message: 'Description must be at least 10 characters' }),
-  basePrice: z.coerce.number().min(1, { message: 'Base price must be at least 1' }),
-  yearStart: z.coerce.number().min(1900, { message: 'Year must be at least 1900' }),
-  yearEnd: z.coerce.number().nullable().optional(),
-  manufacturer: z.string().min(2, { message: 'Manufacturer must be at least 2 characters' }),
-  bodyTypes: z.array(z.string()).min(1, { message: 'At least one body type is required' }),
-  mainImage: z.string().min(2, { message: 'Main image URL is required' }),
-  galleryImages: z.array(z.string()).min(1, { message: 'At least one gallery image is required' }),
-  featured: z.boolean().default(false),
-  restomodCount: z.coerce.number().default(0),
-  historicalInfo: z.string().optional().nullable(),
-  marketTrend: z.array(
-    z.object({
-      year: z.number(),
-      value: z.number(),
-    })
-  ).optional().nullable(),
+// Form validation schema
+const carModelFormSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  description: z.string().min(10, "Description must be at least 10 characters"),
+  yearStart: z.string().regex(/^\d{4}$/, "Must be a valid year"),
+  yearEnd: z.string().regex(/^\d{4}$/, "Must be a valid year"),
+  imageUrl: z.string().url("Must be a valid URL"),
+  thumbnailUrl: z.string().url("Must be a valid URL"),
+  slug: z.string().min(2, "Slug must be at least 2 characters"),
+  featured: z.boolean().optional().default(false),
 });
 
-type FormValues = z.infer<typeof formSchema>;
+type CarModelFormValues = z.infer<typeof carModelFormSchema>;
 
 export default function CarModelsTab() {
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [selectedModel, setSelectedModel] = useState<CarModel | null>(null);
   const { toast } = useToast();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [editBodyType, setEditBodyType] = useState('');
-  const [editGalleryImage, setEditGalleryImage] = useState('');
-  const [editMarketTrendYear, setEditMarketTrendYear] = useState<number | null>(null);
-  const [editMarketTrendValue, setEditMarketTrendValue] = useState<number | null>(null);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [editingModel, setEditingModel] = useState<CarModel | null>(null);
+  const [modelToDelete, setModelToDelete] = useState<CarModel | null>(null);
 
-  // Create form
-  const createForm = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  // Fetch car models
+  const { data: carModels, isLoading } = useQuery({
+    queryKey: ["/api/configurator/car-models"],
+    queryFn: async () => {
+      const response = await apiRequest<CarModel[]>("GET", "/api/configurator/car-models");
+      return response;
+    },
+  });
+
+  // Create car model mutation
+  const createCarModelMutation = useMutation({
+    mutationFn: async (data: CarModelFormValues) => {
+      return await apiRequest<CarModel>("POST", "/api/configurator/car-models", data);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Car model created successfully",
+      });
+      setIsAddDialogOpen(false);
+      queryClient.invalidateQueries({ queryKey: ["/api/configurator/car-models"] });
+      addForm.reset();
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: `Failed to create car model: ${error.message}`,
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Update car model mutation
+  const updateCarModelMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: CarModelFormValues }) => {
+      return await apiRequest<CarModel>("PUT", `/api/configurator/car-models/${id}`, data);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Car model updated successfully",
+      });
+      setEditingModel(null);
+      queryClient.invalidateQueries({ queryKey: ["/api/configurator/car-models"] });
+      editForm.reset();
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: `Failed to update car model: ${error.message}`,
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Delete car model mutation
+  const deleteCarModelMutation = useMutation({
+    mutationFn: async (id: number) => {
+      await apiRequest("DELETE", `/api/configurator/car-models/${id}`);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Car model deleted successfully",
+      });
+      setModelToDelete(null);
+      queryClient.invalidateQueries({ queryKey: ["/api/configurator/car-models"] });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: `Failed to delete car model: ${error.message}`,
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Add form
+  const addForm = useForm<CarModelFormValues>({
+    resolver: zodResolver(carModelFormSchema),
     defaultValues: {
-      name: '',
-      slug: '',
-      description: '',
-      basePrice: 0,
-      yearStart: 1960,
-      yearEnd: null,
-      manufacturer: '',
-      bodyTypes: [],
-      mainImage: '',
-      galleryImages: [],
+      name: "",
+      description: "",
+      yearStart: "",
+      yearEnd: "",
+      imageUrl: "",
+      thumbnailUrl: "",
+      slug: "",
       featured: false,
-      restomodCount: 0,
-      historicalInfo: '',
-      marketTrend: [],
     },
   });
 
   // Edit form
-  const editForm = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const editForm = useForm<CarModelFormValues>({
+    resolver: zodResolver(carModelFormSchema),
     defaultValues: {
-      name: '',
-      slug: '',
-      description: '',
-      basePrice: 0,
-      yearStart: 1960,
-      yearEnd: null,
-      manufacturer: '',
-      bodyTypes: [],
-      mainImage: '',
-      galleryImages: [],
+      name: "",
+      description: "",
+      yearStart: "",
+      yearEnd: "",
+      imageUrl: "",
+      thumbnailUrl: "",
+      slug: "",
       featured: false,
-      restomodCount: 0,
-      historicalInfo: '',
-      marketTrend: [],
     },
   });
 
-  // Fetch car models
-  const { data: carModels, isLoading, error } = useQuery<CarModel[]>({
-    queryKey: ['/api/configurator/models'],
-  });
-
-  // Create mutation
-  const createMutation = useMutation({
-    mutationFn: async (data: FormValues) => {
-      const res = await apiRequest('POST', '/api/admin/configurator/models', data);
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || 'Failed to create car model');
-      }
-      return res.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/configurator/models'] });
-      setIsCreateDialogOpen(false);
-      createForm.reset();
-      toast({
-        title: 'Success',
-        description: 'Car model created successfully',
-      });
-    },
-    onError: (error: Error) => {
-      toast({
-        title: 'Error',
-        description: error.message,
-        variant: 'destructive',
-      });
-    },
-  });
-
-  // Update mutation
-  const updateMutation = useMutation({
-    mutationFn: async (data: FormValues & { id: number }) => {
-      const { id, ...formData } = data;
-      const res = await apiRequest('PUT', `/api/admin/configurator/models/${id}`, formData);
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || 'Failed to update car model');
-      }
-      return res.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/configurator/models'] });
-      setIsEditDialogOpen(false);
-      setSelectedModel(null);
-      editForm.reset();
-      toast({
-        title: 'Success',
-        description: 'Car model updated successfully',
-      });
-    },
-    onError: (error: Error) => {
-      toast({
-        title: 'Error',
-        description: error.message,
-        variant: 'destructive',
-      });
-    },
-  });
-
-  // Delete mutation
-  const deleteMutation = useMutation({
-    mutationFn: async (id: number) => {
-      const res = await apiRequest('DELETE', `/api/admin/configurator/models/${id}`);
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || 'Failed to delete car model');
-      }
-      return res.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/configurator/models'] });
-      setIsDeleteDialogOpen(false);
-      setSelectedModel(null);
-      toast({
-        title: 'Success',
-        description: 'Car model deleted successfully',
-      });
-    },
-    onError: (error: Error) => {
-      toast({
-        title: 'Error',
-        description: error.message,
-        variant: 'destructive',
-      });
-    },
-  });
-
-  // Submit create form
-  const onCreateSubmit = (data: FormValues) => {
-    createMutation.mutate(data);
+  // Handle add form submission
+  const handleAddCarModel = (values: CarModelFormValues) => {
+    createCarModelMutation.mutate(values);
   };
 
-  // Submit edit form
-  const onEditSubmit = (data: FormValues) => {
-    if (!selectedModel) return;
-    updateMutation.mutate({
-      ...data,
-      id: selectedModel.id,
-    });
-  };
-
-  // Edit model click handler
-  const handleEditClick = (model: CarModel) => {
-    setSelectedModel(model);
-    editForm.reset({
-      name: model.name,
-      slug: model.slug,
-      description: model.description,
-      basePrice: parseFloat(model.basePrice.toString()),
-      yearStart: model.yearStart,
-      yearEnd: model.yearEnd || null,
-      manufacturer: model.manufacturer,
-      bodyTypes: model.bodyTypes,
-      mainImage: model.mainImage,
-      galleryImages: model.galleryImages,
-      featured: model.featured,
-      restomodCount: model.restomodCount,
-      historicalInfo: model.historicalInfo || '',
-      marketTrend: model.marketTrend || [],
-    });
-    setIsEditDialogOpen(true);
-  };
-
-  // Delete model click handler
-  const handleDeleteClick = (model: CarModel) => {
-    setSelectedModel(model);
-    setIsDeleteDialogOpen(true);
-  };
-
-  // Confirm delete handler
-  const handleConfirmDelete = () => {
-    if (selectedModel) {
-      deleteMutation.mutate(selectedModel.id);
+  // Handle edit form submission
+  const handleEditCarModel = (values: CarModelFormValues) => {
+    if (editingModel) {
+      updateCarModelMutation.mutate({ id: editingModel.id, data: values });
     }
   };
 
-  // Add body type handler
-  const handleAddBodyType = (form: typeof createForm | typeof editForm) => {
-    const bodyTypes = form.getValues('bodyTypes') || [];
-    if (editBodyType && !bodyTypes.includes(editBodyType)) {
-      form.setValue('bodyTypes', [...bodyTypes, editBodyType]);
-      setEditBodyType('');
+  // Handle delete car model
+  const handleDeleteCarModel = () => {
+    if (modelToDelete) {
+      deleteCarModelMutation.mutate(modelToDelete.id);
     }
   };
 
-  // Remove body type handler
-  const handleRemoveBodyType = (form: typeof createForm | typeof editForm, index: number) => {
-    const bodyTypes = form.getValues('bodyTypes') || [];
-    form.setValue('bodyTypes', bodyTypes.filter((_, i) => i !== index));
-  };
-
-  // Add gallery image handler
-  const handleAddGalleryImage = (form: typeof createForm | typeof editForm) => {
-    const galleryImages = form.getValues('galleryImages') || [];
-    if (editGalleryImage && !galleryImages.includes(editGalleryImage)) {
-      form.setValue('galleryImages', [...galleryImages, editGalleryImage]);
-      setEditGalleryImage('');
+  // Update edit form values when editing model changes
+  React.useEffect(() => {
+    if (editingModel) {
+      editForm.reset({
+        name: editingModel.name,
+        description: editingModel.description,
+        yearStart: editingModel.yearStart.toString(),
+        yearEnd: editingModel.yearEnd.toString(),
+        imageUrl: editingModel.imageUrl,
+        thumbnailUrl: editingModel.thumbnailUrl,
+        slug: editingModel.slug,
+        featured: editingModel.featured,
+      });
     }
-  };
-
-  // Remove gallery image handler
-  const handleRemoveGalleryImage = (form: typeof createForm | typeof editForm, index: number) => {
-    const galleryImages = form.getValues('galleryImages') || [];
-    form.setValue('galleryImages', galleryImages.filter((_, i) => i !== index));
-  };
-
-  // Add market trend data point handler
-  const handleAddMarketTrendData = (form: typeof createForm | typeof editForm) => {
-    if (editMarketTrendYear && editMarketTrendValue) {
-      const marketTrend = form.getValues('marketTrend') || [];
-      const existingYearIndex = marketTrend.findIndex(item => item.year === editMarketTrendYear);
-      
-      if (existingYearIndex >= 0) {
-        // Update existing year
-        const updatedTrend = [...marketTrend];
-        updatedTrend[existingYearIndex] = { year: editMarketTrendYear, value: editMarketTrendValue };
-        form.setValue('marketTrend', updatedTrend);
-      } else {
-        // Add new year
-        form.setValue('marketTrend', [...marketTrend, { year: editMarketTrendYear, value: editMarketTrendValue }]);
-      }
-      
-      setEditMarketTrendYear(null);
-      setEditMarketTrendValue(null);
-    }
-  };
-
-  // Remove market trend data point handler
-  const handleRemoveMarketTrendData = (form: typeof createForm | typeof editForm, index: number) => {
-    const marketTrend = form.getValues('marketTrend') || [];
-    form.setValue('marketTrend', marketTrend.filter((_, i) => i !== index));
-  };
-
-  // Filter car models by search query
-  const filteredCarModels = carModels
-    ? carModels.filter(
-        (model) =>
-          model.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          model.manufacturer.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : [];
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center p-8">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
-  if (error) {
-    return <div>Error loading car models: {(error as Error).message}</div>;
-  }
+  }, [editingModel, editForm]);
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="relative w-64">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search car models..."
-            className="pl-8"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-        <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              Add Car Model
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Add New Car Model</DialogTitle>
-              <DialogDescription>
-                Create a new classic car model for the configurator.
-              </DialogDescription>
-            </DialogHeader>
-            <Form {...createForm}>
-              <form onSubmit={createForm.handleSubmit(onCreateSubmit)} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={createForm.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="1969 Camaro" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={createForm.control}
-                    name="slug"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Slug</FormLabel>
-                        <FormControl>
-                          <Input placeholder="1969-camaro" {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          URL-friendly identifier (no spaces)
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+      <div className="flex justify-between items-center">
+        <p className="text-sm text-muted-foreground">
+          Manage classic car models available in the configurator.
+        </p>
+        <Button onClick={() => setIsAddDialogOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" />
+          Add Car Model
+        </Button>
+      </div>
 
+      {isLoading ? (
+        <div className="flex justify-center items-center py-12">
+          <Loader2 className="w-8 h-8 animate-spin text-[var(--admin-primary)]" />
+        </div>
+      ) : carModels && carModels.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {carModels.map((model) => (
+            <div className="admin-card group" key={model.id}>
+              <div className="admin-card-header">
+                <h3 className="admin-card-title">{model.name}</h3>
+                <p className="admin-card-description text-sm text-muted-foreground">
+                  {model.yearStart} - {model.yearEnd}
+                </p>
+              </div>
+              <div className="admin-card-content">
+                <div className="admin-image-container mb-3">
+                  <img src={model.thumbnailUrl} alt={model.name} className="admin-image object-cover h-48 w-full" />
+                </div>
+                <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{model.description}</p>
+                <div className="flex justify-between items-center mt-4">
+                  <div>
+                    {model.featured && (
+                      <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-[var(--admin-primary)]/10 text-[var(--admin-primary)]">
+                        Featured
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex items-center"
+                      onClick={() => setEditingModel(model)}
+                    >
+                      <Edit className="mr-1.5 h-3 w-3" />
+                      Edit
+                    </Button>
+                    <Button 
+                      variant="destructive" 
+                      size="sm" 
+                      className="flex items-center"
+                      onClick={() => setModelToDelete(model)}
+                    >
+                      <Trash2 className="mr-1.5 h-3 w-3" />
+                      Delete
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-12 border rounded-lg">
+          <h3 className="text-lg font-medium">No car models found</h3>
+          <p className="text-sm text-muted-foreground mt-1">
+            Add a car model to get started with the configurator.
+          </p>
+        </div>
+      )}
+
+      {/* Add Car Model Dialog */}
+      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Add Car Model</DialogTitle>
+            <DialogDescription>
+              Add a new classic car model to the configurator.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <Form {...addForm}>
+            <form onSubmit={addForm.handleSubmit(handleAddCarModel)} className="space-y-6">
+              <div className="grid grid-cols-2 gap-4">
                 <FormField
-                  control={createForm.control}
-                  name="description"
+                  control={addForm.control}
+                  name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Description</FormLabel>
+                      <FormLabel>Name</FormLabel>
                       <FormControl>
-                        <Textarea
-                          placeholder="A detailed description of the car model..."
-                          className="min-h-[120px]"
-                          {...field}
-                        />
+                        <Input placeholder="1967 Mustang Fastback" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={createForm.control}
-                    name="manufacturer"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Manufacturer</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Chevrolet" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={createForm.control}
-                    name="basePrice"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Base Price ($)</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            min="0"
-                            step="100"
-                            placeholder="75000"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={createForm.control}
-                    name="yearStart"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Start Year</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            min="1900"
-                            max="2023"
-                            placeholder="1969"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={createForm.control}
-                    name="yearEnd"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>End Year (Optional)</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            min="1900"
-                            max="2023"
-                            placeholder="1970"
-                            {...field}
-                            value={field.value || ''}
-                            onChange={(e) => field.onChange(e.target.value === '' ? null : parseInt(e.target.value))}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
+                
                 <FormField
-                  control={createForm.control}
-                  name="bodyTypes"
-                  render={() => (
+                  control={addForm.control}
+                  name="slug"
+                  render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Body Types</FormLabel>
-                      <div className="grid grid-cols-1 gap-2">
-                        <div className="flex space-x-2">
-                          <Input
-                            placeholder="Add body type (e.g., Coupe)"
-                            value={editBodyType}
-                            onChange={(e) => setEditBodyType(e.target.value)}
-                          />
-                          <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => handleAddBodyType(createForm)}
-                          >
-                            Add
-                          </Button>
-                        </div>
-                        <div className="flex flex-wrap gap-2 mt-2">
-                          {createForm.watch('bodyTypes')?.map((type, index) => (
-                            <Badge key={index} variant="secondary" className="flex items-center gap-1">
-                              {type}
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                className="h-4 w-4 p-0 text-muted-foreground hover:text-foreground"
-                                onClick={() => handleRemoveBodyType(createForm, index)}
-                              >
-                                <X className="h-3 w-3" />
-                              </Button>
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
+                      <FormLabel>Slug</FormLabel>
+                      <FormControl>
+                        <Input placeholder="1967-mustang-fastback" {...field} />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+              </div>
 
+              <div className="grid grid-cols-2 gap-4">
                 <FormField
-                  control={createForm.control}
-                  name="mainImage"
+                  control={addForm.control}
+                  name="yearStart"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Year Start</FormLabel>
+                      <FormControl>
+                        <Input placeholder="1967" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={addForm.control}
+                  name="yearEnd"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Year End</FormLabel>
+                      <FormControl>
+                        <Input placeholder="1968" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              
+              <FormField
+                control={addForm.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea 
+                        placeholder="Describe the car model..."
+                        className="resize-none min-h-[100px]"
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={addForm.control}
+                  name="imageUrl"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Main Image URL</FormLabel>
@@ -550,641 +353,271 @@ export default function CarModelsTab() {
                     </FormItem>
                   )}
                 />
-
+                
                 <FormField
-                  control={createForm.control}
-                  name="galleryImages"
-                  render={() => (
-                    <FormItem>
-                      <FormLabel>Gallery Images</FormLabel>
-                      <div className="grid grid-cols-1 gap-2">
-                        <div className="flex space-x-2">
-                          <Input
-                            placeholder="Add image URL"
-                            value={editGalleryImage}
-                            onChange={(e) => setEditGalleryImage(e.target.value)}
-                          />
-                          <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => handleAddGalleryImage(createForm)}
-                          >
-                            Add
-                          </Button>
-                        </div>
-                        <div className="flex flex-col gap-2 mt-2">
-                          {createForm.watch('galleryImages')?.map((url, index) => (
-                            <div key={index} className="flex items-center justify-between bg-muted p-2 rounded-md">
-                              <span className="text-sm truncate max-w-[28rem]">{url}</span>
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => handleRemoveGalleryImage(createForm, index)}
-                              >
-                                <X className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={createForm.control}
-                  name="historicalInfo"
+                  control={addForm.control}
+                  name="thumbnailUrl"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Historical Information (Optional)</FormLabel>
+                      <FormLabel>Thumbnail URL</FormLabel>
                       <FormControl>
-                        <Textarea
-                          placeholder="Historical information about the car model..."
-                          className="min-h-[120px]"
-                          {...field}
-                          value={field.value || ''}
-                        />
+                        <Input placeholder="https://example.com/thumbnail.jpg" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+              </div>
+              
+              <FormField
+                control={addForm.control}
+                name="featured"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                    <FormControl>
+                      <input
+                        type="checkbox"
+                        className="h-4 w-4 rounded border border-input"
+                        checked={field.value}
+                        onChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>Featured</FormLabel>
+                      <FormDescription>
+                        Featured car models appear at the top of the configurator.
+                      </FormDescription>
+                    </div>
+                  </FormItem>
+                )}
+              />
 
-                <FormField
-                  control={createForm.control}
-                  name="marketTrend"
-                  render={() => (
-                    <FormItem>
-                      <FormLabel>Market Trend Data (Optional)</FormLabel>
-                      <div className="grid grid-cols-1 gap-2">
-                        <div className="flex space-x-2">
-                          <Input
-                            type="number"
-                            placeholder="Year (e.g., 2020)"
-                            value={editMarketTrendYear || ''}
-                            onChange={(e) => setEditMarketTrendYear(e.target.value ? parseInt(e.target.value) : null)}
-                            className="w-1/3"
-                          />
-                          <Input
-                            type="number"
-                            placeholder="Value ($)"
-                            value={editMarketTrendValue || ''}
-                            onChange={(e) => setEditMarketTrendValue(e.target.value ? parseInt(e.target.value) : null)}
-                            className="w-1/3"
-                          />
-                          <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => handleAddMarketTrendData(createForm)}
-                            className="w-1/3"
-                          >
-                            Add Data Point
-                          </Button>
-                        </div>
-                        <div className="mt-2">
-                          <table className="w-full text-sm">
-                            <thead>
-                              <tr>
-                                <th className="text-left">Year</th>
-                                <th className="text-left">Value ($)</th>
-                                <th className="text-right">Action</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {createForm.watch('marketTrend')?.map((point, index) => (
-                                <tr key={index}>
-                                  <td className="py-1">{point.year}</td>
-                                  <td className="py-1">${point.value.toLocaleString()}</td>
-                                  <td className="py-1 text-right">
-                                    <Button
-                                      type="button"
-                                      variant="ghost"
-                                      size="sm"
-                                      onClick={() => handleRemoveMarketTrendData(createForm, index)}
-                                    >
-                                      <X className="h-4 w-4" />
-                                    </Button>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={createForm.control}
-                  name="featured"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>Featured Model</FormLabel>
-                        <FormDescription>
-                          Display this model prominently on the configurator page
-                        </FormDescription>
-                      </div>
-                    </FormItem>
-                  )}
-                />
-
-                <DialogFooter>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setIsCreateDialogOpen(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit" disabled={createMutation.isPending}>
-                    {createMutation.isPending && (
+              <DialogFooter>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={() => setIsAddDialogOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  type="submit"
+                  disabled={createCarModelMutation.isPending}
+                >
+                  {createCarModelMutation.isPending ? (
+                    <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    )}
-                    Create Model
-                  </Button>
-                </DialogFooter>
-              </form>
-            </Form>
-          </DialogContent>
-        </Dialog>
-      </div>
+                      Saving...
+                    </>
+                  ) : (
+                    'Add Car Model'
+                  )}
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
 
-      {filteredCarModels.length === 0 ? (
-        <div className="text-center py-8">
-          <p className="text-muted-foreground">No car models found. Add a new model to get started.</p>
-        </div>
-      ) : (
-        <div className="border rounded-md">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Manufacturer</TableHead>
-                <TableHead>Years</TableHead>
-                <TableHead>Base Price</TableHead>
-                <TableHead>Body Types</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredCarModels.map((model) => (
-                <TableRow key={model.id}>
-                  <TableCell className="font-medium">{model.name}</TableCell>
-                  <TableCell>{model.manufacturer}</TableCell>
-                  <TableCell>
-                    {model.yearStart}{model.yearEnd ? `-${model.yearEnd}` : ''}
-                  </TableCell>
-                  <TableCell>${parseFloat(model.basePrice.toString()).toLocaleString()}</TableCell>
-                  <TableCell>
-                    <div className="flex flex-wrap gap-1">
-                      {model.bodyTypes.map((type, i) => (
-                        <Badge key={i} variant="outline" className="text-xs">
-                          {type}
-                        </Badge>
-                      ))}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    {model.featured ? (
-                      <Badge className="bg-green-100 text-green-800 hover:bg-green-100 border-green-200">
-                        Featured
-                      </Badge>
-                    ) : (
-                      <Badge variant="outline" className="text-xs">
-                        Regular
-                      </Badge>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleEditClick(model)}
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-destructive"
-                        onClick={() => handleDeleteClick(model)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      )}
-
-      {/* Edit Dialog */}
-      {selectedModel && (
-        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Edit Car Model</DialogTitle>
-              <DialogDescription>
-                Update details for {selectedModel.name}
-              </DialogDescription>
-            </DialogHeader>
-            <Form {...editForm}>
-              <form onSubmit={editForm.handleSubmit(onEditSubmit)} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={editForm.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Name</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={editForm.control}
-                    name="slug"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Slug</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          URL-friendly identifier (no spaces)
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
+      {/* Edit Car Model Dialog */}
+      <Dialog open={!!editingModel} onOpenChange={(open) => !open && setEditingModel(null)}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Edit Car Model</DialogTitle>
+            <DialogDescription>
+              Update car model information.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <Form {...editForm}>
+            <form onSubmit={editForm.handleSubmit(handleEditCarModel)} className="space-y-6">
+              <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={editForm.control}
-                  name="description"
+                  name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Description</FormLabel>
+                      <FormLabel>Name</FormLabel>
                       <FormControl>
-                        <Textarea
-                          className="min-h-[120px]"
-                          {...field}
-                        />
+                        <Input placeholder="1967 Mustang Fastback" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={editForm.control}
-                    name="manufacturer"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Manufacturer</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={editForm.control}
-                    name="basePrice"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Base Price ($)</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            min="0"
-                            step="100"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={editForm.control}
-                    name="yearStart"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Start Year</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            min="1900"
-                            max="2023"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={editForm.control}
-                    name="yearEnd"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>End Year (Optional)</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            min="1900"
-                            max="2023"
-                            {...field}
-                            value={field.value || ''}
-                            onChange={(e) => field.onChange(e.target.value === '' ? null : parseInt(e.target.value))}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
+                
                 <FormField
                   control={editForm.control}
-                  name="bodyTypes"
-                  render={() => (
+                  name="slug"
+                  render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Body Types</FormLabel>
-                      <div className="grid grid-cols-1 gap-2">
-                        <div className="flex space-x-2">
-                          <Input
-                            placeholder="Add body type (e.g., Coupe)"
-                            value={editBodyType}
-                            onChange={(e) => setEditBodyType(e.target.value)}
-                          />
-                          <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => handleAddBodyType(editForm)}
-                          >
-                            Add
-                          </Button>
-                        </div>
-                        <div className="flex flex-wrap gap-2 mt-2">
-                          {editForm.watch('bodyTypes')?.map((type, index) => (
-                            <Badge key={index} variant="secondary" className="flex items-center gap-1">
-                              {type}
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                className="h-4 w-4 p-0 text-muted-foreground hover:text-foreground"
-                                onClick={() => handleRemoveBodyType(editForm, index)}
-                              >
-                                <X className="h-3 w-3" />
-                              </Button>
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
+                      <FormLabel>Slug</FormLabel>
+                      <FormControl>
+                        <Input placeholder="1967-mustang-fastback" {...field} />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+              </div>
 
+              <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={editForm.control}
-                  name="mainImage"
+                  name="yearStart"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Year Start</FormLabel>
+                      <FormControl>
+                        <Input placeholder="1967" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={editForm.control}
+                  name="yearEnd"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Year End</FormLabel>
+                      <FormControl>
+                        <Input placeholder="1968" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              
+              <FormField
+                control={editForm.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea 
+                        placeholder="Describe the car model..."
+                        className="resize-none min-h-[100px]"
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={editForm.control}
+                  name="imageUrl"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Main Image URL</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input placeholder="https://example.com/image.jpg" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
+                
                 <FormField
                   control={editForm.control}
-                  name="galleryImages"
-                  render={() => (
-                    <FormItem>
-                      <FormLabel>Gallery Images</FormLabel>
-                      <div className="grid grid-cols-1 gap-2">
-                        <div className="flex space-x-2">
-                          <Input
-                            placeholder="Add image URL"
-                            value={editGalleryImage}
-                            onChange={(e) => setEditGalleryImage(e.target.value)}
-                          />
-                          <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => handleAddGalleryImage(editForm)}
-                          >
-                            Add
-                          </Button>
-                        </div>
-                        <div className="flex flex-col gap-2 mt-2">
-                          {editForm.watch('galleryImages')?.map((url, index) => (
-                            <div key={index} className="flex items-center justify-between bg-muted p-2 rounded-md">
-                              <span className="text-sm truncate max-w-[28rem]">{url}</span>
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => handleRemoveGalleryImage(editForm, index)}
-                              >
-                                <X className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={editForm.control}
-                  name="historicalInfo"
+                  name="thumbnailUrl"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Historical Information (Optional)</FormLabel>
+                      <FormLabel>Thumbnail URL</FormLabel>
                       <FormControl>
-                        <Textarea
-                          className="min-h-[120px]"
-                          {...field}
-                          value={field.value || ''}
-                        />
+                        <Input placeholder="https://example.com/thumbnail.jpg" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+              </div>
+              
+              <FormField
+                control={editForm.control}
+                name="featured"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                    <FormControl>
+                      <input
+                        type="checkbox"
+                        className="h-4 w-4 rounded border border-input"
+                        checked={field.value}
+                        onChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>Featured</FormLabel>
+                      <FormDescription>
+                        Featured car models appear at the top of the configurator.
+                      </FormDescription>
+                    </div>
+                  </FormItem>
+                )}
+              />
 
-                <FormField
-                  control={editForm.control}
-                  name="marketTrend"
-                  render={() => (
-                    <FormItem>
-                      <FormLabel>Market Trend Data (Optional)</FormLabel>
-                      <div className="grid grid-cols-1 gap-2">
-                        <div className="flex space-x-2">
-                          <Input
-                            type="number"
-                            placeholder="Year (e.g., 2020)"
-                            value={editMarketTrendYear || ''}
-                            onChange={(e) => setEditMarketTrendYear(e.target.value ? parseInt(e.target.value) : null)}
-                            className="w-1/3"
-                          />
-                          <Input
-                            type="number"
-                            placeholder="Value ($)"
-                            value={editMarketTrendValue || ''}
-                            onChange={(e) => setEditMarketTrendValue(e.target.value ? parseInt(e.target.value) : null)}
-                            className="w-1/3"
-                          />
-                          <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => handleAddMarketTrendData(editForm)}
-                            className="w-1/3"
-                          >
-                            Add Data Point
-                          </Button>
-                        </div>
-                        <div className="mt-2">
-                          <table className="w-full text-sm">
-                            <thead>
-                              <tr>
-                                <th className="text-left">Year</th>
-                                <th className="text-left">Value ($)</th>
-                                <th className="text-right">Action</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {editForm.watch('marketTrend')?.map((point, index) => (
-                                <tr key={index}>
-                                  <td className="py-1">{point.year}</td>
-                                  <td className="py-1">${point.value.toLocaleString()}</td>
-                                  <td className="py-1 text-right">
-                                    <Button
-                                      type="button"
-                                      variant="ghost"
-                                      size="sm"
-                                      onClick={() => handleRemoveMarketTrendData(editForm, index)}
-                                    >
-                                      <X className="h-4 w-4" />
-                                    </Button>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={editForm.control}
-                  name="featured"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>Featured Model</FormLabel>
-                        <FormDescription>
-                          Display this model prominently on the configurator page
-                        </FormDescription>
-                      </div>
-                    </FormItem>
-                  )}
-                />
-
-                <DialogFooter>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setIsEditDialogOpen(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit" disabled={updateMutation.isPending}>
-                    {updateMutation.isPending && (
+              <DialogFooter>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={() => setEditingModel(null)}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  type="submit"
+                  disabled={updateCarModelMutation.isPending}
+                >
+                  {updateCarModelMutation.isPending ? (
+                    <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    )}
-                    Update Model
-                  </Button>
-                </DialogFooter>
-              </form>
-            </Form>
-          </DialogContent>
-        </Dialog>
-      )}
-
-      {/* Delete Confirmation Dialog */}
-      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Confirm Deletion</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete {selectedModel?.name}? This action cannot be undone.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setIsDeleteDialogOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="button"
-              variant="destructive"
-              onClick={handleConfirmDelete}
-              disabled={deleteMutation.isPending}
-            >
-              {deleteMutation.isPending && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              Delete Model
-            </Button>
-          </DialogFooter>
+                      Saving...
+                    </>
+                  ) : (
+                    'Save Changes'
+                  )}
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
         </DialogContent>
       </Dialog>
+
+      {/* Delete Car Model Dialog */}
+      <AlertDialog open={!!modelToDelete} onOpenChange={(open) => !open && setModelToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the car model
+              and all associated configuration options.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleDeleteCarModel}
+              className="bg-red-600 text-white hover:bg-red-700"
+              disabled={deleteCarModelMutation.isPending}
+            >
+              {deleteCarModelMutation.isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                'Delete'
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

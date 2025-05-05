@@ -1,63 +1,43 @@
 import React, { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import CarModelsTab from './configurator/CarModelsTab';
 import EnginesTab from './configurator/EnginesTab';
 import TransmissionsTab from './configurator/TransmissionsTab';
 import ColorsTab from './configurator/ColorsTab';
 import WheelsTab from './configurator/WheelsTab';
-import InteriorsTab from './configurator/InteriorsTab';
-import AiOptionsTab from './configurator/AiOptionsTab';
-import AdditionalOptionsTab from './configurator/AdditionalOptionsTab';
-import UserConfigurationsTab from './configurator/UserConfigurationsTab';
 
 export function ConfiguratorManager() {
-  const [activeTab, setActiveTab] = useState('engines');
+  const [activeTab, setActiveTab] = useState('car-models');
 
   return (
     <div className="space-y-6">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <div className="border-b border-[var(--admin-card-border)]">
-          <TabsList className="admin-tabs-list">
-            <TabsTrigger value="engines" className="admin-tabs-trigger">Engines</TabsTrigger>
-            <TabsTrigger value="transmissions" className="admin-tabs-trigger">Transmissions</TabsTrigger>
-            <TabsTrigger value="colors" className="admin-tabs-trigger">Colors</TabsTrigger>
-            <TabsTrigger value="wheels" className="admin-tabs-trigger">Wheels</TabsTrigger>
-            <TabsTrigger value="interiors" className="admin-tabs-trigger">Interiors</TabsTrigger>
-            <TabsTrigger value="ai-options" className="admin-tabs-trigger">AI Options</TabsTrigger>
-            <TabsTrigger value="additional-options" className="admin-tabs-trigger">Add-ons</TabsTrigger>
-            <TabsTrigger value="user-configurations" className="admin-tabs-trigger">Saved Configs</TabsTrigger>
-          </TabsList>
-        </div>
-        
-        <TabsContent value="engines" className="pt-6">
+        <TabsList className="grid grid-cols-5 w-full">
+          <TabsTrigger value="car-models">Car Models</TabsTrigger>
+          <TabsTrigger value="engines">Engines</TabsTrigger>
+          <TabsTrigger value="transmissions">Transmissions</TabsTrigger>
+          <TabsTrigger value="colors">Colors</TabsTrigger>
+          <TabsTrigger value="wheels">Wheels</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="car-models" className="mt-6">
+          <CarModelsTab />
+        </TabsContent>
+
+        <TabsContent value="engines" className="mt-6">
           <EnginesTab />
         </TabsContent>
-        
-        <TabsContent value="transmissions" className="pt-6">
+
+        <TabsContent value="transmissions" className="mt-6">
           <TransmissionsTab />
         </TabsContent>
-        
-        <TabsContent value="colors" className="pt-6">
+
+        <TabsContent value="colors" className="mt-6">
           <ColorsTab />
         </TabsContent>
-        
-        <TabsContent value="wheels" className="pt-6">
+
+        <TabsContent value="wheels" className="mt-6">
           <WheelsTab />
-        </TabsContent>
-        
-        <TabsContent value="interiors" className="pt-6">
-          <InteriorsTab />
-        </TabsContent>
-        
-        <TabsContent value="ai-options" className="pt-6">
-          <AiOptionsTab />
-        </TabsContent>
-        
-        <TabsContent value="additional-options" className="pt-6">
-          <AdditionalOptionsTab />
-        </TabsContent>
-        
-        <TabsContent value="user-configurations" className="pt-6">
-          <UserConfigurationsTab />
         </TabsContent>
       </Tabs>
     </div>
