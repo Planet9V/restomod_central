@@ -219,3 +219,24 @@ export const luxuryShowcaseRelations = relations(luxuryShowcases, ({ one }) => (
 export const luxuryShowcaseInsertSchema = createInsertSchema(luxuryShowcases);
 export type InsertLuxuryShowcase = z.infer<typeof luxuryShowcaseInsertSchema>;
 export type LuxuryShowcase = typeof luxuryShowcases.$inferSelect;
+
+// Research Articles table
+export const researchArticles = pgTable("research_articles", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  slug: text("slug").notNull().unique(),
+  author: text("author").notNull(),
+  publishDate: timestamp("publish_date").defaultNow().notNull(),
+  featuredImage: text("featured_image").notNull(),
+  content: text("content").notNull(),
+  excerpt: text("excerpt").notNull(),
+  category: text("category").notNull(),
+  tags: jsonb("tags").notNull().$type<string[]>(),
+  featured: boolean("featured").default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const researchArticlesInsertSchema = createInsertSchema(researchArticles);
+export type InsertResearchArticle = z.infer<typeof researchArticlesInsertSchema>;
+export type ResearchArticle = typeof researchArticles.$inferSelect;
