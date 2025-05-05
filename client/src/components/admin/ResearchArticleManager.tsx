@@ -251,7 +251,7 @@ export function ResearchArticleManager() {
       
       {/* Create Dialog */}
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto admin-dialog-content">
           <DialogHeader>
             <DialogTitle className="text-xl">Create Research Article</DialogTitle>
             <DialogDescription>
@@ -480,7 +480,7 @@ export function ResearchArticleManager() {
       
       {/* Edit Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto admin-dialog-content">
           <DialogHeader>
             <DialogTitle className="text-xl">Edit Research Article</DialogTitle>
             <DialogDescription>
@@ -708,7 +708,7 @@ export function ResearchArticleManager() {
       
       {/* Delete Confirmation Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent>
+        <DialogContent className="admin-dialog-content">
           <DialogHeader>
             <DialogTitle>Confirm Deletion</DialogTitle>
             <DialogDescription>
