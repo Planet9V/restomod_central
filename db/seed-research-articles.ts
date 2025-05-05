@@ -8,6 +8,20 @@ import article5 from '../client/src/data/articles/materials-science-in-restorati
 import article6 from '../client/src/data/articles/concours-vs-restomod';
 
 const convertArticleToDbFormat = (article: any) => {
+  // Parse date strings carefully
+  let publishDate;
+  try {
+    // Extract just the date portion for consistent parsing
+    const dateStr = article.date.split(' ')[0] + ', ' + article.date.split(' ')[1] + ' ' + article.date.split(' ')[2];
+    publishDate = new Date(dateStr);
+    // Fallback if parsing fails
+    if (isNaN(publishDate.getTime())) {
+      publishDate = new Date();
+    }
+  } catch (e) {
+    publishDate = new Date();
+  }
+  
   // Convert the article data to match the database schema
   return {
     title: article.title,
@@ -17,10 +31,10 @@ const convertArticleToDbFormat = (article: any) => {
     excerpt: article.description,
     category: article.category.toLowerCase().replace(/\s+/g, '-'),
     tags: [], // We don't have tags in the original articles, but the schema requires it
-    featuredImage: article.imageUrl,
+    featured_image: article.imageUrl,
     featured: false, // Default to not featured
-    publishDate: new Date(article.date).toISOString(),
-    updatedAt: new Date().toISOString()
+    publish_date: publishDate,
+    updated_at: new Date()
   };
 };
 
