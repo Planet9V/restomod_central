@@ -543,6 +543,119 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ========== RESEARCH ARTICLES API ROUTES ==========
+  
+  // Get all research articles
+  app.get(`${apiPrefix}/research-articles`, async (req, res) => {
+    try {
+      const category = req.query.category as string | undefined;
+      
+      let articles;
+      if (category && category !== 'all') {
+        articles = await storage.getResearchArticlesByCategory(category);
+      } else {
+        articles = await storage.getResearchArticles();
+      }
+      
+      res.json(articles);
+    } catch (error) {
+      console.error("Error fetching research articles:", error);
+      res.status(500).json({ message: "Failed to fetch research articles" });
+    }
+  });
+  
+  // Get featured research articles
+  app.get(`${apiPrefix}/research-articles/featured`, async (req, res) => {
+    try {
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : 3;
+      const articles = await storage.getFeaturedResearchArticles(limit);
+      res.json(articles);
+    } catch (error) {
+      console.error("Error fetching featured research articles:", error);
+      res.status(500).json({ message: "Failed to fetch featured research articles" });
+    }
+  });
+  
+  // Get research article by slug
+  app.get(`${apiPrefix}/research-articles/:slug`, async (req, res) => {
+    try {
+      const { slug } = req.params;
+      const article = await storage.getResearchArticleBySlug(slug);
+      
+      if (!article) {
+        return res.status(404).json({ message: "Research article not found" });
+      }
+      
+      res.json(article);
+    } catch (error) {
+      console.error("Error fetching research article:", error);
+      res.status(500).json({ message: "Failed to fetch research article" });
+    }
+  });
+  
+  // Admin Research Articles CRUD
+  app.post(`${apiPrefix}/admin/research-articles`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const article = await storage.createResearchArticle(req.body);
+      res.status(201).json(article);
+    } catch (error) {
+      console.error("Error creating research article:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          message: "Validation error", 
+          errors: error.errors.map(e => ({ path: e.path.join('.'), message: e.message }))
+        });
+      }
+      res.status(500).json({ message: "Failed to create research article" });
+    }
+  });
+  
+  app.put(`${apiPrefix}/admin/research-articles/:id`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const articleId = parseInt(id);
+      
+      if (isNaN(articleId)) {
+        return res.status(400).json({ message: "Invalid research article ID" });
+      }
+      
+      const article = await storage.updateResearchArticle(articleId, req.body);
+      res.json(article);
+    } catch (error) {
+      console.error("Error updating research article:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          message: "Validation error", 
+          errors: error.errors.map(e => ({ path: e.path.join('.'), message: e.message }))
+        });
+      }
+      if ((error as Error).message === 'Research article not found') {
+        return res.status(404).json({ message: "Research article not found" });
+      }
+      res.status(500).json({ message: "Failed to update research article" });
+    }
+  });
+  
+  app.delete(`${apiPrefix}/admin/research-articles/:id`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const articleId = parseInt(id);
+      
+      if (isNaN(articleId)) {
+        return res.status(400).json({ message: "Invalid research article ID" });
+      }
+      
+      await storage.deleteResearchArticle(articleId);
+      res.status(204).end();
+    } catch (error) {
+      console.error("Error deleting research article:", error);
+      if ((error as Error).message === 'Research article not found') {
+        return res.status(404).json({ message: "Research article not found" });
+      }
+      res.status(500).json({ message: "Failed to delete research article" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
