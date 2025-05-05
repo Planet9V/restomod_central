@@ -41,6 +41,7 @@ const Home = () => {
       <EngineeringMeetsArtistry />
       <ProjectGallery />
       <ProcessSection />
+      <LuxuryShowcasesSection />
       <ConfiguratorCTA />
       <MarketInsights />
       <AboutUs />
