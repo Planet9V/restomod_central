@@ -6,6 +6,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { PlusCircle, Car, Users, Settings, LogOut, Home, Loader2, Edit, Trash2, AlertCircle, Star, FileText, Sliders } from 'lucide-react';
 import { LuxuryShowcasesTab } from '@/components/admin/LuxuryShowcasesTab';
 import { ResearchArticleManager } from '@/components/admin/ResearchArticleManager';
+import { ConfiguratorManager } from '@/components/admin/ConfiguratorManager';
 import { useLocation } from 'wouter';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { apiRequest, queryClient } from '@/lib/queryClient';
@@ -289,6 +290,16 @@ export default function AdminDashboard() {
               </div>
             </div>
             <ResearchArticleManager />
+          </TabsContent>
+
+          <TabsContent value="car-configurator" className="mt-0 h-full">
+            <div className="admin-section-header">
+              <div>
+                <h1 className="text-3xl font-bold tracking-tight">Car Configurator</h1>
+                <p className="text-[var(--admin-muted)]">Manage your car configurator options for classic car restomods</p>
+              </div>
+            </div>
+            <ConfiguratorManager />
           </TabsContent>
 
           <TabsContent value="projects" className="mt-0 h-full">
