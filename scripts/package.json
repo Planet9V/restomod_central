@@ -1,12 +1,12 @@
 {
-  "name": "image-validation",
+  "name": "restomod-scripts",
   "version": "1.0.0",
-  "description": "Image validation script for Skinny's Rod and Custom",
-  "main": "validate-images.js",
   "type": "module",
+  "description": "Scripts for the Restomod Website",
+  "main": "index.js",
   "scripts": {
-    "validate": "node validate-images.js"
+    "create-showcase": "node create-rogan-showcase.js"
   },
-  "author": "Skinny's Rod and Custom",
+  "author": "",
   "license": "ISC"
 }
