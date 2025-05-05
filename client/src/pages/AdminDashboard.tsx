@@ -232,6 +232,14 @@ export default function AdminDashboard() {
           </button>
 
           <button 
+            className={`admin-sidebar-link ${activeTab === 'research-articles' ? 'active' : ''}`}
+            onClick={() => setActiveTab('research-articles')}
+          >
+            <FileText className="h-5 w-5" />
+            <span>Research Articles</span>
+          </button>
+
+          <button 
             className={`admin-sidebar-link ${activeTab === 'team' ? 'active' : ''}`}
             onClick={() => setActiveTab('team')}
           >
@@ -263,6 +271,16 @@ export default function AdminDashboard() {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full">
           <TabsContent value="luxury-showcases" className="mt-0 h-full">
             <LuxuryShowcasesTab />
+          </TabsContent>
+
+          <TabsContent value="research-articles" className="mt-0 h-full">
+            <div className="admin-section-header">
+              <div>
+                <h1 className="text-3xl font-bold tracking-tight">Research Articles</h1>
+                <p className="text-[var(--admin-muted)]">Manage your educational content and research articles</p>
+              </div>
+            </div>
+            <ResearchArticleManager />
           </TabsContent>
 
           <TabsContent value="projects" className="mt-0 h-full">
