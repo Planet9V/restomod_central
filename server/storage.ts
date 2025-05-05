@@ -297,3 +297,87 @@ export const getProcessData = async () => {
     }
   };
 };
+
+// ========== LUXURY SHOWCASES OPERATIONS ==========
+
+// Luxury Showcases CRUD
+export const createLuxuryShowcase = async (data: z.infer<typeof schema.luxuryShowcaseInsertSchema>) => {
+  const [showcase] = await db.insert(schema.luxuryShowcases)
+    .values(data)
+    .returning();
+  return showcase;
+};
+
+export const updateLuxuryShowcase = async (id: number, data: UpdateData<z.infer<typeof schema.luxuryShowcaseInsertSchema>>) => {
+  const existing = await db.query.luxuryShowcases.findFirst({
+    where: eq(schema.luxuryShowcases.id, id)
+  });
+  
+  if (!existing) {
+    throw new Error('Luxury showcase not found');
+  }
+  
+  const [updated] = await db.update(schema.luxuryShowcases)
+    .set(data)
+    .where(eq(schema.luxuryShowcases.id, id))
+    .returning();
+  
+  return updated;
+};
+
+export const deleteLuxuryShowcase = async (id: number) => {
+  const existing = await db.query.luxuryShowcases.findFirst({
+    where: eq(schema.luxuryShowcases.id, id)
+  });
+  
+  if (!existing) {
+    throw new Error('Luxury showcase not found');
+  }
+  
+  await db.delete(schema.luxuryShowcases)
+    .where(eq(schema.luxuryShowcases.id, id));
+  
+  return true;
+};
+
+// Get all luxury showcases
+export const getLuxuryShowcases = async () => {
+  return db.query.luxuryShowcases.findMany({
+    orderBy: desc(schema.luxuryShowcases.createdAt),
+    with: {
+      project: true
+    }
+  });
+};
+
+// Get a specific luxury showcase by ID
+export const getLuxuryShowcaseById = async (id: number) => {
+  return db.query.luxuryShowcases.findFirst({
+    where: eq(schema.luxuryShowcases.id, id),
+    with: {
+      project: true
+    }
+  });
+};
+
+// Get a specific luxury showcase by slug
+export const getLuxuryShowcaseBySlug = async (slug: string) => {
+  return db.query.luxuryShowcases.findFirst({
+    where: eq(schema.luxuryShowcases.slug, slug),
+    with: {
+      project: true
+    }
+  });
+};
+
+// Get featured luxury showcases
+export const getFeaturedLuxuryShowcases = async (limit: number = 3) => {
+  return db.query.luxuryShowcases.findMany({
+    where: eq(schema.luxuryShowcases.featured, true),
+    orderBy: desc(schema.luxuryShowcases.createdAt),
+    limit,
+    with: {
+      project: true
+    }
+  });
+};

@@ -173,3 +173,49 @@ export const processSteps = pgTable("process_steps", {
 export const processStepsInsertSchema = createInsertSchema(processSteps);
 export type InsertProcessStep = z.infer<typeof processStepsInsertSchema>;
 export type ProcessStep = typeof processSteps.$inferSelect;
+
+// Luxury Showcase pages table
+export const luxuryShowcases = pgTable("luxury_showcases", {
+  id: serial("id").primaryKey(),
+  projectId: integer("project_id").references(() => projects.id, { onDelete: 'cascade' }),
+  title: text("title").notNull(),
+  subtitle: text("subtitle").notNull(),
+  slug: text("slug").notNull().unique(),
+  description: text("description").notNull(),
+  shortDescription: text("short_description").notNull(),
+  videoUrl: text("video_url"),
+  heroImage: text("hero_image").notNull(),
+  galleryImages: jsonb("gallery_images").notNull().$type<string[]>(),
+  detailSections: jsonb("detail_sections").notNull().$type<{
+    title: string;
+    content: string;
+    image?: string;
+    order: number;
+  }[]>(),
+  specifications: jsonb("specifications").notNull().$type<{
+    category: string;
+    items: { label: string; value: string }[];
+  }[]>(),
+  featured: boolean("featured").default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  publishedAt: timestamp("published_at"),
+});
+
+// Relation between projects and luxury showcases
+export const projectsRelations = relations(projects, ({ one }) => ({
+  luxuryShowcase: one(luxuryShowcases, {
+    fields: [projects.id],
+    references: [luxuryShowcases.projectId],
+  }),
+}));
+
+export const luxuryShowcaseRelations = relations(luxuryShowcases, ({ one }) => ({
+  project: one(projects, {
+    fields: [luxuryShowcases.projectId],
+    references: [projects.id],
+  }),
+}));
+
+export const luxuryShowcaseInsertSchema = createInsertSchema(luxuryShowcases);
+export type InsertLuxuryShowcase = z.infer<typeof luxuryShowcaseInsertSchema>;
+export type LuxuryShowcase = typeof luxuryShowcases.$inferSelect;

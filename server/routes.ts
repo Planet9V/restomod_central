@@ -437,6 +437,111 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to update company" });
     }
   });
+  
+  // ========== LUXURY SHOWCASES API ROUTES ==========
+  
+  // Get all luxury showcases
+  app.get(`${apiPrefix}/luxury-showcases`, async (req, res) => {
+    try {
+      const showcases = await storage.getLuxuryShowcases();
+      res.json(showcases);
+    } catch (error) {
+      console.error("Error fetching luxury showcases:", error);
+      res.status(500).json({ message: "Failed to fetch luxury showcases" });
+    }
+  });
+  
+  // Get featured luxury showcases
+  app.get(`${apiPrefix}/luxury-showcases/featured`, async (req, res) => {
+    try {
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : 3;
+      const showcases = await storage.getFeaturedLuxuryShowcases(limit);
+      res.json(showcases);
+    } catch (error) {
+      console.error("Error fetching featured luxury showcases:", error);
+      res.status(500).json({ message: "Failed to fetch featured luxury showcases" });
+    }
+  });
+  
+  // Get a specific luxury showcase by slug
+  app.get(`${apiPrefix}/luxury-showcases/:slug`, async (req, res) => {
+    try {
+      const { slug } = req.params;
+      const showcase = await storage.getLuxuryShowcaseBySlug(slug);
+      
+      if (!showcase) {
+        return res.status(404).json({ message: "Luxury showcase not found" });
+      }
+      
+      res.json(showcase);
+    } catch (error) {
+      console.error("Error fetching luxury showcase:", error);
+      res.status(500).json({ message: "Failed to fetch luxury showcase" });
+    }
+  });
+  
+  // Admin Luxury Showcases CRUD
+  app.post(`${apiPrefix}/admin/luxury-showcases`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const showcase = await storage.createLuxuryShowcase(req.body);
+      res.status(201).json(showcase);
+    } catch (error) {
+      console.error("Error creating luxury showcase:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          message: "Validation error", 
+          errors: error.errors.map(e => ({ path: e.path.join('.'), message: e.message }))
+        });
+      }
+      res.status(500).json({ message: "Failed to create luxury showcase" });
+    }
+  });
+  
+  app.put(`${apiPrefix}/admin/luxury-showcases/:id`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const showcaseId = parseInt(id);
+      
+      if (isNaN(showcaseId)) {
+        return res.status(400).json({ message: "Invalid luxury showcase ID" });
+      }
+      
+      const showcase = await storage.updateLuxuryShowcase(showcaseId, req.body);
+      res.json(showcase);
+    } catch (error) {
+      console.error("Error updating luxury showcase:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          message: "Validation error", 
+          errors: error.errors.map(e => ({ path: e.path.join('.'), message: e.message }))
+        });
+      }
+      if ((error as Error).message === 'Luxury showcase not found') {
+        return res.status(404).json({ message: "Luxury showcase not found" });
+      }
+      res.status(500).json({ message: "Failed to update luxury showcase" });
+    }
+  });
+  
+  app.delete(`${apiPrefix}/admin/luxury-showcases/:id`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const showcaseId = parseInt(id);
+      
+      if (isNaN(showcaseId)) {
+        return res.status(400).json({ message: "Invalid luxury showcase ID" });
+      }
+      
+      await storage.deleteLuxuryShowcase(showcaseId);
+      res.status(204).end();
+    } catch (error) {
+      console.error("Error deleting luxury showcase:", error);
+      if ((error as Error).message === 'Luxury showcase not found') {
+        return res.status(404).json({ message: "Luxury showcase not found" });
+      }
+      res.status(500).json({ message: "Failed to delete luxury showcase" });
+    }
+  });
 
   const httpServer = createServer(app);
   return httpServer;
