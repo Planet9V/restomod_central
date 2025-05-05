@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
-import { PlusCircle, Car, Users, Settings, LogOut, Home, Loader2, Edit, Trash2, AlertCircle, Star, FileText } from 'lucide-react';
+import { PlusCircle, Car, Users, Settings, LogOut, Home, Loader2, Edit, Trash2, AlertCircle, Star, FileText, Sliders } from 'lucide-react';
 import { LuxuryShowcasesTab } from '@/components/admin/LuxuryShowcasesTab';
 import { ResearchArticleManager } from '@/components/admin/ResearchArticleManager';
 import { useLocation } from 'wouter';
@@ -237,6 +237,14 @@ export default function AdminDashboard() {
           >
             <FileText className="h-5 w-5" />
             <span>Research Articles</span>
+          </button>
+
+          <button 
+            className={`admin-sidebar-link ${activeTab === 'car-configurator' ? 'active' : ''}`}
+            onClick={() => setActiveTab('car-configurator')}
+          >
+            <Sliders className="h-5 w-5" />
+            <span>Car Configurator</span>
           </button>
 
           <button 
