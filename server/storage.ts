@@ -381,3 +381,69 @@ export const getFeaturedLuxuryShowcases = async (limit: number = 3) => {
     }
   });
 };
+
+// Research Articles CRUD operations
+export const createResearchArticle = async (data: z.infer<typeof schema.researchArticlesInsertSchema>) => {
+  const [result] = await db.insert(schema.researchArticles).values({
+    ...data,
+    tags: Array.isArray(data.tags) ? data.tags : [],
+  }).returning();
+  return result;
+};
+
+export const updateResearchArticle = async (id: number, data: UpdateData<z.infer<typeof schema.researchArticlesInsertSchema>>) => {
+  if (data.tags && !Array.isArray(data.tags)) {
+    data.tags = [];
+  }
+  
+  const [result] = await db
+    .update(schema.researchArticles)
+    .set({
+      ...data,
+      updatedAt: new Date(),
+    })
+    .where(eq(schema.researchArticles.id, id))
+    .returning();
+  return result;
+};
+
+export const deleteResearchArticle = async (id: number) => {
+  const [result] = await db
+    .delete(schema.researchArticles)
+    .where(eq(schema.researchArticles.id, id))
+    .returning();
+  return result;
+};
+
+export const getResearchArticles = async () => {
+  return await db.query.researchArticles.findMany({
+    orderBy: desc(schema.researchArticles.publishDate),
+  });
+};
+
+export const getResearchArticleById = async (id: number) => {
+  return await db.query.researchArticles.findFirst({
+    where: eq(schema.researchArticles.id, id),
+  });
+};
+
+export const getResearchArticleBySlug = async (slug: string) => {
+  return await db.query.researchArticles.findFirst({
+    where: eq(schema.researchArticles.slug, slug),
+  });
+};
+
+export const getFeaturedResearchArticles = async (limit: number = 3) => {
+  return await db.query.researchArticles.findMany({
+    where: eq(schema.researchArticles.featured, true),
+    limit,
+    orderBy: desc(schema.researchArticles.publishDate),
+  });
+};
+
+export const getResearchArticlesByCategory = async (category: string) => {
+  return await db.query.researchArticles.findMany({
+    where: eq(schema.researchArticles.category, category),
+    orderBy: desc(schema.researchArticles.publishDate),
+  });
+};
