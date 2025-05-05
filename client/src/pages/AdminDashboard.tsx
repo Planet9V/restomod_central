@@ -3,7 +3,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
-import { PlusCircle, Car, Users, Settings, LogOut, Home, Loader2, Edit, Trash2, AlertCircle } from 'lucide-react';
+import { PlusCircle, Car, Users, Settings, LogOut, Home, Loader2, Edit, Trash2, AlertCircle, Star } from 'lucide-react';
+import { LuxuryShowcasesTab } from '@/components/admin/LuxuryShowcasesTab';
 import { useLocation } from 'wouter';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { apiRequest, queryClient } from '@/lib/queryClient';
@@ -222,6 +223,14 @@ export default function AdminDashboard() {
           </button>
           
           <button 
+            className={`admin-sidebar-link ${activeTab === 'luxury-showcases' ? 'active' : ''}`}
+            onClick={() => setActiveTab('luxury-showcases')}
+          >
+            <Star className="h-5 w-5" />
+            <span>Luxury Showcases</span>
+          </button>
+
+          <button 
             className={`admin-sidebar-link ${activeTab === 'team' ? 'active' : ''}`}
             onClick={() => setActiveTab('team')}
           >
@@ -251,6 +260,10 @@ export default function AdminDashboard() {
       {/* Main Content */}
       <div className="admin-content">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full">
+          <TabsContent value="luxury-showcases" className="mt-0 h-full">
+            <LuxuryShowcasesTab />
+          </TabsContent>
+
           <TabsContent value="projects" className="mt-0 h-full">
             <div className="admin-section-header">
               <div>
