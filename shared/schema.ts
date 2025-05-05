@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, jsonb, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, jsonb, timestamp, decimal } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
@@ -240,3 +240,214 @@ export const researchArticles = pgTable("research_articles", {
 export const researchArticlesInsertSchema = createInsertSchema(researchArticles);
 export type InsertResearchArticle = z.infer<typeof researchArticlesInsertSchema>;
 export type ResearchArticle = typeof researchArticles.$inferSelect;
+
+// Car Configurator Schemas
+
+// Car Models table
+export const carModels = pgTable("car_models", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  description: text("description").notNull(),
+  basePrice: decimal("base_price", { precision: 10, scale: 2 }).notNull(),
+  yearStart: integer("year_start").notNull(),
+  yearEnd: integer("year_end"),
+  manufacturer: text("manufacturer").notNull(),
+  bodyTypes: jsonb("body_types").notNull().$type<string[]>(),
+  mainImage: text("main_image").notNull(),
+  galleryImages: jsonb("gallery_images").notNull().$type<string[]>(),
+  featured: boolean("featured").default(false),
+  restomodCount: integer("restomod_count").default(0),
+  historicalInfo: text("historical_info"),
+  marketTrend: jsonb("market_trend").$type<{
+    year: number;
+    value: number;
+  }[]>(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const carModelsInsertSchema = createInsertSchema(carModels);
+export type InsertCarModel = z.infer<typeof carModelsInsertSchema>;
+export type CarModel = typeof carModels.$inferSelect;
+
+// Engine Options table
+export const engineOptions = pgTable("engine_options", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  horsepower: integer("horsepower").notNull(),
+  torque: integer("torque").notNull(),
+  displacement: text("displacement").notNull(),
+  manufacturer: text("manufacturer").notNull(),
+  fuelType: text("fuel_type").notNull(),
+  image: text("image").notNull(),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  compatibleModels: jsonb("compatible_models").notNull().$type<number[]>(),
+  mcKenneyFeatures: jsonb("mckenney_features").$type<string[]>(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const engineOptionsInsertSchema = createInsertSchema(engineOptions);
+export type InsertEngineOption = z.infer<typeof engineOptionsInsertSchema>;
+export type EngineOption = typeof engineOptions.$inferSelect;
+
+// Transmission Options table
+export const transmissionOptions = pgTable("transmission_options", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  type: text("type").notNull(),
+  speeds: integer("speeds").notNull(),
+  manufacturer: text("manufacturer").notNull(),
+  image: text("image").notNull(),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  compatibleEngines: jsonb("compatible_engines").notNull().$type<number[]>(),
+  compatibleModels: jsonb("compatible_models").notNull().$type<number[]>(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const transmissionOptionsInsertSchema = createInsertSchema(transmissionOptions);
+export type InsertTransmissionOption = z.infer<typeof transmissionOptionsInsertSchema>;
+export type TransmissionOption = typeof transmissionOptions.$inferSelect;
+
+// Color Options table
+export const colorOptions = pgTable("color_options", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  hex: text("hex").notNull(),
+  image: text("image").notNull(),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  type: text("type").notNull(), // e.g., metallic, matte, gloss
+  availableForModels: jsonb("available_for_models").notNull().$type<number[]>(),
+  popular: boolean("popular").default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const colorOptionsInsertSchema = createInsertSchema(colorOptions);
+export type InsertColorOption = z.infer<typeof colorOptionsInsertSchema>;
+export type ColorOption = typeof colorOptions.$inferSelect;
+
+// Wheel Options table
+export const wheelOptions = pgTable("wheel_options", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  diameter: integer("diameter").notNull(),
+  width: text("width").notNull(),
+  material: text("material").notNull(),
+  style: text("style").notNull(),
+  image: text("image").notNull(),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  compatibleModels: jsonb("compatible_models").notNull().$type<number[]>(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const wheelOptionsInsertSchema = createInsertSchema(wheelOptions);
+export type InsertWheelOption = z.infer<typeof wheelOptionsInsertSchema>;
+export type WheelOption = typeof wheelOptions.$inferSelect;
+
+// Interior Options table
+export const interiorOptions = pgTable("interior_options", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  material: text("material").notNull(),
+  color: text("color").notNull(),
+  image: text("image").notNull(),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  compatibleModels: jsonb("compatible_models").notNull().$type<number[]>(),
+  features: jsonb("features").notNull().$type<string[]>(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const interiorOptionsInsertSchema = createInsertSchema(interiorOptions);
+export type InsertInteriorOption = z.infer<typeof interiorOptionsInsertSchema>;
+export type InteriorOption = typeof interiorOptions.$inferSelect;
+
+// AI Integration Options table
+export const aiOptions = pgTable("ai_options", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  category: text("category").notNull(), // e.g., performance, safety, entertainment
+  image: text("image").notNull(),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  compatibleModels: jsonb("compatible_models").notNull().$type<number[]>(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const aiOptionsInsertSchema = createInsertSchema(aiOptions);
+export type InsertAiOption = z.infer<typeof aiOptionsInsertSchema>;
+export type AiOption = typeof aiOptions.$inferSelect;
+
+// Additional Options table
+export const additionalOptions = pgTable("additional_options", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  category: text("category").notNull(), // e.g., performance, safety, comfort
+  image: text("image").notNull(),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  compatibleModels: jsonb("compatible_models").notNull().$type<number[]>(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const additionalOptionsInsertSchema = createInsertSchema(additionalOptions);
+export type InsertAdditionalOption = z.infer<typeof additionalOptionsInsertSchema>;
+export type AdditionalOption = typeof additionalOptions.$inferSelect;
+
+// User Configurations table (for saved configurations)
+export const userConfigurations = pgTable("user_configurations", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id, { onDelete: 'cascade' }),
+  name: text("name").notNull(),
+  carModelId: integer("car_model_id").references(() => carModels.id, { onDelete: 'cascade' }).notNull(),
+  engineId: integer("engine_id").references(() => engineOptions.id, { onDelete: 'cascade' }),
+  transmissionId: integer("transmission_id").references(() => transmissionOptions.id, { onDelete: 'cascade' }),
+  colorId: integer("color_id").references(() => colorOptions.id, { onDelete: 'cascade' }),
+  wheelId: integer("wheel_id").references(() => wheelOptions.id, { onDelete: 'cascade' }),
+  interiorId: integer("interior_id").references(() => interiorOptions.id, { onDelete: 'cascade' }),
+  selectedAiOptions: jsonb("selected_ai_options").$type<number[]>(),
+  selectedAdditionalOptions: jsonb("selected_additional_options").$type<number[]>(),
+  aiRecommendations: text("ai_recommendations"),
+  totalPrice: decimal("total_price", { precision: 10, scale: 2 }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Relations for user configurations
+export const userConfigurationsRelations = relations(userConfigurations, ({ one }) => ({
+  user: one(users, {
+    fields: [userConfigurations.userId],
+    references: [users.id],
+  }),
+  carModel: one(carModels, {
+    fields: [userConfigurations.carModelId],
+    references: [carModels.id],
+  }),
+  engine: one(engineOptions, {
+    fields: [userConfigurations.engineId],
+    references: [engineOptions.id],
+  }),
+  transmission: one(transmissionOptions, {
+    fields: [userConfigurations.transmissionId],
+    references: [transmissionOptions.id],
+  }),
+  color: one(colorOptions, {
+    fields: [userConfigurations.colorId],
+    references: [colorOptions.id],
+  }),
+  wheel: one(wheelOptions, {
+    fields: [userConfigurations.wheelId],
+    references: [wheelOptions.id],
+  }),
+  interior: one(interiorOptions, {
+    fields: [userConfigurations.interiorId],
+    references: [interiorOptions.id],
+  }),
+}));
+
+export const userConfigurationsInsertSchema = createInsertSchema(userConfigurations);
+export type InsertUserConfiguration = z.infer<typeof userConfigurationsInsertSchema>;
+export type UserConfiguration = typeof userConfigurations.$inferSelect;
