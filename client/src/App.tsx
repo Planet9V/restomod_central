@@ -16,6 +16,8 @@ import VehicleArchive from "@/pages/VehicleArchive";
 import CarConfigurator from "@/pages/CarConfigurator";
 import AuthPage from "@/pages/AuthPage";
 import AdminDashboard from "@/pages/AdminDashboard";
+import LuxuryShowcasePage from "@/pages/LuxuryShowcasePage";
+import LuxuryShowcasesPage from "@/pages/LuxuryShowcasesPage";
 import NotFound from "@/pages/not-found";
 
 // Layout components
@@ -50,6 +52,8 @@ function Router() {
         <Route path="/resources/:slug" component={ArticleDetail} />
         <Route path="/vehicle-archive" component={VehicleArchive} />
         <Route path="/car-configurator" component={CarConfigurator} />
+        <Route path="/showcases" component={LuxuryShowcasesPage} />
+        <Route path="/showcases/:slug" component={LuxuryShowcasePage} />
         <Route path="/auth" component={AuthPage} />
         <Route path="/admin" component={() => <ProtectedRoute component={AdminDashboard} adminOnly />} />
         <Route component={NotFound} />

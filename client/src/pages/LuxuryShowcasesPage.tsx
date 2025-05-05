@@ -1,164 +1,99 @@
-import { Link } from 'wouter';
+import React from 'react';
 import { useLuxuryShowcases } from '@/hooks/use-luxury-showcase';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ChevronRight } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { ArrowRight, CalendarIcon, Star } from 'lucide-react';
+import { Link } from 'wouter';
+import { formatDistanceToNow } from 'date-fns';
 
-const LuxuryShowcasesPage = () => {
+export default function LuxuryShowcasesPage() {
   const { data: showcases, isLoading, error } = useLuxuryShowcases();
-  
-  // Container animation
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
-  };
-  
-  // Item animation
-  const itemVariants = {
-    hidden: { y: 30, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-        ease: [0.22, 1, 0.36, 1]
-      }
-    }
-  };
-  
-  // Loading state
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-black text-white pt-24 px-4 md:px-8 lg:px-16">
-        <div className="max-w-7xl mx-auto py-12">
-          <Skeleton className="w-1/2 h-12 bg-gray-800 mb-8" />
-          <Skeleton className="w-full h-8 bg-gray-800 mb-16" />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="flex flex-col">
-                <Skeleton className="w-full h-[300px] bg-gray-800 mb-4" />
-                <Skeleton className="w-3/4 h-8 bg-gray-800 mb-2" />
-                <Skeleton className="w-full h-4 bg-gray-800 mb-1" />
-                <Skeleton className="w-2/3 h-4 bg-gray-800" />
-              </div>
+
+  return (
+    <div className="container mx-auto px-4 py-16">
+      <div className="max-w-5xl mx-auto">
+        <div className="text-center mb-16">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">Luxury Showcases</h1>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Explore our collection of exceptional restomod projects, each representing the pinnacle of automotive design, engineering, and craftsmanship.
+          </p>
+        </div>
+
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <Card key={i} className="flex flex-col h-[450px] animate-pulse">
+                <div className="bg-gray-200 dark:bg-gray-700 h-64 rounded-t-lg"></div>
+                <CardHeader>
+                  <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                </CardHeader>
+                <CardContent className="flex-grow">
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6"></div>
+                </CardContent>
+                <CardFooter>
+                  <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded w-32"></div>
+                </CardFooter>
+              </Card>
             ))}
           </div>
-        </div>
-      </div>
-    );
-  }
-  
-  // Error state
-  if (error || !showcases) {
-    return (
-      <div className="min-h-screen bg-black text-white pt-24 px-4 md:px-8 lg:px-16 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold mb-4">Something Went Wrong</h1>
-          <p className="text-xl mb-8 text-gray-400">
-            We couldn't load the luxury showcases. Please try again later.
-          </p>
-          <Link href="/">
-            <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-black">
-              Return Home
-            </Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
-  
-  // No showcases
-  if (showcases.length === 0) {
-    return (
-      <div className="min-h-screen bg-black text-white pt-24 px-4 md:px-8 lg:px-16 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold mb-4">No Luxury Showcases Available</h1>
-          <p className="text-xl mb-8 text-gray-400">
-            Check back soon for our upcoming luxury vehicle showcases.
-          </p>
-          <Link href="/">
-            <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-black">
-              Return Home
-            </Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
-  
-  return (
-    <div className="min-h-screen bg-black text-white pt-24 px-4 md:px-8 lg:px-16">
-      <div className="max-w-7xl mx-auto py-12">
-        {/* Hero Section */}
-        <div className="mb-20 text-center max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-playfair mb-6 tracking-tight font-bold">
-            Luxury Showcases
-          </h1>
-          <p className="text-xl text-gray-400">
-            Explore our collection of meticulously crafted restomod masterpieces, each representing the pinnacle of automotive artistry and engineering excellence.
-          </p>
-        </div>
-        
-        {/* Showcases Grid */}
-        <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-16"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {showcases.map((showcase) => (
-            <motion.div 
-              key={showcase.id} 
-              className="group cursor-pointer"
-              variants={itemVariants}
-            >
-              <Link href={`/showcases/${showcase.slug}`}>
-                <div className="flex flex-col h-full">
-                  <div className="h-[300px] overflow-hidden rounded-lg mb-4">
-                    <img 
-                      src={showcase.heroImage} 
-                      alt={showcase.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
+        ) : error ? (
+          <div className="text-center py-12">
+            <h3 className="text-xl font-medium mb-2">Error loading showcases</h3>
+            <p className="text-muted-foreground">Please try again later.</p>
+          </div>
+        ) : !showcases || showcases.length === 0 ? (
+          <div className="text-center py-12">
+            <h3 className="text-xl font-medium mb-2">No showcases found</h3>
+            <p className="text-muted-foreground">Check back soon for new additions.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {showcases.map((showcase) => (
+              <Card key={showcase.id} className="flex flex-col h-full overflow-hidden group transition-all duration-300 hover:shadow-lg">
+                <div 
+                  className="h-64 bg-cover bg-center transition-all duration-500 group-hover:scale-105"
+                  style={{ backgroundImage: `url(${showcase.heroImage})` }}
+                ></div>
+                <CardHeader>
+                  <div className="flex justify-between items-start">
+                    <CardTitle className="text-xl font-bold">{showcase.title}</CardTitle>
+                    {showcase.featured && (
+                      <Badge variant="secondary" className="bg-amber-500 text-white border-none">
+                        <Star className="h-3 w-3 mr-1 fill-current" />
+                        Featured
+                      </Badge>
+                    )}
                   </div>
-                  <h2 className="text-2xl font-medium mb-2 group-hover:text-burgundy transition-colors duration-300">
-                    {showcase.title}
-                  </h2>
-                  <p className="text-gray-400 mb-4 flex-grow">
+                  <CardDescription className="text-base">{showcase.subtitle}</CardDescription>
+                </CardHeader>
+                <CardContent className="flex-grow">
+                  <p className="text-sm text-muted-foreground line-clamp-3">
                     {showcase.shortDescription}
                   </p>
-                  <div className="flex items-center text-burgundy">
-                    Explore <ChevronRight className="ml-2" />
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </motion.div>
-        
-        {/* CTA */}
-        <div className="bg-charcoal text-white p-8 rounded-sm text-center">
-          <h2 className="font-playfair text-2xl font-medium mb-4">
-            Ready to Create Your Own Masterpiece?
-          </h2>
-          <p className="mb-6 text-white/80 max-w-2xl mx-auto">
-            Let's discuss how we can bring your vision to life with our unique combination of engineering excellence and master craftsmanship.
-          </p>
-          <Link href="/#contact">
-            <Button className="bg-burgundy hover:bg-burgundy/90 text-white transition-colors duration-200">
-              Request a Consultation
-            </Button>
-          </Link>
-        </div>
+                  
+                  {showcase.publishedAt && (
+                    <div className="flex items-center mt-4 text-xs text-muted-foreground">
+                      <CalendarIcon className="h-3 w-3 mr-1" />
+                      {formatDistanceToNow(new Date(showcase.publishedAt), { addSuffix: true })}
+                    </div>
+                  )}
+                </CardContent>
+                <CardFooter className="border-t border-muted/20 pt-4">
+                  <Button variant="default" className="group" asChild>
+                    <Link to={`/showcases/${showcase.slug}`}>
+                      View Details
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </Link>
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
-};
-
-export default LuxuryShowcasesPage;
+}

@@ -9,6 +9,7 @@ import AboutUs from "@/components/home/AboutUs";
 import Testimonials from "@/components/home/Testimonials";
 import ContactSection from "@/components/home/ContactSection";
 import ConfiguratorCTA from "@/components/home/ConfiguratorCTA";
+import LuxuryShowcasesSection from "@/components/home/LuxuryShowcasesSection";
 
 const Home = () => {
   // Initialize scroll reveal animations
