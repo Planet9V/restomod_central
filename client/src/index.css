@@ -67,8 +67,10 @@ html {
     --admin-destructive-hover: #dc2626;
     --admin-muted: #6b7280;
     --admin-muted-foreground: #374151;
-    --admin-form-bg: #f9fafb;
+    --admin-form-bg: #ffffff;
     --admin-form-border: #d1d5db;
+    --admin-form-text: #333333;
+    --admin-dialog-text: #333333;
     --background: 0 0% 100%;
     --foreground: 0 0% 13.3%;
     
@@ -272,7 +274,7 @@ html {
 }
 
 .admin-card-title {
-  @apply text-lg font-semibold;
+  @apply text-lg font-semibold text-[var(--admin-dialog-text)];
 }
 
 .admin-card-description {
@@ -312,11 +314,11 @@ html {
 }
 
 .admin-form-input {
-  @apply w-full px-3 py-2 border border-[var(--admin-form-border)] rounded-md bg-[var(--admin-form-bg)] focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)] focus:ring-opacity-50 transition-colors;
+  @apply w-full px-3 py-2 border border-[var(--admin-form-border)] rounded-md bg-[var(--admin-form-bg)] text-[var(--admin-form-text)] focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)] focus:ring-opacity-50 transition-colors;
 }
 
 .admin-form-textarea {
-  @apply w-full px-3 py-2 border border-[var(--admin-form-border)] rounded-md bg-[var(--admin-form-bg)] focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)] focus:ring-opacity-50 transition-colors min-h-[120px];
+  @apply w-full px-3 py-2 border border-[var(--admin-form-border)] rounded-md bg-[var(--admin-form-bg)] text-[var(--admin-form-text)] focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)] focus:ring-opacity-50 transition-colors min-h-[120px];
 }
 
 .admin-form-error {
@@ -340,15 +342,21 @@ html {
 }
 
 .admin-dialog-title {
-  @apply text-lg font-semibold;
+  @apply text-lg font-semibold text-[var(--admin-dialog-text)];
 }
 
 .admin-dialog-description {
   @apply text-sm text-[var(--admin-muted)];
 }
 
+/* Form placeholder styles */
+.admin-form-input::placeholder,
+.admin-form-textarea::placeholder {
+  @apply text-[var(--admin-muted)] opacity-70;
+}
+
 .admin-dialog-content {
-  @apply p-4;
+  @apply p-4 text-[var(--admin-dialog-text)];
 }
 
 .admin-dialog-footer {
