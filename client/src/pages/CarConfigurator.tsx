@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, ArrowRight, Info, Settings, Check, Search, MessageCircle, Activity, History, Loader2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Info, Settings, Check, Search, MessageCircle, Activity, History, Loader2, Zap } from "lucide-react";
 import VideoHeader from "@/components/layout/VideoHeader";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
@@ -55,6 +55,7 @@ const CarConfigurator = () => {
   
   // AI assistant state
   const [showAssistant, setShowAssistant] = useState<boolean>(false);
+  const [showKittIntro, setShowKittIntro] = useState<boolean>(true);
   const [showHistoricalContext, setShowHistoricalContext] = useState<boolean>(false);
   const [showPerformancePrediction, setShowPerformancePrediction] = useState<boolean>(false);
   const [historicalContext, setHistoricalContext] = useState<any>(null);
@@ -1431,6 +1432,72 @@ const CarConfigurator = () => {
   
   return (
     <div>
+      {/* K.I.T.T. Introduction Dialog - only shows on first load */}
+      {showKittIntro && (
+        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-2xl bg-gradient-to-br from-burgundy to-black rounded-lg overflow-hidden shadow-2xl border border-burgundy/50 transform transition-all">
+            <div className="p-8 text-white">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="relative flex-shrink-0">
+                  <div className="w-16 h-16 rounded-full bg-burgundy flex items-center justify-center">
+                    <span className="relative flex h-8 w-8 animate-pulse">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-8 w-8 bg-white"></span>
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <h2 className="text-3xl font-bold">Meet K.I.T.T.</h2>
+                  <p className="text-white/80">Your AI Car Configuration Assistant</p>
+                </div>
+              </div>
+              
+              <p className="mb-6 text-lg">
+                Welcome to our state-of-the-art restomod car configurator! I'm K.I.T.T., your personal AI assistant, 
+                and I'm here to enhance your configuration experience with:
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div className="flex items-start gap-3">
+                  <MessageCircle className="h-6 w-6 text-burgundy flex-shrink-0 mt-1" />
+                  <div>
+                    <h3 className="font-bold">Interactive Chat</h3>
+                    <p className="text-white/70 text-sm">Ask questions about any car in our lineup</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <History className="h-6 w-6 text-burgundy flex-shrink-0 mt-1" />
+                  <div>
+                    <h3 className="font-bold">Historical Context</h3>
+                    <p className="text-white/70 text-sm">Discover the rich heritage of each vehicle</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Activity className="h-6 w-6 text-burgundy flex-shrink-0 mt-1" />
+                  <div>
+                    <h3 className="font-bold">Performance Analysis</h3>
+                    <p className="text-white/70 text-sm">See how your configuration will perform</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Zap className="h-6 w-6 text-burgundy flex-shrink-0 mt-1" />
+                  <div>
+                    <h3 className="font-bold">Smart Recommendations</h3>
+                    <p className="text-white/70 text-sm">Get personalized configuration suggestions</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-8 flex justify-end">
+                <Button onClick={() => setShowKittIntro(false)} className="bg-white text-burgundy hover:bg-white/90 font-bold text-lg px-8 py-6">
+                  Start Configuring With K.I.T.T.
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    
       {/* Premium Porsche-style Video Header */}
       <VideoHeader
         title="Custom Restomod Configurator"
@@ -1536,50 +1603,72 @@ const CarConfigurator = () => {
       
       {/* Main Content */}
       <div className="container mx-auto px-4 py-16">
-        {/* Floating AI Assistant Button */}
-        <div className="fixed bottom-8 right-8 z-40">
-          <Button 
-            onClick={openAssistant}
-            className="h-14 w-14 rounded-full bg-burgundy hover:bg-burgundy/90 shadow-lg flex items-center justify-center"
-          >
-            <MessageCircle className="h-6 w-6 text-white" />
-            <span className="sr-only">Open K.I.T.T. Assistant</span>
-          </Button>
-        </div>
-        
-        {/* Additional AI Action Buttons */}
-        <div className="fixed bottom-8 left-8 z-40 flex flex-col gap-4">
-          {selectedConfig.model && (
-            <>
+        {/* Prominent K.I.T.T. AI Assistant Bar */}
+        <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-r from-burgundy to-burgundy/80 text-white py-3 px-4 shadow-lg border-t border-white/20">
+          <div className="container mx-auto flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="relative flex h-4 w-4">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-4 w-4 bg-white"></span>
+              </span>
+              <span className="font-bold text-lg">K.I.T.T. AI Assistance Available</span>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              {/* Main Assistant Button */}
               <Button 
-                onClick={fetchHistoricalContext}
-                className="h-14 w-14 rounded-full bg-burgundy/90 hover:bg-burgundy shadow-lg flex items-center justify-center"
-                disabled={isHistoricalContextLoading}
+                onClick={openAssistant}
+                className="bg-white hover:bg-white/90 text-burgundy font-bold shadow-lg flex items-center gap-2 px-6"
+                size="lg"
               >
-                {isHistoricalContextLoading ? (
-                  <Loader2 className="h-6 w-6 text-white animate-spin" />
-                ) : (
-                  <History className="h-6 w-6 text-white" />
-                )}
-                <span className="sr-only">Historical Context</span>
+                <MessageCircle className="h-5 w-5" />
+                Chat with K.I.T.T.
               </Button>
+              
+              {/* Only show these buttons when applicable */}
+              {selectedConfig.model && (
+                <Button 
+                  onClick={fetchHistoricalContext}
+                  className="bg-white/20 hover:bg-white/30 text-white shadow-lg flex items-center gap-2"
+                  disabled={isHistoricalContextLoading}
+                >
+                  {isHistoricalContextLoading ? (
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  ) : (
+                    <History className="h-5 w-5" />
+                  )}
+                  Vehicle History
+                </Button>
+              )}
               
               {selectedConfig.engineType && (
                 <Button 
                   onClick={generatePerformancePrediction}
-                  className="h-14 w-14 rounded-full bg-burgundy/90 hover:bg-burgundy shadow-lg flex items-center justify-center"
+                  className="bg-white/20 hover:bg-white/30 text-white shadow-lg flex items-center gap-2"
                   disabled={isPredictionLoading}
                 >
                   {isPredictionLoading ? (
-                    <Loader2 className="h-6 w-6 text-white animate-spin" />
+                    <Loader2 className="h-5 w-5 animate-spin" />
                   ) : (
-                    <Activity className="h-6 w-6 text-white" />
+                    <Activity className="h-5 w-5" />
                   )}
-                  <span className="sr-only">Performance Prediction</span>
+                  Performance Analysis
                 </Button>
               )}
-            </>
-          )}
+            </div>
+          </div>
+        </div>
+        
+        {/* Mobile Floating Assistant Button for smaller screens */}
+        <div className="fixed bottom-20 right-4 z-50 md:hidden">
+          <Button 
+            onClick={openAssistant}
+            className="h-16 w-16 rounded-full bg-burgundy hover:bg-burgundy/90 shadow-lg flex items-center justify-center"
+            size="lg"
+          >
+            <MessageCircle className="h-8 w-8 text-white" />
+            <span className="sr-only">Open K.I.T.T. Assistant</span>
+          </Button>
         </div>
         
         {/* Progress Steps */}
