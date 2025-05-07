@@ -8,6 +8,7 @@ import * as researchApi from "./api/research";
 import { generateCarImage } from "./api/gemini";
 import * as perplexityApi from "./api/perplexity";
 import * as configuratorApi from "./api/configurator";
+import * as assistantApi from "./api/assistant";
 import { setupAuth, isAuthenticated, isAdmin } from "./auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -187,6 +188,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Gemini image generation endpoint
   app.post(`${apiPrefix}/gemini/generate-image`, generateCarImage);
+
+  // AI Assistant endpoints (K.I.T.T.)
+  app.post(`${apiPrefix}/ai/assistant`, assistantApi.assistantChat);
+  app.get(`${apiPrefix}/ai/historical-context`, assistantApi.getHistoricalContext);
+  app.post(`${apiPrefix}/ai/performance-prediction`, assistantApi.generatePerformancePrediction);
 
   // Perplexity API endpoints
   app.get(`${apiPrefix}/perplexity/car-info`, perplexityApi.getCarInformation);

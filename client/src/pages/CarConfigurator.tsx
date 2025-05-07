@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, ArrowRight, Info, Settings, Check, Search } from "lucide-react";
+import { ArrowLeft, ArrowRight, Info, Settings, Check, Search, MessageCircle, Activity, History } from "lucide-react";
 import VideoHeader from "@/components/layout/VideoHeader";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +13,8 @@ import { apiRequest } from "@/lib/queryClient";
 import ResearchPanel from "@/components/configurator/ResearchPanel";
 import PartResearchPanel from "@/components/configurator/PartResearchPanel";
 import ConfiguratorDashboard from "@/components/configurator/ConfiguratorDashboard";
+import { AIConfigAssistant } from "@/components/configurator/AIConfigAssistant";
+import { useAIAssistant } from "@/hooks/use-ai-assistant";
 
 const CarConfigurator = () => {
   // Configuration state
