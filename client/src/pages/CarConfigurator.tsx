@@ -1434,64 +1434,85 @@ const CarConfigurator = () => {
     <div>
       {/* K.I.T.T. Introduction Dialog - only shows on first load */}
       {showKittIntro && (
-        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-2xl bg-gradient-to-br from-burgundy to-black rounded-lg overflow-hidden shadow-2xl border border-burgundy/50 transform transition-all">
-            <div className="p-8 text-white">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="relative flex-shrink-0">
-                  <div className="w-16 h-16 rounded-full bg-burgundy flex items-center justify-center">
-                    <span className="relative flex h-8 w-8 animate-pulse">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-8 w-8 bg-white"></span>
-                    </span>
-                  </div>
-                </div>
-                <div>
-                  <h2 className="text-3xl font-bold">Meet K.I.T.T.</h2>
-                  <p className="text-white/80">Your AI Car Configuration Assistant</p>
-                </div>
-              </div>
+        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+          <div 
+            className="w-full max-w-2xl bg-white dark:bg-zinc-900 rounded-md overflow-hidden shadow-[0_20px_70px_-10px_rgba(0,0,0,0.3)] border border-zinc-200 dark:border-zinc-800 transform transition-all duration-500 ease-in-out"
+            style={{
+              backgroundImage: 'url("https://www.transparenttextures.com/patterns/carbon-fibre.png")',
+              backgroundBlendMode: 'overlay'
+            }}
+          >
+            <div className="relative">
+              {/* Subtle header accent */}
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-burgundy via-burgundy/80 to-burgundy/50"></div>
               
-              <p className="mb-6 text-lg">
-                Welcome to our state-of-the-art restomod car configurator! I'm K.I.T.T., your personal AI assistant, 
-                and I'm here to enhance your configuration experience with:
-              </p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                <div className="flex items-start gap-3">
-                  <MessageCircle className="h-6 w-6 text-burgundy flex-shrink-0 mt-1" />
+              <div className="p-10 text-charcoal dark:text-white">
+                <div className="flex items-center gap-6 mb-8">
+                  <div className="relative flex-shrink-0">
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-burgundy to-burgundy/80 flex items-center justify-center shadow-lg">
+                      <span className="relative flex h-7 w-7">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-40"></span>
+                        <span className="relative inline-flex rounded-full h-7 w-7 bg-white/90"></span>
+                      </span>
+                    </div>
+                  </div>
                   <div>
-                    <h3 className="font-bold">Interactive Chat</h3>
-                    <p className="text-white/70 text-sm">Ask questions about any car in our lineup</p>
+                    <h2 className="text-3xl font-light tracking-tight mb-1">Meet <span className="font-bold text-burgundy">K.I.T.T.</span></h2>
+                    <p className="text-zinc-500 dark:text-zinc-400 text-lg">Your AI Automotive Engineering Assistant</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <History className="h-6 w-6 text-burgundy flex-shrink-0 mt-1" />
-                  <div>
-                    <h3 className="font-bold">Historical Context</h3>
-                    <p className="text-white/70 text-sm">Discover the rich heritage of each vehicle</p>
+                
+                <p className="mb-8 text-lg font-light leading-relaxed text-zinc-700 dark:text-zinc-300">
+                  Elevate your custom restomod experience with our advanced AI assistant, designed to provide expert guidance throughout your configuration journey.
+                </p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                  <div className="flex items-start gap-4 group">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-burgundy/10 flex items-center justify-center group-hover:bg-burgundy/20 transition-colors duration-300">
+                      <MessageCircle className="h-5 w-5 text-burgundy" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-lg mb-1">Interactive Consultation</h3>
+                      <p className="text-zinc-500 dark:text-zinc-400">Expert guidance on drivetrain compatibility and performance optimization</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4 group">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-burgundy/10 flex items-center justify-center group-hover:bg-burgundy/20 transition-colors duration-300">
+                      <History className="h-5 w-5 text-burgundy" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-lg mb-1">Historical Heritage</h3>
+                      <p className="text-zinc-500 dark:text-zinc-400">Detailed insights into the rich legacy and evolution of classic vehicles</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4 group">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-burgundy/10 flex items-center justify-center group-hover:bg-burgundy/20 transition-colors duration-300">
+                      <Activity className="h-5 w-5 text-burgundy" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-lg mb-1">Performance Analytics</h3>
+                      <p className="text-zinc-500 dark:text-zinc-400">Sophisticated performance projections based on your component selections</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4 group">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-burgundy/10 flex items-center justify-center group-hover:bg-burgundy/20 transition-colors duration-300">
+                      <Zap className="h-5 w-5 text-burgundy" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-lg mb-1">Tailored Recommendations</h3>
+                      <p className="text-zinc-500 dark:text-zinc-400">Personalized suggestions for optimal component selection and styling</p>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <Activity className="h-6 w-6 text-burgundy flex-shrink-0 mt-1" />
-                  <div>
-                    <h3 className="font-bold">Performance Analysis</h3>
-                    <p className="text-white/70 text-sm">See how your configuration will perform</p>
-                  </div>
+                
+                <div className="pt-4 border-t border-zinc-200 dark:border-zinc-800 flex justify-end">
+                  <Button 
+                    onClick={() => setShowKittIntro(false)} 
+                    className="bg-burgundy hover:bg-burgundy/90 text-white font-medium text-base px-8 py-3 rounded-md transition-all duration-300 ease-in-out shadow-md hover:shadow-lg"
+                  >
+                    Begin Configuration
+                  </Button>
                 </div>
-                <div className="flex items-start gap-3">
-                  <Zap className="h-6 w-6 text-burgundy flex-shrink-0 mt-1" />
-                  <div>
-                    <h3 className="font-bold">Smart Recommendations</h3>
-                    <p className="text-white/70 text-sm">Get personalized configuration suggestions</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="mt-8 flex justify-end">
-                <Button onClick={() => setShowKittIntro(false)} className="bg-white text-burgundy hover:bg-white/90 font-bold text-lg px-8 py-6">
-                  Start Configuring With K.I.T.T.
-                </Button>
               </div>
             </div>
           </div>
@@ -1508,94 +1529,181 @@ const CarConfigurator = () => {
         showNavigation={false} // Don't show navigation to avoid duplicates with main header
       />
       
-      {/* AI Assistant */}
+      {/* AI Assistant - Premium Style */}
       {showAssistant && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-4xl h-[600px] bg-background rounded-lg overflow-hidden shadow-xl">
-            <AIConfigAssistant 
-              selectedConfig={selectedConfig} 
-              onRecommendationApply={(recommendations) => {
-                // Handle applying AI recommendations
-                console.log('Applying recommendations:', recommendations);
-                closeAssistant();
-              }}
-              onClose={closeAssistant}
-            />
-          </div>
-        </div>
-      )}
-      
-      {/* Historical Context Modal */}
-      {showHistoricalContext && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-4xl max-h-[80vh] bg-background rounded-lg overflow-auto shadow-xl">
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold">Historical Context</h2>
-                <Button variant="ghost" size="icon" onClick={() => setShowHistoricalContext(false)}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-                  <span className="sr-only">Close</span>
-                </Button>
-              </div>
+        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+          <div 
+            className="w-full max-w-4xl h-[600px] bg-white dark:bg-zinc-900 rounded-md overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.3)] border border-zinc-200 dark:border-zinc-800 transform transition-all duration-300 ease-in-out"
+            style={{
+              backgroundImage: 'url("https://www.transparenttextures.com/patterns/carbon-fibre.png")',
+              backgroundBlendMode: 'overlay'
+            }}
+          >
+            <div className="relative h-full">
+              {/* Subtle header accent */}
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-burgundy via-burgundy/80 to-burgundy/40 z-10"></div>
               
-              {isHistoricalContextLoading ? (
-                <div className="flex justify-center items-center py-12">
-                  <Loader2 className="h-8 w-8 animate-spin text-burgundy" />
-                </div>
-              ) : historicalContext ? (
-                <div className="space-y-6">
-                  {Object.entries(historicalContext.sections || {}).map(([title, content]) => (
-                    <div key={title} className="border-b border-border pb-4 last:border-0">
-                      <h3 className="text-xl font-semibold mb-2">{title}</h3>
-                      <p className="text-charcoal/80 whitespace-pre-line">{content as string}</p>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p>No historical information available.</p>
-              )}
+              <AIConfigAssistant 
+                selectedConfig={selectedConfig} 
+                onRecommendationApply={(recommendations) => {
+                  // Handle applying AI recommendations
+                  console.log('Applying recommendations:', recommendations);
+                  closeAssistant();
+                }}
+                onClose={closeAssistant}
+              />
             </div>
           </div>
         </div>
       )}
       
-      {/* Performance Prediction Modal */}
-      {showPerformancePrediction && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-4xl max-h-[80vh] bg-background rounded-lg overflow-auto shadow-xl">
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold">Performance Prediction</h2>
-                <Button variant="ghost" size="icon" onClick={() => setShowPerformancePrediction(false)}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-                  <span className="sr-only">Close</span>
-                </Button>
-              </div>
+      {/* Historical Context Modal - Premium Style */}
+      {showHistoricalContext && (
+        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+          <div 
+            className="w-full max-w-4xl max-h-[85vh] bg-white dark:bg-zinc-900 rounded-md overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.3)] border border-zinc-200 dark:border-zinc-800 transform transition-all duration-300 ease-in-out"
+            style={{
+              backgroundImage: 'url("https://www.transparenttextures.com/patterns/carbon-fibre.png")',
+              backgroundBlendMode: 'overlay'
+            }}
+          >
+            <div className="relative">
+              {/* Subtle header accent */}
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-burgundy via-burgundy/80 to-burgundy/40"></div>
               
-              {isPredictionLoading ? (
-                <div className="flex justify-center items-center py-12">
-                  <Loader2 className="h-8 w-8 animate-spin text-burgundy" />
+              <div className="py-8 px-10">
+                <div className="flex justify-between items-center mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="flex-shrink-0 w-9 h-9 rounded-full bg-burgundy/10 flex items-center justify-center">
+                      <History className="h-5 w-5 text-burgundy" />
+                    </div>
+                    <h2 className="text-2xl font-light tracking-tight">
+                      <span className="text-burgundy font-medium">Historical</span> Heritage
+                    </h2>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="icon" 
+                    onClick={() => setShowHistoricalContext(false)}
+                    className="rounded-full h-8 w-8 border-zinc-300 dark:border-zinc-700"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                      <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+                    </svg>
+                    <span className="sr-only">Close</span>
+                  </Button>
                 </div>
-              ) : performancePrediction ? (
-                <div className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {Object.entries(performancePrediction.metrics || {}).map(([key, value]) => (
-                      <Card key={key} className="overflow-hidden">
-                        <CardContent className="p-6">
-                          <h3 className="text-lg font-semibold capitalize mb-2">{key.replace(/([A-Z])/g, ' $1').trim()}</h3>
-                          <p className="text-2xl font-bold text-burgundy">{String(value)}</p>
-                        </CardContent>
-                      </Card>
+                
+                {isHistoricalContextLoading ? (
+                  <div className="flex flex-col justify-center items-center py-20">
+                    <div className="relative">
+                      <Loader2 className="h-10 w-10 animate-spin text-burgundy opacity-80" />
+                      <div className="absolute inset-0 h-10 w-10 animate-pulse opacity-30 bg-burgundy/30 rounded-full blur-md"></div>
+                    </div>
+                    <p className="mt-4 text-zinc-500 dark:text-zinc-400 text-sm font-light">
+                      Retrieving historical information...
+                    </p>
+                  </div>
+                ) : historicalContext ? (
+                  <div className="space-y-8 overflow-auto max-h-[60vh] pr-2 styled-scrollbar">
+                    {Object.entries(historicalContext.sections || {}).map(([title, content], index) => (
+                      <div key={title} className={`pb-8 ${index < Object.entries(historicalContext.sections || {}).length - 1 ? 'border-b border-zinc-200 dark:border-zinc-800' : ''}`}>
+                        <h3 className="text-xl font-medium text-burgundy mb-3">{title}</h3>
+                        <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed whitespace-pre-line font-light">{content as string}</p>
+                      </div>
                     ))}
                   </div>
-                  <div className="border-t border-border pt-4">
-                    <h3 className="text-xl font-semibold mb-2">Details</h3>
-                    <p className="text-charcoal/80 whitespace-pre-line">{performancePrediction.fullText}</p>
+                ) : (
+                  <div className="py-8 text-center">
+                    <p className="text-zinc-500 dark:text-zinc-400">No historical information available for this model.</p>
                   </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Performance Prediction Modal - Premium Style */}
+      {showPerformancePrediction && (
+        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+          <div 
+            className="w-full max-w-4xl max-h-[85vh] bg-white dark:bg-zinc-900 rounded-md overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.3)] border border-zinc-200 dark:border-zinc-800 transform transition-all duration-300 ease-in-out"
+            style={{
+              backgroundImage: 'url("https://www.transparenttextures.com/patterns/carbon-fibre.png")',
+              backgroundBlendMode: 'overlay'
+            }}
+          >
+            <div className="relative">
+              {/* Subtle header accent */}
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-burgundy via-burgundy/80 to-burgundy/40"></div>
+              
+              <div className="py-8 px-10">
+                <div className="flex justify-between items-center mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="flex-shrink-0 w-9 h-9 rounded-full bg-burgundy/10 flex items-center justify-center">
+                      <Activity className="h-5 w-5 text-burgundy" />
+                    </div>
+                    <h2 className="text-2xl font-light tracking-tight">
+                      <span className="text-burgundy font-medium">Performance</span> Analytics
+                    </h2>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="icon" 
+                    onClick={() => setShowPerformancePrediction(false)}
+                    className="rounded-full h-8 w-8 border-zinc-300 dark:border-zinc-700"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                      <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+                    </svg>
+                    <span className="sr-only">Close</span>
+                  </Button>
                 </div>
-              ) : (
-                <p>No performance prediction available.</p>
-              )}
+                
+                {isPredictionLoading ? (
+                  <div className="flex flex-col justify-center items-center py-20">
+                    <div className="relative">
+                      <Loader2 className="h-10 w-10 animate-spin text-burgundy opacity-80" />
+                      <div className="absolute inset-0 h-10 w-10 animate-pulse opacity-30 bg-burgundy/30 rounded-full blur-md"></div>
+                    </div>
+                    <p className="mt-4 text-zinc-500 dark:text-zinc-400 text-sm font-light">
+                      Analyzing performance metrics...
+                    </p>
+                  </div>
+                ) : performancePrediction ? (
+                  <div className="space-y-10">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                      {Object.entries(performancePrediction.metrics || {}).map(([key, value]) => (
+                        <div 
+                          key={key} 
+                          className="bg-gradient-to-br from-white to-zinc-50 dark:from-zinc-800 dark:to-zinc-900 rounded-lg p-6 border border-zinc-200 dark:border-zinc-700 shadow-sm transition-all duration-300 hover:shadow-md group"
+                        >
+                          <div className="flex flex-col">
+                            <h3 className="text-sm font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1">
+                              {key.replace(/([A-Z])/g, ' $1').trim()}
+                            </h3>
+                            <p className="text-3xl font-light tracking-tight text-burgundy group-hover:text-burgundy/90 transition-colors">
+                              {String(value)}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    <div className="pt-6 border-t border-zinc-200 dark:border-zinc-800">
+                      <h3 className="text-lg font-medium text-burgundy mb-4">Technical Analysis</h3>
+                      <div className="bg-zinc-50 dark:bg-zinc-800/50 rounded-lg p-6 text-zinc-700 dark:text-zinc-300 leading-relaxed whitespace-pre-line font-light">
+                        {performancePrediction.fullText}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="py-8 text-center">
+                    <p className="text-zinc-500 dark:text-zinc-400">No performance analysis available for this configuration.</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -1603,70 +1711,82 @@ const CarConfigurator = () => {
       
       {/* Main Content */}
       <div className="container mx-auto px-4 py-16">
-        {/* Prominent K.I.T.T. AI Assistant Bar */}
-        <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-r from-burgundy to-burgundy/80 text-white py-3 px-4 shadow-lg border-t border-white/20">
-          <div className="container mx-auto flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <span className="relative flex h-4 w-4">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-4 w-4 bg-white"></span>
-              </span>
-              <span className="font-bold text-lg">K.I.T.T. AI Assistance Available</span>
-            </div>
-            
-            <div className="flex items-center gap-4">
-              {/* Main Assistant Button */}
-              <Button 
-                onClick={openAssistant}
-                className="bg-white hover:bg-white/90 text-burgundy font-bold shadow-lg flex items-center gap-2 px-6"
-                size="lg"
-              >
-                <MessageCircle className="h-5 w-5" />
-                Chat with K.I.T.T.
-              </Button>
+        {/* Premium K.I.T.T. AI Assistant Interface */}
+        <div className="fixed bottom-0 left-0 right-0 z-50">
+          {/* Subtle top border accent */}
+          <div className="h-px w-full bg-gradient-to-r from-transparent via-burgundy/30 to-transparent"></div>
+          
+          {/* Main assistance bar */}
+          <div className="backdrop-blur-md bg-white/90 dark:bg-zinc-900/90 text-charcoal dark:text-white py-4 px-6 shadow-[0_-4px_20px_-2px_rgba(0,0,0,0.1)] border-t border-zinc-200 dark:border-zinc-800">
+            <div className="container mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-burgundy opacity-60"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-burgundy"></span>
+                </div>
+                <span className="text-lg tracking-tight">
+                  <span className="font-semibold text-burgundy">K.I.T.T.</span>
+                  <span className="text-zinc-600 dark:text-zinc-300 font-light"> AI Engineering Assistant</span>
+                </span>
+              </div>
               
-              {/* Only show these buttons when applicable */}
-              {selectedConfig.model && (
+              <div className="flex flex-wrap items-center gap-3">
+                {/* Primary Assistant Button */}
                 <Button 
-                  onClick={fetchHistoricalContext}
-                  className="bg-white/20 hover:bg-white/30 text-white shadow-lg flex items-center gap-2"
-                  disabled={isHistoricalContextLoading}
+                  onClick={openAssistant}
+                  className="bg-burgundy hover:bg-burgundy/90 text-white font-medium rounded-md transition-all duration-300 shadow-sm hover:shadow-md flex items-center gap-2 px-4"
                 >
-                  {isHistoricalContextLoading ? (
-                    <Loader2 className="h-5 w-5 animate-spin" />
-                  ) : (
-                    <History className="h-5 w-5" />
-                  )}
-                  Vehicle History
+                  <MessageCircle className="h-5 w-5" />
+                  <span>Configuration Assistant</span>
                 </Button>
-              )}
-              
-              {selectedConfig.engineType && (
-                <Button 
-                  onClick={generatePerformancePrediction}
-                  className="bg-white/20 hover:bg-white/30 text-white shadow-lg flex items-center gap-2"
-                  disabled={isPredictionLoading}
-                >
-                  {isPredictionLoading ? (
-                    <Loader2 className="h-5 w-5 animate-spin" />
-                  ) : (
-                    <Activity className="h-5 w-5" />
+                
+                {/* Additional features that appear conditionally */}
+                <div className="flex gap-2">
+                  {selectedConfig.model && (
+                    <Button 
+                      onClick={fetchHistoricalContext}
+                      variant="outline"
+                      className="border-zinc-300 dark:border-zinc-700 bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-800 dark:text-zinc-200 rounded-md transition-all duration-300 flex items-center gap-2"
+                      disabled={isHistoricalContextLoading}
+                    >
+                      {isHistoricalContextLoading ? (
+                        <Loader2 className="h-4 w-4 animate-spin text-burgundy" />
+                      ) : (
+                        <History className="h-4 w-4 text-burgundy" />
+                      )}
+                      <span>Historical Analysis</span>
+                    </Button>
                   )}
-                  Performance Analysis
-                </Button>
-              )}
+                  
+                  {selectedConfig.engineType && (
+                    <Button 
+                      onClick={generatePerformancePrediction}
+                      variant="outline"
+                      className="border-zinc-300 dark:border-zinc-700 bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-800 dark:text-zinc-200 rounded-md transition-all duration-300 flex items-center gap-2"
+                      disabled={isPredictionLoading}
+                    >
+                      {isPredictionLoading ? (
+                        <Loader2 className="h-4 w-4 animate-spin text-burgundy" />
+                      ) : (
+                        <Activity className="h-4 w-4 text-burgundy" />
+                      )}
+                      <span>Performance Analytics</span>
+                    </Button>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
         
-        {/* Mobile Floating Assistant Button for smaller screens */}
-        <div className="fixed bottom-20 right-4 z-50 md:hidden">
+        {/* Mobile Floating Assistant Button with subtle animation */}
+        <div className="fixed bottom-24 right-6 z-50 md:hidden">
+          <div className="absolute -inset-1.5 bg-gradient-to-r from-burgundy to-burgundy/60 rounded-full animate-pulse opacity-70 blur-sm"></div>
           <Button 
             onClick={openAssistant}
-            className="h-16 w-16 rounded-full bg-burgundy hover:bg-burgundy/90 shadow-lg flex items-center justify-center"
-            size="lg"
+            className="relative h-14 w-14 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-lg flex items-center justify-center transition-transform duration-300 hover:scale-105"
           >
-            <MessageCircle className="h-8 w-8 text-white" />
+            <MessageCircle className="h-6 w-6 text-burgundy" />
             <span className="sr-only">Open K.I.T.T. Assistant</span>
           </Button>
         </div>
