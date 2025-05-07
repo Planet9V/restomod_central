@@ -1462,7 +1462,7 @@ const CarConfigurator = () => {
                   </div>
                 </div>
                 
-                <p className="mb-8 text-lg font-light leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <p className="mb-8 text-lg font-light leading-relaxed text-black dark:text-zinc-300">
                   Elevate your custom restomod experience with our advanced AI assistant, designed to provide expert guidance throughout your configuration journey.
                 </p>
                 
@@ -1472,8 +1472,8 @@ const CarConfigurator = () => {
                       <MessageCircle className="h-5 w-5 text-burgundy" />
                     </div>
                     <div>
-                      <h3 className="font-medium text-lg mb-1">Interactive Consultation</h3>
-                      <p className="text-zinc-500 dark:text-zinc-400">Expert guidance on drivetrain compatibility and performance optimization</p>
+                      <h3 className="font-medium text-lg mb-1 text-black dark:text-white">Interactive Consultation</h3>
+                      <p className="text-black/70 dark:text-zinc-400">Expert guidance on drivetrain compatibility and performance optimization</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4 group">
@@ -1481,8 +1481,8 @@ const CarConfigurator = () => {
                       <History className="h-5 w-5 text-burgundy" />
                     </div>
                     <div>
-                      <h3 className="font-medium text-lg mb-1">Historical Heritage</h3>
-                      <p className="text-zinc-500 dark:text-zinc-400">Detailed insights into the rich legacy and evolution of classic vehicles</p>
+                      <h3 className="font-medium text-lg mb-1 text-black dark:text-white">Historical Heritage</h3>
+                      <p className="text-black/70 dark:text-zinc-400">Detailed insights into the rich legacy and evolution of classic vehicles</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4 group">
@@ -1490,8 +1490,8 @@ const CarConfigurator = () => {
                       <Activity className="h-5 w-5 text-burgundy" />
                     </div>
                     <div>
-                      <h3 className="font-medium text-lg mb-1">Performance Analytics</h3>
-                      <p className="text-zinc-500 dark:text-zinc-400">Sophisticated performance projections based on your component selections</p>
+                      <h3 className="font-medium text-lg mb-1 text-black dark:text-white">Performance Analytics</h3>
+                      <p className="text-black/70 dark:text-zinc-400">Sophisticated performance projections based on your component selections</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4 group">
@@ -1499,8 +1499,8 @@ const CarConfigurator = () => {
                       <Zap className="h-5 w-5 text-burgundy" />
                     </div>
                     <div>
-                      <h3 className="font-medium text-lg mb-1">Tailored Recommendations</h3>
-                      <p className="text-zinc-500 dark:text-zinc-400">Personalized suggestions for optimal component selection and styling</p>
+                      <h3 className="font-medium text-lg mb-1 text-black dark:text-white">Tailored Recommendations</h3>
+                      <p className="text-black/70 dark:text-zinc-400">Personalized suggestions for optimal component selection and styling</p>
                     </div>
                   </div>
                 </div>
@@ -1609,7 +1609,7 @@ const CarConfigurator = () => {
                     {Object.entries(historicalContext.sections || {}).map(([title, content], index) => (
                       <div key={title} className={`pb-8 ${index < Object.entries(historicalContext.sections || {}).length - 1 ? 'border-b border-zinc-200 dark:border-zinc-800' : ''}`}>
                         <h3 className="text-xl font-medium text-burgundy mb-3">{title}</h3>
-                        <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed whitespace-pre-line font-light">{content as string}</p>
+                        <p className="text-black dark:text-zinc-300 leading-relaxed whitespace-pre-line font-light">{content as string}</p>
                       </div>
                     ))}
                   </div>
@@ -1693,7 +1693,7 @@ const CarConfigurator = () => {
                     
                     <div className="pt-6 border-t border-zinc-200 dark:border-zinc-800">
                       <h3 className="text-lg font-medium text-burgundy mb-4">Technical Analysis</h3>
-                      <div className="bg-zinc-50 dark:bg-zinc-800/50 rounded-lg p-6 text-zinc-700 dark:text-zinc-300 leading-relaxed whitespace-pre-line font-light">
+                      <div className="bg-zinc-50 dark:bg-zinc-800/50 rounded-lg p-6 text-black dark:text-zinc-300 leading-relaxed whitespace-pre-line font-light">
                         {performancePrediction.fullText}
                       </div>
                     </div>
@@ -1710,74 +1710,7 @@ const CarConfigurator = () => {
       )}
       
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-16">
-        {/* Premium K.I.T.T. AI Assistant Interface */}
-        <div className="fixed bottom-0 left-0 right-0 z-50">
-          {/* Subtle top border accent */}
-          <div className="h-px w-full bg-gradient-to-r from-transparent via-burgundy/30 to-transparent"></div>
-          
-          {/* Main assistance bar */}
-          <div className="backdrop-blur-md bg-white/90 dark:bg-zinc-900/90 text-charcoal dark:text-white py-4 px-6 shadow-[0_-4px_20px_-2px_rgba(0,0,0,0.1)] border-t border-zinc-200 dark:border-zinc-800">
-            <div className="container mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="relative flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-burgundy opacity-60"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-burgundy"></span>
-                </div>
-                <span className="text-lg tracking-tight">
-                  <span className="font-semibold text-burgundy">K.I.T.T.</span>
-                  <span className="text-zinc-600 dark:text-zinc-300 font-light"> AI Engineering Assistant</span>
-                </span>
-              </div>
-              
-              <div className="flex flex-wrap items-center gap-3">
-                {/* Primary Assistant Button */}
-                <Button 
-                  onClick={openAssistant}
-                  className="bg-burgundy hover:bg-burgundy/90 text-white font-medium rounded-md transition-all duration-300 shadow-sm hover:shadow-md flex items-center gap-2 px-4"
-                >
-                  <MessageCircle className="h-5 w-5" />
-                  <span>Configuration Assistant</span>
-                </Button>
-                
-                {/* Additional features that appear conditionally */}
-                <div className="flex gap-2">
-                  {selectedConfig.model && (
-                    <Button 
-                      onClick={fetchHistoricalContext}
-                      variant="outline"
-                      className="border-zinc-300 dark:border-zinc-700 bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-800 dark:text-zinc-200 rounded-md transition-all duration-300 flex items-center gap-2"
-                      disabled={isHistoricalContextLoading}
-                    >
-                      {isHistoricalContextLoading ? (
-                        <Loader2 className="h-4 w-4 animate-spin text-burgundy" />
-                      ) : (
-                        <History className="h-4 w-4 text-burgundy" />
-                      )}
-                      <span>Historical Analysis</span>
-                    </Button>
-                  )}
-                  
-                  {selectedConfig.engineType && (
-                    <Button 
-                      onClick={generatePerformancePrediction}
-                      variant="outline"
-                      className="border-zinc-300 dark:border-zinc-700 bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-800 dark:text-zinc-200 rounded-md transition-all duration-300 flex items-center gap-2"
-                      disabled={isPredictionLoading}
-                    >
-                      {isPredictionLoading ? (
-                        <Loader2 className="h-4 w-4 animate-spin text-burgundy" />
-                      ) : (
-                        <Activity className="h-4 w-4 text-burgundy" />
-                      )}
-                      <span>Performance Analytics</span>
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="container mx-auto px-4 py-16 pb-28">
         
         {/* Mobile Floating Assistant Button with subtle animation */}
         <div className="fixed bottom-24 right-6 z-50 md:hidden">
@@ -1789,6 +1722,59 @@ const CarConfigurator = () => {
             <MessageCircle className="h-6 w-6 text-burgundy" />
             <span className="sr-only">Open K.I.T.T. Assistant</span>
           </Button>
+        </div>
+        
+        {/* AI Assistant Controls */}
+        <div className="flex justify-end mb-4">
+          <div className="flex items-center gap-3">
+            <div className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-burgundy opacity-60"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-burgundy"></span>
+            </div>
+            <Button 
+              onClick={openAssistant}
+              variant="outline"
+              size="sm"
+              className="border-zinc-300 dark:border-zinc-700 bg-white/90 dark:bg-zinc-900/90 hover:bg-zinc-100 dark:hover:bg-zinc-800 shadow-sm text-black dark:text-zinc-200 rounded-md transition-all duration-300 flex items-center gap-2"
+            >
+              <MessageCircle className="h-3.5 w-3.5 text-burgundy" />
+              <span className="text-xs font-medium">K.I.T.T. Assistant</span>
+            </Button>
+            
+            {selectedConfig.model && (
+              <Button 
+                onClick={fetchHistoricalContext}
+                variant="outline"
+                size="sm"
+                className="border-zinc-300 dark:border-zinc-700 bg-white/90 dark:bg-zinc-900/90 hover:bg-zinc-100 dark:hover:bg-zinc-800 shadow-sm text-black dark:text-zinc-200 rounded-md transition-all duration-300 flex items-center gap-2"
+                disabled={isHistoricalContextLoading}
+              >
+                {isHistoricalContextLoading ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin text-burgundy" />
+                ) : (
+                  <History className="h-3.5 w-3.5 text-burgundy" />
+                )}
+                <span className="text-xs font-medium">Heritage</span>
+              </Button>
+            )}
+            
+            {selectedConfig.engineType && (
+              <Button 
+                onClick={generatePerformancePrediction}
+                variant="outline"
+                size="sm"
+                className="border-zinc-300 dark:border-zinc-700 bg-white/90 dark:bg-zinc-900/90 hover:bg-zinc-100 dark:hover:bg-zinc-800 shadow-sm text-black dark:text-zinc-200 rounded-md transition-all duration-300 flex items-center gap-2"
+                disabled={isPredictionLoading}
+              >
+                {isPredictionLoading ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin text-burgundy" />
+                ) : (
+                  <Activity className="h-3.5 w-3.5 text-burgundy" />
+                )}
+                <span className="text-xs font-medium">Performance</span>
+              </Button>
+            )}
+          </div>
         </div>
         
         {/* Progress Steps */}
