@@ -10,24 +10,25 @@ export async function getResearchArticles(req: Request, res: Response) {
   try {
     const { category, tag, search, page = 1, limit = 10 } = req.query;
     
-    let query = db.select().from(researchArticles);
+    // Start building the query
+    let queryBuilder = db.select().from(researchArticles);
     
     // Apply category filter if provided
     if (category && typeof category === 'string') {
-      query = query.where(eq(researchArticles.category, category));
+      queryBuilder = queryBuilder.where(eq(researchArticles.category, category));
     }
     
     // Apply tag filter if provided
     if (tag && typeof tag === 'string') {
       // We need to search for this tag in the tags JSONB array
-      query = query.where(
+      queryBuilder = queryBuilder.where(
         sql`${researchArticles.tags} @> ${JSON.stringify([tag])}`
       );
     }
     
     // Apply search filter if provided
     if (search && typeof search === 'string') {
-      query = query.where(
+      queryBuilder = queryBuilder.where(
         or(
           like(researchArticles.title, `%${search}%`),
           like(researchArticles.excerpt, `%${search}%`),
@@ -48,10 +49,11 @@ export async function getResearchArticles(req: Request, res: Response) {
     const total = countResult[0]?.count || 0;
     
     // Apply ordering and pagination
-    const articles = await query
+    const articles = await queryBuilder
       .orderBy(desc(researchArticles.publishDate))
       .limit(Number(limit))
-      .offset(offset);
+      .offset(offset)
+      .execute();
     
     return res.status(200).json({
       articles,

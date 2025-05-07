@@ -1,135 +1,79 @@
-import { ResearchArticle, researchArticles } from "@shared/schema";
+/**
+ * Article Generator Service
+ * 
+ * Automatically generates research articles about restomods and classic cars
+ * using the Perplexity AI API.
+ */
+
 import { db } from "@db";
+import { researchArticles } from "@shared/schema";
+import { eq, like } from "drizzle-orm";
 import slugify from "slugify";
-import { eq } from "drizzle-orm";
+import fetch from "node-fetch";
 
-// Categories for research articles
+// Categories for the research articles
 export const ARTICLE_CATEGORIES = [
+  "classic-cars",
+  "restomod-tech",
   "market-trends",
+  "automotive-history",
   "restoration-techniques",
-  "classic-models",
-  "modern-upgrades",
-  "investment-analysis",
-  "historical-context"
+  "car-collection"
 ];
 
-// Interesting topics for article generation
+// Topics to choose from for article generation
+// These are used as a starting point for AI article generation
 const ARTICLE_TOPICS = [
-  // Market trends
-  { 
-    topic: "The Rising Value of 1960s Muscle Cars in Today's Market", 
-    category: "market-trends",
-    tags: ["investment", "muscle-cars", "1960s", "market-value"]
-  },
-  { 
-    topic: "Collectible Car Auctions: How Restomods are Outperforming Original Classics", 
-    category: "market-trends",
-    tags: ["auctions", "collectibles", "restomods", "investment"]
-  },
-  { 
-    topic: "The Premium Market for Celebrity-Owned Restomods", 
-    category: "market-trends",
-    tags: ["celebrity", "premium", "market-value", "collectors"]
-  },
+  // Classic Car History
+  "The Evolution of the Ford Mustang from 1964 to Today",
+  "How the 1969 Dodge Charger Became an American Icon",
+  "The Cultural Impact of American Muscle Cars in 1960s Cinema",
+  "Forgotten Classics: Overlooked American Cars of the 1950s",
+  "European Sports Cars That Changed Automotive Design Forever",
   
-  // Restoration techniques
-  { 
-    topic: "Balancing Authenticity and Performance in Chassis Restoration", 
-    category: "restoration-techniques",
-    tags: ["chassis", "authenticity", "performance", "engineering"]
-  },
-  { 
-    topic: "Paint Preservation Techniques for Show-Quality Restomods", 
-    category: "restoration-techniques",
-    tags: ["paint", "preservation", "detailing", "finish"]
-  },
-  { 
-    topic: "3D Printing Applications in Classic Car Restoration", 
-    category: "restoration-techniques",
-    tags: ["3d-printing", "technology", "parts", "innovation"]
-  },
+  // Restomod Technology
+  "Modern Engine Swaps: Bringing Classic Cars into the 21st Century",
+  "Digital Dashboards vs. Classic Gauges: The Tech Behind Modern Restomods",
+  "Advanced Suspension Systems for Classic Cars",
+  "Battery Technology for Classic Car Electrification",
+  "3D Printing in Classic Car Restoration: Creating Unavailable Parts",
   
-  // Classic models
-  { 
-    topic: "The Enduring Appeal of the 1967 Ford Mustang Fastback", 
-    category: "classic-models",
-    tags: ["ford", "mustang", "1967", "fastback", "muscle-cars"]
-  },
-  { 
-    topic: "Chevrolet Camaro Through the Decades: Evolution of an American Icon", 
-    category: "classic-models",
-    tags: ["chevrolet", "camaro", "history", "evolution", "muscle-cars"]
-  },
-  { 
-    topic: "Forgotten Classics: The Underappreciated Cars of the 1950s", 
-    category: "classic-models",
-    tags: ["1950s", "rare", "undervalued", "collectibles"]
-  },
+  // Market Trends
+  "Investment Guide: Which Classic Cars Are Appreciating in 2025?",
+  "The Economics of Restomod Projects: Cost vs. Value",
+  "How Barrett-Jackson Auctions Have Shaped the Classic Car Market",
+  "Collecting Trends: Why 1990s Cars Are the New Vintage Hotspot",
+  "The Impact of Automotive Heritage on Modern Car Values",
   
-  // Modern upgrades
-  { 
-    topic: "Modern Fuel Injection Systems for Classic V8 Engines", 
-    category: "modern-upgrades",
-    tags: ["fuel-injection", "v8", "performance", "engine"]
-  },
-  { 
-    topic: "Integrating Smart Technology into Classic Car Interiors", 
-    category: "modern-upgrades",
-    tags: ["smart-tech", "interior", "connectivity", "modernization"]
-  },
-  { 
-    topic: "Electric Conversion Options for Classic American Trucks", 
-    category: "modern-upgrades",
-    tags: ["electric", "conversion", "trucks", "sustainability"]
-  },
+  // Restoration Techniques
+  "Metal Fabrication Techniques for Classic Car Bodywork",
+  "Paint Technology Evolution: From Lacquer to Modern Water-Based Systems",
+  "Preserving Patina: The Art of Minimal Restoration",
+  "Upholstery Materials That Balance Authenticity and Durability",
+  "Engine Rebuilding Essentials for Classic V8s",
   
-  // Investment analysis
-  { 
-    topic: "Long-term Value Projection for 1960s vs. 1970s American Muscle", 
-    category: "investment-analysis",
-    tags: ["investment", "muscle-cars", "value", "projection"]
-  },
-  { 
-    topic: "Risk Assessment: Investing in Rare European Classics vs. American Icons", 
-    category: "investment-analysis",
-    tags: ["risk", "european", "american", "investment"]
-  },
-  { 
-    topic: "The Collector's Guide to Documenting Restomod Provenance", 
-    category: "investment-analysis",
-    tags: ["provenance", "documentation", "collector", "value"]
-  },
+  // Car Collection
+  "Building the Perfect Car Collection: Balance vs. Specialization",
+  "Climate-Controlled Storage Solutions for Valuable Classics",
+  "The Psychology Behind Car Collecting: Why We Love Classic Automobiles",
+  "Insurance Considerations for High-Value Classic Car Collections",
+  "Digital Documentation Systems for Classic Car Collections",
   
-  // Historical context
-  { 
-    topic: "The Cultural Impact of American Muscle Cars in 1960s Cinema", 
-    category: "historical-context",
-    tags: ["culture", "cinema", "1960s", "americana"]
-  },
-  { 
-    topic: "From Factory to Legend: The Story of the Shelby GT500", 
-    category: "historical-context",
-    tags: ["shelby", "gt500", "history", "ford"]
-  },
-  { 
-    topic: "The Oil Crisis and Its Lasting Effect on Classic American Car Design", 
-    category: "historical-context",
-    tags: ["oil-crisis", "design", "history", "economy"]
-  }
+  // Automotive History
+  "The Rise and Fall of American Automotive Manufacturing Giants",
+  "How WWII Changed Automobile Design and Engineering",
+  "The Oil Crisis and Its Lasting Impact on American Car Culture",
+  "Influential Automotive Designers Who Shaped Car History",
+  "Racing Innovations That Made Their Way to Production Cars"
 ];
 
-// Stock images for restomod articles
-const ARTICLE_IMAGES = [
-  "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=2070", // Ford Mustang
-  "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=2083", // Classic car at sunset
-  "https://images.unsplash.com/photo-1583121274602-3e2820c69888?q=80&w=2070", // Vintage car
-  "https://images.unsplash.com/photo-1567808291548-fc3ee04dbcf0?q=80&w=2071", // Car auction
-  "https://images.unsplash.com/photo-1626668893632-6f3a4466d22f?q=80&w=2072", // Blue muscle car
-  "https://images.unsplash.com/photo-1581112877498-bbe916e42929?q=80&w=1974", // Red muscle car
-  "https://images.unsplash.com/photo-1611566026373-c6c8da0ea861?q=80&w=1935", // Classic interior
-  "https://images.unsplash.com/photo-1544455379-7d3f284b5e2c?q=80&w=1828", // Engine closeup
-  "https://images.unsplash.com/photo-1533290602255-4da913cbe5ec?q=80&w=1974", // Classic car wheel
-  "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=1600", // 1953 Ford F100
+// Tags for categorizing articles
+const COMMON_TAGS = [
+  "classic cars", "restomods", "automotive history", "muscle cars", 
+  "American classics", "European classics", "restoration", "car collecting",
+  "automotive design", "car value", "investment vehicles", "performance upgrades",
+  "custom builds", "automotive technology", "vintage automobiles", "car auctions",
+  "hot rods", "collector cars", "automobile preservation", "automotive engineering"
 ];
 
 /**
@@ -144,25 +88,59 @@ function getRandomItem<T>(array: T[]): T {
  */
 function getRecentRandomDate(): Date {
   const now = new Date();
-  const pastMonth = new Date();
-  pastMonth.setMonth(now.getMonth() - 1);
+  const oneMonthAgo = new Date();
+  oneMonthAgo.setMonth(now.getMonth() - 1);
   
-  const randomTimestamp = pastMonth.getTime() + Math.random() * (now.getTime() - pastMonth.getTime());
-  return new Date(randomTimestamp);
+  const randomTime = oneMonthAgo.getTime() + Math.random() * (now.getTime() - oneMonthAgo.getTime());
+  return new Date(randomTime);
 }
 
 /**
  * Check if an article topic already exists
  */
 async function topicExists(topic: string): Promise<boolean> {
-  const articles = await db.select().from(researchArticles).where(eq(researchArticles.title, topic));
-  return articles.length > 0;
+  const existingArticles = await db
+    .select({ id: researchArticles.id })
+    .from(researchArticles)
+    .where(like(researchArticles.title, `%${topic}%`))
+    .limit(1);
+  
+  return existingArticles.length > 0;
 }
 
 /**
  * Generate article using Perplexity AI API
  */
 async function generateArticleContent(topic: string, category: string): Promise<{ content: string, excerpt: string }> {
+  if (!process.env.PERPLEXITY_API_KEY) {
+    throw new Error("PERPLEXITY_API_KEY environment variable is not set");
+  }
+  
+  console.log(`Generating article for topic: ${topic} (Category: ${category})`);
+  
+  const formattedCategory = category.replace(/-/g, ' ');
+  
+  const prompt = `
+    Write a comprehensive, informative, and engaging article about "${topic}" for a premium restomod and classic car enthusiast website.
+    
+    The article should:
+    - Be written in a sophisticated tone appropriate for affluent car collectors and enthusiasts
+    - Include historical context, technical details, and market insights where relevant
+    - Be approximately 1000-1500 words
+    - Be structured with Markdown formatting using ## for section headings
+    - Begin with a compelling introduction that doesn't explicitly state "Introduction"
+    - Include 3-5 distinct sections with informative headings
+    - End with a conclusion section
+    - The content should be highly informative and educational, avoid generic statements
+    - Specifically relate to ${formattedCategory} where appropriate
+    
+    Also provide a 2-3 sentence excerpt that would appear as a preview of the article.
+    Format your response as follows:
+    
+    CONTENT: [full article content with Markdown formatting]
+    EXCERPT: [brief excerpt for the article preview]
+  `;
+
   try {
     const response = await fetch("https://api.perplexity.ai/chat/completions", {
       method: "POST",
@@ -175,122 +153,110 @@ async function generateArticleContent(topic: string, category: string): Promise<
         messages: [
           {
             role: "system",
-            content: `You are an expert automotive journalist specializing in classic cars, restomods, and collectible vehicles. 
-            Write educational, accurate, and engaging content that provides valuable insights for enthusiasts and collectors.
-            Use a professional tone that balances technical expertise with accessibility.
-            Include specific details, historical references, and market insights where appropriate.
-            Format the article with clear sections using markdown heading formatting.`
+            content: "You are an expert automotive journalist specializing in classic cars, restomods, and collectible vehicles. Your articles are published in prestigious automotive magazines. Write with authority, detailed knowledge, and a sophisticated tone."
           },
-          {
-            role: "user",
-            content: `Write a detailed, well-researched article on "${topic}" for the "${category}" category of our classic car and restomod website.
-            The article should be approximately 800-1000 words, divided into clear sections with headings.
-            Include factual information, historical context, and industry insights where relevant.
-            End with a conclusion that summarizes key points and offers some forward-looking perspective.
-            Also provide a brief 2-3 sentence excerpt that summarizes the article for display in article listings.`
+          { 
+            role: "user", 
+            content: prompt 
           }
         ],
-        temperature: 0.2,
-        max_tokens: 3000,
-        top_p: 0.9
+        max_tokens: 4000,
+        temperature: 0.7
       })
     });
 
-    const data = await response.json();
+    const data = await response.json() as any;
     
-    if (!data.choices || !data.choices[0]?.message?.content) {
-      throw new Error("Invalid response from AI service");
-    }
-
-    const fullContent = data.choices[0].message.content;
-    
-    // Extract excerpt (assuming the excerpt is at the end)
-    const excerptMatch = fullContent.match(/Excerpt:\s*([\s\S]+)$/i) || 
-                         fullContent.match(/Summary:\s*([\s\S]+)$/i);
-    
-    let content = fullContent;
-    let excerpt = "";
-    
-    if (excerptMatch) {
-      // Remove the excerpt from the main content
-      content = fullContent.replace(excerptMatch[0], "").trim();
-      excerpt = excerptMatch[1].trim();
+    if (!response.ok) {
+      console.error("Perplexity API Error:", data);
+      throw new Error(`Perplexity API error: ${data.error?.message || "Unknown error"}`);
     }
     
-    // If no explicit excerpt found, use the first paragraph
-    if (!excerpt) {
-      const firstParagraph = fullContent.split('\n\n')[0].trim();
-      excerpt = firstParagraph.length > 200 
-        ? firstParagraph.substring(0, 197) + '...' 
-        : firstParagraph;
+    const text = data.choices[0].message.content;
+    
+    // Extract content and excerpt
+    const contentMatch = text.match(/CONTENT:([\s\S]*?)(?:EXCERPT:|$)/i);
+    const excerptMatch = text.match(/EXCERPT:([\s\S]*?)$/i);
+    
+    if (!contentMatch) {
+      throw new Error("Failed to extract article content from AI response");
     }
+    
+    const content = contentMatch[1].trim();
+    const excerpt = excerptMatch ? excerptMatch[1].trim() : content.substring(0, 150) + "...";
     
     return { content, excerpt };
   } catch (error) {
     console.error("Error generating article content:", error);
-    throw new Error("Failed to generate article content");
+    throw new Error(`Failed to generate article: ${(error as Error).message}`);
   }
 }
 
 /**
  * Create a new research article
  */
-export async function generateNewArticle(): Promise<ResearchArticle | null> {
+export async function generateNewArticle(): Promise<typeof researchArticles.$inferSelect | null> {
   try {
-    // Get all existing article topics
-    const existingArticles = await db.select({ title: researchArticles.title }).from(researchArticles);
-    const existingTitles = new Set(existingArticles.map(a => a.title));
+    // Randomly select an article topic
+    let attempts = 0;
+    let selectedTopic = "";
+    let topicAlreadyExists = true;
     
-    // Filter to topics that don't already exist
-    const availableTopics = ARTICLE_TOPICS.filter(topic => !existingTitles.has(topic.topic));
+    // Try to find a topic that doesn't already exist
+    while (topicAlreadyExists && attempts < ARTICLE_TOPICS.length) {
+      selectedTopic = getRandomItem(ARTICLE_TOPICS);
+      topicAlreadyExists = await topicExists(selectedTopic);
+      attempts++;
+    }
     
-    // If no topics available, exit gracefully
-    if (availableTopics.length === 0) {
-      console.log("All predefined topics have been used. Please add more topics.");
+    // Exit if all topics have been used
+    if (topicAlreadyExists) {
+      console.log("All predefined topics have already been used");
       return null;
     }
     
-    // Select a random topic from available ones
-    const selectedTopic = getRandomItem(availableTopics);
+    // Select a random category
+    const selectedCategory = getRandomItem(ARTICLE_CATEGORIES);
     
-    // Generate article content using Perplexity AI
-    const { content, excerpt } = await generateArticleContent(
-      selectedTopic.topic, 
-      selectedTopic.category
-    );
+    // Generate the article content
+    const { content, excerpt } = await generateArticleContent(selectedTopic, selectedCategory);
     
-    // Create slug from topic
-    const slug = slugify(selectedTopic.topic, { 
-      lower: true,
-      strict: true
-    });
+    // Select random tags relevant to the article
+    const numTags = Math.floor(Math.random() * 4) + 3; // 3-6 tags
+    const shuffledTags = [...COMMON_TAGS].sort(() => 0.5 - Math.random());
+    const selectedTags = shuffledTags.slice(0, numTags);
     
-    // Select a random image
-    const featuredImage = getRandomItem(ARTICLE_IMAGES);
+    // Create a slug from the title
+    const slug = slugify(selectedTopic, { lower: true, strict: true });
     
-    // Create and store new article
-    const newArticle = {
-      title: selectedTopic.topic,
+    // Determine if this should be a featured article (20% chance)
+    const isFeatured = Math.random() < 0.2;
+    
+    // Get a random publish date within the last month
+    const publishDate = getRecentRandomDate();
+    
+    // Create the article
+    const newArticles = await db.insert(researchArticles).values({
+      title: selectedTopic,
       slug,
-      author: "McKenney Engineering Team",
-      publishDate: getRecentRandomDate(),
-      featuredImage,
-      content,
       excerpt,
-      category: selectedTopic.category,
-      tags: selectedTopic.tags,
-      featured: Math.random() < 0.2, // 20% chance of being featured
+      content,
+      category: selectedCategory,
+      tags: selectedTags,
+      featured: isFeatured,
+      publishDate,
+      readTime: Math.floor(content.split(' ').length / 200), // Approx. read time in minutes
+      createdAt: new Date(),
       updatedAt: new Date()
-    };
+    }).returning();
     
-    const [insertedArticle] = await db.insert(researchArticles)
-      .values(newArticle)
-      .returning();
+    const newArticle = newArticles[0];
     
-    console.log(`Created new research article: ${insertedArticle.title}`);
-    return insertedArticle;
+    console.log(`Created new research article: ${selectedTopic}`);
+    
+    return newArticle;
   } catch (error) {
-    console.error("Error generating new article:", error);
+    console.error("Error generating article:", error);
     return null;
   }
 }
