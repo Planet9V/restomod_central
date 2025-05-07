@@ -17,6 +17,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Loader2, Plus, Trash2, Edit, Eye } from 'lucide-react';
+import { ArticleGenerator } from '@/components/admin/ArticleGenerator';
 import { format } from 'date-fns';
 
 const researchArticleFormSchema = z.object({
@@ -194,12 +195,24 @@ export function ResearchArticleManager() {
         </div>
       </CardHeader>
       <CardContent>
+        {/* AI Article Generator Card */}
+        <div className="mb-8">
+          <ArticleGenerator />
+        </div>
+        
+        <div className="flex items-center mb-4">
+          <h3 className="text-lg font-semibold">Existing Articles</h3>
+          <div className="ml-2 px-2 py-1 bg-muted rounded-md text-xs">
+            {articles?.length || 0} articles
+          </div>
+        </div>
+        
         {isLoading ? (
           <div className="flex justify-center p-8">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
           </div>
         ) : articles && articles.length > 0 ? (
-          <ScrollArea className="h-[calc(100vh-250px)]">
+          <ScrollArea className="h-[calc(100vh-350px)]">
             <Table>
               <TableHeader>
                 <TableRow>
