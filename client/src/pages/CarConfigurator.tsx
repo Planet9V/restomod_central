@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, ArrowRight, Info, Settings, Check, Search, MessageCircle, Activity, History } from "lucide-react";
+import { ArrowLeft, ArrowRight, Info, Settings, Check, Search, MessageCircle, Activity, History, Loader2 } from "lucide-react";
 import VideoHeader from "@/components/layout/VideoHeader";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
@@ -52,6 +52,30 @@ const CarConfigurator = () => {
   const [selectedPart, setSelectedPart] = useState<string>("");
   const [realVehicleImage, setRealVehicleImage] = useState<string>("");
   const [realPartImage, setRealPartImage] = useState<string>("");
+  
+  // AI assistant state
+  const [showAssistant, setShowAssistant] = useState<boolean>(false);
+  const [showHistoricalContext, setShowHistoricalContext] = useState<boolean>(false);
+  const [showPerformancePrediction, setShowPerformancePrediction] = useState<boolean>(false);
+  const [historicalContext, setHistoricalContext] = useState<any>(null);
+  const [performancePrediction, setPerformancePrediction] = useState<any>(null);
+  
+  // Initialize AI assistant
+  const { 
+    sendMessage,
+    messages,
+    latestRecommendations,
+    isLoading: isAssistantLoading,
+    getHistoricalContext,
+    predictPerformance,
+    isHistoricalContextLoading,
+    isPredictionLoading
+  } = useAIAssistant({
+    onRecommendationsReceived: (recommendations) => {
+      // Handle any recommendations the AI provides
+      console.log('AI recommendations:', recommendations);
+    }
+  });
   
   // Car models data
   const models = [
@@ -341,7 +365,7 @@ const CarConfigurator = () => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
   };
   
-  // Get AI recommendation
+  // Get AI recommendation using Perplexity
   const getAiRecommendation = async () => {
     setIsLoadingAI(true);
     try {
@@ -387,6 +411,81 @@ const CarConfigurator = () => {
       setAiRecommendation("Unable to generate AI recommendation at this time. Please try again later.");
     } finally {
       setIsLoadingAI(false);
+    }
+  };
+
+  // Open K.I.T.T. assistant dialog
+  const openAssistant = () => {
+    setShowAssistant(true);
+  };
+
+  // Close K.I.T.T. assistant dialog
+  const closeAssistant = () => {
+    setShowAssistant(false);
+  };
+
+  // Get historical context about the selected vehicle
+  const fetchHistoricalContext = async () => {
+    const selectedModel = models.find(m => m.id === selectedConfig.model);
+    if (!selectedModel) return;
+    
+    try {
+      setShowHistoricalContext(true);
+      
+      // Parse model name to extract year and make
+      const nameParts = selectedModel.name.split(' ');
+      const year = nameParts[0];
+      const make = nameParts[1];
+      const modelName = nameParts.slice(2).join(' ');
+      
+      const result = await getHistoricalContext({
+        modelName,
+        year,
+        make
+      });
+      
+      setHistoricalContext(result);
+    } catch (error) {
+      console.error("Error fetching historical context:", error);
+    }
+  };
+
+  // Generate performance prediction for the current configuration
+  const generatePerformancePrediction = async () => {
+    const selectedModel = models.find(m => m.id === selectedConfig.model);
+    const selectedEngine = engineOptions.find(e => e.id === selectedConfig.engineType);
+    
+    if (!selectedModel || !selectedEngine) return;
+    
+    try {
+      setShowPerformancePrediction(true);
+      
+      // Get transmission info
+      const selectedTransmission = transmissionOptions.find(t => t.id === selectedConfig.transmission);
+      
+      // Get selected modifications as an array of names
+      const modifications: string[] = [];
+      
+      // Add wheel choice
+      const selectedWheels = wheelOptions.find(w => w.id === selectedConfig.wheels);
+      if (selectedWheels) modifications.push(selectedWheels.name);
+      
+      // Add selected additional options
+      selectedConfig.options.forEach(optionId => {
+        const option = additionalOptions.find(o => o.id === optionId);
+        if (option) modifications.push(option.name);
+      });
+      
+      const result = await predictPerformance({
+        carModel: selectedModel.name,
+        engine: selectedEngine.name,
+        transmission: selectedTransmission?.name,
+        modifications
+      });
+      
+      setPerformancePrediction(result);
+    } catch (error) {
+      console.error("Error generating performance prediction:", error);
     }
   };
   
@@ -1342,8 +1441,147 @@ const CarConfigurator = () => {
         showNavigation={false} // Don't show navigation to avoid duplicates with main header
       />
       
+      {/* AI Assistant */}
+      {showAssistant && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-4xl h-[600px] bg-background rounded-lg overflow-hidden shadow-xl">
+            <AIConfigAssistant 
+              selectedConfig={selectedConfig} 
+              onRecommendationApply={(recommendations) => {
+                // Handle applying AI recommendations
+                console.log('Applying recommendations:', recommendations);
+                closeAssistant();
+              }}
+              onClose={closeAssistant}
+            />
+          </div>
+        </div>
+      )}
+      
+      {/* Historical Context Modal */}
+      {showHistoricalContext && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-4xl max-h-[80vh] bg-background rounded-lg overflow-auto shadow-xl">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold">Historical Context</h2>
+                <Button variant="ghost" size="icon" onClick={() => setShowHistoricalContext(false)}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                  <span className="sr-only">Close</span>
+                </Button>
+              </div>
+              
+              {isHistoricalContextLoading ? (
+                <div className="flex justify-center items-center py-12">
+                  <Loader2 className="h-8 w-8 animate-spin text-burgundy" />
+                </div>
+              ) : historicalContext ? (
+                <div className="space-y-6">
+                  {Object.entries(historicalContext.sections || {}).map(([title, content]) => (
+                    <div key={title} className="border-b border-border pb-4 last:border-0">
+                      <h3 className="text-xl font-semibold mb-2">{title}</h3>
+                      <p className="text-charcoal/80 whitespace-pre-line">{content as string}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p>No historical information available.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Performance Prediction Modal */}
+      {showPerformancePrediction && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-4xl max-h-[80vh] bg-background rounded-lg overflow-auto shadow-xl">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold">Performance Prediction</h2>
+                <Button variant="ghost" size="icon" onClick={() => setShowPerformancePrediction(false)}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                  <span className="sr-only">Close</span>
+                </Button>
+              </div>
+              
+              {isPredictionLoading ? (
+                <div className="flex justify-center items-center py-12">
+                  <Loader2 className="h-8 w-8 animate-spin text-burgundy" />
+                </div>
+              ) : performancePrediction ? (
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {Object.entries(performancePrediction.metrics || {}).map(([key, value]) => (
+                      <Card key={key} className="overflow-hidden">
+                        <CardContent className="p-6">
+                          <h3 className="text-lg font-semibold capitalize mb-2">{key.replace(/([A-Z])/g, ' $1').trim()}</h3>
+                          <p className="text-2xl font-bold text-burgundy">{value}</p>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                  <div className="border-t border-border pt-4">
+                    <h3 className="text-xl font-semibold mb-2">Details</h3>
+                    <p className="text-charcoal/80 whitespace-pre-line">{performancePrediction.fullText}</p>
+                  </div>
+                </div>
+              ) : (
+                <p>No performance prediction available.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+      
       {/* Main Content */}
       <div className="container mx-auto px-4 py-16">
+        {/* Floating AI Assistant Button */}
+        <div className="fixed bottom-8 right-8 z-40">
+          <Button 
+            onClick={openAssistant}
+            className="h-14 w-14 rounded-full bg-burgundy hover:bg-burgundy/90 shadow-lg flex items-center justify-center"
+          >
+            <MessageCircle className="h-6 w-6 text-white" />
+            <span className="sr-only">Open K.I.T.T. Assistant</span>
+          </Button>
+        </div>
+        
+        {/* Additional AI Action Buttons */}
+        <div className="fixed bottom-8 left-8 z-40 flex flex-col gap-4">
+          {selectedConfig.model && (
+            <>
+              <Button 
+                onClick={fetchHistoricalContext}
+                className="h-14 w-14 rounded-full bg-burgundy/90 hover:bg-burgundy shadow-lg flex items-center justify-center"
+                disabled={isHistoricalContextLoading}
+              >
+                {isHistoricalContextLoading ? (
+                  <Loader2 className="h-6 w-6 text-white animate-spin" />
+                ) : (
+                  <History className="h-6 w-6 text-white" />
+                )}
+                <span className="sr-only">Historical Context</span>
+              </Button>
+              
+              {selectedConfig.engineType && (
+                <Button 
+                  onClick={generatePerformancePrediction}
+                  className="h-14 w-14 rounded-full bg-burgundy/90 hover:bg-burgundy shadow-lg flex items-center justify-center"
+                  disabled={isPredictionLoading}
+                >
+                  {isPredictionLoading ? (
+                    <Loader2 className="h-6 w-6 text-white animate-spin" />
+                  ) : (
+                    <Activity className="h-6 w-6 text-white" />
+                  )}
+                  <span className="sr-only">Performance Prediction</span>
+                </Button>
+              )}
+            </>
+          )}
+        </div>
+        
         {/* Progress Steps */}
         <div className="mb-12">
           <Tabs 
