@@ -9,6 +9,8 @@ import { generateCarImage } from "./api/gemini";
 import * as perplexityApi from "./api/perplexity";
 import * as configuratorApi from "./api/configurator";
 import * as assistantApi from "./api/assistant";
+import * as articlesApi from "./api/articles";
+import { scheduleArticleGeneration } from "./services/scheduler";
 import { setupAuth, isAuthenticated, isAdmin } from "./auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
