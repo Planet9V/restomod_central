@@ -1,6 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { scheduleArticleGeneration, cleanupScheduledTasks } from "./services/scheduler";
 
 const app = express();
 app.use(express.json());
@@ -66,5 +67,21 @@ app.use((req, res, next) => {
     reusePort: true,
   }, () => {
     log(`serving on port ${port}`);
+    
+    // Start the scheduled article generation task
+    scheduleArticleGeneration();
+    
+    // Set up cleanup for graceful shutdown
+    process.on('SIGINT', () => {
+      log('Cleaning up scheduled tasks before shutdown');
+      cleanupScheduledTasks();
+      process.exit(0);
+    });
+    
+    process.on('SIGTERM', () => {
+      log('Cleaning up scheduled tasks before shutdown');
+      cleanupScheduledTasks();
+      process.exit(0);
+    });
   });
 })();

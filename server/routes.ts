@@ -595,52 +595,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ========== RESEARCH ARTICLES API ROUTES ==========
   
   // Get all research articles
-  app.get(`${apiPrefix}/research-articles`, async (req, res) => {
-    try {
-      const category = req.query.category as string | undefined;
-      
-      let articles;
-      if (category && category !== 'all') {
-        articles = await storage.getResearchArticlesByCategory(category);
-      } else {
-        articles = await storage.getResearchArticles();
-      }
-      
-      res.json(articles);
-    } catch (error) {
-      console.error("Error fetching research articles:", error);
-      res.status(500).json({ message: "Failed to fetch research articles" });
-    }
-  });
+  // New enhanced research articles endpoints with advanced filtering
+  app.get(`${apiPrefix}/research-articles`, articlesApi.getResearchArticles);
   
   // Get featured research articles
-  app.get(`${apiPrefix}/research-articles/featured`, async (req, res) => {
-    try {
-      const limit = req.query.limit ? parseInt(req.query.limit as string) : 3;
-      const articles = await storage.getFeaturedResearchArticles(limit);
-      res.json(articles);
-    } catch (error) {
-      console.error("Error fetching featured research articles:", error);
-      res.status(500).json({ message: "Failed to fetch featured research articles" });
-    }
-  });
+  app.get(`${apiPrefix}/research-articles/featured`, articlesApi.getFeaturedArticles);
+  
+  // Get article categories
+  app.get(`${apiPrefix}/research-articles/categories`, articlesApi.getArticleCategories);
+  
+  // Get popular tags
+  app.get(`${apiPrefix}/research-articles/tags/popular`, articlesApi.getPopularTags);
+  
+  // Get articles by category
+  app.get(`${apiPrefix}/research-articles/category/:category`, articlesApi.getArticlesByCategory);
+  
+  // Get articles by tag
+  app.get(`${apiPrefix}/research-articles/tag/:tag`, articlesApi.getArticlesByTag);
   
   // Get research article by slug
-  app.get(`${apiPrefix}/research-articles/:slug`, async (req, res) => {
-    try {
-      const { slug } = req.params;
-      const article = await storage.getResearchArticleBySlug(slug);
-      
-      if (!article) {
-        return res.status(404).json({ message: "Research article not found" });
-      }
-      
-      res.json(article);
-    } catch (error) {
-      console.error("Error fetching research article:", error);
-      res.status(500).json({ message: "Failed to fetch research article" });
-    }
-  });
+  app.get(`${apiPrefix}/research-articles/:slug`, articlesApi.getResearchArticleBySlug);
+  
+  // Generate a new article (admin only)
+  app.post(`${apiPrefix}/admin/research-articles/generate`, isAuthenticated, isAdmin, articlesApi.generateArticle);
   
   // Admin Research Articles CRUD
   app.post(`${apiPrefix}/admin/research-articles`, isAuthenticated, isAdmin, async (req, res) => {
