@@ -1516,7 +1516,7 @@ const CarConfigurator = () => {
                       <Card key={key} className="overflow-hidden">
                         <CardContent className="p-6">
                           <h3 className="text-lg font-semibold capitalize mb-2">{key.replace(/([A-Z])/g, ' $1').trim()}</h3>
-                          <p className="text-2xl font-bold text-burgundy">{value}</p>
+                          <p className="text-2xl font-bold text-burgundy">{String(value)}</p>
                         </CardContent>
                       </Card>
                     ))}

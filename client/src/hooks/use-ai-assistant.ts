@@ -1,200 +1,158 @@
-import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { apiRequest } from '@/lib/queryClient';
-import { useToast } from '@/hooks/use-toast';
+import { useState, useCallback } from "react";
+import { apiRequest } from "@/lib/queryClient";
 
-export type AssistantMessage = {
-  role: 'user' | 'assistant';
+export type MessageRole = "user" | "assistant";
+
+export interface ChatMessage {
+  role: MessageRole;
   content: string;
-};
-
-export type AssistantResponse = {
-  message: string;
-  recommendations?: {
-    engine?: string | null;
-    color?: string | null;
-    wheels?: string | null;
-    [key: string]: any;
-  } | null;
-};
-
-interface UseAIAssistantOptions {
-  onMessageReceived?: (message: string) => void;
-  onRecommendationsReceived?: (recommendations: any) => void;
 }
 
-export const useAIAssistant = (options?: UseAIAssistantOptions) => {
-  const [messages, setMessages] = useState<AssistantMessage[]>([]);
-  const [latestRecommendations, setLatestRecommendations] = useState<any>(null);
-  const { toast } = useToast();
+export interface Recommendation {
+  title: string;
+  description: string;
+  type: string;
+  value?: string;
+}
 
-  const chatMutation = useMutation({
-    mutationFn: async ({ 
-      message, 
-      config, 
-      configContext 
-    }: { 
-      message: string; 
-      config?: any; 
-      configContext?: string;
-    }) => {
-      const response = await apiRequest<AssistantResponse>('POST', '/api/ai/assistant', {
-        message,
-        config,
-        configContext,
-        conversationHistory: messages
-      });
-      
-      return response;
-    },
-    onSuccess: (data) => {
-      // Add the assistant's message to the conversation
-      if (data.message) {
-        const newMessage: AssistantMessage = {
-          role: 'assistant',
-          content: data.message
-        };
-        
-        setMessages(prev => [...prev, newMessage]);
-        
-        if (options?.onMessageReceived) {
-          options.onMessageReceived(data.message);
-        }
-      }
-      
-      // Process recommendations if any
-      if (data.recommendations) {
-        setLatestRecommendations(data.recommendations);
-        
-        if (options?.onRecommendationsReceived) {
-          options.onRecommendationsReceived(data.recommendations);
-        }
-      }
-    },
-    onError: (error) => {
-      console.error('Error communicating with AI assistant:', error);
-      toast({
-        title: 'Communication Error',
-        description: 'Unable to reach the AI assistant. Please try again later.',
-        variant: 'destructive',
-      });
+interface HistoricalContextParams {
+  modelName: string;
+  year: string;
+  make: string;
+}
+
+interface PerformancePredictionParams {
+  carModel: string;
+  engine: string;
+  transmission?: string;
+  modifications?: string[];
+}
+
+interface AIAssistantOptions {
+  onRecommendationsReceived?: (recommendations: Recommendation[]) => void;
+}
+
+export function useAIAssistant(options?: AIAssistantOptions) {
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [latestRecommendations, setLatestRecommendations] = useState<Recommendation[] | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  
+  // Historical context
+  const [historicalContext, setHistoricalContext] = useState<any>(null);
+  const [isHistoricalContextLoading, setIsHistoricalContextLoading] = useState<boolean>(false);
+  
+  // Performance prediction
+  const [performancePrediction, setPerformancePrediction] = useState<any>(null);
+  const [isPredictionLoading, setIsPredictionLoading] = useState<boolean>(false);
+
+  // Add a message to the chat history
+  const addMessage = useCallback((content: string, role: MessageRole) => {
+    setMessages(prev => [...prev, { role, content }]);
+  }, []);
+
+  // Send a message to the AI assistant
+  const sendMessage = useCallback(async (content: string, role: MessageRole = "user") => {
+    if (role === "user") {
+      // Add user message immediately
+      addMessage(content, "user");
+    } else {
+      // If it's an assistant message (used for initial greeting), add it directly
+      addMessage(content, "assistant");
+      return;
     }
-  });
 
-  const historicalContextMutation = useMutation({
-    mutationFn: async ({ 
-      modelName, 
-      year, 
-      make,
-      category 
-    }: { 
-      modelName?: string; 
-      year?: string | number;
-      make?: string;
-      category?: string;
-    }) => {
-      // Construct the query string
-      const queryParams = new URLSearchParams();
-      if (modelName) queryParams.append('modelName', modelName.toString());
-      if (year) queryParams.append('year', year.toString());
-      if (make) queryParams.append('make', make);
-      if (category) queryParams.append('category', category);
-      
-      const response = await apiRequest<{ fullText: string; sections: Record<string, string> }>(
-        'GET', 
-        `/api/ai/historical-context?${queryParams.toString()}`
-      );
-      
-      return response;
-    }
-  });
-
-  const performancePredictionMutation = useMutation({
-    mutationFn: async ({ 
-      carModel, 
-      engine, 
-      transmission,
-      modifications
-    }: { 
-      carModel: string; 
-      engine: string;
-      transmission?: string;
-      modifications?: string[];
-    }) => {
+    // Make API call to get assistant response
+    setIsLoading(true);
+    try {
       const response = await apiRequest<{ 
-        fullText: string; 
-        metrics: Record<string, string> 
-      }>('POST', '/api/ai/performance-prediction', {
-        carModel,
-        engine,
-        transmission,
-        modifications
+        message: string;
+        recommendations?: Recommendation[];
+      }>('POST', '/api/ai/assistant', { 
+        message: content, 
+        history: messages
       });
-      
-      return response;
+
+      if (response) {
+        // Add assistant response to chat
+        addMessage(response.message, "assistant");
+        
+        // Handle recommendations if any
+        if (response.recommendations && response.recommendations.length > 0) {
+          setLatestRecommendations(response.recommendations);
+          
+          if (options?.onRecommendationsReceived) {
+            options.onRecommendationsReceived(response.recommendations);
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error sending message to AI assistant:", error);
+      addMessage("I'm sorry, I encountered an error processing your request. Please try again.", "assistant");
+    } finally {
+      setIsLoading(false);
     }
-  });
+  }, [messages, addMessage, options]);
 
-  // Send a message to the assistant
-  const sendMessage = (
-    message: string, 
-    config?: any, 
-    configContext?: string
-  ) => {
-    // Add the user's message to the conversation
-    const userMessage: AssistantMessage = {
-      role: 'user',
-      content: message
-    };
-    
-    setMessages(prev => [...prev, userMessage]);
-    
-    // Send the message to the API
-    return chatMutation.mutateAsync({ message, config, configContext });
-  };
+  // Get historical context for a vehicle
+  const getHistoricalContext = useCallback(async (params: HistoricalContextParams) => {
+    setIsHistoricalContextLoading(true);
+    try {
+      const response = await apiRequest<any>('POST', '/api/ai/historical-context', params);
+      
+      if (response) {
+        setHistoricalContext(response);
+        return response;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error getting historical context:", error);
+      return null;
+    } finally {
+      setIsHistoricalContextLoading(false);
+    }
+  }, []);
 
-  // Clear the conversation history
-  const clearConversation = () => {
+  // Generate performance prediction
+  const predictPerformance = useCallback(async (params: PerformancePredictionParams) => {
+    setIsPredictionLoading(true);
+    try {
+      const response = await apiRequest<any>('POST', '/api/ai/performance-prediction', params);
+      
+      if (response) {
+        setPerformancePrediction(response);
+        return response;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error predicting performance:", error);
+      return null;
+    } finally {
+      setIsPredictionLoading(false);
+    }
+  }, []);
+
+  // Clear chat history
+  const clearMessages = useCallback(() => {
     setMessages([]);
     setLatestRecommendations(null);
-  };
-
-  // Get historical context for a specific car model
-  const getHistoricalContext = (
-    params: { 
-      modelName?: string; 
-      year?: string | number;
-      make?: string;
-      category?: string;
-    }
-  ) => {
-    return historicalContextMutation.mutateAsync(params);
-  };
-
-  // Generate performance predictions
-  const predictPerformance = (
-    params: { 
-      carModel: string; 
-      engine: string;
-      transmission?: string;
-      modifications?: string[];
-    }
-  ) => {
-    return performancePredictionMutation.mutateAsync(params);
-  };
+  }, []);
 
   return {
-    // State
     messages,
-    latestRecommendations,
-    isLoading: chatMutation.isPending,
-    isHistoricalContextLoading: historicalContextMutation.isPending,
-    isPredictionLoading: performancePredictionMutation.isPending,
-    
-    // Actions
     sendMessage,
-    clearConversation,
+    addMessage,
+    clearMessages,
+    latestRecommendations,
+    isLoading,
+    
+    // Historical context
     getHistoricalContext,
-    predictPerformance
+    historicalContext,
+    isHistoricalContextLoading,
+    
+    // Performance prediction
+    predictPerformance,
+    performancePrediction,
+    isPredictionLoading
   };
-};
+}
