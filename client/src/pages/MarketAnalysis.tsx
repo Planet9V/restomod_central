@@ -9,6 +9,7 @@ import {
 } from 'recharts';
 import { Tilt } from "react-tilt";
 import * as d3 from 'd3';
+import { Link } from "wouter";
 import PageHeader from "@/components/ui/page-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
@@ -802,6 +803,25 @@ const MarketAnalysis = () => {
         subtitle="Comprehensive Investment Data & Market Projections (2005-2045)"
         imageSrc="https://images.unsplash.com/photo-1532578498858-e8ccfe449ac7?q=80&w=1600&auto=format&fit=crop"
       />
+      
+      {/* Model Valuation Button */}
+      <div className="bg-white py-4 border-b">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row justify-between items-center">
+            <div className="mb-4 sm:mb-0">
+              <h3 className="text-xl font-medium">Looking for specific model values?</h3>
+              <p className="text-muted-foreground">Check our detailed model-specific valuations with exact dollar figures</p>
+            </div>
+            <Button 
+              className="bg-burgundy hover:bg-burgundy/90 text-white"
+              size="lg"
+              asChild
+            >
+              <Link href="/model-values">View Model Valuations</Link>
+            </Button>
+          </div>
+        </div>
+      </div>
 
       {/* Model-Specific Valuation Data */}
       <section className="py-12 border-b">
