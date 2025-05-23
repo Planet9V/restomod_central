@@ -11,15 +11,66 @@ export const COLORS = {
 
 // Navigation links for header and footer
 export const NAV_LINKS = [
-  { name: 'Our Projects', href: '/projects' },
-  { name: 'Process', href: '/#process' },
-  { name: 'About Us', href: '/#about' },
-  { name: 'Resources', href: '/resources' },
-  { name: 'Archive', href: '/vehicle-archive' },
-  { name: 'Build Your Restomod', href: '/car-configurator' },
-  { name: 'Insights', href: '/#insights' },
-  { name: 'Mustang Guide', href: '/mustang-restomods' },
-  { name: 'Market Analysis', href: '/market-analysis' },
+  { 
+    name: 'Our Projects', 
+    href: '/projects',
+    isExternal: false,
+    description: 'Explore our completed custom builds and restomods'
+  },
+  { 
+    name: 'Process', 
+    href: '/#process',
+    isExternal: false,
+    description: 'Learn how we transform classics into modern masterpieces'
+  },
+  { 
+    name: 'About Us', 
+    href: '/#about',
+    isExternal: false,
+    description: 'Meet our team and discover our passion for automotive excellence'
+  },
+  { 
+    name: 'Resources', 
+    href: '/resources',
+    isExternal: false,
+    description: 'Educational articles and guides for restomod enthusiasts'
+  },
+  { 
+    name: 'Archive', 
+    href: '/vehicle-archive',
+    isExternal: false,
+    description: 'Browse our historical collection of classic and custom builds'
+  },
+  { 
+    name: 'Build Your Restomod', 
+    href: '/car-configurator',
+    isExternal: false,
+    description: 'Use our AI-powered tool to create your dream custom build'
+  },
+  { 
+    name: 'Market Insights', 
+    href: '/#insights',
+    isExternal: false,
+    description: 'Industry trends and investment data for the restomod market'
+  },
+  { 
+    name: 'Restomod Valuations', 
+    href: '/model-values',
+    isExternal: false,
+    description: 'Detailed pricing analytics for specific restomod models'
+  },
+  { 
+    name: 'Market Analysis', 
+    href: '/market-analysis',
+    isExternal: false,
+    description: 'Comprehensive data on restomod market growth and investment metrics'
+  },
+  { 
+    name: 'Mustang Guide', 
+    href: '/mustang-restomods',
+    isExternal: false,
+    description: 'Expert guide to Ford Mustang restomod builds and valuations'
+  }
 ];
 
 // Project categories

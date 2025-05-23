@@ -103,7 +103,11 @@ const Navigation = ({
         className={`fixed inset-0 bg-charcoal/95 z-50 flex flex-col pt-20 pb-8 px-6 transition-opacity duration-500 ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
       >
         <div className="flex flex-col space-y-6 mt-8">
-          {NAV_LINKS.map((link, index) => (
+          {/* Group navigation links by categories */}
+          {/* Main navigation links */}
+          <div className="text-white text-xs uppercase tracking-wider mb-4 opacity-60">Main</div>
+          
+          {NAV_LINKS.slice(0, 6).map((link, index) => (
             <div 
               key={link.href}
               className="overflow-hidden"
@@ -132,6 +136,47 @@ const Navigation = ({
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
+              {link.description && (
+                <p className="text-white/60 text-sm mt-1 ml-1 mb-2">{link.description}</p>
+              )}
+            </div>
+          ))}
+          
+          {/* Market Analysis navigation links */}
+          <div className="text-white text-xs uppercase tracking-wider mt-8 mb-4 opacity-60">Market Research</div>
+          
+          {NAV_LINKS.slice(6).map((link, index) => (
+            <div 
+              key={link.href}
+              className="overflow-hidden"
+              style={{ 
+                transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(-20px)',
+                opacity: isMobileMenuOpen ? 1 : 0,
+                transition: `transform 0.5s ease ${0.1 + (index + 6) * 0.1}s, opacity 0.5s ease ${0.1 + (index + 6) * 0.1}s`
+              }}
+            >
+              <Link 
+                href={link.href}
+                className="text-white text-2xl font-playfair font-bold hover:text-gold transition-all duration-300 group flex items-center"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <span className="relative">
+                  {link.name}
+                  <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
+                </span>
+                <svg 
+                  className="w-5 h-5 ml-2 transform transition-transform duration-300 opacity-0 group-hover:opacity-100 group-hover:translate-x-1" 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+              {link.description && (
+                <p className="text-white/60 text-sm mt-1 ml-1 mb-2">{link.description}</p>
+              )}
             </div>
           ))}
           
