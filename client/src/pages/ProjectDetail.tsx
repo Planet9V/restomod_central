@@ -5,6 +5,8 @@ import { ArrowLeft, Check } from "lucide-react";
 import { useEffect } from "react";
 import { type Project } from "@shared/schema";
 import { imageService } from "@/services/imageService";
+import { TypewriterSpecs } from "@/components/animations/TypewriterSpecs";
+import { motion } from "framer-motion";
 
 interface ProjectDetailData extends Partial<Project> {
   title: string;

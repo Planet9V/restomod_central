@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Engine, Gauge, Zap, Settings } from 'lucide-react';
+import { Car, Gauge, Zap, Settings } from 'lucide-react';
 
 interface TypewriterSpecsProps {
   specs: Record<string, string>;
@@ -75,7 +75,7 @@ export function TypewriterSpecs({ specs, title = "Specifications", className = "
   const getSpecIcon = (key: string) => {
     const lowerKey = key.toLowerCase();
     if (lowerKey.includes('engine') || lowerKey.includes('motor')) {
-      return <Engine className="h-4 w-4 text-amber-400" />;
+      return <Car className="h-4 w-4 text-amber-400" />;
     }
     if (lowerKey.includes('power') || lowerKey.includes('hp') || lowerKey.includes('torque')) {
       return <Zap className="h-4 w-4 text-blue-400" />;
