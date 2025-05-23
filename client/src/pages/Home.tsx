@@ -10,6 +10,7 @@ import Testimonials from "@/components/home/Testimonials";
 import ContactSection from "@/components/home/ContactSection";
 import ConfiguratorCTA from "@/components/home/ConfiguratorCTA";
 import LuxuryShowcasesSection from "@/components/home/LuxuryShowcasesSection";
+import { motion } from "framer-motion";
 
 const Home = () => {
   // Initialize scroll reveal animations
@@ -34,19 +35,111 @@ const Home = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const sectionVariants = {
+    hidden: { opacity: 0, y: 60 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      },
+    },
+  };
+
   return (
     <>
       <HeroSection />
-      <FeaturedProject />
-      <EngineeringMeetsArtistry />
-      <ProjectGallery />
-      <ProcessSection />
-      <LuxuryShowcasesSection />
-      <ConfiguratorCTA />
-      <MarketInsights />
-      <AboutUs />
-      <Testimonials />
-      <ContactSection />
+      
+      <motion.div
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        <FeaturedProject />
+      </motion.div>
+      
+      <motion.div
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        <EngineeringMeetsArtistry />
+      </motion.div>
+      
+      <motion.div
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        <ProjectGallery />
+      </motion.div>
+      
+      <motion.div
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        <ProcessSection />
+      </motion.div>
+      
+      <motion.div
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        <LuxuryShowcasesSection />
+      </motion.div>
+      
+      <motion.div
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        <ConfiguratorCTA />
+      </motion.div>
+      
+      <motion.div
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        <MarketInsights />
+      </motion.div>
+      
+      <motion.div
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        <AboutUs />
+      </motion.div>
+      
+      <motion.div
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        <Testimonials />
+      </motion.div>
+      
+      <motion.div
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        <ContactSection />
+      </motion.div>
     </>
   );
 };
