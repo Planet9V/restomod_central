@@ -13,6 +13,7 @@ import Testimonials from "@/components/home/Testimonials";
 import ContactSection from "@/components/home/ContactSection";
 import ConfiguratorCTA from "@/components/home/ConfiguratorCTA";
 import LuxuryShowcasesSection from "@/components/home/LuxuryShowcasesSection";
+import { UpcomingEvents } from "@/components/home/UpcomingEvents";
 
 const Home = () => {
   // Initialize scroll reveal animations
@@ -147,6 +148,16 @@ const Home = () => {
         viewport={{ once: true, amount: 0.3 }}
       >
         <MarketInsights />
+      </motion.div>
+      
+      <motion.div
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        className="bg-gray-50 dark:bg-gray-900"
+      >
+        <UpcomingEvents />
       </motion.div>
       
       <motion.div

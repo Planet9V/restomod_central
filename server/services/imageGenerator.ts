@@ -30,8 +30,8 @@ export async function generateCarShowImage(title: string, eventType: string): Pr
     // Select a random prompt variation for variety
     const imagePrompt = prompts[Math.floor(Math.random() * prompts.length)];
     
-    // Generate image url using Gemini
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-vision:generateContent?key=${process.env.GEMINI_API_KEY}`;
+    // Generate image using the updated Gemini API
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
     
     const response = await fetch(url, {
       method: 'POST',

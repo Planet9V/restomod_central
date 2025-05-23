@@ -116,10 +116,14 @@ export async function generateNewArticle() {
     console.log('Generating custom feature image for article...');
     const featuredImage = await generateCarShowImage(title, category === 'history' ? 'vintage car' : 'restomod');
     
-    // Create article data
+    // Add timestamp for unique slug
+    const timestamp = new Date().getTime();
+    const uniqueSlug = `${slugify(title, { lower: true, strict: true })}-${timestamp}`;
+    
+    // Create article data with unique slug
     const articleData = {
       title,
-      slug: slugify(title, { lower: true, strict: true }),
+      slug: uniqueSlug,
       content,
       category,
       excerpt,
@@ -268,10 +272,14 @@ export async function generateCarShowArticle() {
       }
     }
     
-    // Generate article data
+    // Add a timestamp to ensure unique slugs
+    const timestamp = new Date().getTime();
+    const uniqueSlug = `${slugify(title, { lower: true, strict: true })}-${timestamp}`;
+    
+    // Generate article data with unique slug
     const articleData = {
       title,
-      slug: slugify(title, { lower: true, strict: true }),
+      slug: uniqueSlug,
       content: updatedContent,
       category: 'events',
       excerpt,
