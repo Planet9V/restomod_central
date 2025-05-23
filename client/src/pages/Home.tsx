@@ -1,4 +1,7 @@
 import { useEffect } from "react";
+import { Link } from "wouter";
+import { ChevronRight } from "lucide-react";
+import { motion } from "framer-motion";
 import HeroSection from "@/components/home/HeroSection";
 import FeaturedProject from "@/components/home/FeaturedProject";
 import EngineeringMeetsArtistry from "@/components/home/EngineeringMeetsArtistry";
@@ -10,7 +13,6 @@ import Testimonials from "@/components/home/Testimonials";
 import ContactSection from "@/components/home/ContactSection";
 import ConfiguratorCTA from "@/components/home/ConfiguratorCTA";
 import LuxuryShowcasesSection from "@/components/home/LuxuryShowcasesSection";
-import { motion } from "framer-motion";
 
 const Home = () => {
   // Initialize scroll reveal animations
@@ -58,6 +60,39 @@ const Home = () => {
         viewport={{ once: true, amount: 0.3 }}
       >
         <FeaturedProject />
+      </motion.div>
+      
+      {/* Mustang Guide Promo Section */}
+      <motion.div
+        className="bg-gradient-to-r from-burgundy to-charcoal py-12 md:py-16"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+      >
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            <div className="mb-6 md:mb-0 md:mr-10">
+              <h2 className="text-2xl md:text-3xl font-playfair text-white font-bold mb-3">
+                1960s Ford Mustang Restomod Guide
+              </h2>
+              <p className="text-white/80 max-w-2xl">
+                Explore our comprehensive guide on Coyote-powered classic Mustang restomods. Learn about modern engine swaps, suspension upgrades, and investment potential.
+              </p>
+            </div>
+            <Link href="/guides/mustang-restomods" className="shrink-0">
+              <motion.button 
+                className="bg-white text-burgundy px-6 py-3 rounded-sm font-medium flex items-center group relative overflow-hidden"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <span className="relative z-10">View Guide</span>
+                <ChevronRight className="ml-2 h-5 w-5 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
+                <span className="absolute inset-0 bg-gold transform translate-y-full transition-transform duration-300 group-hover:translate-y-0"></span>
+              </motion.button>
+            </Link>
+          </div>
+        </div>
       </motion.div>
       
       <motion.div

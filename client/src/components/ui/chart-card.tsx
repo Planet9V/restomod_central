@@ -16,7 +16,7 @@ import { COLORS } from "@/lib/constants";
 interface ChartData {
   name: string;
   value: number;
-  year?: number;
+  year?: number | string;
 }
 
 interface ChartCardProps {
