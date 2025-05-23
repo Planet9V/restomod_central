@@ -23,7 +23,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import ModelValueAnalysis from "@/components/market/ModelValueAnalysis";
+import { ModelValueAnalysis } from "@/components/market/ModelValueAnalysis";
+import { RealtimeResearch } from "@/components/market/RealtimeResearch";
 import { MODEL_SPECIFIC_VALUATIONS } from "@/data/specific-model-data";
 
 // Premium tilt options
@@ -802,6 +803,26 @@ const MarketAnalysis = () => {
         imageSrc="https://images.unsplash.com/photo-1532578498858-e8ccfe449ac7?q=80&w=1600&auto=format&fit=crop"
       />
 
+      {/* Model-Specific Valuation Data */}
+      <section className="py-12 border-b">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+          >
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold font-playfair mb-2">Premium Model Valuations</h2>
+              <p className="text-muted-foreground max-w-3xl">
+                Detailed investment metrics with exact dollar figures for specific premium restomod platforms, based on recent auction data and completed builds
+              </p>
+            </div>
+            
+            <ModelValueAnalysis />
+          </motion.div>
+        </div>
+      </section>
+      
       {/* Market Dashboard */}
       <section className="py-8 bg-offwhite">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">

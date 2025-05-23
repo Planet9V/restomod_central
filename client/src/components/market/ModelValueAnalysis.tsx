@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import Tilt from 'react-tilt';
+import { Tilt } from 'react-tilt';
 import { MODEL_SPECIFIC_VALUATIONS, PREMIUM_AUCTION_RESULTS, REGIONAL_MARKET_HOTSPOTS, ROI_BY_VEHICLE_CLASS } from '@/data/specific-model-data';
 
 // Constants
