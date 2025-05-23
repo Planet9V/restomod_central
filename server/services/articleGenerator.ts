@@ -2,6 +2,7 @@ import fetch from 'node-fetch';
 import slugify from 'slugify';
 import { createResearchArticle } from '../storage';
 import { researchArticlesInsertSchema } from '@shared/schema';
+import { generateCarShowImage, generateEventInfographic, extractEventsFromContent } from './imageGenerator';
 
 // Define article categories
 export const ARTICLE_CATEGORIES = [
@@ -111,6 +112,10 @@ export async function generateNewArticle() {
     const firstParagraph = content.split('\n\n')[1] || '';
     const excerpt = firstParagraph.substring(0, 150) + '...';
     
+    // Generate a custom feature image based on the article topic
+    console.log('Generating custom feature image for article...');
+    const featuredImage = await generateCarShowImage(title, category === 'history' ? 'vintage car' : 'restomod');
+    
     // Create article data
     const articleData = {
       title,
@@ -119,9 +124,9 @@ export async function generateNewArticle() {
       category,
       excerpt,
       author: 'Restomod Research Team',
-      featuredImage: 'https://images.unsplash.com/photo-1588127333419-b9d7de223dcf?w=1200&auto=format&fit=crop',
+      featuredImage, // Use the generated custom image
       tags: generateTagsFromTitle(title),
-      featured: true, // Always feature car show articles
+      featured: true,
       metaDescription: excerpt
     };
     
@@ -242,15 +247,36 @@ export async function generateCarShowArticle() {
     // Create a teaser/excerpt
     const excerpt = `Discover the must-visit classic car shows and automotive events happening from ${startDate} to ${endDate}. Find event details, special features, and our highlighted event of the week.`;
     
+    // Extract event information from content for infographic
+    const events = extractEventsFromContent(content);
+    
+    console.log(`Found ${events.length} events in article content`);
+    
+    // Generate custom feature image and infographic
+    console.log('Generating custom feature image...');
+    const featuredImage = await generateCarShowImage(title, 'classic car');
+    
+    // Generate infographic if we have events
+    let updatedContent = content;
+    if (events.length > 0) {
+      console.log('Generating event infographic...');
+      const infographicUrl = await generateEventInfographic(events);
+      
+      if (infographicUrl) {
+        // Add the infographic to the article content
+        updatedContent += `\n\n## Event Calendar\n\n![Upcoming Event Calendar](${infographicUrl})\n\n`;
+      }
+    }
+    
     // Generate article data
     const articleData = {
       title,
       slug: slugify(title, { lower: true, strict: true }),
-      content,
+      content: updatedContent,
       category: 'events',
       excerpt,
       author: 'Auto Events Team',
-      featuredImage: 'https://images.unsplash.com/photo-1541497613813-0780960684a4?w=1200&auto=format&fit=crop',
+      featuredImage, // Use the generated image
       tags: ['car shows', 'events', 'classic cars', 'automotive', 'upcoming'],
       featured: true,
       metaDescription: `Comprehensive guide to upcoming classic car shows and events from ${startDate} to ${endDate}. Find locations, dates, and highlights.`
