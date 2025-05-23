@@ -1,168 +1,197 @@
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Loader2, Search, RefreshCw, ExternalLink } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { motion } from "framer-motion";
+import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { Search, Car, RefreshCw, Clock, AlertTriangle } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { apiRequest } from '@/lib/queryClient';
 
-interface RealtimeResearchProps {
-  initialQuery?: string;
-}
-
-export default function RealtimeResearch({ initialQuery = "restomod market trends 2024" }: RealtimeResearchProps) {
-  const [query, setQuery] = useState(initialQuery);
-  const [results, setResults] = useState<null | {
-    content: string;
-    citations: string[];
-    searchTime: string;
-  }>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleSearch = async () => {
+export function RealtimeResearch() {
+  const [query, setQuery] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const { toast } = useToast();
+  
+  const marketResearchMutation = useMutation({
+    mutationFn: async (searchQuery: string) => {
+      const res = await apiRequest('POST', '/api/market-research/search', { query: searchQuery });
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(errorText || 'Failed to fetch market research data');
+      }
+      return await res.json();
+    },
+    onError: (error: Error) => {
+      toast({
+        title: 'Research Error',
+        description: error.message,
+        variant: 'destructive',
+      });
+    }
+  });
+  
+  const handleSearch = () => {
     if (!query.trim()) return;
     
-    setIsLoading(true);
-    setError(null);
-    
-    try {
-      const startTime = new Date();
-      const response = await fetch('/api/market-research/search', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ query }),
-      });
-      
-      if (!response.ok) {
-        throw new Error(`Search failed: ${response.statusText}`);
-      }
-      
-      const data = await response.json();
-      const endTime = new Date();
-      const searchTime = ((endTime.getTime() - startTime.getTime()) / 1000).toFixed(2);
-      
-      setResults({
-        content: data.content,
-        citations: data.citations || [],
-        searchTime
-      });
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred');
-      console.error('Search error:', err);
-    } finally {
-      setIsLoading(false);
+    setSearchTerm(query);
+    marketResearchMutation.mutate(query);
+  };
+  
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch();
     }
   };
-
-  // Process and format the content with paragraphs
-  const formatContent = (content: string) => {
-    return content.split('\n\n').map((paragraph, index) => (
-      <p key={index} className="mb-4 last:mb-0">{paragraph}</p>
-    ));
-  };
-
+  
+  // Sample search suggestions specific to restomod market research
+  const searchSuggestions = [
+    "Current market value of 1967 Ford Mustang Fastback restomods",
+    "Average ROI for Corvette C2 restomods over the past 5 years",
+    "Most valuable modification factors for classic Bronco restomods",
+    "Porsche 911 Singer values compared to other premium builds",
+    "Current trends in 1980s classic car restomod market"
+  ];
+  
   return (
-    <Card className="w-full shadow-md bg-white">
-      <CardHeader className="pb-4">
-        <CardTitle className="flex justify-between items-center">
-          <span className="font-playfair text-xl">Real-Time Market Research</span>
-          <Badge variant="outline" className="bg-burgundy/10 text-burgundy">
-            Powered by AI
-          </Badge>
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle className="text-2xl flex items-center">
+          <Search className="mr-2 h-5 w-5 text-muted-foreground" />
+          Realtime Market Research
         </CardTitle>
         <CardDescription>
-          Search for the latest market data, trends, and research information
+          Access current market data and analyses powered by Perplexity AI
         </CardDescription>
       </CardHeader>
-      
       <CardContent>
-        <div className="flex gap-2 mb-6">
+        <div className="flex space-x-2 mb-4">
           <Input
-            placeholder="Search for market trends, vehicle values, or builder information..."
+            placeholder="Research specific model values, trends, or investment insights..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
             className="flex-1"
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleSearch();
-              }
-            }}
           />
-          <Button 
-            onClick={handleSearch}
-            disabled={isLoading || !query.trim()}
-            className="bg-burgundy hover:bg-burgundy/90"
-          >
-            {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Search className="h-4 w-4" />
-            )}
-            <span className="ml-2">Search</span>
+          <Button onClick={handleSearch} disabled={marketResearchMutation.isPending}>
+            {marketResearchMutation.isPending ? <RefreshCw className="h-4 w-4 animate-spin" /> : "Search"}
           </Button>
         </div>
         
-        {isLoading && (
-          <div className="flex flex-col items-center justify-center py-8">
-            <Loader2 className="h-8 w-8 text-burgundy animate-spin mb-4" />
-            <p className="text-sm text-charcoal/70">Searching for latest market information...</p>
+        {!searchTerm && !marketResearchMutation.data && (
+          <div className="mb-4">
+            <p className="text-sm text-muted-foreground mb-2">Suggested searches:</p>
+            <div className="flex flex-wrap gap-2">
+              {searchSuggestions.map((suggestion, index) => (
+                <Badge 
+                  key={index} 
+                  variant="outline" 
+                  className="cursor-pointer hover:bg-muted"
+                  onClick={() => {
+                    setQuery(suggestion);
+                    setSearchTerm(suggestion);
+                    marketResearchMutation.mutate(suggestion);
+                  }}
+                >
+                  {suggestion}
+                </Badge>
+              ))}
+            </div>
           </div>
         )}
         
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-sm p-4 text-sm text-red-800">
-            <p className="font-medium mb-1">Error:</p>
-            <p>{error}</p>
+        {marketResearchMutation.isPending && (
+          <div className="py-8 text-center">
+            <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-4 text-muted-foreground" />
+            <p className="text-muted-foreground">Researching market data...</p>
+            <p className="text-xs text-muted-foreground mt-1">Sourcing information from global databases and auctions</p>
           </div>
         )}
         
-        {!isLoading && results && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <div className="prose prose-sm max-w-none mb-4 text-charcoal/80">
-              {formatContent(results.content)}
+        {marketResearchMutation.isError && (
+          <div className="py-8 text-center border rounded-md bg-destructive/10">
+            <AlertTriangle className="h-8 w-8 mx-auto mb-4 text-destructive" />
+            <p className="text-destructive font-medium">Research Error</p>
+            <p className="text-muted-foreground mt-1">Unable to retrieve market data. Please try again.</p>
+          </div>
+        )}
+        
+        {marketResearchMutation.isSuccess && (
+          <div className="mt-4">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-medium">Research Results</h3>
+              <div className="flex items-center text-xs text-muted-foreground">
+                <Clock className="h-3 w-3 mr-1" />
+                <span>Updated just now</span>
+              </div>
             </div>
             
-            {results.citations && results.citations.length > 0 && (
-              <>
-                <Separator className="my-4" />
-                <div className="mt-4">
-                  <h4 className="text-sm font-medium mb-2">Sources:</h4>
-                  <ul className="space-y-1 text-xs">
-                    {results.citations.slice(0, 5).map((citation, index) => (
-                      <li key={index} className="flex items-start gap-1 text-charcoal/70">
-                        <ExternalLink className="h-3 w-3 mt-0.5 flex-shrink-0" />
-                        <span className="truncate">{citation}</span>
-                      </li>
-                    ))}
-                  </ul>
+            <Tabs defaultValue="analysis">
+              <TabsList className="mb-4">
+                <TabsTrigger value="analysis">Analysis</TabsTrigger>
+                <TabsTrigger value="data">Market Data</TabsTrigger>
+                <TabsTrigger value="sources">Sources</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="analysis" className="space-y-4">
+                <div className="p-4 bg-muted/50 rounded-md">
+                  <div className="flex items-center mb-3">
+                    <Car className="h-5 w-5 mr-2 text-primary" />
+                    <h4 className="font-medium">Market Insights: {searchTerm}</h4>
+                  </div>
+                  <div className="whitespace-pre-line text-sm space-y-4">
+                    {marketResearchMutation.data?.content || "No analysis available"}
+                  </div>
                 </div>
-              </>
-            )}
-            
-            <div className="flex justify-between items-center mt-4 text-xs text-charcoal/60">
-              <span>Results in {results.searchTime} seconds</span>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={handleSearch} 
-                className="h-8 gap-1"
-                disabled={isLoading}
-              >
-                <RefreshCw className="h-3 w-3" />
-                <span>Refresh</span>
-              </Button>
-            </div>
-          </motion.div>
+              </TabsContent>
+              
+              <TabsContent value="data">
+                <div className="p-4 bg-muted/50 rounded-md">
+                  <h4 className="font-medium mb-3">Key Data Points</h4>
+                  {marketResearchMutation.data?.marketData ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {Object.entries(marketResearchMutation.data.marketData).map(([key, value]) => (
+                        <div key={key} className="flex justify-between p-2 bg-background rounded border">
+                          <span className="text-sm font-medium">{key}</span>
+                          <span className="text-sm">{value as string}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">No specific data points extracted</p>
+                  )}
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="sources">
+                <div className="p-4 bg-muted/50 rounded-md">
+                  <h4 className="font-medium mb-3">Information Sources</h4>
+                  {marketResearchMutation.data?.sources && marketResearchMutation.data.sources.length > 0 ? (
+                    <ul className="space-y-2 text-sm">
+                      {marketResearchMutation.data.sources.map((source: string, index: number) => (
+                        <li key={index} className="text-blue-600 hover:underline overflow-hidden text-ellipsis">
+                          <a href={source} target="_blank" rel="noopener noreferrer">
+                            {source}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">No source citations available</p>
+                  )}
+                </div>
+              </TabsContent>
+            </Tabs>
+          </div>
         )}
       </CardContent>
+      <CardFooter className="text-xs text-muted-foreground border-t pt-4">
+        Powered by Perplexity AI • Data refreshed daily • Market trends are for informational purposes only
+      </CardFooter>
     </Card>
   );
 }
+
+export default RealtimeResearch;

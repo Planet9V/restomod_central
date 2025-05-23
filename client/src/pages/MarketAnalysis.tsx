@@ -23,6 +23,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import ModelValueAnalysis from "@/components/market/ModelValueAnalysis";
+import { MODEL_SPECIFIC_VALUATIONS } from "@/data/specific-model-data";
 
 // Premium tilt options
 const tiltOptions = {

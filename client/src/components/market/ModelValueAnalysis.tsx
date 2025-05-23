@@ -395,8 +395,7 @@ export function ModelValueAnalysis() {
                   <span className="text-sm">This Model</span>
                   <span className="text-sm font-medium">{model.cagr}% Annual</span>
                 </div>
-                <Progress value={model.cagr * 5} className="h-1.5 bg-muted" 
-                  indicatorClassName="bg-green-600" />
+                <Progress value={model.cagr * 5} className="h-1.5 bg-muted" />
                 
                 <div className="flex justify-between">
                   <span className="text-sm">S&P 500 (Avg)</span>
