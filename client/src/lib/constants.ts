@@ -18,7 +18,8 @@ export const NAV_LINKS = [
   { name: 'Archive', href: '/vehicle-archive' },
   { name: 'Build Your Restomod', href: '/car-configurator' },
   { name: 'Insights', href: '/#insights' },
-  { name: 'Mustang Guide', href: '/guides/mustang-restomods' },
+  { name: 'Mustang Guide', href: '/mustang-restomods' },
+  { name: 'Market Analysis', href: '/market-analysis' },
 ];
 
 // Project categories

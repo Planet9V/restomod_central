@@ -19,6 +19,7 @@ import AdminDashboard from "@/pages/AdminDashboard";
 import LuxuryShowcasePage from "@/pages/LuxuryShowcasePage";
 import LuxuryShowcasesPage from "@/pages/LuxuryShowcasesPage";
 import MustangRestomods from "@/pages/MustangRestomods";
+import MarketAnalysis from "@/pages/MarketAnalysis";
 import NotFound from "@/pages/not-found";
 
 // Layout components
@@ -56,6 +57,8 @@ function Router() {
         <Route path="/showcases" component={LuxuryShowcasesPage} />
         <Route path="/showcases/:slug" component={LuxuryShowcasePage} />
         <Route path="/guides/mustang-restomods" component={MustangRestomods} />
+        <Route path="/mustang-restomods" component={MustangRestomods} />
+        <Route path="/market-analysis" component={MarketAnalysis} />
         <Route path="/auth" component={AuthPage} />
         <Route path="/admin" component={() => <ProtectedRoute component={AdminDashboard} adminOnly />} />
         <Route component={NotFound} />
