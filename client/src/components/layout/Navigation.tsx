@@ -45,78 +45,11 @@ const Navigation = ({
           <span className="absolute inset-0 w-0 opacity-0 group-hover:opacity-20 group-hover:w-full bg-gradient-to-r from-transparent via-white to-transparent transition-all duration-700 transform -skew-x-12 -translate-x-full group-hover:translate-x-full"></span>
         </div>
         
-        {/* Desktop Navigation - center aligned links with micro-interactions */}
-        <div className="hidden md:flex items-center justify-center flex-1 space-x-8 text-sm font-medium tracking-wide uppercase">
-          {NAV_LINKS.slice(0, 5).map((link) => (
-            <div key={link.href} className="group relative">
-              <Link 
-                href={link.href} 
-                className={`${textColorClass} group-hover:text-gold transition-all duration-300 py-2 ${
-                  location === link.href ? "text-gold" : ""
-                }`}
-              >
-                {link.name}
-                {/* Animated underline effect */}
-                <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full ${
-                  location === link.href ? "w-full" : ""
-                }`}></span>
-              </Link>
-              {/* We're removing the tooltip that was causing the appearance of a duplicate menu */}
-            </div>
-          ))}
-        </div>
+        {/* Spacer to center logo and hamburger menu */}
+        <div className="flex-1"></div>
         
-        {/* Right side CTA and mobile menu */}
+        {/* Right side - just hamburger menu */}
         <div className="flex items-center">
-          {/* Authentication buttons */}
-          <div className="hidden md:flex items-center mr-4">
-            {isAuthenticated ? (
-              <div className="flex items-center space-x-4">
-                {isAdmin && (
-                  <Link 
-                    href="/admin" 
-                    className={`${textColorClass} hover:text-gold transition-all duration-300 flex items-center`}
-                  >
-                    <Lock size={16} className="mr-1" />
-                    <span>Admin</span>
-                  </Link>
-                )}
-                <button
-                  onClick={() => logoutMutation.mutate()}
-                  className={`${textColorClass} hover:text-gold transition-all duration-300 flex items-center`}
-                >
-                  <User size={16} className="mr-1" />
-                  <span>Logout</span>
-                </button>
-              </div>
-            ) : (
-              <Link 
-                href="/auth" 
-                className={`${textColorClass} hover:text-gold transition-all duration-300 flex items-center`}
-              >
-                <Lock size={16} className="mr-1" />
-                <span>Admin Login</span>
-              </Link>
-            )}
-          </div>
-
-          {/* Desktop consultation button with micro-interactions */}
-          {hasConsultationButton && (
-            <div className="hidden md:block relative group mr-4">
-              <Link 
-                href="#contact" 
-                className="relative z-10 bg-burgundy text-white px-6 py-3 rounded-sm block overflow-hidden"
-              >
-                <span className="relative z-10 transition-transform duration-300 group-hover:translate-y-0 block">
-                  Consultation
-                </span>
-                {/* Animated background slide effect */}
-                <span className="absolute inset-0 bg-gold transform translate-y-full transition-transform duration-300 group-hover:translate-y-0"></span>
-              </Link>
-              {/* Subtle glow effect */}
-              <div className="absolute -inset-0.5 bg-gold/20 rounded-sm opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-300"></div>
-            </div>
-          )}
           
           {/* Hamburger menu with micro-interactions */}
           <button
