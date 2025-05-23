@@ -119,11 +119,10 @@ export async function generateNewArticle() {
       category,
       excerpt,
       author: 'Restomod Research Team',
-      imageUrl: 'https://images.unsplash.com/photo-1588127333419-b9d7de223dcf?w=1200&auto=format&fit=crop',
+      featuredImage: 'https://images.unsplash.com/photo-1588127333419-b9d7de223dcf?w=1200&auto=format&fit=crop',
       tags: generateTagsFromTitle(title),
       featured: true, // Always feature car show articles
-      metaDescription: excerpt,
-      sources: citations.join('\n')
+      metaDescription: excerpt
     };
     
     // Validate and create
@@ -251,11 +250,10 @@ export async function generateCarShowArticle() {
       category: 'events',
       excerpt,
       author: 'Auto Events Team',
-      imageUrl: 'https://images.unsplash.com/photo-1541497613813-0780960684a4?w=1200&auto=format&fit=crop',
+      featuredImage: 'https://images.unsplash.com/photo-1541497613813-0780960684a4?w=1200&auto=format&fit=crop',
       tags: ['car shows', 'events', 'classic cars', 'automotive', 'upcoming'],
-      isFeatured: true,
-      metaDescription: `Comprehensive guide to upcoming classic car shows and events from ${startDate} to ${endDate}. Find locations, dates, and highlights.`,
-      sources: citations.join('\n')
+      featured: true,
+      metaDescription: `Comprehensive guide to upcoming classic car shows and events from ${startDate} to ${endDate}. Find locations, dates, and highlights.`
     };
     
     // Validate and create the article
