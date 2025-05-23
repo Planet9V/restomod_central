@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Bar, BarChart, CartesianGrid, Cell, LineChart, Line, PieChart, Pie, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { ArrowUpRight, Banknote, BarChart3, Clock, Tag, TrendingUp } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Banknote, BarChart3, Binary, ChevronRight, Clock, Compass, DollarSign, FileCheck, GanttChart, LineChart as LineChartIcon, Percent, Shield, Star, Tag, Ticket, TrendingUp } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -48,6 +48,7 @@ const formatCurrency = (value: number) => {
 export function ModelValueAnalysis() {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedModel, setSelectedModel] = useState<number>(1);
+  const [activeTab, setActiveTab] = useState<string>("overview");
 
   // Filter models by category if needed
   const filteredModels = selectedCategory === 'All' 
@@ -65,7 +66,18 @@ export function ModelValueAnalysis() {
     factor: item.factor,
     impact: item.impact
   }));
+
+  // Calculate the value appreciation from classic to restomod
+  const appreciationPercentage = currentModel.currentValue && currentModel.classicValue
+    ? Math.round((currentModel.currentValue / currentModel.classicValue - 1) * 100)
+    : 0;
   
+  // Prepare auction data
+  const auctionData = currentModel.auctionHighlights?.recentSales.map((sale, index) => ({
+    name: `Sale ${index + 1}`,
+    value: sale
+  })) || [];
+
   return (
     <motion.div
       initial="hidden"
@@ -79,7 +91,7 @@ export function ModelValueAnalysis() {
           <CardHeader className="pb-3">
             <CardTitle className="text-xl font-medium">Model-Specific Valuation Data</CardTitle>
             <CardDescription>
-              Detailed financial metrics for premium restomod models based on real market data
+              Detailed financial metrics for premium restomod models based on real auction results from Hagerty, Barrett-Jackson, Mecum, and RM Sotheby's
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -151,47 +163,116 @@ export function ModelValueAnalysis() {
               </div>
               
               <CardContent className="pt-6">
-                <div className="flex justify-between mb-6">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Current Market Value</p>
-                    <p className="text-2xl font-bold text-primary">{formatCurrency(currentModel.currentValue)}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm text-muted-foreground">5-Year Growth</p>
-                    <p className="text-xl font-semibold text-green-600">+{currentModel.fiveYearGrowth}%</p>
-                  </div>
-                </div>
-                
-                <Separator className="mb-6" />
-                
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div className="bg-muted rounded-md p-4">
-                    <div className="flex items-center text-muted-foreground mb-1">
-                      <Tag className="h-4 w-4 mr-1" />
-                      <span className="text-xs">Average Build Cost</span>
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                  <TabsList className="grid grid-cols-2 mb-4">
+                    <TabsTrigger value="overview" className="text-xs">Overview</TabsTrigger>
+                    <TabsTrigger value="details" className="text-xs">Details</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="overview" className="mt-0">
+                    <div className="flex justify-between mb-6">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Premium Restomod Value</p>
+                        <p className="text-2xl font-bold text-primary">{formatCurrency(currentModel.currentValue)}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm text-muted-foreground">Unmodified Classic Value</p>
+                        <p className="text-xl font-medium text-muted-foreground">{formatCurrency(currentModel.classicValue)}</p>
+                        <p className="text-sm font-bold text-green-600">+{appreciationPercentage}% Premium</p>
+                      </div>
                     </div>
-                    <p className="text-lg font-semibold">{formatCurrency(currentModel.averageBuildCost)}</p>
-                  </div>
-                  <div className="bg-muted rounded-md p-4">
-                    <div className="flex items-center text-muted-foreground mb-1">
-                      <Banknote className="h-4 w-4 mr-1" />
-                      <span className="text-xs">Premium Build Cost</span>
+                    
+                    <Separator className="mb-6" />
+                    
+                    <div className="grid grid-cols-2 gap-4 mb-6">
+                      <div className="bg-muted rounded-md p-4">
+                        <div className="flex items-center text-muted-foreground mb-1">
+                          <Tag className="h-4 w-4 mr-1" />
+                          <span className="text-xs">Average Build Cost</span>
+                        </div>
+                        <p className="text-lg font-semibold">{formatCurrency(currentModel.averageBuildCost)}</p>
+                      </div>
+                      <div className="bg-muted rounded-md p-4">
+                        <div className="flex items-center text-muted-foreground mb-1">
+                          <Banknote className="h-4 w-4 mr-1" />
+                          <span className="text-xs">Premium Build Cost</span>
+                        </div>
+                        <p className="text-lg font-semibold">{formatCurrency(currentModel.premiumBuildCost)}</p>
+                      </div>
                     </div>
-                    <p className="text-lg font-semibold">{formatCurrency(currentModel.premiumBuildCost)}</p>
-                  </div>
-                </div>
-                
-                <h3 className="text-sm font-medium mb-3">Key Value Determinants</h3>
-                <div className="space-y-3">
-                  {currentModel.valueDeterminants.map((item, idx) => (
-                    <div key={idx} className="flex justify-between items-center">
-                      <span className="text-sm">{item.factor}</span>
-                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                        +{item.impact}%
-                      </Badge>
+                    
+                    <h3 className="text-sm font-medium mb-3">Key Value Determinants</h3>
+                    <div className="space-y-3">
+                      {currentModel.valueDeterminants.map((item, idx) => (
+                        <div key={idx} className="flex justify-between items-center">
+                          <span className="text-sm">{item.factor}</span>
+                          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                            +{item.impact}%
+                          </Badge>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="details" className="mt-0">
+                    <div className="space-y-4">
+                      <div>
+                        <h3 className="text-sm font-medium mb-2 flex items-center">
+                          <Ticket className="h-3.5 w-3.5 mr-1.5 text-primary" />
+                          Auction History
+                        </h3>
+                        <div className="bg-muted/50 rounded-md p-3 text-sm">
+                          <div className="flex justify-between mb-1">
+                            <span className="text-muted-foreground">Highest recorded sale:</span>
+                            <span className="font-medium">{formatCurrency(currentModel.auctionHighlights?.highestSale || 0)}</span>
+                          </div>
+                          <div className="flex justify-between mb-2">
+                            <span className="text-muted-foreground">Recent auction houses:</span>
+                            <span className="font-medium">{currentModel.auctionHighlights?.auctionHouses.join(', ')}</span>
+                          </div>
+                          <div className="h-24">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <BarChart data={auctionData} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
+                                <XAxis dataKey="name" tick={{ fontSize: 9 }} />
+                                <YAxis domain={[0, 'dataMax + 100000']} tick={{ fontSize: 9 }} tickFormatter={(value) => `$${value/1000}k`} />
+                                <Tooltip formatter={(value) => [formatCurrency(value as number), 'Sale Price']} />
+                                <Bar dataKey="value" fill="#be123c" radius={[4, 4, 0, 0]} />
+                              </BarChart>
+                            </ResponsiveContainer>
+                          </div>
+                          <p className="text-xs text-center mt-1 text-muted-foreground">Recent auction results</p>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <h3 className="text-sm font-medium mb-2 flex items-center">
+                          <Binary className="h-3.5 w-3.5 mr-1.5 text-primary" />
+                          Valuation Comparison
+                        </h3>
+                        <div className="grid grid-cols-2 gap-3 text-xs">
+                          <div className="bg-muted/50 rounded-md p-3">
+                            <div className="text-muted-foreground mb-1">Original Classic</div>
+                            <div className="text-base font-medium">{formatCurrency(currentModel.classicValue)}</div>
+                            <div className="text-xs mt-1 text-muted-foreground">
+                              In #3 "Good" condition with matching numbers
+                            </div>
+                          </div>
+                          <div className="bg-green-50 rounded-md p-3">
+                            <div className="text-green-700 mb-1">Premium Restomod</div>
+                            <div className="text-base font-medium">{formatCurrency(currentModel.currentValue)}</div>
+                            <div className="text-xs mt-1 text-green-700/70">
+                              +{appreciationPercentage}% premium over original
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="text-xs text-center mt-1 text-muted-foreground italic">
+                        Data sourced from Hagerty, Barrett-Jackson, Mecum, and RM Sotheby's
+                      </div>
+                    </div>
+                  </TabsContent>
+                </Tabs>
               </CardContent>
             </Card>
           </Tilt>
@@ -204,7 +285,7 @@ export function ModelValueAnalysis() {
               <CardHeader>
                 <CardTitle className="text-xl font-medium">Value Impact Factors</CardTitle>
                 <CardDescription>
-                  Key factors influencing the {currentModel.model}'s market valuation
+                  Key factors influencing the {currentModel.model}'s market valuation based on real-world data
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -216,8 +297,8 @@ export function ModelValueAnalysis() {
                       margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                     >
                       <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                      <XAxis type="number" domain={[0, 40]} />
-                      <YAxis dataKey="factor" type="category" width={140} tick={{ fontSize: 12 }} />
+                      <XAxis type="number" domain={[0, 'dataMax + 10']} />
+                      <YAxis dataKey="factor" type="category" width={150} tick={{ fontSize: 12 }} />
                       <Tooltip
                         formatter={(value) => [`+${value}%`, 'Market Impact']}
                         contentStyle={{
@@ -226,13 +307,14 @@ export function ModelValueAnalysis() {
                           borderRadius: "0.5rem",
                         }}
                       />
-                      <Bar dataKey="impact" fill="#10b981" radius={[0, 4, 4, 0]} />
+                      <Bar dataKey="impact" fill="#be123c" radius={[0, 4, 4, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
               </CardContent>
-              <CardFooter className="text-xs text-muted-foreground border-t pt-4">
-                Data sourced from recent auction results and builder pricing (Q1 2024)
+              <CardFooter className="text-xs text-muted-foreground border-t pt-4 flex items-center justify-between">
+                <span>Data sourced from professional appraisals and auction results</span>
+                <Badge variant="outline" className="text-xs font-normal">2024 Analysis</Badge>
               </CardFooter>
             </Card>
           </Tilt>
