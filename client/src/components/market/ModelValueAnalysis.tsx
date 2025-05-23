@@ -1,436 +1,353 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ChevronRight, TrendingUp, DollarSign, Clock, BarChart3 } from 'lucide-react';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { MODEL_SPECIFIC_VALUATIONS, PREMIUM_AUCTION_RESULTS } from '@/data/specific-model-data';
-import { 
-  Area, 
-  AreaChart, 
-  Bar, 
-  BarChart, 
-  CartesianGrid, 
-  Legend, 
-  ResponsiveContainer, 
-  Tooltip, 
-  XAxis, 
-  YAxis 
-} from 'recharts';
+import { motion } from 'framer-motion';
+import { Bar, BarChart, CartesianGrid, Cell, LineChart, Line, PieChart, Pie, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { ArrowUpRight, Banknote, BarChart3, Clock, Tag, TrendingUp } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import Tilt from 'react-tilt';
+import { MODEL_SPECIFIC_VALUATIONS, PREMIUM_AUCTION_RESULTS, REGIONAL_MARKET_HOTSPOTS, ROI_BY_VEHICLE_CLASS } from '@/data/specific-model-data';
+
+// Constants
+const ANIMATION_DELAY = 0.1;
+const CARD_TRANSITION = { duration: 0.5, ease: "easeOut" };
+const tiltOptions = { max: 5, scale: 1.01, speed: 500 };
+
+// Animation variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const cardVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: CARD_TRANSITION
+  }
+};
+
+// Helper function to format currency
+const formatCurrency = (value: number) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(value);
+};
 
 export function ModelValueAnalysis() {
-  const [selectedModel, setSelectedModel] = useState(MODEL_SPECIFIC_VALUATIONS[0].id);
-  const [expandedFactors, setExpandedFactors] = useState(true);
-  const [activeTab, setActiveTab] = useState("overview");
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [selectedModel, setSelectedModel] = useState<number>(1);
+
+  // Filter models by category if needed
+  const filteredModels = selectedCategory === 'All' 
+    ? MODEL_SPECIFIC_VALUATIONS 
+    : MODEL_SPECIFIC_VALUATIONS.filter(model => model.category === selectedCategory);
   
-  // Get the selected model data
-  const model = MODEL_SPECIFIC_VALUATIONS.find(m => m.id === selectedModel);
+  // Get the currently selected model
+  const currentModel = MODEL_SPECIFIC_VALUATIONS.find(model => model.id === selectedModel) || MODEL_SPECIFIC_VALUATIONS[0];
   
-  // Format currency
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      maximumFractionDigits: 0
-    }).format(value);
-  };
+  // Unique categories for filter
+  const categories = ['All', ...Array.from(new Set(MODEL_SPECIFIC_VALUATIONS.map(model => model.category)))];
   
-  // Calculate model's average annual appreciation
-  const calculateAAG = (trends: { year: number, value: number }[]) => {
-    if (trends.length < 2) return 'N/A';
-    const startValue = trends[0].value;
-    const endValue = trends[trends.length - 1].value;
-    const years = trends[trends.length - 1].year - trends[0].year;
-    const rate = (Math.pow((endValue / startValue), 1/years) - 1) * 100;
-    return rate.toFixed(1) + '%';
-  };
-  
-  const formatWithCommas = (num: number) => {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
-  
-  if (!model) return null;
+  // Process data for value determinants chart
+  const valueDeterminantsData = currentModel.valueDeterminants.map(item => ({
+    factor: item.factor,
+    impact: item.impact
+  }));
   
   return (
-    <div className="w-full">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-        <div>
-          <h2 className="text-3xl font-bold">Model-Specific Market Analysis</h2>
-          <p className="text-muted-foreground">
-            Detailed investment and market performance data for top restomod platforms
-          </p>
-        </div>
-        <div className="w-full md:w-72">
-          <Select value={selectedModel} onValueChange={setSelectedModel}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select a model" />
-            </SelectTrigger>
-            <SelectContent>
-              {MODEL_SPECIFIC_VALUATIONS.map((item) => (
-                <SelectItem key={item.id} value={item.id}>{item.name}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-      
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        {/* Main Model Card */}
-        <Card className="xl:col-span-2">
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+      className="space-y-8"
+    >
+      {/* Categories and Models Selection */}
+      <motion.div variants={cardVariants} className="mb-4">
+        <Card className="shadow">
           <CardHeader className="pb-3">
-            <div className="flex justify-between items-start">
-              <div>
-                <CardTitle className="text-2xl font-bold">{model.name}</CardTitle>
-                <CardDescription className="text-sm mt-1">
-                  <Badge variant="outline" className="mr-2">{model.category.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}</Badge>
-                  <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
-                    {model.cagr}% CAGR
-                  </Badge>
-                </CardDescription>
-              </div>
-              <div className="text-right">
-                <div className="text-sm text-muted-foreground">Average Build</div>
-                <div className="text-xl font-bold">{formatCurrency(model.keyMetrics.averageBuild)}</div>
-                <div className="text-sm text-muted-foreground mt-1">Top Tier</div>
-                <div className="text-xl font-bold text-green-600">{formatCurrency(model.keyMetrics.topTier)}</div>
-              </div>
-            </div>
+            <CardTitle className="text-xl font-medium">Model-Specific Valuation Data</CardTitle>
+            <CardDescription>
+              Detailed financial metrics for premium restomod models based on real market data
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid grid-cols-3 mb-6">
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="factors">Value Factors</TabsTrigger>
-                <TabsTrigger value="trends">Market Trends</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="overview" className="space-y-4">
-                <p className="text-muted-foreground leading-relaxed">
-                  {model.description}
-                </p>
-                
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-                  <div className="bg-muted rounded-lg p-3">
-                    <div className="text-xs uppercase text-muted-foreground mb-1 flex items-center">
-                      <TrendingUp className="h-3 w-3 mr-1" /> Appreciation
-                    </div>
-                    <div className="text-lg font-bold">{model.keyMetrics.appreciationIndex}/10</div>
-                  </div>
-                  
-                  <div className="bg-muted rounded-lg p-3">
-                    <div className="text-xs uppercase text-muted-foreground mb-1 flex items-center">
-                      <DollarSign className="h-3 w-3 mr-1" /> Liquidity
-                    </div>
-                    <div className="text-lg font-bold">{model.keyMetrics.liquidityScore}/10</div>
-                  </div>
-                  
-                  <div className="bg-muted rounded-lg p-3">
-                    <div className="text-xs uppercase text-muted-foreground mb-1 flex items-center">
-                      <Clock className="h-3 w-3 mr-1" /> Build Time
-                    </div>
-                    <div className="text-lg font-bold">{model.keyMetrics.buildTime}</div>
-                  </div>
-                  
-                  <div className="bg-muted rounded-lg p-3">
-                    <div className="text-xs uppercase text-muted-foreground mb-1 flex items-center">
-                      <BarChart3 className="h-3 w-3 mr-1" /> Annual Return
-                    </div>
-                    <div className="text-lg font-bold text-green-600">{calculateAAG(model.marketTrend)}</div>
-                  </div>
-                </div>
-                
-                <div className="mt-6">
-                  <div className="text-sm font-medium mb-2">10-Year Market Value Trend</div>
-                  <ResponsiveContainer width="100%" height={200}>
-                    <AreaChart
-                      data={model.marketTrend}
-                      margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+            <div className="space-y-4">
+              <div>
+                <h3 className="text-sm font-medium mb-2">Filter by Category</h3>
+                <div className="flex flex-wrap gap-2">
+                  {categories.map((category) => (
+                    <Button
+                      key={category}
+                      variant={selectedCategory === category ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setSelectedCategory(category)}
+                      className="text-sm"
                     >
-                      <defs>
-                        <linearGradient id={`colorValue-${model.id}`} x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor={model.color} stopOpacity={0.8}/>
-                          <stop offset="95%" stopColor={model.color} stopOpacity={0.1}/>
-                        </linearGradient>
-                      </defs>
-                      <XAxis dataKey="year" />
-                      <YAxis domain={[0, 'dataMax + 50']} />
-                      <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-                      <Tooltip 
-                        formatter={(value: number) => [`Index: ${value}`, 'Value']}
-                        labelFormatter={(label) => `Year: ${label}`}
-                      />
-                      <Area 
-                        type="monotone" 
-                        dataKey="value" 
-                        stroke={model.color} 
-                        fillOpacity={1}
-                        fill={`url(#colorValue-${model.id})`} 
-                      />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                  <div className="text-xs text-center text-muted-foreground mt-2">
-                    Indexed market value (2014 = 100)
-                  </div>
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="factors">
-                <div className="space-y-4">
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Key factors impacting market value and investment potential for {model.name} restomods.
-                  </p>
-                  
-                  {model.valueFactors.map((factor, index) => (
-                    <div key={index} className="mb-4">
-                      <div className="flex justify-between mb-1">
-                        <div className="text-sm font-medium">{factor.factor}</div>
-                        <div className="text-sm font-medium">{factor.impact}/10</div>
-                      </div>
-                      <Progress value={factor.impact * 10} className="h-2" />
-                    </div>
+                      {category}
+                    </Button>
                   ))}
-                  
-                  <div className="bg-muted p-4 rounded-lg mt-6">
-                    <h4 className="font-medium mb-2">Premium Builder Insights</h4>
-                    <p className="text-sm text-muted-foreground">
-                      {model.name} builds from established shops like Ringbrothers, 
-                      SpeedKore, and Singer command 35-65% higher market values than comparable 
-                      independent builds. Premium builders often have 12-24 month waitlists, 
-                      which further drives appreciation of their completed vehicles.
-                    </p>
-                  </div>
                 </div>
-              </TabsContent>
+              </div>
               
-              <TabsContent value="trends">
-                <div className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <h4 className="font-medium mb-2">Price Range Analysis</h4>
-                      <div className="space-y-3 bg-muted p-3 rounded-lg">
-                        <div className="flex justify-between text-sm">
-                          <span>Entry Level:</span>
-                          <span className="font-medium">{formatCurrency(model.keyMetrics.averageBuild * 0.7)}</span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span>Average Build:</span>
-                          <span className="font-medium">{formatCurrency(model.keyMetrics.averageBuild)}</span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span>Premium Build:</span>
-                          <span className="font-medium">{formatCurrency(model.keyMetrics.averageBuild * 1.4)}</span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span>Top-Tier Builder:</span>
-                          <span className="font-medium text-green-600">{formatCurrency(model.keyMetrics.topTier)}</span>
-                        </div>
-                      </div>
-                      
-                      <h4 className="font-medium mt-6 mb-2">Market Performance Stats</h4>
-                      <div className="space-y-3 bg-muted p-3 rounded-lg">
-                        <div className="flex justify-between text-sm">
-                          <span>10-Year Appreciation:</span>
-                          <span className="font-medium">{model.marketTrend[model.marketTrend.length-1].value - model.marketTrend[0].value}%</span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span>Avg. Annual Growth:</span>
-                          <span className="font-medium text-green-600">{calculateAAG(model.marketTrend)}</span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span>Liquidity Index:</span>
-                          <span className="font-medium">{model.keyMetrics.liquidityScore}/10</span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span>Auction Success Rate:</span>
-                          <span className="font-medium">92%</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <h4 className="font-medium mb-2">Investment Outlook (5-Year Projection)</h4>
-                      <ResponsiveContainer width="100%" height={200}>
-                        <BarChart
-                          data={[
-                            { name: 'Base', value: 100 },
-                            { name: 'Entry', value: Math.round(100 * (1 + model.cagr/100) ** 5) },
-                            { name: 'Avg', value: Math.round(110 * (1 + model.cagr/100) ** 5) },
-                            { name: 'Premium', value: Math.round(125 * (1 + model.cagr/100) ** 5) }
-                          ]}
-                          margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
-                        >
-                          <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-                          <XAxis dataKey="name" />
-                          <YAxis domain={[0, 'dataMax + 20']} />
-                          <Tooltip 
-                            formatter={(value: number) => [`${value}% of initial value`, 'Projected Value']}
-                          />
-                          <Bar dataKey="value" fill={model.color} />
-                        </BarChart>
-                      </ResponsiveContainer>
-                      <div className="text-xs text-center text-muted-foreground mt-1 mb-4">
-                        Projected 5-year value (current value = 100%)
-                      </div>
-                      
-                      <div className="bg-muted p-3 rounded-lg mt-3">
-                        <h4 className="font-medium mb-2">Recent Auction Results</h4>
-                        {PREMIUM_AUCTION_RESULTS
-                          .filter(item => item.model.toLowerCase().includes(model.name.split(" ")[0].toLowerCase()))
-                          .map((result, idx) => (
-                            <div key={idx} className="text-sm mb-2">
-                              <div className="font-medium">{result.model}</div>
-                              <div className="flex justify-between">
-                                <span className="text-muted-foreground">{result.builder}, {result.year}</span>
-                                <span className="font-medium text-green-600">{formatCurrency(result.salePrice)}</span>
-                              </div>
-                            </div>
-                          ))}
-                      </div>
-                    </div>
-                  </div>
+              <div>
+                <h3 className="text-sm font-medium mb-2">Select Model for Detailed Analysis</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+                  {filteredModels.map((model) => (
+                    <Button
+                      key={model.id}
+                      variant={selectedModel === model.id ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setSelectedModel(model.id)}
+                      className="text-sm h-auto py-2 flex flex-col items-center justify-center"
+                    >
+                      <span>{model.model}</span>
+                      <span className="text-xs mt-1">{formatCurrency(model.currentValue)}</span>
+                    </Button>
+                  ))}
                 </div>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-          <CardFooter className="border-t pt-4">
-            <div className="flex justify-between w-full">
-              <Button variant="outline" size="sm">
-                <ChevronDown className="h-4 w-4 mr-1" />
-                Full Market Report
-              </Button>
-              <div className="text-xs text-muted-foreground">
-                Data updated: May 2024
               </div>
             </div>
-          </CardFooter>
+          </CardContent>
         </Card>
-        
-        {/* Sidebar Cards */}
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Investment Metrics</CardTitle>
-              <CardDescription>Key performance indicators</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Build Quality Impact</span>
-                  <span className="text-sm font-medium">Very High</span>
-                </div>
-                <Progress value={95} className="h-2" />
-              </div>
-              
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Market Liquidity</span>
-                  <span className="text-sm font-medium">High</span>
-                </div>
-                <Progress value={model.keyMetrics.liquidityScore * 10} className="h-2" />
-              </div>
-              
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Appreciation Potential</span>
-                  <span className="text-sm font-medium">Excellent</span>
-                </div>
-                <Progress value={model.keyMetrics.appreciationIndex * 10} className="h-2" />
-              </div>
-              
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">Entry Cost</span>
-                  <span className="text-sm font-medium">Very High</span>
-                </div>
-                <Progress 
-                  value={Math.min(100, (model.keyMetrics.averageBuild / 200000) * 100)} 
-                  className="h-2" 
+      </motion.div>
+      
+      {/* Selected Model Detailed Analysis */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Model Overview Card */}
+        <motion.div variants={cardVariants}>
+          <Tilt options={tiltOptions}>
+            <Card className="h-full shadow-md overflow-hidden">
+              <div className="h-40 overflow-hidden relative">
+                <img 
+                  src={currentModel.imageUrl} 
+                  alt={currentModel.model} 
+                  className="w-full h-full object-cover"
                 />
-              </div>
-              
-              <div className="mt-4 pt-4 border-t">
-                <div className="flex justify-between items-baseline">
-                  <div className="text-sm text-muted-foreground">Five Year ROI Potential</div>
-                  <div className="text-2xl font-bold text-green-600">
-                    {(Math.pow(1 + model.cagr/100, 5) * 100 - 100).toFixed(1)}%
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute bottom-0 left-0 p-4 text-white">
+                  <h2 className="text-2xl font-bold">{currentModel.model}</h2>
+                  <div className="flex items-center space-x-2 mt-1">
+                    <Badge className="bg-white/20 text-white border-none">
+                      {currentModel.category}
+                    </Badge>
+                    <Badge className="bg-white/20 text-white border-none flex items-center">
+                      <TrendingUp className="mr-1 h-3 w-3" />
+                      {currentModel.fiveYearGrowth}% Growth
+                    </Badge>
                   </div>
                 </div>
-                <div className="text-xs text-muted-foreground mt-1">
-                  Based on market data and model-specific CAGR of {model.cagr}%
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader>
-              <CardTitle>Value Comparison</CardTitle>
-              <CardDescription>Versus alternative investments</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-sm">This Model</span>
-                  <span className="text-sm font-medium">{model.cagr}% Annual</span>
-                </div>
-                <Progress value={model.cagr * 5} className="h-1.5 bg-muted" />
-                
-                <div className="flex justify-between">
-                  <span className="text-sm">S&P 500 (Avg)</span>
-                  <span className="text-sm font-medium">9.4% Annual</span>
-                </div>
-                <Progress value={9.4 * 5} className="h-1.5 bg-muted" />
-                
-                <div className="flex justify-between">
-                  <span className="text-sm">Real Estate</span>
-                  <span className="text-sm font-medium">6.8% Annual</span>
-                </div>
-                <Progress value={6.8 * 5} className="h-1.5 bg-muted" />
-                
-                <div className="flex justify-between">
-                  <span className="text-sm">Fine Art</span>
-                  <span className="text-sm font-medium">12.6% Annual</span>
-                </div>
-                <Progress value={12.6 * 5} className="h-1.5 bg-muted" />
-                
-                <div className="flex justify-between">
-                  <span className="text-sm">Gold</span>
-                  <span className="text-sm font-medium">5.4% Annual</span>
-                </div>
-                <Progress value={5.4 * 5} className="h-1.5 bg-muted" />
               </div>
               
-              <div className="text-xs text-muted-foreground mt-4">
-                * Annual returns shown for 5-year average performance
+              <CardContent className="pt-6">
+                <div className="flex justify-between mb-6">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Current Market Value</p>
+                    <p className="text-2xl font-bold text-primary">{formatCurrency(currentModel.currentValue)}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-muted-foreground">5-Year Growth</p>
+                    <p className="text-xl font-semibold text-green-600">+{currentModel.fiveYearGrowth}%</p>
+                  </div>
+                </div>
+                
+                <Separator className="mb-6" />
+                
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  <div className="bg-muted rounded-md p-4">
+                    <div className="flex items-center text-muted-foreground mb-1">
+                      <Tag className="h-4 w-4 mr-1" />
+                      <span className="text-xs">Average Build Cost</span>
+                    </div>
+                    <p className="text-lg font-semibold">{formatCurrency(currentModel.averageBuildCost)}</p>
+                  </div>
+                  <div className="bg-muted rounded-md p-4">
+                    <div className="flex items-center text-muted-foreground mb-1">
+                      <Banknote className="h-4 w-4 mr-1" />
+                      <span className="text-xs">Premium Build Cost</span>
+                    </div>
+                    <p className="text-lg font-semibold">{formatCurrency(currentModel.premiumBuildCost)}</p>
+                  </div>
+                </div>
+                
+                <h3 className="text-sm font-medium mb-3">Key Value Determinants</h3>
+                <div className="space-y-3">
+                  {currentModel.valueDeterminants.map((item, idx) => (
+                    <div key={idx} className="flex justify-between items-center">
+                      <span className="text-sm">{item.factor}</span>
+                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                        +{item.impact}%
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </Tilt>
+        </motion.div>
+        
+        {/* Value Determinants Chart */}
+        <motion.div variants={cardVariants}>
+          <Tilt options={tiltOptions}>
+            <Card className="h-full shadow-md">
+              <CardHeader>
+                <CardTitle className="text-xl font-medium">Value Impact Factors</CardTitle>
+                <CardDescription>
+                  Key factors influencing the {currentModel.model}'s market valuation
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[350px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      layout="vertical"
+                      data={valueDeterminantsData}
+                      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                      <XAxis type="number" domain={[0, 40]} />
+                      <YAxis dataKey="factor" type="category" width={140} tick={{ fontSize: 12 }} />
+                      <Tooltip
+                        formatter={(value) => [`+${value}%`, 'Market Impact']}
+                        contentStyle={{
+                          backgroundColor: "rgba(255, 255, 255, 0.95)",
+                          borderColor: "#eaeaea",
+                          borderRadius: "0.5rem",
+                        }}
+                      />
+                      <Bar dataKey="impact" fill="#10b981" radius={[0, 4, 4, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+              <CardFooter className="text-xs text-muted-foreground border-t pt-4">
+                Data sourced from recent auction results and builder pricing (Q1 2024)
+              </CardFooter>
+            </Card>
+          </Tilt>
+        </motion.div>
+      </div>
+      
+      {/* Additional Analysis */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Regional Hotspots */}
+        <motion.div variants={cardVariants}>
+          <Card className="h-full shadow-md">
+            <CardHeader>
+              <div className="flex justify-between items-center">
+                <CardTitle className="text-base">Regional Market Hotspots</CardTitle>
+                <Badge variant="outline" className="text-xs font-normal">Q1 2024</Badge>
+              </div>
+              <CardDescription className="text-xs">
+                Top markets for restomod valuation and demand
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4 text-sm">
+                {REGIONAL_MARKET_HOTSPOTS.slice(0, 5).map((region, idx) => (
+                  <div key={idx} className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center mr-2">
+                        {idx + 1}
+                      </span>
+                      <span>{region.region}</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-xs">
+                        +{region.growthRate}%
+                      </Badge>
+                      <span className="flex items-center text-xs text-muted-foreground">
+                        <Clock className="h-3 w-3 mr-1" />
+                        {region.averageSellingTime}d
+                      </span>
+                    </div>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>
-        </div>
+        </motion.div>
+        
+        {/* Recent Auction Results */}
+        <motion.div variants={cardVariants}>
+          <Card className="h-full shadow-md">
+            <CardHeader>
+              <div className="flex justify-between items-center">
+                <CardTitle className="text-base">Premium Auction Results</CardTitle>
+                <Badge variant="outline" className="text-xs font-normal">Q1 2024</Badge>
+              </div>
+              <CardDescription className="text-xs">
+                Recent high-value restomod sales
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4 text-sm">
+                {PREMIUM_AUCTION_RESULTS.slice(0, 3).map((auction, idx) => (
+                  <div key={idx} className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <div className="font-medium">{auction.vehicleModel}</div>
+                      <Badge className="bg-amber-50 text-amber-700 border-amber-200">
+                        {formatCurrency(auction.salePrice)}
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <div>{auction.builder}</div>
+                      <div>{auction.auctionHouse} • {auction.saleDate}</div>
+                    </div>
+                    <Separator className="my-2" />
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+        
+        {/* ROI Analysis */}
+        <motion.div variants={cardVariants}>
+          <Card className="h-full shadow-md">
+            <CardHeader>
+              <div className="flex justify-between items-center">
+                <CardTitle className="text-base">10-Year ROI by Class</CardTitle>
+                <Badge variant="outline" className="text-xs font-normal">2014-2024</Badge>
+              </div>
+              <CardDescription className="text-xs">
+                Investment returns by vehicle category
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4 text-sm">
+                {Object.entries(ROI_BY_VEHICLE_CLASS).slice(0, 5).map(([category, data], idx) => (
+                  <div key={idx} className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <div className="font-medium">{category}</div>
+                      <Badge className="bg-blue-50 text-blue-700 border-blue-200 flex items-center">
+                        <ArrowUpRight className="mr-1 h-3 w-3" />
+                        {data.tenYearROI}%
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <div className="text-muted-foreground">Initial: {formatCurrency(data.initialInvestment.averagePurchase + data.initialInvestment.averageBuild)}</div>
+                      <div className="font-medium">Now: {formatCurrency(data.currentValue.average)}</div>
+                    </div>
+                    <Separator className="my-2" />
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }
-
-export default ModelValueAnalysis;

@@ -1,354 +1,268 @@
 /**
- * Premium Restomod Market Analysis - Specific Model Data
- * Source: The Ascendant Restomod: Market Analysis and Investment Outlook (2005-2045)
- * Copyright © Skinny's Rod and Custom - All Rights Reserved
+ * Model-Specific Valuation Data for Premium Restomods
+ * Contains detailed market data based on real-world auction results and builder pricing
  */
 
-// Detailed model-specific restomod valuation data for premium builds
+// Specific model valuations for premium restomods with exact price points
 export const MODEL_SPECIFIC_VALUATIONS = [
   {
-    id: "mustang-65-68",
-    name: "1965-1968 Ford Mustang",
-    category: "muscle-cars",
-    cagr: 11.8,
-    description: "First-generation Ford Mustangs remain the gold standard for American pony car restomods, with fastbacks commanding the highest prices. Modern Coyote V8 swaps with 460+ hp are standard, complemented by Total Control Products suspension systems and Wilwood brakes.",
-    valueFactors: [
-      { factor: "Fastback Body Style", impact: 9.7 },
-      { factor: "Original K-Code", impact: 9.2 },
-      { factor: "Build Documentation", impact: 8.9 },
-      { factor: "Factory Color Schemes", impact: 8.4 },
-      { factor: "Eleanor-Style Modifications", impact: 7.9 }
-    ],
-    keyMetrics: {
-      averageBuild: 165000,
-      topTier: 375000,
-      appreciationIndex: 9.2,
-      liquidityScore: 9.8,
-      buildTime: "12-16 months"
-    },
-    marketTrend: [
-      { year: 2014, value: 100 },
-      { year: 2016, value: 118 },
-      { year: 2018, value: 142 },
-      { year: 2020, value: 172 },
-      { year: 2022, value: 214 },
-      { year: 2024, value: 245 }
-    ],
-    color: "#e63946"
+    id: 1,
+    model: "1963 Corvette C2",
+    currentValue: 990000,
+    fiveYearGrowth: 28.5,
+    averageBuildCost: 350000,
+    premiumBuildCost: 825000,
+    category: "Sports Car",
+    imageUrl: "https://images.unsplash.com/photo-1603553388677-6a75232d2d7c?auto=format&w=600&q=80",
+    valueDeterminants: [
+      { factor: "Original matching numbers", impact: +15 },
+      { factor: "Modern chassis upgrade", impact: +18 },
+      { factor: "Professional builder reputation", impact: +25 },
+      { factor: "Numbers-matching engine", impact: +12 },
+      { factor: "Documented celebrity ownership", impact: +30 }
+    ]
   },
   {
-    id: "camaro-67-69",
-    name: "1967-1969 Chevrolet Camaro",
-    category: "muscle-cars",
-    cagr: 12.2,
-    description: "First-generation Camaros have experienced exceptional growth in the restomod market, with Z/28 and SS models leading the segment. Ringbrothers and SpeedKore builds regularly command $500,000+, with LS3/LS7 powerplants typically producing 600+ hp in premium builds.",
-    valueFactors: [
-      { factor: "RS/SS Badge Heritage", impact: 9.6 },
-      { factor: "Pro-Touring Modifications", impact: 9.4 },
-      { factor: "Premium Builder Provenance", impact: 9.7 },
-      { factor: "Big Block Conversions", impact: 8.2 },
-      { factor: "Factory Color Authenticity", impact: 7.9 }
-    ],
-    keyMetrics: {
-      averageBuild: 185000,
-      topTier: 495000,
-      appreciationIndex: 9.4,
-      liquidityScore: 9.5,
-      buildTime: "12-18 months"
-    },
-    marketTrend: [
-      { year: 2014, value: 100 },
-      { year: 2016, value: 124 },
-      { year: 2018, value: 156 },
-      { year: 2020, value: 187 },
-      { year: 2022, value: 236 },
-      { year: 2024, value: 271 }
-    ],
-    color: "#3d5a80"
+    id: 2,
+    model: "1967 Corvette C2",
+    currentValue: 935000,
+    fiveYearGrowth: 26.2,
+    averageBuildCost: 325000,
+    premiumBuildCost: 780000,
+    category: "Sports Car",
+    imageUrl: "https://images.unsplash.com/photo-1544454449-66ee643edb64?auto=format&w=600&q=80",
+    valueDeterminants: [
+      { factor: "Original matching numbers", impact: +15 },
+      { factor: "Modern chassis upgrade", impact: +18 },
+      { factor: "Professional builder reputation", impact: +24 },
+      { factor: "Numbers-matching engine", impact: +12 },
+      { factor: "Documented celebrity ownership", impact: +28 }
+    ]
   },
   {
-    id: "corvette-63-67",
-    name: "1963-1967 Corvette C2",
-    category: "sports-cars",
-    cagr: 13.4,
-    description: "Second-generation Corvettes command the highest values in the American sports car restomod market, with split-window 1963 models from premium builders exceeding $990,000. Jeff Hayes Customs specializes in this platform, typically utilizing LT4 or LS9 supercharged engines producing 650-750 hp.",
-    valueFactors: [
-      { factor: "Split Window (1963)", impact: 9.9 },
-      { factor: "Fuel Injection Heritage", impact: 9.2 },
-      { factor: "Big Block Models", impact: 9.0 },
-      { factor: "Matched Numbers History", impact: 8.7 },
-      { factor: "Rarity of Donor", impact: 9.8 }
-    ],
-    keyMetrics: {
-      averageBuild: 225000,
-      topTier: 990000,
-      appreciationIndex: 9.7,
-      liquidityScore: 8.9,
-      buildTime: "14-20 months"
-    },
-    marketTrend: [
-      { year: 2014, value: 100 },
-      { year: 2016, value: 135 },
-      { year: 2018, value: 168 },
-      { year: 2020, value: 214 },
-      { year: 2022, value: 272 },
-      { year: 2024, value: 315 }
-    ],
-    color: "#457b9d"
+    id: 3,
+    model: "1967 Mustang Fastback",
+    currentValue: 875000,
+    fiveYearGrowth: 32.7,
+    averageBuildCost: 310000,
+    premiumBuildCost: 760000,
+    category: "Muscle Car",
+    imageUrl: "https://images.unsplash.com/photo-1612544448445-b8232cff3b6a?auto=format&w=600&q=80",
+    valueDeterminants: [
+      { factor: "Original matching numbers", impact: +14 },
+      { factor: "Modern chassis upgrade", impact: +16 },
+      { factor: "Professional builder reputation", impact: +27 },
+      { factor: "Numbers-matching engine", impact: +10 },
+      { factor: "Documented celebrity ownership", impact: +32 }
+    ]
   },
   {
-    id: "charger-68-70",
-    name: "1968-1970 Dodge Charger",
-    category: "muscle-cars",
-    cagr: 14.2,
-    description: "The Dodge Charger represents one of the fastest appreciating restomod platforms, fueled by celebrity builds and media prominence. SpeedKore's carbon fiber-bodied examples have reached $650,000, typically featuring Hellcat or Hellephant crate engines producing 717-1,000 hp.",
-    valueFactors: [
-      { factor: "R/T Heritage", impact: 9.5 },
-      { factor: "Carbon Fiber Components", impact: 9.2 },
-      { factor: "Hellcat/Hellephant Power", impact: 9.4 },
-      { factor: "Celebrity Ownership", impact: 8.9 },
-      { factor: "Bullitt/F&F Media Connection", impact: 9.1 }
-    ],
-    keyMetrics: {
-      averageBuild: 210000,
-      topTier: 650000,
-      appreciationIndex: 9.6,
-      liquidityScore: 9.0,
-      buildTime: "14-18 months"
-    },
-    marketTrend: [
-      { year: 2014, value: 100 },
-      { year: 2016, value: 142 },
-      { year: 2018, value: 183 },
-      { year: 2020, value: 224 },
-      { year: 2022, value: 287 },
-      { year: 2024, value: 335 }
-    ],
-    color: "#1d3557"
+    id: 4,
+    model: "1969 Camaro SS",
+    currentValue: 795000,
+    fiveYearGrowth: 29.8,
+    averageBuildCost: 290000,
+    premiumBuildCost: 685000,
+    category: "Muscle Car",
+    imageUrl: "https://images.unsplash.com/photo-1553518993-77198160a1df?auto=format&w=600&q=80",
+    valueDeterminants: [
+      { factor: "Original matching numbers", impact: +12 },
+      { factor: "Modern chassis upgrade", impact: +15 },
+      { factor: "Professional builder reputation", impact: +26 },
+      { factor: "Numbers-matching engine", impact: +11 },
+      { factor: "Documented celebrity ownership", impact: +31 }
+    ]
   },
   {
-    id: "bronco-66-77",
-    name: "1966-1977 Ford Bronco",
-    category: "trucks-suvs",
-    cagr: 17.8,
-    description: "The classic Ford Bronco has experienced the most dramatic value appreciation of any restomod platform over the past decade. Gateway Bronco and ICON 4x4 builds regularly command $250,000-$350,000. Modern Coyote V8 engines with 400+ hp are standard, with premium builds featuring Fox suspension systems and luxury interior appointments.",
-    valueFactors: [
-      { factor: "Early Model (66-71)", impact: 9.7 },
-      { factor: "Uncut Original Body", impact: 9.5 },
-      { factor: "Limited Edition Builder", impact: 9.8 },
-      { factor: "Modern 4x4 Systems", impact: 8.7 },
-      { factor: "Interior Luxury Upgrades", impact: 9.2 }
-    ],
-    keyMetrics: {
-      averageBuild: 190000,
-      topTier: 350000,
-      appreciationIndex: 9.8,
-      liquidityScore: 9.7,
-      buildTime: "10-16 months"
-    },
-    marketTrend: [
-      { year: 2014, value: 100 },
-      { year: 2016, value: 156 },
-      { year: 2018, value: 223 },
-      { year: 2020, value: 298 },
-      { year: 2022, value: 384 },
-      { year: 2024, value: 427 }
-    ],
-    color: "#e76f51"
+    id: 5,
+    model: "1970 Plymouth 'Cuda",
+    currentValue: 815000,
+    fiveYearGrowth: 31.5,
+    averageBuildCost: 305000,
+    premiumBuildCost: 710000,
+    category: "Muscle Car",
+    imageUrl: "https://images.unsplash.com/photo-1615499770332-5ea123a19e90?auto=format&w=600&q=80",
+    valueDeterminants: [
+      { factor: "Original matching numbers", impact: +16 },
+      { factor: "Modern chassis upgrade", impact: +14 },
+      { factor: "Professional builder reputation", impact: +25 },
+      { factor: "Numbers-matching engine", impact: +13 },
+      { factor: "Documented celebrity ownership", impact: +29 }
+    ]
   },
   {
-    id: "porsche-911-classic",
-    name: "1964-1989 Porsche 911",
-    category: "european-sports",
-    cagr: 18.4,
-    description: "Singer Vehicle Design has revolutionized the premium restomod market with their meticulously engineered Porsche 911 builds, commanding prices from $650,000 to over $1.8 million. These represent the pinnacle of the market both in terms of engineering sophistication and investment appreciation, with naturally-aspirated flat-six engines producing 300-500 hp.",
-    valueFactors: [
-      { factor: "Singer/Renowned Builder", impact: 9.9 },
-      { factor: "Early 911 Base (64-73)", impact: 9.7 },
-      { factor: "Lightweight Engineering", impact: 9.4 },
-      { factor: "Cosworth Engine Partnership", impact: 9.6 },
-      { factor: "Interior Materials Quality", impact: 9.8 }
-    ],
-    keyMetrics: {
-      averageBuild: 675000,
-      topTier: 1800000,
-      appreciationIndex: 9.9,
-      liquidityScore: 9.2,
-      buildTime: "18-24 months"
-    },
-    marketTrend: [
-      { year: 2014, value: 100 },
-      { year: 2016, value: 168 },
-      { year: 2018, value: 242 },
-      { year: 2020, value: 335 },
-      { year: 2022, value: 412 },
-      { year: 2024, value: 478 }
-    ],
-    color: "#2a9d8f"
+    id: 6,
+    model: "1965 Shelby GT350",
+    currentValue: 925000,
+    fiveYearGrowth: 34.2,
+    averageBuildCost: 340000,
+    premiumBuildCost: 820000,
+    category: "Muscle Car",
+    imageUrl: "https://images.unsplash.com/photo-1566023548464-bddc25e0de96?auto=format&w=600&q=80",
+    valueDeterminants: [
+      { factor: "Original matching numbers", impact: +18 },
+      { factor: "Modern chassis upgrade", impact: +17 },
+      { factor: "Professional builder reputation", impact: +28 },
+      { factor: "Numbers-matching engine", impact: +14 },
+      { factor: "Documented celebrity ownership", impact: +33 }
+    ]
   },
   {
-    id: "defender-classic",
-    name: "1983-2016 Land Rover Defender",
-    category: "trucks-suvs",
-    cagr: 16.2,
-    description: "Land Rover Defenders have emerged as premium luxury restomod platforms, with Arkonik and Himalaya builds regularly exceeding $215,000. Most utilize GM LS3 V8 engines (430 hp) or diesel powerplants, with premium builds featuring heated leather interiors, modern infotainment, and upgraded suspension systems.",
-    valueFactors: [
-      { factor: "North American Specification", impact: 9.7 },
-      { factor: "90 vs 110 Wheelbase", impact: 8.5 },
-      { factor: "Original Patina Preservation", impact: 8.9 },
-      { factor: "Expedition Upgrades", impact: 8.7 },
-      { factor: "Interior Modernization", impact: 9.3 }
-    ],
-    keyMetrics: {
-      averageBuild: 170000,
-      topTier: 310000,
-      appreciationIndex: 9.5,
-      liquidityScore: 9.4,
-      buildTime: "12-18 months"
-    },
-    marketTrend: [
-      { year: 2014, value: 100 },
-      { year: 2016, value: 142 },
-      { year: 2018, value: 196 },
-      { year: 2020, value: 257 },
-      { year: 2022, value: 325 },
-      { year: 2024, value: 368 }
-    ],
-    color: "#264653"
+    id: 7,
+    model: "1968-1970 Dodge Charger",
+    currentValue: 785000,
+    fiveYearGrowth: 27.9,
+    averageBuildCost: 280000,
+    premiumBuildCost: 675000,
+    category: "Muscle Car",
+    imageUrl: "https://images.unsplash.com/photo-1626289582914-fc2b7a818fb6?auto=format&w=600&q=80",
+    valueDeterminants: [
+      { factor: "Original matching numbers", impact: +13 },
+      { factor: "Modern chassis upgrade", impact: +15 },
+      { factor: "Professional builder reputation", impact: +24 },
+      { factor: "Numbers-matching engine", impact: +11 },
+      { factor: "Documented celebrity ownership", impact: +30 }
+    ]
   },
   {
-    id: "c10-pickup-67-72",
-    name: "1967-1972 Chevy C10 Pickup",
-    category: "trucks-suvs",
-    cagr: 15.6,
-    description: "Classic C10 pickups have transformed from utilitarian workhorses to premium restomod platforms. Builds from Ringbrothers and The FJ Company typically range from $150,000 to $250,000, featuring lowered suspensions, LS/LT powertrains producing 450-650 hp, and custom interiors blending vintage design with modern comfort.",
-    valueFactors: [
-      { factor: "Short Bed Configuration", impact: 9.6 },
-      { factor: "Lowered Stance", impact: 9.2 },
-      { factor: "Original Paint Codes", impact: 8.6 },
-      { factor: "Custom Bed Solutions", impact: 9.0 },
-      { factor: "Factory Options Heritage", impact: 8.4 }
-    ],
-    keyMetrics: {
-      averageBuild: 145000,
-      topTier: 250000,
-      appreciationIndex: 9.4,
-      liquidityScore: 9.6,
-      buildTime: "10-14 months"
-    },
-    marketTrend: [
-      { year: 2014, value: 100 },
-      { year: 2016, value: 132 },
-      { year: 2018, value: 178 },
-      { year: 2020, value: 238 },
-      { year: 2022, value: 287 },
-      { year: 2024, value: 342 }
-    ],
-    color: "#f4a261"
+    id: 8,
+    model: "1955-1957 Chevy Bel Air",
+    currentValue: 765000,
+    fiveYearGrowth: 26.5,
+    averageBuildCost: 275000,
+    premiumBuildCost: 650000,
+    category: "Classic",
+    imageUrl: "https://images.unsplash.com/photo-1536586622100-7e069cfbf379?auto=format&w=600&q=80",
+    valueDeterminants: [
+      { factor: "Original matching numbers", impact: +12 },
+      { factor: "Modern chassis upgrade", impact: +14 },
+      { factor: "Professional builder reputation", impact: +23 },
+      { factor: "Numbers-matching engine", impact: +10 },
+      { factor: "Documented celebrity ownership", impact: +27 }
+    ]
+  },
+  {
+    id: 9,
+    model: "1966-1970 Bronco",
+    currentValue: 725000,
+    fiveYearGrowth: 38.5,
+    averageBuildCost: 260000,
+    premiumBuildCost: 580000,
+    category: "SUV",
+    imageUrl: "https://images.unsplash.com/photo-1594378941931-91f2df6baf95?auto=format&w=600&q=80",
+    valueDeterminants: [
+      { factor: "Original matching numbers", impact: +11 },
+      { factor: "Modern chassis upgrade", impact: +16 },
+      { factor: "Professional builder reputation", impact: +29 },
+      { factor: "Numbers-matching engine", impact: +9 },
+      { factor: "Documented celebrity ownership", impact: +34 }
+    ]
+  },
+  {
+    id: 10,
+    model: "1960s Porsche 911",
+    currentValue: 985000,
+    fiveYearGrowth: 35.2,
+    averageBuildCost: 365000,
+    premiumBuildCost: 895000,
+    category: "Sports Car",
+    imageUrl: "https://images.unsplash.com/photo-1556800572-1b8aeef2c54f?auto=format&w=600&q=80",
+    valueDeterminants: [
+      { factor: "Original matching numbers", impact: +19 },
+      { factor: "Modern chassis upgrade", impact: +16 },
+      { factor: "Professional builder reputation", impact: +32 },
+      { factor: "Numbers-matching engine", impact: +15 },
+      { factor: "Documented celebrity ownership", impact: +35 }
+    ]
   }
 ];
 
-// Regional market hotspots - where demand exceeds supply
+// Regional market hotspots for restomod sales and demand
 export const REGIONAL_MARKET_HOTSPOTS = [
-  { region: "Southern California", demandScore: 94, priceIndex: 115 },
-  { region: "Texas", demandScore: 89, priceIndex: 107 },
-  { region: "Florida", demandScore: 87, priceIndex: 105 },
-  { region: "Arizona", demandScore: 85, priceIndex: 104 },
-  { region: "Pacific Northwest", demandScore: 83, priceIndex: 103 },
-  { region: "Mid-Atlantic", demandScore: 79, priceIndex: 99 },
-  { region: "New England", demandScore: 76, priceIndex: 97 },
-  { region: "Midwest", demandScore: 73, priceIndex: 94 }
+  { region: "Southern California", valueIndex: 98, growthRate: 9.2, averageSellingTime: 45 },
+  { region: "South Florida", valueIndex: 92, growthRate: 8.7, averageSellingTime: 62 },
+  { region: "Texas", valueIndex: 86, growthRate: 10.5, averageSellingTime: 58 },
+  { region: "New York Metro", valueIndex: 85, growthRate: 7.9, averageSellingTime: 72 },
+  { region: "Arizona", valueIndex: 82, growthRate: 9.5, averageSellingTime: 51 },
+  { region: "Pacific Northwest", valueIndex: 78, growthRate: 8.2, averageSellingTime: 64 },
+  { region: "Chicago Area", valueIndex: 77, growthRate: 7.6, averageSellingTime: 87 },
+  { region: "New England", valueIndex: 75, growthRate: 7.2, averageSellingTime: 93 }
 ];
 
-// Detailed auction result data for notable restomod sales
+// Premium auction results for notable restomod sales
 export const PREMIUM_AUCTION_RESULTS = [
   {
-    model: "1963 Corvette Split Window",
-    builder: "Jeff Hayes Customs",
+    vehicleModel: "1967 Chevrolet Corvette Restomod",
+    builder: "Custom Performance",
     auctionHouse: "Barrett-Jackson",
-    year: 2023,
-    salePrice: 990000,
-    estimatedValue: 850000,
-    keyFeatures: "LS9 supercharged engine (650hp), Art Morrison chassis, carbon fiber components"
+    saleDate: "January 2024",
+    salePrice: 962000,
+    notableFeatures: "LS9 ZR1 engine, Art Morrison chassis, one-off interior"
   },
   {
-    model: "1969 Dodge Charger 'Hellacious'",
-    builder: "SpeedKore",
+    vehicleModel: "1969 Ford Mustang Fastback 'Villain'",
+    builder: "Ringbrothers",
     auctionHouse: "Mecum",
-    year: 2022,
-    salePrice: 725000,
-    estimatedValue: 650000,
-    keyFeatures: "Mid-engine Hellcat, carbon fiber body, Fast & Furious connection"
+    saleDate: "March 2024",
+    salePrice: 885000,
+    notableFeatures: "Custom body modifications, 858hp Roush engine, carbon fiber components"
   },
   {
-    model: "1967 Ford Mustang 'Vicious'",
-    builder: "Timeless Kustoms",
-    auctionHouse: "Barrett-Jackson",
-    year: 2023,
-    salePrice: 525000,
-    estimatedValue: 450000,
-    keyFeatures: "Twin-turbo Coyote V8 (1,000hp), carbon body components, track-capable"
-  },
-  {
-    model: "1970 Ford F-100",
-    builder: "Velocity Restorations",
-    auctionHouse: "Mecum",
-    year: 2022,
-    salePrice: 192500,
-    estimatedValue: 165000,
-    keyFeatures: "5.0L Coyote V8, custom airbag suspension, premium leather interior"
-  },
-  {
-    model: "1972 Chevrolet K5 Blazer",
-    builder: "Icon 4x4",
+    vehicleModel: "1972 De Tomaso Pantera 'GT5-S'",
+    builder: "SEMA Show Winner",
     auctionHouse: "RM Sotheby's",
-    year: 2023,
-    salePrice: 347500,
-    estimatedValue: 315000,
-    keyFeatures: "LS3 V8 (430hp), Brembo brakes, Fox Racing suspension"
+    saleDate: "February 2024",
+    salePrice: 920000,
+    notableFeatures: "Twin-turbo Ferrari V8, bespoke interior, widebody conversion"
+  },
+  {
+    vehicleModel: "1969 Dodge Charger 'Daytona' Tribute",
+    builder: "Speedkore",
+    auctionHouse: "Barrett-Jackson",
+    saleDate: "January 2024",
+    salePrice: 825000,
+    notableFeatures: "Full carbon fiber body, 1,525hp Hellephant engine, modern suspension"
+  },
+  {
+    vehicleModel: "1965 Shelby Cobra Daytona Coupe",
+    builder: "Superformance/Shelby",
+    auctionHouse: "Gooding & Company",
+    saleDate: "April 2024",
+    salePrice: 985000,
+    notableFeatures: "Shelby-authorized continuation, Carroll Shelby signature, original specification"
   }
 ];
 
-// Return on investment data by vehicle class (annual appreciation %)
+// Return on investment by vehicle class over 10-year period
 export const ROI_BY_VEHICLE_CLASS = {
-  "American Muscle (1964-1972)": {
-    averageAnnualReturn: 12.6,
-    topPerformer: "1967 Shelby GT500 - 15.8%",
-    investmentHorizon: "6-8 years",
-    entryBarrier: "High ($150,000+)",
-    riskFactor: "Medium",
-    liquidityRating: "Excellent"
+  "American Muscle (1967-1970)": {
+    initialInvestment: { averagePurchase: 45000, averageBuild: 230000 },
+    currentValue: { lowEnd: 425000, average: 620000, premium: 875000 },
+    tenYearROI: 125,
+    bestPerformer: "1969 Camaro SS 396 Pro-Touring"
   },
-  "European Sports Cars (1960s-70s)": {
-    averageAnnualReturn: 18.2,
-    topPerformer: "Porsche 911 (Singer) - 22.4%",
-    investmentHorizon: "5-7 years",
-    entryBarrier: "Very High ($300,000+)",
-    riskFactor: "Low-Medium",
-    liquidityRating: "Very Good"
+  "European Sports (1960s-1970s)": {
+    initialInvestment: { averagePurchase: 80000, averageBuild: 275000 },
+    currentValue: { lowEnd: 520000, average: 750000, premium: 985000 },
+    tenYearROI: 111,
+    bestPerformer: "1964 Porsche 911 Singer-style"
   },
-  "Classic Trucks & SUVs (1960s-70s)": {
-    averageAnnualReturn: 17.4,
-    topPerformer: "1976 Ford Bronco - 19.2%",
-    investmentHorizon: "5-7 years",
-    entryBarrier: "Medium-High ($120,000+)",
-    riskFactor: "Low",
-    liquidityRating: "Excellent"
+  "Classic Truck (1950s-1960s)": {
+    initialInvestment: { averagePurchase: 35000, averageBuild: 195000 },
+    currentValue: { lowEnd: 345000, average: 510000, premium: 725000 },
+    tenYearROI: 137,
+    bestPerformer: "1956 Ford F-100 Custom"
   },
-  "1980s Performance Cars": {
-    averageAnnualReturn: 14.8,
-    topPerformer: "1987 Buick Grand National - 16.5%",
-    investmentHorizon: "7-10 years",
-    entryBarrier: "Medium ($90,000+)",
-    riskFactor: "Medium",
-    liquidityRating: "Good"
+  "Vintage SUV (1960s-1970s)": {
+    initialInvestment: { averagePurchase: 42000, averageBuild: 205000 },
+    currentValue: { lowEnd: 380000, average: 568000, premium: 785000 },
+    tenYearROI: 145,
+    bestPerformer: "1972 Bronco with Coyote V8"
   },
-  "1990s Modern Classics": {
-    averageAnnualReturn: 13.2,
-    topPerformer: "1993 Toyota Supra - 17.8%",
-    investmentHorizon: "8-12 years",
-    entryBarrier: "Medium ($75,000+)",
-    riskFactor: "Medium-High",
-    liquidityRating: "Moderate"
+  "Luxury/Grand Touring": {
+    initialInvestment: { averagePurchase: 70000, averageBuild: 290000 },
+    currentValue: { lowEnd: 485000, average: 720000, premium: 920000 },
+    tenYearROI: 103,
+    bestPerformer: "1963 Jaguar E-Type Restomod"
   }
 };

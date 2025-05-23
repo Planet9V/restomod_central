@@ -202,6 +202,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get(`${apiPrefix}/perplexity/part-info`, perplexityApi.getPartInformation);
   app.post(`${apiPrefix}/perplexity/configuration`, perplexityApi.getConfigurationRecommendations);
   
+  // Market Research API endpoint
+  app.post(`${apiPrefix}/market-research/search`, marketResearchApi.searchMarketData);
+  
   // ========== ADMIN API ROUTES ==========
   // These routes are protected and require admin authentication
   
