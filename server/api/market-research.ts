@@ -52,7 +52,14 @@ export async function searchMarketData(req: Request, res: Response) {
       });
     }
 
-    const data = await response.json();
+    const data = await response.json() as {
+      choices: [{
+        message: {
+          content: string;
+        }
+      }];
+      citations?: string[];
+    };
     
     // Process the response
     const content = data.choices[0].message.content;

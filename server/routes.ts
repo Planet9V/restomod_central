@@ -10,6 +10,7 @@ import * as perplexityApi from "./api/perplexity";
 import * as configuratorApi from "./api/configurator";
 import * as assistantApi from "./api/assistant";
 import * as articlesApi from "./api/articles";
+import * as marketResearchApi from "./api/market-research";
 import { scheduleArticleGeneration } from "./services/scheduler";
 import { setupAuth, isAuthenticated, isAdmin } from "./auth";
 
@@ -618,6 +619,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Generate a new article (admin only)
   app.post(`${apiPrefix}/admin/research-articles/generate`, isAuthenticated, isAdmin, articlesApi.generateArticle);
+  
+  // Real-time market research endpoint using Perplexity API
+  app.post(`${apiPrefix}/market-research/search`, marketResearchApi.searchMarketData);
   
   // Admin Research Articles CRUD
   app.post(`${apiPrefix}/admin/research-articles`, isAuthenticated, isAdmin, async (req, res) => {

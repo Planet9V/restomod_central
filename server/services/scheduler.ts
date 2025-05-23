@@ -1,65 +1,44 @@
-/**
- * Scheduler for automated tasks like article generation
- * This module provides functionality for scheduling and managing recurring tasks
- */
+import { generateCarShowArticle } from './articleGenerator';
 
-import { generateNewArticle } from "./articleGenerator";
-import { log } from "../vite";
-
-// Store all scheduled tasks for clean shutdown
-const scheduledTasks: NodeJS.Timeout[] = [];
+// Store active timers for cleanup
+const activeTimers: NodeJS.Timeout[] = [];
 
 /**
- * Schedule an article generation task to run once per day
+ * Initializes all scheduled tasks for the application
+ * Currently includes:
+ * - Article generation for upcoming car shows (every 2 hours)
  */
 export function scheduleArticleGeneration() {
-  // Log the start of scheduling
-  log("Starting scheduled article generation task", "scheduler");
+  console.log('Setting up scheduled article generation system...');
   
-  // Set interval for daily article generation (24 hours in milliseconds)
-  const INTERVAL_MS = 24 * 60 * 60 * 1000; // 24 hours
+  // Function to run the generator
+  const runScheduledGenerator = async () => {
+    console.log('Running scheduled article generation for car shows...');
+    await generateCarShowArticle();
+  };
   
-  // Optional: Generate an article immediately on startup
-  generateArticleTask();
+  // Schedule to run every 2 hours
+  const twoHoursInMs = 2 * 60 * 60 * 1000;
+  const intervalTimer = setInterval(runScheduledGenerator, twoHoursInMs);
+  activeTimers.push(intervalTimer);
   
-  // Schedule the recurring task
-  const taskId = setInterval(generateArticleTask, INTERVAL_MS);
+  // Also run immediately on startup (with a small delay)
+  const startupTimer = setTimeout(runScheduledGenerator, 5000);
+  activeTimers.push(startupTimer);
   
-  // Store the task ID for cleanup
-  scheduledTasks.push(taskId);
-  
-  // Log completion
-  log("Scheduled daily article generation task", "scheduler");
+  console.log('Article generation scheduling system initialized - will run every 2 hours');
 }
 
 /**
- * Execute the article generation task
- */
-async function generateArticleTask() {
-  log("Running scheduled article generation task", "scheduler");
-  
-  try {
-    const article = await generateNewArticle();
-    
-    if (article) {
-      log(`Successfully generated new article: "${article.title}"`, "scheduler");
-    } else {
-      log("No new article was generated - possible topic exhaustion", "scheduler");
-    }
-  } catch (error) {
-    log(`Error in scheduled article generation: ${(error as Error).message}`, "scheduler");
-  }
-}
-
-/**
- * Clean up all scheduled tasks
+ * Cleans up all scheduled tasks when shutting down the server
+ * This prevents tasks from running in the background after server shutdown
  */
 export function cleanupScheduledTasks() {
-  // Clear all intervals
-  scheduledTasks.forEach(taskId => clearInterval(taskId));
+  // Clear all timers
+  activeTimers.forEach(timer => {
+    clearTimeout(timer);
+    clearInterval(timer);
+  });
   
-  // Empty the array
-  scheduledTasks.length = 0;
-  
-  log("Cleaned up all scheduled tasks", "scheduler");
+  console.log(`Cleaned up ${activeTimers.length} scheduled tasks`);
 }
