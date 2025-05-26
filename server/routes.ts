@@ -215,10 +215,80 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ========== RESEARCH DATA PROCESSING ROUTES ==========
   // Process authentic research documents and populate database
   const { processResearchDataHandler, getAuthenticDataHandler, getProcessingStatusHandler } = await import('./api/processResearchData');
+  const { carShowEventProcessor } = await import('./services/carShowEventProcessor');
   
   app.post(`${apiPrefix}/admin/process-research-data`, isAuthenticated, isAdmin, processResearchDataHandler);
   app.get(`${apiPrefix}/authentic-data/:type`, getAuthenticDataHandler);
   app.get(`${apiPrefix}/processing-status`, getProcessingStatusHandler);
+
+  // ========== CAR SHOW CALENDAR & EVENTS ==========
+  // Calendar and event search functionality from your research documents
+  
+  // Get car show calendar events
+  app.get(`${apiPrefix}/car-show-calendar`, async (req, res) => {
+    try {
+      const { year, month } = req.query;
+      
+      if (year && month) {
+        const events = carShowEventProcessor.getEventsForMonth(
+          parseInt(year as string), 
+          parseInt(month as string) - 1
+        );
+        res.json({ events, year, month });
+      } else {
+        // Return all calendar events
+        const carShowData = (global as any).carShowData;
+        res.json({ 
+          events: carShowData?.eventCalendar || [],
+          message: carShowData ? "Calendar loaded from research documents" : "Process car show data first"
+        });
+      }
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch calendar events" });
+    }
+  });
+
+  // Search car show events
+  app.get(`${apiPrefix}/car-show-search`, async (req, res) => {
+    try {
+      const { location, eventType, startDate, endDate } = req.query;
+      
+      const criteria: any = {};
+      if (location) criteria.location = location as string;
+      if (eventType) criteria.eventType = eventType as string;
+      if (startDate && endDate) {
+        criteria.dateRange = {
+          start: new Date(startDate as string),
+          end: new Date(endDate as string)
+        };
+      }
+
+      const events = carShowEventProcessor.searchEvents(criteria);
+      res.json({ 
+        events, 
+        criteria,
+        count: events.length,
+        source: "authentic_research_documents"
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to search events" });
+    }
+  });
+
+  // Get event venues from research
+  app.get(`${apiPrefix}/event-venues`, async (req, res) => {
+    try {
+      const carShowData = (global as any).carShowData;
+      res.json({
+        venues: carShowData?.eventVenues || [],
+        websites: carShowData?.eventWebsites || [],
+        searchFilters: carShowData?.searchFilters || [],
+        source: "car_show_research_documents"
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch event venues" });
+    }
+  });
 
   // ========== ADMIN API ROUTES ==========
   // These routes are protected and require admin authentication
