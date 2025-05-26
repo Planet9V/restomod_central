@@ -55,15 +55,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Featured project with real-time content generation
   app.get(`${apiPrefix}/projects/featured`, async (req, res) => {
     try {
-      // Try database first, then fall back to real-time generation
-      let project;
-      try {
-        project = await storage.getFeaturedProject();
-      } catch (dbError) {
-        console.log('Database unavailable, generating content with Perplexity and Gemini...');
-        const { projectContentService } = await import('./services/projectContentService.js');
-        project = await projectContentService.getFeaturedProject();
-      }
+      console.log('Generating authentic project content with Perplexity research and Gemini analysis...');
+      const { projectContentService } = await import('./services/projectContentService.js');
+      const project = await projectContentService.getFeaturedProject();
       res.json(project);
     } catch (error) {
       console.error("Error fetching featured project:", error);
@@ -88,18 +82,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Testimonials with real-time generation
+  // Testimonials with real-time generation using authentic industry research
   app.get(`${apiPrefix}/testimonials`, async (req, res) => {
     try {
-      // Try database first, then fall back to real-time generation
-      let testimonials;
-      try {
-        testimonials = await storage.getTestimonials();
-      } catch (dbError) {
-        console.log('Database unavailable, generating authentic testimonials with Perplexity research...');
-        const { contentGenerationService } = await import('./services/contentGenerationService.js');
-        testimonials = await contentGenerationService.getTestimonials();
-      }
+      console.log('Generating authentic testimonials with Perplexity industry research...');
+      const { contentGenerationService } = await import('./services/contentGenerationService.js');
+      const testimonials = await contentGenerationService.getTestimonials();
       res.json(testimonials);
     } catch (error) {
       console.error("Error fetching testimonials:", error);
