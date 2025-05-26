@@ -248,7 +248,7 @@ export function MarketTrendMoodBoard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {displayData.market_indicators.map((indicator, index) => (
+                {displayData.market_indicators?.map((indicator, index) => (
                   <div key={index} className="flex items-center justify-between">
                     <div className="flex-1">
                       <div className="font-medium text-sm">{indicator.name}</div>
@@ -290,7 +290,7 @@ export function MarketTrendMoodBoard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {displayData.recent_activity.map((activity, index) => (
+                {displayData.recent_activity?.map((activity, index) => (
                   <div key={index} className="border-l-2 border-burgundy/20 pl-3">
                     <div className="text-sm font-medium">{activity.event}</div>
                     <div className="flex items-center gap-2 mt-1">
