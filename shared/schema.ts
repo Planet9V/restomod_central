@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, jsonb, timestamp, decimal } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, jsonb, timestamp, decimal, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
@@ -451,3 +451,149 @@ export const userConfigurationsRelations = relations(userConfigurations, ({ one 
 export const userConfigurationsInsertSchema = createInsertSchema(userConfigurations);
 export type InsertUserConfiguration = z.infer<typeof userConfigurationsInsertSchema>;
 export type UserConfiguration = typeof userConfigurations.$inferSelect;
+
+// Enhanced market data tables for comprehensive analytics
+export const marketValuations = pgTable("market_valuations", {
+  id: serial("id").primaryKey(),
+  vehicleMake: varchar("vehicle_make", { length: 100 }).notNull(),
+  vehicleModel: varchar("vehicle_model", { length: 100 }).notNull(),
+  yearRange: varchar("year_range", { length: 50 }),
+  engineVariant: varchar("engine_variant", { length: 200 }),
+  bodyStyle: varchar("body_style", { length: 100 }),
+  conditionRating: varchar("condition_rating", { length: 50 }),
+  hagertyValue: decimal("hagerty_value", { precision: 12, scale: 2 }),
+  auctionHigh: decimal("auction_high", { precision: 12, scale: 2 }),
+  auctionLow: decimal("auction_low", { precision: 12, scale: 2 }),
+  averagePrice: decimal("average_price", { precision: 12, scale: 2 }),
+  trendPercentage: decimal("trend_percentage", { precision: 5, scale: 2 }),
+  marketSegment: varchar("market_segment", { length: 100 }),
+  investmentGrade: varchar("investment_grade", { length: 50 }),
+  lastUpdated: timestamp("last_updated").defaultNow(),
+  sourceData: text("source_data"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const builderProfiles = pgTable("builder_profiles", {
+  id: serial("id").primaryKey(),
+  companyName: varchar("company_name", { length: 200 }).notNull(),
+  location: varchar("location", { length: 200 }),
+  specialtyFocus: text("specialty_focus"),
+  reputationTier: varchar("reputation_tier", { length: 50 }),
+  averageBuildCostRange: varchar("average_build_cost_range", { length: 100 }),
+  buildTimeEstimate: varchar("build_time_estimate", { length: 100 }),
+  notableProjects: text("notable_projects"),
+  contactInformation: text("contact_information"),
+  websiteUrl: varchar("website_url", { length: 500 }),
+  portfolioImages: text("portfolio_images").array(),
+  certifications: text("certifications").array(),
+  warrantyOffered: boolean("warranty_offered").default(false),
+  yearEstablished: integer("year_established"),
+  rating: decimal("rating", { precision: 3, scale: 2 }),
+  reviewCount: integer("review_count").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const technicalSpecifications = pgTable("technical_specifications", {
+  id: serial("id").primaryKey(),
+  componentCategory: varchar("component_category", { length: 100 }).notNull(),
+  partNumber: varchar("part_number", { length: 200 }),
+  manufacturer: varchar("manufacturer", { length: 200 }).notNull(),
+  productName: varchar("product_name", { length: 300 }),
+  priceRange: varchar("price_range", { length: 100 }),
+  exactPrice: decimal("exact_price", { precision: 10, scale: 2 }),
+  compatibility: text("compatibility"),
+  performanceSpecs: text("performance_specs"),
+  installationDifficulty: varchar("installation_difficulty", { length: 50 }),
+  requiredTools: text("required_tools").array(),
+  estimatedLaborHours: decimal("estimated_labor_hours", { precision: 4, scale: 1 }),
+  vendorUrl: varchar("vendor_url", { length: 500 }),
+  inStock: boolean("in_stock").default(true),
+  popularityRank: integer("popularity_rank"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const eventVenues = pgTable("event_venues", {
+  id: serial("id").primaryKey(),
+  venueName: varchar("venue_name", { length: 300 }).notNull(),
+  locationCity: varchar("location_city", { length: 100 }),
+  locationState: varchar("location_state", { length: 50 }),
+  locationCountry: varchar("location_country", { length: 100 }).default("USA"),
+  venueType: varchar("venue_type", { length: 100 }),
+  capacity: integer("capacity"),
+  amenities: text("amenities").array(),
+  contactInfo: text("contact_info"),
+  websiteUrl: varchar("website_url", { length: 500 }),
+  coordinates: varchar("coordinates", { length: 100 }),
+  parkingAvailable: boolean("parking_available").default(true),
+  foodVendors: boolean("food_vendors").default(false),
+  swapMeet: boolean("swap_meet").default(false),
+  judgingClasses: text("judging_classes").array(),
+  entryFees: varchar("entry_fees", { length: 200 }),
+  trophiesAwarded: boolean("trophies_awarded").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const buildGuides = pgTable("build_guides", {
+  id: serial("id").primaryKey(),
+  title: varchar("title", { length: 300 }).notNull(),
+  vehicleApplication: varchar("vehicle_application", { length: 200 }),
+  difficultyLevel: varchar("difficulty_level", { length: 50 }),
+  estimatedCost: varchar("estimated_cost", { length: 100 }),
+  estimatedTime: varchar("estimated_time", { length: 100 }),
+  requiredSkills: text("required_skills").array(),
+  toolsNeeded: text("tools_needed").array(),
+  partsRequired: text("parts_required"),
+  stepByStepGuide: text("step_by_step_guide"),
+  safetyWarnings: text("safety_warnings").array(),
+  troubleshootingTips: text("troubleshooting_tips"),
+  videoUrl: varchar("video_url", { length: 500 }),
+  authorName: varchar("author_name", { length: 200 }),
+  authorCredentials: varchar("author_credentials", { length: 300 }),
+  views: integer("views").default(0),
+  rating: decimal("rating", { precision: 3, scale: 2 }),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const investmentAnalytics = pgTable("investment_analytics", {
+  id: serial("id").primaryKey(),
+  vehicleCategory: varchar("vehicle_category", { length: 100 }).notNull(),
+  investmentHorizon: varchar("investment_horizon", { length: 50 }),
+  expectedReturn: decimal("expected_return", { precision: 5, scale: 2 }),
+  riskLevel: varchar("risk_level", { length: 50 }),
+  liquidityRating: varchar("liquidity_rating", { length: 50 }),
+  marketTrends: text("market_trends"),
+  demographicFactors: text("demographic_factors"),
+  recommendationScore: decimal("recommendation_score", { precision: 3, scale: 1 }),
+  supportingData: text("supporting_data"),
+  lastAnalyzed: timestamp("last_analyzed").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Schema validation for new tables
+export const marketValuationsInsertSchema = createInsertSchema(marketValuations);
+export type InsertMarketValuation = z.infer<typeof marketValuationsInsertSchema>;
+export type MarketValuation = typeof marketValuations.$inferSelect;
+
+export const builderProfilesInsertSchema = createInsertSchema(builderProfiles);
+export type InsertBuilderProfile = z.infer<typeof builderProfilesInsertSchema>;
+export type BuilderProfile = typeof builderProfiles.$inferSelect;
+
+export const technicalSpecificationsInsertSchema = createInsertSchema(technicalSpecifications);
+export type InsertTechnicalSpecification = z.infer<typeof technicalSpecificationsInsertSchema>;
+export type TechnicalSpecification = typeof technicalSpecifications.$inferSelect;
+
+export const eventVenuesInsertSchema = createInsertSchema(eventVenues);
+export type InsertEventVenue = z.infer<typeof eventVenuesInsertSchema>;
+export type EventVenue = typeof eventVenues.$inferSelect;
+
+export const buildGuidesInsertSchema = createInsertSchema(buildGuides);
+export type InsertBuildGuide = z.infer<typeof buildGuidesInsertSchema>;
+export type BuildGuide = typeof buildGuides.$inferSelect;
+
+export const investmentAnalyticsInsertSchema = createInsertSchema(investmentAnalytics);
+export type InsertInvestmentAnalytic = z.infer<typeof investmentAnalyticsInsertSchema>;
+export type InvestmentAnalytic = typeof investmentAnalytics.$inferSelect;
