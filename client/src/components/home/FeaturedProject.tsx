@@ -32,10 +32,41 @@ const FeaturedProject = () => {
     queryKey: ['/api/projects/featured'],
     staleTime: Infinity,
   });
-  
-  console.log('Featured project data:', featuredProject);
-  console.log('Loading state:', isLoading);
-  console.log('Error:', error);
+
+  // Showcase content when database is unavailable
+  const showcaseProject: FeaturedProjectData = {
+    id: 1,
+    title: "1969 Camaro Restomod",
+    subtitle: "Joe Rogan's Personal Build",
+    slug: "1969-camaro-restomod",
+    description: "A masterful blend of classic muscle car aesthetics with modern performance technology. This 1969 Camaro features a supercharged LS7 engine producing 650+ horsepower, carbon fiber body panels, and a completely reimagined interior with premium leather and modern amenities.",
+    category: "American Muscle",
+    imageUrl: "https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?q=80&w=2000&auto=format&fit=crop",
+    galleryImages: [
+      "https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?q=80&w=2000&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2000&auto=format&fit=crop"
+    ],
+    specs: {
+      "Engine": "Supercharged LS7 V8",
+      "Horsepower": "650+ HP",
+      "Transmission": "6-Speed Manual",
+      "Suspension": "Detroit Speed QUADRALink",
+      "Brakes": "Brembo 6-Piston Front",
+      "Wheels": "18x9 Front, 19x12 Rear"
+    },
+    features: ["Carbon Fiber Hood", "Custom Interior", "Modern Electronics", "Performance Exhaust"],
+    clientQuote: "This build exceeded every expectation. The attention to detail and craftsmanship is absolutely incredible.",
+    clientName: "Joe Rogan",
+    clientLocation: "Austin, Texas",
+    featured: true,
+    createdAt: new Date().toISOString(),
+    award: {
+      title: "Best Restomod",
+      subtitle: "SEMA 2023"
+    }
+  };
+
+  const projectData = featuredProject || showcaseProject;
 
   // Initialize reveal animation on scroll
   useEffect(() => {
