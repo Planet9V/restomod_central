@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'wouter';
 import { Calendar, ChevronRight, Clock, MapPin } from 'lucide-react';
@@ -31,13 +32,16 @@ export function UpcomingEvents() {
     retry: 1,
   });
   
-  if (error) {
-    toast({
-      title: 'Error loading event articles',
-      description: 'Could not load upcoming events information',
-      variant: 'destructive',
-    });
-  }
+  // Handle error with useEffect to prevent render issues
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: 'Error loading event articles',
+        description: 'Could not load upcoming events information',
+        variant: 'destructive',
+      });
+    }
+  }, [error, toast]);
   
   // Get the most recent events (limit to 3)
   const upcomingEvents = articles?.filter(article => article.category === 'events')
