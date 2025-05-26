@@ -86,7 +86,14 @@ export function MarketTrendMoodBoard() {
     ]
   };
 
-  const displayData = trendData || mockTrendData;
+  // Ensure we have complete data structure with fallback to mock data
+  const displayData = {
+    sentiment: trendData?.sentiment || mockTrendData.sentiment,
+    sentiment_score: trendData?.sentiment_score || mockTrendData.sentiment_score,
+    market_confidence: trendData?.market_confidence || mockTrendData.market_confidence,
+    market_indicators: trendData?.market_indicators || mockTrendData.market_indicators,
+    recent_activity: trendData?.recent_activity || mockTrendData.recent_activity
+  };
 
   // Animation variants
   const containerVariants = {
