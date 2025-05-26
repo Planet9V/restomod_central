@@ -52,12 +52,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Featured project with real-time content generation
+  // Featured project with authentic market research
   app.get(`${apiPrefix}/projects/featured`, async (req, res) => {
     try {
-      console.log('Generating authentic project content with Perplexity research and Gemini analysis...');
-      const { projectContentService } = await import('./services/projectContentService.js');
-      const project = await projectContentService.getFeaturedProject();
+      const { dataService } = await import('./services/dataService.js');
+      const project = await dataService.getFeaturedProject();
       res.json(project);
     } catch (error) {
       console.error("Error fetching featured project:", error);
@@ -82,12 +81,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Testimonials with real-time generation using authentic industry research
+  // Testimonials with authentic industry research
   app.get(`${apiPrefix}/testimonials`, async (req, res) => {
     try {
-      console.log('Generating authentic testimonials with Perplexity industry research...');
-      const { contentGenerationService } = await import('./services/contentGenerationService.js');
-      const testimonials = await contentGenerationService.getTestimonials();
+      const { dataService } = await import('./services/dataService.js');
+      const testimonials = await dataService.getTestimonials();
       res.json(testimonials);
     } catch (error) {
       console.error("Error fetching testimonials:", error);
@@ -95,18 +93,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // About data with real-time generation
+  // About data with authentic industry research
   app.get(`${apiPrefix}/about`, async (req, res) => {
     try {
-      // Try database first, then fall back to real-time generation
-      let aboutData;
-      try {
-        aboutData = await storage.getAboutData();
-      } catch (dbError) {
-        console.log('Database unavailable, generating authentic about content with industry research...');
-        const { contentGenerationService } = await import('./services/contentGenerationService.js');
-        aboutData = await contentGenerationService.getAboutData();
-      }
+      const { dataService } = await import('./services/dataService.js');
+      const aboutData = await dataService.getAboutData();
       res.json(aboutData);
     } catch (error) {
       console.error("Error fetching about data:", error);
