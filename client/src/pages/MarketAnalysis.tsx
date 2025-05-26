@@ -805,6 +805,19 @@ const MarketAnalysis = () => {
         imageSrc="https://images.unsplash.com/photo-1532578498858-e8ccfe449ac7?q=80&w=1600&auto=format&fit=crop"
       />
       
+      {/* Dynamic Market Trend Mood Board */}
+      <section className="py-16 bg-gradient-to-r from-gray-50 to-offwhite">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <MarketTrendMoodBoard />
+          </motion.div>
+        </div>
+      </section>
+
       {/* Model Valuation Button */}
       <div className="bg-white py-4 border-b">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
