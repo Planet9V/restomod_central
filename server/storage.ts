@@ -447,3 +447,81 @@ export const getResearchArticlesByCategory = async (category: string) => {
     orderBy: desc(schema.researchArticles.publishDate),
   });
 };
+
+// ========== CAR SHOW EVENTS STORAGE ==========
+
+export const createCarShowEvent = async (data: z.infer<typeof schema.carShowEventsInsertSchema>) => {
+  const [event] = await db.insert(schema.carShowEvents).values(data).returning();
+  return event;
+};
+
+export const updateCarShowEvent = async (id: number, data: UpdateData<z.infer<typeof schema.carShowEventsInsertSchema>>) => {
+  const [event] = await db.update(schema.carShowEvents).set(data).where(eq(schema.carShowEvents.id, id)).returning();
+  return event;
+};
+
+export const deleteCarShowEvent = async (id: number) => {
+  await db.delete(schema.carShowEvents).where(eq(schema.carShowEvents.id, id));
+};
+
+export const getCarShowEvents = async (filters?: {
+  eventType?: string;
+  state?: string;
+  featured?: boolean;
+  status?: string;
+  limit?: number;
+}) => {
+  let query = db.select().from(schema.carShowEvents);
+  
+  if (filters?.eventType && filters.eventType !== 'all') {
+    query = query.where(eq(schema.carShowEvents.eventType, filters.eventType));
+  }
+  if (filters?.state && filters.state !== 'all') {
+    query = query.where(eq(schema.carShowEvents.state, filters.state));
+  }
+  if (filters?.featured !== undefined) {
+    query = query.where(eq(schema.carShowEvents.featured, filters.featured));
+  }
+  if (filters?.status && filters.status !== 'all') {
+    query = query.where(eq(schema.carShowEvents.status, filters.status));
+  }
+  
+  if (filters?.limit) {
+    query = query.limit(filters.limit);
+  }
+
+  const events = await query.orderBy(schema.carShowEvents.startDate);
+  return events;
+};
+
+export const getCarShowEventById = async (id: number) => {
+  const [event] = await db.select().from(schema.carShowEvents).where(eq(schema.carShowEvents.id, id)).limit(1);
+  return event;
+};
+
+export const getCarShowEventBySlug = async (slug: string) => {
+  const [event] = await db.select().from(schema.carShowEvents).where(eq(schema.carShowEvents.eventSlug, slug)).limit(1);
+  return event;
+};
+
+export const getFeaturedCarShowEvents = async (limit: number = 5) => {
+  const events = await db.select().from(schema.carShowEvents)
+    .where(eq(schema.carShowEvents.featured, true))
+    .orderBy(schema.carShowEvents.startDate)
+    .limit(limit);
+  return events;
+};
+
+export const getCarShowEventsByType = async (eventType: string) => {
+  const events = await db.select().from(schema.carShowEvents)
+    .where(eq(schema.carShowEvents.eventType, eventType))
+    .orderBy(schema.carShowEvents.startDate);
+  return events;
+};
+
+export const getCarShowEventsByState = async (state: string) => {
+  const events = await db.select().from(schema.carShowEvents)
+    .where(eq(schema.carShowEvents.state, state))
+    .orderBy(schema.carShowEvents.startDate);
+  return events;
+};

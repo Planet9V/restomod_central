@@ -323,23 +323,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get authentic events from your research documents
+  // Get car show events from PostgreSQL database
   app.get(`${apiPrefix}/database-events`, async (req, res) => {
     try {
-      const { authenticCarShowExtractor } = await import('./services/authenticCarShowExtractor');
-      const { eventType, state, featured, searchTerm } = req.query;
+      const { eventType, state, featured, status, limit } = req.query;
       
       const filters: any = {};
       if (eventType) filters.eventType = eventType as string;
       if (state) filters.state = state as string;
       if (featured !== undefined) filters.featured = featured === 'true';
-      if (searchTerm) filters.searchTerm = searchTerm as string;
+      if (status) filters.status = status as string;
+      if (limit) filters.limit = parseInt(limit as string);
 
-      const events = await authenticCarShowExtractor.getFilteredEvents(filters);
+      const events = await storage.getCarShowEvents(filters);
       res.json({ success: true, events });
     } catch (error) {
-      console.error("Error fetching authentic events:", error);
-      res.status(500).json({ error: "Failed to fetch authentic events" });
+      console.error("Error fetching car show events:", error);
+      res.status(500).json({ error: "Failed to fetch car show events from database" });
     }
   });
 
@@ -361,19 +361,89 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Comprehensive event extraction from research documents and Perplexity
-  app.post(`${apiPrefix}/admin/extract-all-events`, isAuthenticated, isAdmin, async (req, res) => {
+  // Complete Car Show Events CRUD API Routes for PostgreSQL
+
+  // Create new car show event
+  app.post(`${apiPrefix}/admin/car-show-events`, isAuthenticated, isAdmin, async (req, res) => {
     try {
-      const { comprehensiveEventExtractor } = await import('./services/comprehensiveEventExtractor');
-      
-      console.log('🚀 Starting comprehensive event extraction...');
-      const result = await comprehensiveEventExtractor.processCompleteEventDatabase();
-      
+      const event = await storage.createCarShowEvent(req.body);
+      res.status(201).json({ success: true, event });
+    } catch (error) {
+      console.error("Error creating car show event:", error);
+      res.status(500).json({ error: "Failed to create car show event" });
+    }
+  });
+
+  // Update car show event
+  app.put(`${apiPrefix}/admin/car-show-events/:id`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const event = await storage.updateCarShowEvent(id, req.body);
+      res.json({ success: true, event });
+    } catch (error) {
+      console.error("Error updating car show event:", error);
+      res.status(500).json({ error: "Failed to update car show event" });
+    }
+  });
+
+  // Delete car show event
+  app.delete(`${apiPrefix}/admin/car-show-events/:id`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteCarShowEvent(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting car show event:", error);
+      res.status(500).json({ error: "Failed to delete car show event" });
+    }
+  });
+
+  // Get single car show event by ID
+  app.get(`${apiPrefix}/car-show-events/:id`, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const event = await storage.getCarShowEventById(id);
+      res.json({ success: true, event });
+    } catch (error) {
+      console.error("Error fetching car show event:", error);
+      res.status(500).json({ error: "Failed to fetch car show event" });
+    }
+  });
+
+  // Get car show event by slug
+  app.get(`${apiPrefix}/car-show-events/slug/:slug`, async (req, res) => {
+    try {
+      const event = await storage.getCarShowEventBySlug(req.params.slug);
+      res.json({ success: true, event });
+    } catch (error) {
+      console.error("Error fetching car show event by slug:", error);
+      res.status(500).json({ error: "Failed to fetch car show event" });
+    }
+  });
+
+  // Get featured car show events
+  app.get(`${apiPrefix}/car-show-events/featured`, async (req, res) => {
+    try {
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : 5;
+      const events = await storage.getFeaturedCarShowEvents(limit);
+      res.json({ success: true, events });
+    } catch (error) {
+      console.error("Error fetching featured car show events:", error);
+      res.status(500).json({ error: "Failed to fetch featured car show events" });
+    }
+  });
+
+  // Seed database with authentic car show events
+  app.post(`${apiPrefix}/admin/seed-car-show-events`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const { seedCarShowEvents } = await import('../db/seed-car-show-events');
+      console.log('🌱 Starting car show events seeding with authentic data...');
+      const result = await seedCarShowEvents();
       res.json(result);
     } catch (error) {
-      console.error("Error extracting events:", error);
+      console.error("Error seeding car show events:", error);
       res.status(500).json({ 
-        error: "Failed to extract events",
+        error: "Failed to seed car show events",
         details: error instanceof Error ? error.message : 'Unknown error'
       });
     }
