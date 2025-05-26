@@ -212,6 +212,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Market Trends API endpoint
   app.get(`${apiPrefix}/market-trends`, getMarketTrends);
   
+  // ========== RESEARCH DATA PROCESSING ROUTES ==========
+  // Process authentic research documents and populate database
+  const { processResearchDataHandler, getAuthenticDataHandler, getProcessingStatusHandler } = await import('./api/processResearchData');
+  
+  app.post(`${apiPrefix}/admin/process-research-data`, isAuthenticated, isAdmin, processResearchDataHandler);
+  app.get(`${apiPrefix}/authentic-data/:type`, getAuthenticDataHandler);
+  app.get(`${apiPrefix}/processing-status`, getProcessingStatusHandler);
+
   // ========== ADMIN API ROUTES ==========
   // These routes are protected and require admin authentication
   
