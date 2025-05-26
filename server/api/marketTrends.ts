@@ -1,123 +1,17 @@
 import { Request, Response } from 'express';
+import { marketDataService } from '../services/marketDataService.js';
 
 /**
- * Get real-time market trend data using Perplexity AI
- * Analyzes current restomod and classic car market conditions
+ * Get real-time market trend data using Perplexity for research and Gemini for analysis
+ * Provides authentic market conditions with professional analysis
  */
 export async function getMarketTrends(req: Request, res: Response) {
   try {
-    const { timeframe = 'week' } = req.query;
+    const timeframe = req.query.timeframe as string || 'current';
     
-    if (!process.env.PERPLEXITY_API_KEY) {
-      return res.status(500).json({ 
-        error: 'Market trend analysis requires Perplexity API access. Please configure API key.' 
-      });
-    }
-
-    // Construct research prompt based on timeframe
-    const timeframePrompts = {
-      day: 'past 24 hours',
-      week: 'past 7 days', 
-      month: 'past 30 days'
-    };
-
-    const prompt = `Analyze the current restomod and classic car market trends for the ${timeframePrompts[timeframe as keyof typeof timeframePrompts] || 'past week'}. 
-
-Please provide a comprehensive market analysis including:
-
-1. Overall market sentiment (bullish, bearish, or neutral) with a score from 1-100
-2. Market confidence level (1-100)
-3. Top 5 trending classic car models with current estimated values and percentage changes
-4. Key market indicators: auction activity, collector interest, investment flow, supply availability (each scored 1-100 with change percentages)
-5. Recent significant market events or news that impact classic car values
-
-Focus on authentic data from recent auction results (Barrett-Jackson, Mecum, RM Sotheby's), collector market reports, and industry news. Provide specific dollar values and percentage changes where available.
-
-Respond in JSON format with the following structure:
-{
-  "overall_sentiment": "bullish|bearish|neutral",
-  "sentiment_score": number,
-  "market_confidence": number,
-  "trending_models": [
-    {
-      "model": "string",
-      "change_percentage": number,
-      "current_value": number,
-      "trend_direction": "up|down|stable"
-    }
-  ],
-  "market_indicators": [
-    {
-      "name": "string",
-      "value": number,
-      "change": number,
-      "status": "positive|negative|neutral"
-    }
-  ],
-  "recent_activity": [
-    {
-      "event": "string",
-      "impact": "high|medium|low",
-      "timestamp": "string"
-    }
-  ]
-}`;
-
-    // Call Perplexity API for real market analysis
-    const perplexityResponse = await fetch('https://api.perplexity.ai/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.PERPLEXITY_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'llama-3.1-sonar-small-128k-online',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are a classic car market analyst with access to real-time auction data and industry reports. Provide accurate, data-driven market analysis with specific values and trends.'
-          },
-          {
-            role: 'user',
-            content: prompt
-          }
-        ],
-        max_tokens: 2000,
-        temperature: 0.2,
-        top_p: 0.9,
-        return_images: false,
-        return_related_questions: false,
-        search_recency_filter: timeframe === 'day' ? 'day' : timeframe === 'week' ? 'week' : 'month'
-      }),
-    });
-
-    if (!perplexityResponse.ok) {
-      throw new Error(`Perplexity API error: ${perplexityResponse.status}`);
-    }
-
-    const perplexityData = await perplexityResponse.json();
-    const analysisText = perplexityData.choices[0].message.content;
-
-    // Extract JSON from the response
-    let marketData;
-    try {
-      // Try to parse JSON directly
-      const jsonMatch = analysisText.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        marketData = JSON.parse(jsonMatch[0]);
-      } else {
-        throw new Error('No JSON found in response');
-      }
-    } catch (parseError) {
-      // Fallback: construct structured data from text analysis
-      marketData = parseMarketAnalysis(analysisText, timeframe as string);
-    }
-
-    // Add metadata
-    marketData.last_updated = new Date().toISOString();
-    marketData.timeframe = timeframe;
-    marketData.data_sources = perplexityData.citations || [];
-
+    console.log('Getting real-time market trends using Perplexity and Gemini...');
+    const marketData = await marketDataService.getMarketTrends(timeframe);
+    
     res.json(marketData);
 
   } catch (error) {
