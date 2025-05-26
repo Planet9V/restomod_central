@@ -1,13 +1,119 @@
+import { useState } from "react";
 import { Link } from "wouter";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, Book, Calendar, FileText, MessageSquare } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
+import { 
+  ArrowRight, 
+  Book, 
+  Calendar, 
+  FileText, 
+  MessageSquare, 
+  Search,
+  Star,
+  ExternalLink,
+  Users,
+  Award,
+  ChevronRight,
+  Compass,
+  Globe,
+  Filter
+} from "lucide-react";
+import PageHeader from "@/components/ui/page-header";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
 
 const Resources = () => {
-  // Sample resource data
+  const [activeTab, setActiveTab] = useState("guides");
+
+  // Breadcrumb navigation
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "Resources", href: "/resources", isCurrentPage: true }
+  ];
+
+  // Featured car show platforms from research
+  const featuredPlatforms = [
+    {
+      name: "Hemmings Motor News",
+      description: "The pillar of the collector car hobby with institutional authority and comprehensive event listings",
+      url: "hemmings.com",
+      rating: 5,
+      features: ["Detailed event listings", "Organizer contacts", "Regional filters", "Daily updates"],
+      specialization: "Classic & collector cars",
+      imageUrl: "https://images.unsplash.com/photo-1554744512-d6c603f27c54?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      name: "CarShowSafari.com",
+      description: "Dedicated hub with extensive community features and nationwide car show listings",
+      url: "carshowsafari.com", 
+      rating: 4,
+      features: ["Virtual car shows", "Community forums", "Automotive history", "Member showcases"],
+      specialization: "Community-driven events",
+      imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      name: "American Collectors Insurance",
+      description: "Insurance company's community initiative with highly relevant classic car events",
+      url: "americancollectors.com",
+      rating: 4,
+      features: ["Comprehensive filters", "Cost sliders", "Premium events", "Professional presentation"],
+      specialization: "Collector car focus",
+      imageUrl: "https://images.unsplash.com/photo-1549399292-36400e85ad48?q=80&w=800&auto=format&fit=crop"
+    }
+  ];
+
+  // Expert search strategies from research
+  const searchStrategies = [
+    {
+      category: "Location-Based Research",
+      description: "Techniques for finding events in your area",
+      strategies: [
+        "Use radius search (e.g., 'shows within 50 miles') for comprehensive coverage",
+        "Search by city, state, and ZIP code for precise targeting", 
+        "Consider seasonal migration patterns (indoor winter, outdoor summer events)",
+        "Check regional car club calendars for exclusive or smaller events"
+      ]
+    },
+    {
+      category: "Era-Specific Filtering", 
+      description: "Finding shows that match your vehicle's era",
+      strategies: [
+        "Filter by classic car eras: pre-war, 1950s, muscle cars, etc.",
+        "Look for marque-specific shows (All Ford, Mopar only, etc.)",
+        "Search theme-based events: hot rods, original/restored, concours",
+        "Identify judged vs. non-judged events based on your interests"
+      ]
+    },
+    {
+      category: "Advanced Research Techniques",
+      description: "Professional methods for thorough event discovery", 
+      strategies: [
+        "Cross-reference multiple platforms for comprehensive coverage",
+        "Use keyword searches for specific vehicle types or themes",
+        "Check event organizer websites directly for detailed information",
+        "Follow classic car influencers and clubs on social media for announcements"
+      ]
+    }
+  ];
+
+  // Sample resource data enhanced with car show research
   const resources = [
     {
       id: 1,
+      title: "Ultimate Guide to Classic Car Show Platforms",
+      description: "Comprehensive analysis of the best websites for discovering classic car shows, based on extensive research of user needs and platform capabilities.",
+      type: "guide",
+      date: "May 26, 2025",
+      readTime: "15 min read",
+      category: "Car Shows",
+      imageUrl: "https://images.unsplash.com/photo-1554744512-d6c603f27c54?q=80&w=800&auto=format&fit=crop",
+      href: "/car-show-guide"
+    },
+    {
+      id: 2,
       title: "Understanding Restomod Value: Investment vs. Passion",
       description: "Explore the financial aspects of restomod projects, including value retention, appreciation factors, and the balance between investment and passion.",
       type: "article",

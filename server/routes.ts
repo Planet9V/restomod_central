@@ -11,6 +11,7 @@ import * as configuratorApi from "./api/configurator";
 import * as assistantApi from "./api/assistant";
 import * as articlesApi from "./api/articles";
 import * as marketResearchApi from "./api/market-research";
+import { getMarketTrends } from "./api/marketTrends";
 import { scheduleArticleGeneration } from "./services/scheduler";
 import { setupAuth, isAuthenticated, isAdmin } from "./auth";
 
@@ -204,6 +205,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Market Research API endpoint
   app.post(`${apiPrefix}/market-research/search`, marketResearchApi.searchMarketData);
+  
+  // Market Trends API endpoint
+  app.get(`${apiPrefix}/market-trends`, getMarketTrends);
   
   // ========== ADMIN API ROUTES ==========
   // These routes are protected and require admin authentication

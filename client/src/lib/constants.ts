@@ -70,6 +70,12 @@ export const NAV_LINKS = [
     href: '/mustang-restomods',
     isExternal: false,
     description: 'Expert guide to Ford Mustang restomod builds and valuations'
+  },
+  { 
+    name: 'Car Show Guide', 
+    href: '/car-show-guide',
+    isExternal: false,
+    description: 'Ultimate guide to finding and researching classic car shows'
   }
 ];
 
