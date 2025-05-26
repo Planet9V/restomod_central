@@ -362,6 +362,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Comprehensive event extraction from research documents and Perplexity
+  app.post(`${apiPrefix}/admin/extract-all-events`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const { comprehensiveEventExtractor } = await import('./services/comprehensiveEventExtractor');
+      
+      console.log('🚀 Starting comprehensive event extraction...');
+      const result = await comprehensiveEventExtractor.processCompleteEventDatabase();
+      
+      res.json(result);
+    } catch (error) {
+      console.error("Error extracting events:", error);
+      res.status(500).json({ 
+        error: "Failed to extract events",
+        details: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
   // ========== ADMIN API ROUTES ==========
   // These routes are protected and require admin authentication
   

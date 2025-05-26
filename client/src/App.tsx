@@ -22,6 +22,7 @@ import MustangRestomods from "@/pages/MustangRestomods";
 import MarketAnalysis from "@/pages/MarketAnalysis";
 import ModelValues from "@/pages/ModelValues";
 import CarShowGuide from "@/pages/CarShowGuide";
+import CarShowEvents from "@/pages/CarShowEvents";
 import NotFound from "@/pages/not-found";
 
 // Layout components
@@ -63,6 +64,7 @@ function Router() {
         <Route path="/market-analysis" component={MarketAnalysis} />
         <Route path="/model-values" component={ModelValues} />
         <Route path="/car-show-guide" component={CarShowGuide} />
+        <Route path="/car-show-events" component={CarShowEvents} />
         <Route path="/auth" component={AuthPage} />
         <Route path="/admin" component={() => <ProtectedRoute component={AdminDashboard} adminOnly />} />
         <Route component={NotFound} />
