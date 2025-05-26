@@ -290,6 +290,78 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ========== GEMINI AI EVENT PROCESSING ==========
+  // Intelligent event processing and database storage
+  
+  // Process new event data with Gemini AI
+  app.post(`${apiPrefix}/admin/process-events`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const { geminiEventProcessor } = await import('./services/geminiEventProcessor');
+      const { eventData, sourceUrl } = req.body;
+      
+      if (!eventData) {
+        return res.status(400).json({ error: "Event data is required" });
+      }
+
+      const result = await geminiEventProcessor.processEventData(eventData, sourceUrl);
+      res.json(result);
+    } catch (error) {
+      console.error("Error processing events with Gemini:", error);
+      res.status(500).json({ error: "Failed to process events" });
+    }
+  });
+
+  // Search for new events in research documents
+  app.post(`${apiPrefix}/admin/search-new-events`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const { geminiEventProcessor } = await import('./services/geminiEventProcessor');
+      const result = await geminiEventProcessor.searchForNewEvents();
+      res.json(result);
+    } catch (error) {
+      console.error("Error searching for new events:", error);
+      res.status(500).json({ error: "Failed to search for new events" });
+    }
+  });
+
+  // Get events from PostgreSQL database
+  app.get(`${apiPrefix}/database-events`, async (req, res) => {
+    try {
+      const { geminiEventProcessor } = await import('./services/geminiEventProcessor');
+      const { eventType, state, featured, status, limit } = req.query;
+      
+      const filters: any = {};
+      if (eventType) filters.eventType = eventType as string;
+      if (state) filters.state = state as string;
+      if (featured !== undefined) filters.featured = featured === 'true';
+      if (status) filters.status = status as string;
+      if (limit) filters.limit = parseInt(limit as string);
+
+      const result = await geminiEventProcessor.getEvents(filters);
+      res.json(result);
+    } catch (error) {
+      console.error("Error fetching database events:", error);
+      res.status(500).json({ error: "Failed to fetch events from database" });
+    }
+  });
+
+  // Categorize content with Gemini AI
+  app.post(`${apiPrefix}/admin/categorize-content`, isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const { geminiEventProcessor } = await import('./services/geminiEventProcessor');
+      const { content } = req.body;
+      
+      if (!content) {
+        return res.status(400).json({ error: "Content is required" });
+      }
+
+      const result = await geminiEventProcessor.categorizeEventContent(content);
+      res.json(result);
+    } catch (error) {
+      console.error("Error categorizing content:", error);
+      res.status(500).json({ error: "Failed to categorize content" });
+    }
+  });
+
   // ========== ADMIN API ROUTES ==========
   // These routes are protected and require admin authentication
   

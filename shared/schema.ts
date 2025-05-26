@@ -596,9 +596,63 @@ export const vendorPartnerships = pgTable("vendor_partnerships", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Classic Car Show Events Table - Comprehensive event storage
+export const carShowEvents = pgTable("car_show_events", {
+  id: serial("id").primaryKey(),
+  eventName: text("event_name").notNull(),
+  eventSlug: text("event_slug").unique().notNull(),
+  venue: text("venue").notNull(),
+  venueName: text("venue_name"),
+  address: text("address"),
+  city: text("city").notNull(),
+  state: text("state").notNull(),
+  country: text("country").default("USA"),
+  zipCode: text("zip_code"),
+  startDate: timestamp("start_date").notNull(),
+  endDate: timestamp("end_date"),
+  eventType: text("event_type").notNull(), // 'auction', 'car_show', 'concours', 'cruise_in', 'swap_meet'
+  eventCategory: text("event_category"), // 'classic', 'muscle', 'hot_rod', 'exotic', 'general'
+  description: text("description"),
+  website: text("website"),
+  organizerName: text("organizer_name"),
+  organizerContact: text("organizer_contact"),
+  organizerEmail: text("organizer_email"),
+  organizerPhone: text("organizer_phone"),
+  entryFeeSpectator: text("entry_fee_spectator"),
+  entryFeeParticipant: text("entry_fee_participant"),
+  registrationDeadline: timestamp("registration_deadline"),
+  capacity: integer("capacity"),
+  expectedAttendance: integer("expected_attendance"),
+  features: text("features"), // JSON string of features array
+  amenities: text("amenities"), // JSON string of amenities
+  vehicleRequirements: text("vehicle_requirements"),
+  judgingClasses: text("judging_classes"), // JSON string of judging categories
+  awards: text("awards"), // JSON string of awards/trophies
+  parkingInfo: text("parking_info"),
+  foodVendors: boolean("food_vendors").default(false),
+  swapMeet: boolean("swap_meet").default(false),
+  liveMusic: boolean("live_music").default(false),
+  kidsActivities: boolean("kids_activities").default(false),
+  weatherContingency: text("weather_contingency"),
+  specialNotes: text("special_notes"),
+  imageUrl: text("image_url"),
+  featured: boolean("featured").default(false),
+  status: text("status").default("active"), // 'active', 'cancelled', 'postponed', 'completed'
+  sourceUrl: text("source_url"), // Where the event info was found
+  dataSource: text("data_source").default("research_documents"), // 'research_documents', 'gemini_processed', 'manual'
+  verificationStatus: text("verification_status").default("pending"), // 'pending', 'verified', 'needs_update'
+  lastVerified: timestamp("last_verified"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
 // Schema validation for all new enhanced tables
 export const marketValuationsInsertSchema = createInsertSchema(marketValuations);
 export type InsertMarketValuation = z.infer<typeof marketValuationsInsertSchema>;
+
+export const carShowEventsInsertSchema = createInsertSchema(carShowEvents);
+export type InsertCarShowEvent = z.infer<typeof carShowEventsInsertSchema>;
+export type CarShowEvent = typeof carShowEvents.$inferSelect;
 export type MarketValuation = typeof marketValuations.$inferSelect;
 
 export const builderProfilesInsertSchema = createInsertSchema(builderProfiles);
