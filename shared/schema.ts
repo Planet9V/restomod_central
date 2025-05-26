@@ -495,6 +495,108 @@ export const builderProfiles = pgTable("builder_profiles", {
 });
 
 // Schema validation for new tables
+// Technical specifications table for authentic parts data
+export const technicalSpecifications = pgTable("technical_specifications", {
+  id: serial("id").primaryKey(),
+  componentCategory: text("component_category").notNull(),
+  partNumber: text("part_number"),
+  manufacturer: text("manufacturer").notNull(),
+  productName: text("product_name"),
+  priceRange: text("price_range"),
+  exactPrice: decimal("exact_price", { precision: 10, scale: 2 }),
+  compatibility: text("compatibility"),
+  performanceSpecs: text("performance_specs"),
+  installationDifficulty: text("installation_difficulty"),
+  requiredTools: text("required_tools").array(),
+  estimatedLaborHours: decimal("estimated_labor_hours", { precision: 4, scale: 1 }),
+  vendorUrl: text("vendor_url"),
+  inStock: boolean("in_stock").default(true),
+  popularityRank: integer("popularity_rank"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Event venues table for car show data
+export const eventVenues = pgTable("event_venues", {
+  id: serial("id").primaryKey(),
+  venueName: text("venue_name").notNull(),
+  locationCity: text("location_city"),
+  locationState: text("location_state"),
+  locationCountry: text("location_country").default("USA"),
+  venueType: text("venue_type"),
+  capacity: integer("capacity"),
+  amenities: text("amenities").array(),
+  contactInfo: text("contact_info"),
+  websiteUrl: text("website_url"),
+  coordinates: text("coordinates"),
+  parkingAvailable: boolean("parking_available").default(true),
+  foodVendors: boolean("food_vendors").default(false),
+  swapMeet: boolean("swap_meet").default(false),
+  judgingClasses: text("judging_classes").array(),
+  entryFees: text("entry_fees"),
+  trophiesAwarded: boolean("trophies_awarded").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Build guides table for technical documentation
+export const buildGuides = pgTable("build_guides", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  vehicleApplication: text("vehicle_application"),
+  difficultyLevel: text("difficulty_level"),
+  estimatedCost: text("estimated_cost"),
+  estimatedTime: text("estimated_time"),
+  requiredSkills: text("required_skills").array(),
+  toolsNeeded: text("tools_needed").array(),
+  partsRequired: text("parts_required"),
+  stepByStepGuide: text("step_by_step_guide"),
+  safetyWarnings: text("safety_warnings").array(),
+  troubleshootingTips: text("troubleshooting_tips"),
+  videoUrl: text("video_url"),
+  authorName: text("author_name"),
+  authorCredentials: text("author_credentials"),
+  views: integer("views").default(0),
+  rating: decimal("rating", { precision: 3, scale: 2 }),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Investment analytics table for market data
+export const investmentAnalytics = pgTable("investment_analytics", {
+  id: serial("id").primaryKey(),
+  vehicleCategory: text("vehicle_category").notNull(),
+  investmentHorizon: text("investment_horizon"),
+  expectedReturn: decimal("expected_return", { precision: 5, scale: 2 }),
+  riskLevel: text("risk_level"),
+  liquidityRating: text("liquidity_rating"),
+  marketTrends: text("market_trends"),
+  demographicFactors: text("demographic_factors"),
+  recommendationScore: decimal("recommendation_score", { precision: 3, scale: 1 }),
+  supportingData: text("supporting_data"),
+  lastAnalyzed: timestamp("last_analyzed").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Vendor partnerships table for affiliate data
+export const vendorPartnerships = pgTable("vendor_partnerships", {
+  id: serial("id").primaryKey(),
+  companyName: text("company_name").notNull(),
+  category: text("category").notNull(),
+  commissionRate: decimal("commission_rate", { precision: 5, scale: 2 }),
+  revenueOpportunity: text("revenue_opportunity"),
+  productTypes: text("product_types").array(),
+  affiliateUrl: text("affiliate_url"),
+  trackingCode: text("tracking_code"),
+  paymentTerms: text("payment_terms"),
+  minimumPayout: decimal("minimum_payout", { precision: 8, scale: 2 }),
+  contactInfo: text("contact_info"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Schema validation for all new enhanced tables
 export const marketValuationsInsertSchema = createInsertSchema(marketValuations);
 export type InsertMarketValuation = z.infer<typeof marketValuationsInsertSchema>;
 export type MarketValuation = typeof marketValuations.$inferSelect;
@@ -502,5 +604,25 @@ export type MarketValuation = typeof marketValuations.$inferSelect;
 export const builderProfilesInsertSchema = createInsertSchema(builderProfiles);
 export type InsertBuilderProfile = z.infer<typeof builderProfilesInsertSchema>;
 export type BuilderProfile = typeof builderProfiles.$inferSelect;
+
+export const technicalSpecificationsInsertSchema = createInsertSchema(technicalSpecifications);
+export type InsertTechnicalSpecification = z.infer<typeof technicalSpecificationsInsertSchema>;
+export type TechnicalSpecification = typeof technicalSpecifications.$inferSelect;
+
+export const eventVenuesInsertSchema = createInsertSchema(eventVenues);
+export type InsertEventVenue = z.infer<typeof eventVenuesInsertSchema>;
+export type EventVenue = typeof eventVenues.$inferSelect;
+
+export const buildGuidesInsertSchema = createInsertSchema(buildGuides);
+export type InsertBuildGuide = z.infer<typeof buildGuidesInsertSchema>;
+export type BuildGuide = typeof buildGuides.$inferSelect;
+
+export const investmentAnalyticsInsertSchema = createInsertSchema(investmentAnalytics);
+export type InsertInvestmentAnalytic = z.infer<typeof investmentAnalyticsInsertSchema>;
+export type InvestmentAnalytic = typeof investmentAnalytics.$inferSelect;
+
+export const vendorPartnershipsInsertSchema = createInsertSchema(vendorPartnerships);
+export type InsertVendorPartnership = z.infer<typeof vendorPartnershipsInsertSchema>;
+export type VendorPartnership = typeof vendorPartnerships.$inferSelect;
 
 
