@@ -24,6 +24,12 @@ export const NAV_LINKS = [
     description: 'Learn how we transform classics into modern masterpieces'
   },
   { 
+    name: 'Car Show Events', 
+    href: '/car-show-events',
+    isExternal: false,
+    description: 'Discover premier car shows, auctions, and automotive events nationwide'
+  },
+  { 
     name: 'About Us', 
     href: '/#about',
     isExternal: false,

@@ -323,24 +323,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get events from PostgreSQL database
+  // Get authentic events from your research documents
   app.get(`${apiPrefix}/database-events`, async (req, res) => {
     try {
-      const { geminiEventProcessor } = await import('./services/geminiEventProcessor');
-      const { eventType, state, featured, status, limit } = req.query;
+      const { authenticCarShowExtractor } = await import('./services/authenticCarShowExtractor');
+      const { eventType, state, featured, searchTerm } = req.query;
       
       const filters: any = {};
       if (eventType) filters.eventType = eventType as string;
       if (state) filters.state = state as string;
       if (featured !== undefined) filters.featured = featured === 'true';
-      if (status) filters.status = status as string;
-      if (limit) filters.limit = parseInt(limit as string);
+      if (searchTerm) filters.searchTerm = searchTerm as string;
 
-      const result = await geminiEventProcessor.getEvents(filters);
-      res.json(result);
+      const events = await authenticCarShowExtractor.getFilteredEvents(filters);
+      res.json({ success: true, events });
     } catch (error) {
-      console.error("Error fetching database events:", error);
-      res.status(500).json({ error: "Failed to fetch events from database" });
+      console.error("Error fetching authentic events:", error);
+      res.status(500).json({ error: "Failed to fetch authentic events" });
     }
   });
 
