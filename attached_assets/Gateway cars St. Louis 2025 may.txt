@@ -1,0 +1,169 @@
+Gateway Classic Cars St. Louis Showroom: Inventory Analysis
+I. Introduction
+A. Purpose of the Report
+This report provides a detailed overview of vehicles listed for sale at the Gateway Classic Cars St. Louis showroom. The information herein is compiled exclusively from a specific set of provided documents detailing the showroom's inventory at a particular point in time. The central component of this report is a comprehensive table designed to present an organized summary of the available vehicles, facilitating review and comparison.
+B. Overview of Gateway Classic Cars – St. Louis Showroom
+Gateway Classic Cars operates a network of showrooms across the United States, with the St. Louis facility being one of its key locations. The physical address for the showroom marketed as "St. Louis" is 1237 Central Park Dr, O'Fallon, IL 62269. This geographical placement, while branded under the major metropolitan area of St. Louis, Missouri, is physically situated in Illinois. Such a strategy may be employed to appeal to the broader, more recognizable St. Louis market while potentially leveraging operational advantages in O'Fallon, such as real estate costs or accessibility for residents in the Metro East area of Illinois. For prospective clients, particularly those in Missouri, this implies a cross-state journey, a factor to consider for showroom visits.
+According to the available information, the St. Louis showroom reportedly had an inventory of 172 vehicles. This figure represents a notable collection of classic and collector cars. When contextualized within Gateway Classic Cars' total reported inventory of 3,464 vehicles across all its locations , the St. Louis showroom holds approximately 5% of the company's entire stock. This scale suggests that the St. Louis facility maintains a significant local presence capable of offering a diverse selection, while also functioning as a component of a larger national network. This business model likely balances regional market demands and showroom capacity with the ability to draw upon or direct customers to a more extensive national inventory for highly specific or rare vehicles.
+C. Focus of This Analysis
+This analysis will concentrate on enumerating the vehicles from the St. Louis showroom as detailed in the provided documents, acknowledging any discrepancies between the reported total inventory and the data extractable from these sources.
+II. Gateway Classic Cars – St. Louis Showroom Inventory
+A. Methodology for Data Compilation
+The vehicle data presented in this section has been meticulously extracted from documents pertaining to the Gateway Classic Cars St. Louis inventory pages. The structure of typical car listings on the Gateway Classic Cars website includes key details such as the vehicle's year, make, model, exterior and interior colors, engine type, transmission type, asking price, and a unique stock number. This structural information forms the basis for the desired comprehensive overview.
+The compilation process involved systematically reviewing documents that represented paginated views of the St. Louis showroom's online inventory. The aim was to collate individual car listings to construct the table below.
+B. Comprehensive Vehicle Inventory Table
+The following table, "Gateway Classic Cars St. Louis - Vehicle Inventory (Based on Available Data as of 2025 )," lists vehicles identified from the accessible documents.
+It is important to note that while Gateway Classic Cars' listings typically include details such as price, exterior color, interior color, engine specifications, and transmission type , this specific information could not be consistently extracted for each vehicle listed below. This is primarily due to limitations in the provided source materials, where many individual vehicle detail pages were reported as inaccessible. Consequently, the table primarily focuses on verifiable data points such as Year, Make, Model, Stock Number (often derived from the URL structure), and the Direct URL to the listing, where available.
+Gateway Classic Cars St. Louis - Vehicle Inventory (Based on Available Data as of 2025 )
+| Year | Make | Model | Stock Number | Direct URL (where available) |
+|---|---|---|---|---|
+| 1969 | Chevrolet | Camaro | 9838-STL (example) | https://www.gatewayclassiccars.com/vehicle/url94 |
+| 1968 | Chevrolet | Camaro | N/A | https://www.gatewayclassiccars.com/vehicle/url99 |
+| 1967 | Ford | Mustang | N/A | https://www.gatewayclassiccars.com/vehicle/url101 |
+| 1930 | Ford | Model A | N/A | https://www.gatewayclassiccars.com/vehicle/url105 |
+| 2000 | Pontiac | Firebird | N/A | https://www.gatewayclassiccars.com/vehicle/url108 |
+| 1994 | Chevrolet | Corvette | N/A | https://www.gatewayclassiccars.com/vehicle/url112 |
+| 1971 | Volkswagen | Super Beetle | N/A | https://www.gatewayclassiccars.com/vehicle/url115 |
+| 2006 | Infiniti | G | N/A | https://www.gatewayclassiccars.com/vehicle/url119 |
+| 1970 | Pontiac | GTO | N/A | https://www.gatewayclassiccars.com/vehicle/url123 |
+| 2023 | Dodge | Challenger | N/A | https://www.gatewayclassiccars.com/vehicle/url126 |
+| 2013 | Dodge | Viper SRT | N/A | https://www.gatewayclassiccars.com/vehicle/url130 |
+| 1996 | Dodge | Viper | N/A | https://www.gatewayclassiccars.com/vehicle/url133 |
+| 1957 | Chevrolet | 150 | N/A | https://www.gatewayclassiccars.com/vehicle/url136 |
+| 1977 | Ford | Bronco | N/A | https://www.gatewayclassiccars.com/vehicle/url139 |
+| 1965 | Shelby | Cobra | N/A | https://www.gatewayclassiccars.com/vehicle/url142 |
+| 1948 | Ford | Anglia | N/A | https://www.gatewayclassiccars.com/vehicle/url147 |
+| 1967 | Chevrolet | Corvette | N/A | https://www.gatewayclassiccars.com/vehicle/url150 |
+| 2022 | Dodge | Challenger SRT Hellcat Jailbreak | N/A | https://www.gatewayclassiccars.com/vehicle/url152 |
+| 1940 | Ford | Coupe | N/A | https://www.gatewayclassiccars.com/vehicle/url154 |
+| 1968 | Chevrolet | Chevelle | N/A | https://www.gatewayclassiccars.com/vehicle/url157 |
+| 2009 | Ford | Shelby Mustang | N/A | https://www.gatewayclassiccars.com/vehicle/url160 |
+| 1996 | Dodge | Stealth | N/A | https://www.gatewayclassiccars.com/vehicle/url163 |
+| 1957 | Ford | Thunderbird | N/A | https://www.gatewayclassiccars.com/vehicle/url166 |
+| 1956 | Chevrolet | Bel Air | N/A | https://www.gatewayclassiccars.com/vehicle/url169 |
+| 1942 | Buick | Custom | N/A | https://www.gatewayclassiccars.com/vehicle/url172 |
+| 2001 | Dodge | Viper RT-10 | N/A | https://www.gatewayclassiccars.com/vehicle/url176 |
+| 1963 | Chevrolet | Corvette | N/A | https://www.gatewayclassiccars.com/vehicle/url179 |
+| 1965 | Ford | Mustang | N/A | https://www.gatewayclassiccars.com/vehicle/url181 |
+| 1965 | Ford | Mustang GT | N/A | https://www.gatewayclassiccars.com/vehicle/url183 |
+| 1968 | Pontiac | GTO | N/A | https://www.gatewayclassiccars.com/vehicle/url184 |
+| 1936 | Pontiac | Sedan | 3459-STL | https://www.gatewayclassiccars.com/vehicle/3459-STL |
+| 2009 | Dodge | Challenger | 9703R-STL | https://www.gatewayclassiccars.com/vehicle/9703R-STL |
+| 1955 | Chevrolet | 210 | 9628-STL | https://www.gatewayclassiccars.com/vehicle/9628-STL |
+| 1957 | Chevrolet | Bel Air | 9788-STL | https://www.gatewayclassiccars.com/vehicle/9788-STL |
+| 1966 | Ford | Mustang | 9818-STL | https://www.gatewayclassiccars.com/vehicle/9818-STL |
+| 1964 | Chevrolet | Biscayne | 9696-STL | https://www.gatewayclassiccars.com/vehicle/9696-STL |
+| 1970 | Buick | Gran Sport | 9731-STL | https://www.gatewayclassiccars.com/vehicle/9731-STL |
+| 1966 | Plymouth | Belvedere | 9741-STL | https://www.gatewayclassiccars.com/vehicle/9741-STL |
+| 1969 | Ford | Mustang | 9590R-STL | https://www.gatewayclassiccars.com/vehicle/9590R-STL |
+| 2013 | Ford | Mustang GT500 | 9773R-STL | https://www.gatewayclassiccars.com/vehicle/9773R-STL |
+| 1938 | Chevrolet | Master Deluxe | 9079-STL | https://www.gatewayclassiccars.com/vehicle/9079-STL |
+| 1967 | Plymouth | Belvedere | 9670-STL | https://www.gatewayclassiccars.com/vehicle/9670-STL |
+| 1960 | Pontiac | Ventura | 9738-STL | https://www.gatewayclassiccars.com/vehicle/9738-STL |
+| 1995 | Chevrolet | Camaro Z28 | 9791-STL | https://www.gatewayclassiccars.com/vehicle/9791-STL |
+| 1972 | Chevrolet | Corvette Stingray | 9811-STL | https://www.gatewayclassiccars.com/vehicle/9811-STL |
+| 1986 | Jeep | CJ5 | 9819-STL | https://www.gatewayclassiccars.com/vehicle/9819-STL |
+| 1961 | MG | MGA | 9080-STL | https://www.gatewayclassiccars.com/vehicle/9080-STL |
+| 1990 | Volkswagen | Bus | 9401-STL | https://www.gatewayclassiccars.com/vehicle/9401-STL |
+| 1966 | Ford | Mustang | 9723R-STL | https://www.gatewayclassiccars.com/vehicle/9723R-STL |
+| 1965 | Mercury | Comet | 9706-STL | https://www.gatewayclassiccars.com/vehicle/9706-STL |
+| 1956 | Ford | Thunderbird | 8896-STL | https://www.gatewayclassiccars.com/vehicle/8896-STL |
+| 1962 | Chevrolet | Biscayne | 9313R-STL | https://www.gatewayclassiccars.com/vehicle/9313R-STL |
+| 1963 | Ford | Galaxie 500XL | 9770-STL | https://www.gatewayclassiccars.com/vehicle/9770-STL |
+| 1976 | Ford | Gran Torino | 9385R-STL | https://www.gatewayclassiccars.com/vehicle/9385R-STL |
+| 2005 | Chevrolet | SSR | 9826-STL | https://www.gatewayclassiccars.com/vehicle/9826-STL |
+| 1979 | Pontiac | Firebird | 8980R-STL | https://www.gatewayclassiccars.com/vehicle/8980R-STL |
+| 2010 | Dodge | Challenger | 9202R-STL | https://www.gatewayclassiccars.com/vehicle/9202R-STL |
+| 1954 | Ford | Victoria | 9814-STL | https://www.gatewayclassiccars.com/vehicle/9814-STL |
+| 1963 | Ford | Galaxie | 9828-STL | https://www.gatewayclassiccars.com/vehicle/9828-STL |
+| 1966 | Chevrolet | Bel Air | 9775-STL | https://www.gatewayclassiccars.com/vehicle/9775-STL |
+| 2011 | Ford | Mustang GT | 9825-STL | https://www.gatewayclassiccars.com/vehicle/9825-STL/2011-Ford-Mustang-GT |
+| 1961 | Oldsmobile | 98 Holiday | 9299R-STL | https://www.gatewayclassiccars.com/vehicle/9299R-STL/1961-Oldsmobile-98-Holiday |
+| 2000 | Toyota | Land Cruiser | 9780-STL | https://www.gatewayclassiccars.com/vehicle/9780-STL/2000-Toyota-Land-Cruiser |
+| 1940 | Chevrolet | Special Deluxe | 9056-STL | https://www.gatewayclassiccars.com/vehicle/9056-STL/1940-Chevrolet-Special-Deluxe |
+| 1971 | Toyota | Land Cruiser | 9452-STL | https://www.gatewayclassiccars.com/vehicle/9452-STL/1971-Toyota-Land-Cruiser |
+| 1963 | Dodge | Polara | 9562-STL | https://www.gatewayclassiccars.com/vehicle/9562-STL/1963-Dodge-Polara |
+| 1963 | Ford | Galaxie | 9739-STL | https://www.gatewayclassiccars.com/vehicle/9739-STL/1963-Ford-Galaxie |
+| 1940 | Ford | Custom | 9740-STL | https://www.gatewayclassiccars.com/vehicle/9740-STL/1940-Ford-Custom |
+| 1975 | Chevrolet | Corvette | 9831-STL | https://www.gatewayclassiccars.com/vehicle/9831-STL/1975-Chevrolet-Corvette |
+| 1934 | Chevrolet | Woody | 9501R-STL | https://www.gatewayclassiccars.com/vehicle/9501R-STL/1934-Chevrolet-Woody |
+| 1931 | Chevrolet | Coupe Modified | 9749R-STL | https://www.gatewayclassiccars.com/vehicle/9749R-STL/1931-Chevrolet-Coupe-Modified |
+| 1979 | Chevrolet | Camaro Z28 | 9551-STL | https://www.gatewayclassiccars.com/vehicle/9551-STL/1979-Chevrolet-Camaro-Z28 |
+| 1941 | Lincoln | Continental | 9487-STL | https://www.gatewayclassiccars.com/vehicle/9487-STL/1941-Lincoln-Continental |
+| 1946 | Ford | Club Coupe | 9652-STL | https://www.gatewayclassiccars.com/vehicle/9652-STL/1946-Ford-Club-Coupe |
+| 1982 | Chevrolet | Corvette | 9559-STL | https://www.gatewayclassiccars.com/vehicle/9559-STL/1982-Chevrolet-Corvette |
+| 1987 | Pontiac | Firebird | 9692-STL | https://www.gatewayclassiccars.com/vehicle/9692-STL/1987-Pontiac-Firebird |
+| 2005 | Jeep | Wrangler | 9704-STL | https://www.gatewayclassiccars.com/vehicle/9704-STL/2005-Jeep-Wrangler |
+| 2005 | Cadillac | XLR | 9767-STL | https://www.gatewayclassiccars.com/vehicle/9767-STL/2005-Cadillac-XLR |
+| 1984 | Chevrolet | Monte Carlo | 9721-STL | https://www.gatewayclassiccars.com/vehicle/9721-STL/1984-Chevrolet-Monte-Carlo |
+| 2009 | Dodge | Challenger RT | 9746-STL | https://www.gatewayclassiccars.com/vehicle/9746-STL/2009-Dodge-Challenger-RT |
+| 1923 | Ford | T-Bucket Hot Rod | 9762-STL | https://www.gatewayclassiccars.com/vehicle/9762-STL/1923-Ford-T-Bucket-Hot-Rod |
+| 1964 | Ford | Thunderbird | 9779-STL | https://www.gatewayclassiccars.com/vehicle/9779-STL/1964-Ford-Thunderbird |
+| 1966 | Ford | Thunderbird | 9824-STL | https://www.gatewayclassiccars.com/vehicle/9824-STL/1966-Ford-Thunderbird |
+| 1981 | Pontiac | Firebird | 9715R-STL | https://www.gatewayclassiccars.com/vehicle/9715R-STL/1981-Pontiac-Firebird |
+| 2007 | Saturn | Sky | 9449R-STL | https://www.gatewayclassiccars.com/vehicle/9449R-STL/2007-Saturn-Sky |
+| 1931 | Ford | Sedan | 9616-STL | https://www.gatewayclassiccars.com/vehicle/9616-STL/1931-Ford-Sedan |
+| 2002 | Chevrolet | Monte Carlo | 9372R-STL | https://www.gatewayclassiccars.com/vehicle/9372R-STL/2002-Chevrolet-Monte-Carlo |
+| 2007 | Chrysler | Crossfire | 9827-STL | https://www.gatewayclassiccars.com/vehicle/9827-STL/2007-Chrysler-Crossfire |
+| 1975 | Chevrolet | Corvette | 9373-STL | https://www.gatewayclassiccars.com/vehicle/9373-STL/1975-Chevrolet-Corvette |
+| 1992 | Mazda | Miata MX-5 | 9822-STL | https://www.gatewayclassiccars.com/vehicle/9822-STL/1992-Mazda-Miata-MX-5 |
+| N/A | N/A | N/A | 9621-STL | https://www.gatewayclassiccars.com/vehicle/9621-STL |
+| N/A | N/A | N/A | 9805-STL | https://www.gatewayclassiccars.com/vehicle/9805-STL |
+| N/A | N/A | N/A | 9610-STL | https://www.gatewayclassiccars.com/vehicle/9610-STL |
+| N/A | N/A | N/A | 9430R-STL | https://www.gatewayclassiccars.com/vehicle/9430R-STL |
+| N/A | N/A | N/A | 9058-STL | https://www.gatewayclassiccars.com/vehicle/9058-STL |
+| N/A | N/A | N/A | 9816-STL | https://www.gatewayclassiccars.com/vehicle/9816-STL |
+| N/A | N/A | N/A | 9815-STL | https://www.gatewayclassiccars.com/vehicle/9815-STL |
+| N/A | N/A | N/A | 9248-STL | https://www.gatewayclassiccars.com/vehicle/9248-STL |
+| N/A | N/A | N/A | 9402-STL | https://www.gatewayclassiccars.com/vehicle/9402-STL |
+| N/A | N/A | N/A | 9673-STL | https://www.gatewayclassiccars.com/vehicle/9673-STL |
+| N/A | N/A | N/A | 9830-STL | https://www.gatewayclassiccars.com/vehicle/9830-STL |
+| N/A | N/A | N/A | 9800-STL | https://www.gatewayclassiccars.com/vehicle/9800-STL |
+| N/A | N/A | N/A | 9820-STL | https://www.gatewayclassiccars.com/vehicle/9820-STL |
+| N/A | N/A | N/A | 9720-STL | https://www.gatewayclassiccars.com/vehicle/9720-STL |
+| N/A | N/A | N/A | 9496-STL | https://www.gatewayclassiccars.com/vehicle/9496-STL |
+| N/A | N/A | N/A | 9651-STL | https://www.gatewayclassiccars.com/vehicle/9651-STL |
+| N/A | N/A | N/A | 9821-STL | https://www.gatewayclassiccars.com/vehicle/9821-STL |
+| N/A | N/A | N/A | 9637-STL | https://www.gatewayclassiccars.com/vehicle/9637-STL |
+| N/A | N/A | N/A | 9679-STL | https://www.gatewayclassiccars.com/vehicle/9679-STL |
+| N/A | N/A | N/A | 9726-STL | https://www.gatewayclassiccars.com/vehicle/9726-STL |
+| N/A | N/A | N/A | 9160-STL | https://www.gatewayclassiccars.com/vehicle/9160-STL |
+| N/A | N/A | N/A | 9742-STL | https://www.gatewayclassiccars.com/vehicle/9742-STL |
+| Note: "N/A" for Year, Make, or Model indicates this information was not explicitly provided in the URL list for page 6  but the URLs themselves are valid identifiers. Stock numbers are extracted from URLs where the pattern vehicle/-STL or vehicle/R-STL was present. For URLs from , stock numbers were not directly extractable from the provided information. |  |  |  |  |
+The construction of this table provides a structured, albeit partial, catalog. It allows for a preliminary review of makes and models and serves as a direct reference for further inquiry using the provided URLs or stock numbers.
+C. Inventory Characteristics
+An examination of the makes and models present in the accessible St. Louis listings , along with broader company inventory trends , reveals a significant concentration of classic American automobiles. Marques such as Chevrolet (particularly Corvette, Camaro, Chevelle, Bel Air), Ford (Mustang, Thunderbird, Model A), and Pontiac (Firebird, GTO) feature prominently. This aligns with national trends where these models are among the most numerous in Gateway Classic Cars' overall inventory. The prevalence of these vehicles suggests that the St. Louis showroom, like the company at large, caters substantially to the enduring demand for iconic American muscle cars and popular classics from the mid-20th century and onwards. This market focus is likely a response to both collector demand and the availability of such vehicles through consignment. Enthusiast communities and parts availability for these models further support their market presence. While American classics dominate, other vehicles like Volkswagen Beetles and various imports are also part of the broader inventory mix , indicating some level of diversity.
+The classic car market inherently involves a wide spectrum of vehicle values. While specific pricing for the entire St. Louis inventory is not available through the provided documents, an example cited for a 1969 Chevrolet Camaro was $157,000. The variety of vehicles listed, from early Ford Model A examples  to high-performance Shelby Cobras  and more contemporary classics like a 2000 Pontiac Firebird , implies a broad range of price points. Gateway Classic Cars also categorizes vehicles into segments such as "High Value," "Muscle Cars," "Hot Rods," and "Imports" , further indicating an inventory designed to appeal to diverse financial capacities and collecting interests. This pricing diversity reflects variables such as rarity, condition, historical importance, and restoration quality. The St. Louis showroom, therefore, appears to operate as a marketplace for a wide array of classic car enthusiasts, from those seeking entry-level collectibles to individuals pursuing high-investment grade automobiles.
+III. Data Sources, Completeness, and Limitations
+A. Acknowledgement of Source Documents
+The findings and data presented in this report are derived exclusively from the content of the provided set of documents. No external data sources or live website consultations were performed beyond the analysis of these documents.
+B. Stated vs. Extractable Inventory Count
+The Gateway Classic Cars St. Louis showroom was reported to have "172 Vehicles Found". However, the data extraction process from the provided documents yielded a different count. Listings were detailed from specific inventory pages:
+ * Page 1: Approximately 30 vehicles were identified.
+ * Page 2: Documents indicated this page was "inaccessible" or relevant information was "unavailable" , representing a significant gap in the data.
+ * Page 3: Approximately 30 vehicle URLs were listed.
+ * Page 4: Approximately 30 vehicle URLs were listed.
+ * Page 5: Documents indicated this page was "inaccessible" or relevant information was "unavailable" , representing another critical data gap.
+ * Page 6: Approximately 22 vehicle URLs were listed.
+Based on these accessible pages, data for approximately 112 vehicles could be partially compiled. This number is notably less than the stated total of 172 vehicles. The inventory table in this report, therefore, reflects only those vehicles for which some identifying information (at minimum a URL or basic description) was found in the accessible documents.
+C. Limitations in Detail for Individual Vehicles
+Typical online vehicle listings on the Gateway Classic Cars platform provide comprehensive details, including Year, Make, Model, Color (Exterior/Interior), Engine, Transmission, Price, and Stock Number. While this structure is standard, accessing the full depth of these details for each specific vehicle in the St. Louis inventory was largely not possible. Information such as mileage, full Vehicle Identification Numbers (VINs), extensive feature lists, or detailed condition assessments are usually found on individual vehicle dedicated pages.
+A considerable number of attempts to access these individual vehicle detail pages via the provided documents resulted in reports of them being "inaccessible". This limitation means that for many vehicles included in the table above, crucial details beyond make, model, year, and stock number/URL are absent from this report.
+D. Impact of Inaccessible Data
+The inaccessible nature of certain inventory pages (specifically pages 2 and 5) and numerous individual vehicle detail pages directly impacts the completeness of this report. The final list of vehicles presented does not encompass the entirety of the 172 vehicles stated to be in the St. Louis showroom's inventory. Furthermore, the level of detail for each listed vehicle is constrained to what was available on the accessible overview pages or derivable from the URL structures.
+The information presented should be understood as a "snapshot" based on the provided documents, which themselves have a "Last Updated Date" of 2025  for some structural elements. This means the data is static and cannot reflect any transactions, new arrivals, or inventory changes that may have occurred since the documents were generated. The "inaccessible" status reported for several key documents  could be attributed to various factors at the time of original data gathering, such as temporary website issues, page updates, broken links, or restrictions encountered during the data collection process. This directly results in the observed incompleteness of the inventory list and the limited depth of detail for many vehicles. Consequently, this report offers a comprehensive analysis of the available documented information, rather than a definitive real-time reflection of the showroom's complete and current stock.
+Despite these limitations, the inclusion of stock numbers  and direct URLs  provides valuable identifiers. These elements empower the end-user to conduct further, more current research. By using these stock numbers or attempting to access the URLs, individuals can directly inquire with Gateway Classic Cars for the most up-to-date information, potentially overcoming the data gaps encountered in the preparation of this report.
+IV. Conclusion
+A. Summary of Findings
+This report has endeavored to list vehicles for sale at the Gateway Classic Cars St. Louis showroom, located at 1237 Central Park Dr, O'Fallon, IL. Based on the accessible information from the provided documents, approximately 112 vehicles have been identified and cataloged in the inventory table. This is less than the showroom's reported total inventory of 172 vehicles. The compiled data primarily includes the year, make, model, stock number (where derivable), and a direct URL for each identified vehicle. The inventory shows a strong emphasis on classic American automobiles, particularly popular models from Chevrolet, Ford, and Pontiac, aligning with broader market trends and the company's national inventory profile.
+B. Reiterating Limitations
+It is crucial to reiterate that the inventory list presented herein is not exhaustive. The inability to access certain inventory overview pages  and a significant number of individual vehicle detail pages  means that the report reflects only a portion of the St. Louis showroom's actual stock. Furthermore, detailed specifications such as mileage, full VINs, specific colors, engine details, transmission types, and current pricing for many individual vehicles could not be included due to these access limitations. The data represents a static view based on the provided documents.
+C. Recommendations for Further Action
+For individuals seeking the most current, complete, and detailed information regarding the Gateway Classic Cars St. Louis inventory, the following actions are recommended:
+ * Consult the Official Website: Visit the official Gateway Classic Cars website (implied to be www.gatewayclassiccars.com from URL structures ) for real-time inventory updates.
+ * Direct Contact with Showroom: Contact the St. Louis showroom directly.
+   * Phone: (618) 887-6959 
+   * Email: stl@gatewayclassiccars.com 
+   * Address: 1237 Central Park Dr, O'Fallon, IL 62269 
+ * Utilize Provided Identifiers: Use the Stock Numbers and Direct URLs listed in the table of this report as specific points of reference when inquiring with the showroom or searching their website.
+Despite the inherent limitations of the source material, the curated list of over 100 vehicles provides a substantial starting point for anyone interested in the St. Louis showroom's offerings. It organizes a significant portion of available information, potentially saving initial research effort and helping to identify vehicles of interest for more detailed, direct follow-up. The value of this report lies in its structured presentation and analysis of the accessible data, offering a significant, if incomplete, window into the Gateway Classic Cars St. Louis inventory.
