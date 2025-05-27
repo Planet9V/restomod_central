@@ -324,20 +324,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get ALL car show events from PostgreSQL database (147 authentic events)
+  // Get ALL car show events from PostgreSQL database (193+ authentic events with advanced filtering)
   app.get(`${apiPrefix}/car-show-events`, async (req, res) => {
     try {
-      const { eventType, state, featured, status } = req.query;
+      const { 
+        eventType, 
+        state, 
+        region, 
+        category, 
+        month, 
+        featured, 
+        status, 
+        search,
+        limit 
+      } = req.query;
       
       const filters: any = {};
+      
+      // Advanced filtering capabilities
       if (eventType && eventType !== 'all') filters.eventType = eventType as string;
       if (state && state !== 'all') filters.state = state as string;
+      if (region && region !== 'all') filters.region = region as string;
+      if (category && category !== 'all') filters.category = category as string;
+      if (month && month !== 'all') filters.month = month as string;
       if (featured !== undefined) filters.featured = featured === 'true';
       if (status && status !== 'all') filters.status = status as string;
-      // Removed limit filter to show ALL 147 authentic car shows
+      if (search && search.trim()) filters.search = search as string;
+      if (limit) filters.limit = parseInt(limit as string);
 
       const events = await storage.getCarShowEvents(filters);
-      res.json({ success: true, events, total: events.length });
+      
+      // Enhanced response with metadata for better discoverability
+      res.json({ 
+        success: true, 
+        events, 
+        total: events.length,
+        filters: {
+          applied: Object.keys(filters).length > 0 ? filters : null,
+          available: {
+            regions: ['midwest', 'south', 'northeast', 'west', 'southeast', 'southwest'],
+            categories: ['classic_cars', 'muscle_cars', 'hot_rods', 'street_rods', 'antique_cars', 'exotic_cars', 'trucks', 'motorcycles'],
+            eventTypes: ['auction', 'car_show', 'concours', 'cruise_in', 'swap_meet']
+          }
+        },
+        message: `Loaded ${events.length} authentic car show events from nationwide database`
+      });
     } catch (error) {
       console.error("Error fetching car show events:", error);
       res.status(500).json({ error: "Failed to fetch car show events from database" });
