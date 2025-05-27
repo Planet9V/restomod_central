@@ -290,7 +290,12 @@ export default function CarShowEvents() {
               >
                 <Select value={eventTypeFilter} onValueChange={setEventTypeFilter}>
                   <SelectTrigger className="bg-zinc-900/50 border-zinc-600 focus:border-orange-500">
-                    <SelectValue placeholder="Event Type" />
+                    <SelectValue placeholder="Event Type">
+                      {eventTypeFilter === 'all_types' 
+                        ? 'All Types' 
+                        : eventTypeFilter.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+                      }
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-600">
                     <SelectItem value="all_types">All Types</SelectItem>
@@ -319,7 +324,9 @@ export default function CarShowEvents() {
 
                 <Select value={stateFilter} onValueChange={setStateFilter}>
                   <SelectTrigger className="bg-zinc-900/50 border-zinc-600 focus:border-orange-500">
-                    <SelectValue placeholder="State" />
+                    <SelectValue placeholder="State">
+                      {stateFilter === 'all_states' ? 'All States' : stateFilter}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-600">
                     <SelectItem value="all_states">All States</SelectItem>
@@ -333,7 +340,12 @@ export default function CarShowEvents() {
 
                 <Select value={categoryFilter} onValueChange={setCategoryFilter}>
                   <SelectTrigger className="bg-zinc-900/50 border-zinc-600 focus:border-orange-500">
-                    <SelectValue placeholder="Category" />
+                    <SelectValue placeholder="Category">
+                      {categoryFilter === 'all_categories' 
+                        ? 'All Categories' 
+                        : categoryFilter.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+                      }
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-600">
                     <SelectItem value="all_categories">All Categories</SelectItem>
