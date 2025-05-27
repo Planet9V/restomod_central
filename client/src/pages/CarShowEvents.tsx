@@ -43,22 +43,38 @@ export default function CarShowEvents() {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    setIsLoading(true);
-    try {
-      const filters = {
-        eventType: eventTypeFilter !== "all" ? eventTypeFilter : undefined,
-        state: stateFilter !== "all" ? stateFilter : undefined,
-        featured: featuredOnly || undefined,
-        limit: 100
-      };
-      const events = directCarShowService.getEvents(filters);
-      setEventsData({ events });
-      setError(null);
-    } catch (err) {
-      setError(err as Error);
-    } finally {
-      setIsLoading(false);
-    }
+    const fetchAuthenticEvents = async () => {
+      setIsLoading(true);
+      try {
+        const params = new URLSearchParams();
+        if (eventTypeFilter !== "all") params.append('eventType', eventTypeFilter);
+        if (stateFilter !== "all") params.append('state', stateFilter);
+        if (featuredOnly) params.append('featured', 'true');
+
+        const response = await fetch(`/api/car-show-events?${params.toString()}`);
+        const data = await response.json();
+        
+        if (data && Array.isArray(data)) {
+          setEventsData({ events: data });
+          setError(null);
+          console.log(`✅ Loaded ${data.length} authentic car shows from Neon database`);
+        } else if (data.success && data.events) {
+          setEventsData({ events: data.events });
+          setError(null);
+          console.log(`✅ Loaded ${data.events.length} authentic car shows from Neon database`);
+        } else {
+          throw new Error('Failed to fetch authentic car show events');
+        }
+      } catch (err) {
+        setError(err as Error);
+        setEventsData(null);
+        console.error('❌ Failed to load car show events:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAuthenticEvents();
   }, [eventTypeFilter, stateFilter, featuredOnly]);
 
   const events = eventsData?.events || [];
