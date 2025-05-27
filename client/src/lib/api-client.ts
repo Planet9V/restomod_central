@@ -7,10 +7,14 @@ const API_BASE = '';
 
 export async function fetchCarShowEvents(filters: Record<string, any> = {}) {
   try {
-    // Build query parameters
+    // Build query parameters, excluding "all_*" values that mean "show all"
     const params = new URLSearchParams();
     Object.entries(filters).forEach(([key, value]) => {
-      if (value && value !== 'all') {
+      if (value && 
+          value !== 'all' && 
+          value !== 'all_types' && 
+          value !== 'all_states' && 
+          value !== 'all_categories') {
         params.append(key, String(value));
       }
     });

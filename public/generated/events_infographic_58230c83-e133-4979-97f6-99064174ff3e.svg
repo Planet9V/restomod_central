@@ -1,0 +1,69 @@
+
+    <svg width="800" height="580" xmlns="http://www.w3.org/2000/svg">
+      <style>
+        .title { font-family: Arial, sans-serif; font-size: 24px; font-weight: bold; fill: #333; }
+        .event { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #333; }
+        .date { font-family: Arial, sans-serif; font-size: 14px; fill: #666; }
+        .location { font-family: Arial, sans-serif; font-size: 14px; fill: #666; }
+        .highlight { filter: drop-shadow(0px 0px 5px rgba(217, 37, 42, 0.5)); }
+        .event-box { fill: #fff; stroke: #ddd; stroke-width: 1; rx: 5; ry: 5; }
+        .event-highlight { fill: #fff; stroke: #D9252A; stroke-width: 2; rx: 5; ry: 5; }
+        .header { fill: #222; }
+      </style>
+      
+      <!-- Header background -->
+      <rect x="0" y="0" width="800" height="60" class="header" />
+      
+      <!-- Title -->
+      <text x="400" y="40" text-anchor="middle" class="title" fill="#fff">Upcoming Classic Car Events</text>
+      
+      <!-- Events -->
+    
+      <g class="highlight">
+        <rect x="50" y="70" width="700" height="70" class="event-highlight" />
+        <text x="70" y="100" class="event">1. **Jerrys Chevrolet of Burleson Memorial Day Classic Car Show**</text>
+        <text x="70" y="120" class="date">📅 ** May 26, 2025</text>
+        <text x="300" y="120" class="location">📍 ** Jerrys Chevrolet of Burleson</text>
+        <text x="700" y="110" text-anchor="end" fill="#D9252A" font-weight="bold">★ FEATURED</text>
+      </g>
+      
+      <g class="highlight">
+        <rect x="50" y="150" width="700" height="70" class="event-highlight" />
+        <text x="70" y="180" class="event">2. **Blains Car Show in Romeoville**</text>
+        <text x="70" y="200" class="date">📅 ** May 26, 2025</text>
+        <text x="300" y="200" class="location">📍 ** Romeoville, IL</text>
+        <text x="700" y="190" text-anchor="end" fill="#D9252A" font-weight="bold">★ FEATURED</text>
+      </g>
+      
+      <g class="highlight">
+        <rect x="50" y="230" width="700" height="70" class="event-highlight" />
+        <text x="70" y="260" class="event">3. **2025 World of Wheels**</text>
+        <text x="70" y="280" class="date">📅 ** May 30 - June 2, 2025</text>
+        <text x="300" y="280" class="location">📍 ** Vernon Hills, IL</text>
+        <text x="700" y="270" text-anchor="end" fill="#D9252A" font-weight="bold">★ FEATURED</text>
+      </g>
+      
+      <g class="highlight">
+        <rect x="50" y="310" width="700" height="70" class="event-highlight" />
+        <text x="70" y="340" class="event">4. **9th Annual CT Seaport Car Club Antique and Classic Car Show**</text>
+        <text x="70" y="360" class="date">📅 ** May 26, 2025</text>
+        <text x="300" y="360" class="location">📍 ** Fairfield Ludlowe High School, Fairfield, CT</text>
+        <text x="700" y="350" text-anchor="end" fill="#D9252A" font-weight="bold">★ FEATURED</text>
+      </g>
+      
+      <g class="highlight">
+        <rect x="50" y="390" width="700" height="70" class="event-highlight" />
+        <text x="70" y="420" class="event">5. **Pomona Swap Meet & Classic Car Show**</text>
+        <text x="70" y="440" class="date">📅 ** May 26, 2025</text>
+        <text x="300" y="440" class="location">📍 ** Fairplex, Pomona, CA</text>
+        <text x="700" y="430" text-anchor="end" fill="#D9252A" font-weight="bold">★ FEATURED</text>
+      </g>
+      
+      <g class="highlight">
+        <rect x="50" y="470" width="700" height="70" class="event-highlight" />
+        <text x="70" y="500" class="event">6. **RK's 38th Annual Chicagoland Fire Up That Classic Car Show**</text>
+        <text x="70" y="520" class="date">📅 ** April 13, 2025 (Rescheduled for May 9, 2026)</text>
+        <text x="300" y="520" class="location">📍 ** The Hideaway Cafe Lounge, Bensenville, IL</text>
+        <text x="700" y="510" text-anchor="end" fill="#D9252A" font-weight="bold">★ FEATURED</text>
+      </g>
+      </svg>
