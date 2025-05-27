@@ -47,6 +47,13 @@ export default function CarShowEvents() {
   const [eventsData, setEventsData] = useState<{ events: CarShowEvent[] } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+  
+  // Dynamic filter options from your authentic data
+  const [filterOptions, setFilterOptions] = useState({
+    eventTypes: [],
+    states: [],
+    categories: []
+  });
 
   useEffect(() => {
     const fetchAuthenticEvents = async () => {
@@ -72,6 +79,17 @@ export default function CarShowEvents() {
           setEventsData({ events: data.events });
           setError(null);
           console.log(`✅ Loaded ${data.events.length} authentic car shows from Neon database`);
+          
+          // Extract unique filter options from your authentic data
+          const uniqueEventTypes = [...new Set(data.events.map(event => event.eventType).filter(Boolean))];
+          const uniqueStates = [...new Set(data.events.map(event => event.state).filter(Boolean))];
+          const uniqueCategories = [...new Set(data.events.map(event => event.eventCategory).filter(Boolean))];
+          
+          setFilterOptions({
+            eventTypes: uniqueEventTypes.sort(),
+            states: uniqueStates.sort(),
+            categories: uniqueCategories.sort()
+          });
         } else {
           throw new Error('Failed to fetch authentic car show events');
         }
@@ -240,11 +258,11 @@ export default function CarShowEvents() {
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-600">
                     <SelectItem value="all">All Types</SelectItem>
-                    <SelectItem value="auction">Auctions</SelectItem>
-                    <SelectItem value="car_show">Car Shows</SelectItem>
-                    <SelectItem value="concours">Concours</SelectItem>
-                    <SelectItem value="cruise_in">Cruise-Ins</SelectItem>
-                    <SelectItem value="swap_meet">Swap Meets</SelectItem>
+                    {filterOptions.eventTypes.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
 
@@ -269,33 +287,11 @@ export default function CarShowEvents() {
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-600">
                     <SelectItem value="all">All States</SelectItem>
-                    <SelectItem value="California">California</SelectItem>
-                    <SelectItem value="Texas">Texas</SelectItem>
-                    <SelectItem value="Florida">Florida</SelectItem>
-                    <SelectItem value="Arizona">Arizona</SelectItem>
-                    <SelectItem value="Michigan">Michigan</SelectItem>
-                    <SelectItem value="Pennsylvania">Pennsylvania</SelectItem>
-                    <SelectItem value="New York">New York</SelectItem>
-                    <SelectItem value="Nevada">Nevada</SelectItem>
-                    <SelectItem value="Tennessee">Tennessee</SelectItem>
-                    <SelectItem value="Illinois">Illinois</SelectItem>
-                    <SelectItem value="Wisconsin">Wisconsin</SelectItem>
-                    <SelectItem value="Missouri">Missouri</SelectItem>
-                    <SelectItem value="Iowa">Iowa</SelectItem>
-                    <SelectItem value="Indiana">Indiana</SelectItem>
-                    <SelectItem value="Ohio">Ohio</SelectItem>
-                    <SelectItem value="Kentucky">Kentucky</SelectItem>
-                    <SelectItem value="Minnesota">Minnesota</SelectItem>
-                    <SelectItem value="Kansas">Kansas</SelectItem>
-                    <SelectItem value="Nebraska">Nebraska</SelectItem>
-                    <SelectItem value="North Carolina">North Carolina</SelectItem>
-                    <SelectItem value="South Carolina">South Carolina</SelectItem>
-                    <SelectItem value="Georgia">Georgia</SelectItem>
-                    <SelectItem value="Alabama">Alabama</SelectItem>
-                    <SelectItem value="Mississippi">Mississippi</SelectItem>
-                    <SelectItem value="Louisiana">Louisiana</SelectItem>
-                    <SelectItem value="Arkansas">Arkansas</SelectItem>
-                    <SelectItem value="Oklahoma">Oklahoma</SelectItem>
+                    {filterOptions.states.map((state) => (
+                      <SelectItem key={state} value={state}>
+                        {state}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
 
