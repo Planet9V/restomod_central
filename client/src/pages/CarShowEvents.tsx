@@ -52,9 +52,9 @@ export default function CarShowEvents() {
   
   // Dynamic filter options from your authentic data
   const [filterOptions, setFilterOptions] = useState({
-    eventTypes: [],
-    states: [],
-    categories: []
+    eventTypes: [] as string[],
+    states: [] as string[],
+    categories: [] as string[]
   });
 
   useEffect(() => {
@@ -101,14 +101,33 @@ export default function CarShowEvents() {
         console.log(`✅ Loaded ${events.length} authentic car shows from database`);
           
         // Extract unique filter options from your authentic data
-        const uniqueEventTypes = Array.from(new Set(events.map((event: any) => event.eventType).filter(Boolean)));
-        const uniqueStates = Array.from(new Set(events.map((event: any) => event.state).filter(Boolean)));
-        const uniqueCategories = Array.from(new Set(events.map((event: any) => event.eventCategory).filter(Boolean)));
+        const eventTypes: string[] = [];
+        const states: string[] = [];
+        const categories: string[] = [];
+        
+        // Safely extract unique values
+        events.forEach((event: any) => {
+          if (event.eventType && !eventTypes.includes(event.eventType)) {
+            eventTypes.push(event.eventType);
+          }
+          if (event.state && !states.includes(event.state)) {
+            states.push(event.state);
+          }
+          if (event.eventCategory && !categories.includes(event.eventCategory)) {
+            categories.push(event.eventCategory);
+          }
+        });
         
         setFilterOptions({
-          eventTypes: uniqueEventTypes.sort(),
-          states: uniqueStates.sort(),
-          categories: uniqueCategories.sort()
+          eventTypes: eventTypes.sort(),
+          states: states.sort(),
+          categories: categories.sort()
+        });
+        
+        console.log('✅ Filter options extracted:', {
+          eventTypes: eventTypes.length,
+          states: states.length,
+          categories: categories.length
         });
       } catch (err) {
         setError(err as Error);
