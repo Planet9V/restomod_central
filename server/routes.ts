@@ -367,11 +367,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const events = await storage.getCarShowEvents(filters);
       console.log('✅ Successfully fetched events:', events?.length || 0);
       
-      // Enhanced response with metadata for better discoverability
+      // Ensure we're returning valid JSON with proper structure
       const response = { 
         success: true, 
-        events, 
-        total: events.length,
+        events: events || [], 
+        total: events?.length || 0,
         filters: {
           applied: Object.keys(filters).length > 0 ? filters : null,
           available: {
@@ -380,11 +380,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
             eventTypes: ['auction', 'car_show', 'concours', 'cruise_in', 'swap_meet']
           }
         },
-        message: `Loaded ${events.length} authentic car show events from nationwide database`
+        message: `Loaded ${events?.length || 0} authentic car show events from nationwide database`
       };
       
-      console.log('📤 Sending response:', JSON.stringify(response).substring(0, 200) + '...');
-      res.json(response);
+      console.log('📤 Sending JSON response with', response.events.length, 'events');
+      return res.status(200).json(response);
     } catch (error) {
       console.error("Error fetching car show events:", error);
       res.status(500).json({ error: "Failed to fetch car show events from database" });
