@@ -479,15 +479,15 @@ export const getCarShowEvents = async (filters?: {
     let query = db.select().from(schema.carShowEvents);
     const conditions: any[] = [];
     
-    if (filters?.eventType && filters.eventType !== 'all') {
+    if (filters?.eventType && filters.eventType !== 'all' && filters.eventType !== 'all_types') {
       conditions.push(eq(schema.carShowEvents.eventType, filters.eventType));
     }
     
-    if (filters?.state && filters.state !== 'all') {
+    if (filters?.state && filters.state !== 'all' && filters.state !== 'all_states') {
       conditions.push(eq(schema.carShowEvents.state, filters.state));
     }
     
-    if (filters?.category && filters.category !== 'all') {
+    if (filters?.category && filters.category !== 'all' && filters.category !== 'all_categories') {
       conditions.push(eq(schema.carShowEvents.eventCategory, filters.category));
     }
     

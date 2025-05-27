@@ -37,10 +37,10 @@ interface CarShowEvent {
 
 export default function CarShowEvents() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [eventTypeFilter, setEventTypeFilter] = useState("all");
-  const [stateFilter, setStateFilter] = useState("all");
+  const [eventTypeFilter, setEventTypeFilter] = useState("all_types");
+  const [stateFilter, setStateFilter] = useState("all_states");
   const [regionFilter, setRegionFilter] = useState("all");
-  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all_categories");
   const [monthFilter, setMonthFilter] = useState("all");
   const [featuredOnly, setFeaturedOnly] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
@@ -251,15 +251,15 @@ export default function CarShowEvents() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="text-sm text-zinc-400">Showing {filteredEvents.length} of {events.length} events</span>
-                {(eventTypeFilter !== "all" || stateFilter !== "all" || regionFilter !== "all" || categoryFilter !== "all" || monthFilter !== "all" || featuredOnly) && (
+                {(eventTypeFilter !== "all_types" || stateFilter !== "all_states" || regionFilter !== "all" || categoryFilter !== "all_categories" || monthFilter !== "all" || featuredOnly) && (
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => {
-                      setEventTypeFilter("all");
-                      setStateFilter("all");
+                      setEventTypeFilter("all_types");
+                      setStateFilter("all_states");
                       setRegionFilter("all");
-                      setCategoryFilter("all");
+                      setCategoryFilter("all_categories");
                       setMonthFilter("all");
                       setFeaturedOnly(false);
                     }}
@@ -293,7 +293,7 @@ export default function CarShowEvents() {
                     <SelectValue placeholder="Event Type" />
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-600">
-                    <SelectItem value="all">All Types</SelectItem>
+                    <SelectItem value="all_types">All Types</SelectItem>
                     {filterOptions.eventTypes.map((type) => (
                       <SelectItem key={type} value={type}>
                         {type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
@@ -322,7 +322,7 @@ export default function CarShowEvents() {
                     <SelectValue placeholder="State" />
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-600">
-                    <SelectItem value="all">All States</SelectItem>
+                    <SelectItem value="all_states">All States</SelectItem>
                     {filterOptions.states.map((state) => (
                       <SelectItem key={state} value={state}>
                         {state}
@@ -336,7 +336,7 @@ export default function CarShowEvents() {
                     <SelectValue placeholder="Category" />
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-600">
-                    <SelectItem value="all">All Categories</SelectItem>
+                    <SelectItem value="all_categories">All Categories</SelectItem>
                     {filterOptions.categories.map((category) => (
                       <SelectItem key={category} value={category}>
                         {category.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
