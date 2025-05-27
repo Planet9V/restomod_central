@@ -71,11 +71,7 @@ export default function CarShowEvents() {
         const response = await fetch(`/api/car-show-events?${params.toString()}`);
         const data = await response.json();
         
-        if (data && Array.isArray(data)) {
-          setEventsData({ events: data });
-          setError(null);
-          console.log(`✅ Loaded ${data.length} authentic car shows from Neon database`);
-        } else if (data.success && data.events) {
+        if (data?.success && data?.events) {
           setEventsData({ events: data.events });
           setError(null);
           console.log(`✅ Loaded ${data.events.length} authentic car shows from Neon database`);
