@@ -2,6 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { scheduleArticleGeneration, cleanupScheduledTasks } from "./services/scheduler";
+import { databaseHealthMonitor } from "./services/databaseHealthCheck";
 
 const app = express();
 app.use(express.json());
@@ -67,6 +68,12 @@ app.use((req, res, next) => {
     reusePort: true,
   }, () => {
     log(`serving on port ${port}`);
+    
+    // Initialize database health monitoring
+    console.log('🔍 Initializing database health monitoring...');
+    databaseHealthMonitor.performHealthCheck().then(() => {
+      databaseHealthMonitor.startPeriodicChecks(5); // Check every 5 minutes
+    });
     
     // Start the scheduled article generation task
     scheduleArticleGeneration();

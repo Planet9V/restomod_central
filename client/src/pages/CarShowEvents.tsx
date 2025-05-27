@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, MapPin, Users, DollarSign, Clock, Filter, Search, Star, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { directCarShowService } from "@/services/directCarShowData";
 
 interface CarShowEvent {
   id: number;
@@ -37,21 +37,29 @@ export default function CarShowEvents() {
   const [stateFilter, setStateFilter] = useState("all");
   const [featuredOnly, setFeaturedOnly] = useState(false);
 
-  // Fetch events from database
-  const { data: eventsData, isLoading, error } = useQuery({
-    queryKey: ["/api/database-events", eventTypeFilter, stateFilter, featuredOnly],
-    queryFn: async () => {
-      const params = new URLSearchParams();
-      if (eventTypeFilter !== "all") params.append("eventType", eventTypeFilter);
-      if (stateFilter !== "all") params.append("state", stateFilter);
-      if (featuredOnly) params.append("featured", "true");
-      params.append("limit", "100");
+  // Get authentic car show events data directly
+  const [eventsData, setEventsData] = useState<{ events: CarShowEvent[] } | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
-      const response = await fetch(`/api/database-events?${params}`);
-      if (!response.ok) throw new Error("Failed to fetch events");
-      return response.json();
+  useEffect(() => {
+    setIsLoading(true);
+    try {
+      const filters = {
+        eventType: eventTypeFilter !== "all" ? eventTypeFilter : undefined,
+        state: stateFilter !== "all" ? stateFilter : undefined,
+        featured: featuredOnly || undefined,
+        limit: 100
+      };
+      const events = directCarShowService.getEvents(filters);
+      setEventsData({ events });
+      setError(null);
+    } catch (err) {
+      setError(err as Error);
+    } finally {
+      setIsLoading(false);
     }
-  });
+  }, [eventTypeFilter, stateFilter, featuredOnly]);
 
   const events = eventsData?.events || [];
 
