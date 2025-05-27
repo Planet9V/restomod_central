@@ -54,7 +54,11 @@ export default function GatewayVehicles() {
         const response = await fetch(`/api/gateway-vehicles?${params.toString()}`);
         const data = await response.json();
         
-        if (data.success) {
+        if (data && Array.isArray(data)) {
+          setVehiclesData({ vehicles: data });
+          setError(null);
+          console.log(`✅ Loaded ${data.length} authentic Gateway Classic Cars from Neon database`);
+        } else if (data.success && data.vehicles) {
           setVehiclesData({ vehicles: data.vehicles });
           setError(null);
           console.log(`✅ Loaded ${data.vehicles.length} authentic Gateway Classic Cars from Neon database`);
