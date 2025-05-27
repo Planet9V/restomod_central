@@ -349,7 +349,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (month && month !== 'all') filters.month = month as string;
       if (featured !== undefined) filters.featured = featured === 'true';
       if (status && status !== 'all') filters.status = status as string;
-      if (search && search.trim()) filters.search = search as string;
+      if (search && typeof search === 'string' && search.trim()) filters.search = search;
       if (limit) filters.limit = parseInt(limit as string);
 
       const events = await storage.getCarShowEvents(filters);
