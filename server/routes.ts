@@ -434,6 +434,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // IMMEDIATE DATA IMPORT - All authentic car shows and Gateway cars
+  app.post(`${apiPrefix}/import-all-data-now`, async (req, res) => {
+    try {
+      console.log('🚗 IMPORTING ALL AUTHENTIC DATA INTO DATABASE...');
+      
+      // Import car show events from seeder
+      const { seedCarShowEvents } = await import('../db/seed-car-show-events');
+      const carShowResult = await seedCarShowEvents();
+      console.log('✅ Car show events imported:', carShowResult);
+      
+      // Import Gateway Classic Cars
+      const { seedGatewayClassics } = await import('../db/seed-gateway-classics');
+      const gatewayResult = await seedGatewayClassics();
+      console.log('✅ Gateway Classic Cars imported:', gatewayResult);
+      
+      res.json({
+        success: true,
+        message: 'ALL AUTHENTIC DATA IMPORTED SUCCESSFULLY',
+        results: {
+          carShows: carShowResult,
+          gatewayCars: gatewayResult
+        }
+      });
+    } catch (error) {
+      console.error("Error importing all data:", error);
+      res.status(500).json({ 
+        success: false,
+        error: "Failed to import data",
+        details: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
   // Direct import of Midwest car show data - unrestricted for immediate use
   app.post(`${apiPrefix}/import-midwest-shows-now`, async (req, res) => {
     try {
