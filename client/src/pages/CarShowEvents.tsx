@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, MapPin, Users, DollarSign, Clock, Filter, Search, Star, ExternalLink } from "lucide-react";
+import { Calendar, MapPin, Users, DollarSign, Clock, Filter, Search, Star, ExternalLink, TrendingUp, Globe, Car } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { SocialShare } from "@/components/SocialShare";
 import { directCarShowService } from "@/services/directCarShowData";
 
 interface CarShowEvent {
@@ -35,7 +37,11 @@ export default function CarShowEvents() {
   const [searchTerm, setSearchTerm] = useState("");
   const [eventTypeFilter, setEventTypeFilter] = useState("all");
   const [stateFilter, setStateFilter] = useState("all");
+  const [regionFilter, setRegionFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [monthFilter, setMonthFilter] = useState("all");
   const [featuredOnly, setFeaturedOnly] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
 
   // Get authentic car show events data directly
   const [eventsData, setEventsData] = useState<{ events: CarShowEvent[] } | null>(null);
@@ -49,7 +55,11 @@ export default function CarShowEvents() {
         const params = new URLSearchParams();
         if (eventTypeFilter !== "all") params.append('eventType', eventTypeFilter);
         if (stateFilter !== "all") params.append('state', stateFilter);
+        if (regionFilter !== "all") params.append('region', regionFilter);
+        if (categoryFilter !== "all") params.append('category', categoryFilter);
+        if (monthFilter !== "all") params.append('month', monthFilter);
         if (featuredOnly) params.append('featured', 'true');
+        if (searchTerm.trim()) params.append('search', searchTerm.trim());
 
         const response = await fetch(`/api/car-show-events?${params.toString()}`);
         const data = await response.json();
@@ -75,7 +85,7 @@ export default function CarShowEvents() {
     };
 
     fetchAuthenticEvents();
-  }, [eventTypeFilter, stateFilter, featuredOnly]);
+  }, [eventTypeFilter, stateFilter, regionFilter, categoryFilter, monthFilter, featuredOnly, searchTerm]);
 
   const events = eventsData?.events || [];
 
@@ -148,7 +158,7 @@ export default function CarShowEvents() {
             <div className="flex flex-wrap gap-4 justify-center">
               <Badge variant="secondary" className="bg-orange-500/20 text-orange-300 border-orange-500/30">
                 <Calendar className="w-4 h-4 mr-2" />
-                100+ Real Events
+                193+ Authentic Events
               </Badge>
               <Badge variant="secondary" className="bg-blue-500/20 text-blue-300 border-blue-500/30">
                 <MapPin className="w-4 h-4 mr-2" />
