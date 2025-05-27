@@ -434,6 +434,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Direct import of Midwest car show data - unrestricted for immediate use
+  app.post(`${apiPrefix}/import-midwest-shows-now`, async (req, res) => {
+    try {
+      const { importMidwestCarShows } = await import('./services/midwestCarShowImporter');
+      console.log('🚗 Starting immediate import of authentic Midwest car show events...');
+      const result = await importMidwestCarShows();
+      
+      res.json({
+        success: true,
+        message: `Successfully imported ${result.imported} authentic Midwest car show events`,
+        stats: {
+          imported: result.imported,
+          duplicatesSkipped: result.duplicates,
+          errors: result.errors,
+          totalProcessed: result.total
+        }
+      });
+    } catch (error) {
+      console.error("Error importing Midwest car shows:", error);
+      res.status(500).json({ 
+        success: false,
+        error: "Failed to import Midwest car show data",
+        details: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
   // Import Midwest car show data from research documents
   app.post(`${apiPrefix}/admin/import-midwest-car-shows`, isAuthenticated, isAdmin, async (req, res) => {
     try {
