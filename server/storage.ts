@@ -1,6 +1,6 @@
 import { db } from "@db";
 import * as schema from "@shared/schema";
-import { eq, like, desc, asc } from "drizzle-orm";
+import { eq, like, desc, asc, gte, lte } from "drizzle-orm";
 import { z } from "zod";
 import { createInsertSchema } from "drizzle-zod";
 
@@ -524,4 +524,47 @@ export const getCarShowEventsByState = async (state: string) => {
     .where(eq(schema.carShowEvents.state, state))
     .orderBy(schema.carShowEvents.startDate);
   return events;
+};
+
+// Gateway Classic Cars Inventory Functions
+export const getGatewayVehicles = async (filters?: {
+  make?: string;
+  category?: string;
+  priceMin?: number;
+  priceMax?: number;
+  year?: number;
+}) => {
+  let query = db.select().from(schema.gatewayVehicles);
+  
+  if (filters?.make && filters.make !== 'all') {
+    query = query.where(eq(schema.gatewayVehicles.make, filters.make));
+  }
+  if (filters?.category && filters.category !== 'all') {
+    query = query.where(eq(schema.gatewayVehicles.category, filters.category));
+  }
+  if (filters?.priceMin) {
+    query = query.where(gte(schema.gatewayVehicles.price, filters.priceMin.toString()));
+  }
+  if (filters?.priceMax) {
+    query = query.where(lte(schema.gatewayVehicles.price, filters.priceMax.toString()));
+  }
+  if (filters?.year) {
+    query = query.where(eq(schema.gatewayVehicles.year, filters.year));
+  }
+  
+  const vehicles = await query.orderBy(schema.gatewayVehicles.year, schema.gatewayVehicles.make);
+  return vehicles;
+};
+
+export const getGatewayVehicleById = async (id: number) => {
+  const [vehicle] = await db.select().from(schema.gatewayVehicles).where(eq(schema.gatewayVehicles.id, id)).limit(1);
+  return vehicle;
+};
+
+export const getFeaturedGatewayVehicles = async (limit: number = 6) => {
+  const vehicles = await db.select().from(schema.gatewayVehicles)
+    .where(eq(schema.gatewayVehicles.featured, true))
+    .orderBy(schema.gatewayVehicles.year)
+    .limit(limit);
+  return vehicles;
 };

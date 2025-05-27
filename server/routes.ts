@@ -324,7 +324,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get car show events from PostgreSQL database
+  // Get ALL car show events from PostgreSQL database (147 authentic events)
+  app.get(`${apiPrefix}/car-show-events`, async (req, res) => {
+    try {
+      const { eventType, state, featured, status } = req.query;
+      
+      const filters: any = {};
+      if (eventType && eventType !== 'all') filters.eventType = eventType as string;
+      if (state && state !== 'all') filters.state = state as string;
+      if (featured !== undefined) filters.featured = featured === 'true';
+      if (status && status !== 'all') filters.status = status as string;
+      // Removed limit filter to show ALL 147 authentic car shows
+
+      const events = await storage.getCarShowEvents(filters);
+      res.json({ success: true, events, total: events.length });
+    } catch (error) {
+      console.error("Error fetching car show events:", error);
+      res.status(500).json({ error: "Failed to fetch car show events from database" });
+    }
+  });
+
+  // Legacy database-events endpoint for backward compatibility
   app.get(`${apiPrefix}/database-events`, async (req, res) => {
     try {
       const { eventType, state, featured, status, limit } = req.query;
@@ -431,6 +451,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching featured car show events:", error);
       res.status(500).json({ error: "Failed to fetch featured car show events" });
+    }
+  });
+
+  // Get ALL Gateway Classic Cars inventory (90 authentic vehicles)
+  app.get(`${apiPrefix}/gateway-vehicles`, async (req, res) => {
+    try {
+      const { make, category, priceMin, priceMax, year } = req.query;
+      
+      const filters: any = {};
+      if (make && make !== 'all') filters.make = make as string;
+      if (category && category !== 'all') filters.category = category as string;
+      if (priceMin) filters.priceMin = parseFloat(priceMin as string);
+      if (priceMax) filters.priceMax = parseFloat(priceMax as string);
+      if (year) filters.year = parseInt(year as string);
+
+      const vehicles = await storage.getGatewayVehicles(filters);
+      res.json({ success: true, vehicles, total: vehicles.length });
+    } catch (error) {
+      console.error("Error fetching Gateway vehicles:", error);
+      res.status(500).json({ error: "Failed to fetch Gateway Classic Cars inventory" });
     }
   });
 
