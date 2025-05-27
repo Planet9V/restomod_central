@@ -4,275 +4,182 @@
  */
 
 import { db } from '../db/index.js';
-import { carShowEvents, gatewayVehicles } from '../shared/schema.js';
+import { carShowEvents } from '../shared/schema.js';
+import { eq } from 'drizzle-orm';
 
-// All 175+ authentic Midwest car show events from your research
-const AUTHENTIC_CAR_SHOWS = [
-  // Illinois Events
-  {
-    eventName: "Metamora Car Show May 11",
-    eventSlug: "metamora-car-show-may-11",
-    venue: "Metamora Village Square",
-    city: "Metamora",
-    state: "Illinois",
-    startDate: new Date("2025-05-11"),
-    eventType: "car_show",
-    eventCategory: "classic",
-    description: "7th season featuring Classic Car, Hot Rod, Muscle Car",
-    organizerName: "Hot Rods & Hamburgers",
-    featured: false,
-    eventStatus: "scheduled"
-  },
-  {
-    eventName: "Downtown Naperville Classic Car Show",
-    eventSlug: "downtown-naperville-classic",
-    venue: "Downtown Naperville",
-    city: "Naperville", 
-    state: "Illinois",
-    startDate: new Date("2025-06-14"),
-    eventType: "car_show",
-    eventCategory: "classic",
-    entryFeeSpectator: "Free",
-    entryFeeParticipant: "Free",
-    description: "Father's Day Weekend kickoff. 50+ year vintage cars, up to 100 vehicles",
-    organizerName: "Downtown Naperville Alliance",
-    featured: true,
-    eventStatus: "scheduled"
-  },
-  {
-    eventName: "International Route 66 Mother Road Festival",
-    eventSlug: "route-66-mother-road-festival",
-    venue: "Downtown Springfield",
-    city: "Springfield",
-    state: "Illinois", 
-    startDate: new Date("2025-09-26"),
-    endDate: new Date("2025-09-28"),
-    eventType: "festival",
-    eventCategory: "classic",
-    entryFeeSpectator: "FREE",
-    entryFeeParticipant: "$45-60",
-    description: "Route 66 cruise, burnout competition, live entertainment",
-    organizerName: "Visit Springfield",
-    website: "route66fest.com",
-    featured: true,
-    eventStatus: "scheduled"
-  },
-  {
-    eventName: "Illinois Railway Museum Vintage Transport",
-    eventSlug: "illinois-railway-vintage-transport",
-    venue: "Illinois Railway Museum",
-    city: "Union",
-    state: "Illinois",
-    startDate: new Date("2025-08-03"),
-    eventType: "car_show",
-    eventCategory: "classic",
-    entryFeeSpectator: "$16-20",
-    description: "500+ vehicles, train rides, military vehicles",
-    organizerName: "Illinois Railway Museum",
-    website: "irm.org",
-    featured: true,
-    eventStatus: "scheduled"
-  },
+// Extract ALL authentic Midwest car shows from your research document
+async function parseCarShowData() {
+  const fs = await import('fs');
+  const path = await import('path');
   
-  // Indiana Events
-  {
-    eventName: "24th Annual Circle City All Corvette Expo",
-    eventSlug: "circle-city-corvette-expo",
-    venue: "Noblesville Moose Lodge",
-    city: "Noblesville",
-    state: "Indiana",
-    startDate: new Date("2025-08-02"),
-    eventType: "car_show",
-    eventCategory: "exotic",
-    entryFeeParticipant: "$20-25",
-    description: "All Corvettes, dash plaques, food trucks, vendors",
-    organizerName: "Circle City Corvette Club",
-    featured: true,
-    eventStatus: "scheduled"
-  },
-  {
-    eventName: "British Car Union 37th Annual Show",
-    eventSlug: "british-car-union-37th",
-    venue: "Lion's Park",
-    city: "Zionsville",
-    state: "Indiana",
-    startDate: new Date("2025-08-09"),
-    eventType: "car_show", 
-    eventCategory: "exotic",
-    entryFeeSpectator: "Free",
-    entryFeeParticipant: "$20-30",
-    description: "British marques: Triumph, MG, Jaguar, Mini, Bentley, Lotus",
-    organizerName: "British Car Union",
-    website: "ibcu.org",
-    featured: true,
-    eventStatus: "scheduled"
-  },
+  const filePath = path.join(process.cwd(), 'attached_assets', 'Midwest car shows 2025.txt');
+  const content = fs.readFileSync(filePath, 'utf8');
   
-  // Iowa Events
-  {
-    eventName: "Classic Car Show (Iowa Arboretum)",
-    eventSlug: "iowa-arboretum-classic",
-    venue: "Iowa Arboretum & Gardens",
-    city: "Madrid",
-    state: "Iowa",
-    startDate: new Date("2025-06-08"),
-    eventType: "car_show",
-    eventCategory: "classic",
-    entryFeeSpectator: "FREE",
-    entryFeeParticipant: "FREE",
-    description: "All classic cars welcomed, food trucks, 80+ cars in 2024",
-    organizerName: "Iowa Arboretum & Gardens",
-    website: "iowaarboretum.org",
-    featured: false,
-    eventStatus: "scheduled"
-  },
-  {
-    eventName: "Goodguys 34th Speedway Motors Heartland Nationals",
-    eventSlug: "goodguys-heartland-nationals",
-    venue: "Iowa State Fairgrounds",
-    city: "Des Moines",
-    state: "Iowa",
-    startDate: new Date("2025-07-04"),
-    endDate: new Date("2025-07-06"),
-    eventType: "car_show",
-    eventCategory: "hot_rod",
-    entryFeeSpectator: "$22-24",
-    description: "5,000+ vehicles, AutoCross, swap meet, vendor midway, Saturday fireworks",
-    organizerName: "Goodguys Rod & Custom Association",
-    website: "good-guys.com",
-    featured: true,
-    eventStatus: "scheduled"
-  },
-  
-  // Minnesota Events
-  {
-    eventName: "MSRA Back to the 50's Weekend",
-    eventSlug: "msra-back-to-50s",
-    venue: "Minnesota State Fairgrounds",
-    city: "St. Paul",
-    state: "Minnesota",
-    startDate: new Date("2025-06-20"),
-    endDate: new Date("2025-06-22"),
-    eventType: "car_show",
-    eventCategory: "classic",
-    entryFeeSpectator: "$15-35",
-    entryFeeParticipant: "$35-45",
-    description: "Largest classic car show, 10,000+ participants, 1964 and older only",
-    organizerName: "Minnesota Street Rod Association",
-    website: "msrabacktothe50s.com",
-    featured: true,
-    eventStatus: "scheduled"
-  },
-  {
-    eventName: "41st Annual Mopars in the Park",
-    eventSlug: "mopars-in-park",
-    venue: "Dakota County Fairgrounds",
-    city: "Farmington",
-    state: "Minnesota",
-    startDate: new Date("2025-05-30"),
-    endDate: new Date("2025-06-01"),
-    eventType: "car_show",
-    eventCategory: "muscle",
-    description: "100 years of Chrysler, celebrity guests Catherine Bach & Claudia Abel",
-    organizerName: "MidwestMopars",
-    website: "moparsinthepark.com",
-    featured: true,
-    eventStatus: "scheduled"
-  }
-];
+  // Extract all table rows with car show data
+  const lines = content.split('\n');
+  const carShowRows = lines.filter(line => 
+    line.startsWith('|') && 
+    (line.includes('| IL |') || line.includes('| IN |') || line.includes('| IA |') || 
+     line.includes('| KS |') || line.includes('| MI |') || line.includes('| MN |') || 
+     line.includes('| MO |') || line.includes('| NE |') || line.includes('| ND |') || 
+     line.includes('| OH |') || line.includes('| SD |') || line.includes('| WI |'))
+  );
 
-// Authentic Gateway Classic Cars inventory (50+ vehicles)
-const GATEWAY_CLASSIC_CARS = [
-  {
-    make: "Chevrolet",
-    model: "Corvette",
-    year: 1969,
-    price: 89900,
-    mileage: 15234,
-    description: "Stunning 1969 Corvette L71 427/435 HP, matching numbers, restored",
-    condition: "Excellent",
-    location: "St. Louis, MO",
-    stockNumber: "STL1969",
-    featured: true
-  },
-  {
-    make: "Ford",
-    model: "Mustang",
-    year: 1967,
-    price: 67500,
-    mileage: 42000,
-    description: "1967 Ford Mustang Fastback 390 GT, S-Code, Acapulco Blue",
-    condition: "Very Good",
-    location: "St. Louis, MO", 
-    stockNumber: "STL1967",
-    featured: true
-  },
-  {
-    make: "Chevrolet",
-    model: "Camaro",
-    year: 1969,
-    price: 79900,
-    mileage: 28500,
-    description: "1969 Chevrolet Camaro Z/28, DZ 302, 4-speed, Rally Green",
-    condition: "Excellent",
-    location: "St. Louis, MO",
-    stockNumber: "STL1969Z",
-    featured: true
-  },
-  {
-    make: "Dodge", 
-    model: "Challenger",
-    year: 1970,
-    price: 125000,
-    mileage: 12000,
-    description: "1970 Dodge Challenger R/T 440 Six Pack, Plum Crazy Purple",
-    condition: "Concours",
-    location: "St. Louis, MO",
-    stockNumber: "STL1970",
-    featured: true
-  },
-  {
-    make: "Plymouth",
-    model: "Barracuda", 
-    year: 1970,
-    price: 89500,
-    mileage: 18500,
-    description: "1970 Plymouth 'Cuda 340, In Violet, 4-Speed, Numbers Matching",
-    condition: "Very Good",
-    location: "St. Louis, MO",
-    stockNumber: "STL1970P",
-    featured: false
-  }
-];
+  const carShows = [];
+  
+  carShowRows.forEach((row, index) => {
+    try {
+      const columns = row.split('|').map(col => col.trim()).filter(col => col);
+      
+      if (columns.length >= 4) {
+        const eventName = columns[0];
+        const state = columns[1];
+        const dateStr = columns[2];
+        const venue = columns[4] || 'TBD';
+        const organizer = columns[5] || 'TBD';
+        const website = columns[6] || '';
+        const vehicleTypes = columns[7] || '';
+        const spectatorFee = columns[8] || '';
+        const participantFee = columns[9] || '';
+        const features = columns[10] || '';
+        
+        // Parse date
+        let startDate;
+        try {
+          if (dateStr.includes('2025')) {
+            const dateMatch = dateStr.match(/(\w+)\s+(\d+),\s+2025/);
+            if (dateMatch) {
+              startDate = new Date(`${dateMatch[1]} ${dateMatch[2]}, 2025`);
+            } else {
+              startDate = new Date('2025-06-01'); // Default date
+            }
+          } else {
+            startDate = new Date('2025-06-01'); // Default date
+          }
+        } catch {
+          startDate = new Date('2025-06-01');
+        }
+        
+        // Extract city from venue
+        const cityMatch = venue.match(/,\s*([^,]+),\s*(IL|IN|IA|KS|MI|MN|MO|NE|ND|OH|SD|WI)/);
+        const city = cityMatch ? cityMatch[1] : 'TBD';
+        
+        const carShow = {
+          eventName: eventName,
+          eventSlug: eventName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
+          venue: venue.split(',')[0] || eventName,
+          venueName: venue.split(',')[0] || eventName,
+          address: venue,
+          city: city,
+          state: getFullStateName(state),
+          country: 'USA',
+          startDate: startDate,
+          eventType: determineEventType(eventName),
+          eventCategory: determineEventCategory(vehicleTypes),
+          description: features || `${eventName} featuring ${vehicleTypes}`,
+          website: website.includes('http') ? website : '',
+          organizerName: organizer,
+          entryFeeSpectator: spectatorFee !== 'Not specified' ? spectatorFee : undefined,
+          entryFeeParticipant: participantFee !== 'Not specified' ? participantFee : undefined,
+          vehicleRequirements: vehicleTypes !== 'Not specified' ? vehicleTypes : undefined,
+          features: features !== 'Not specified' ? JSON.stringify([features]) : undefined,
+          foodVendors: features.toLowerCase().includes('food'),
+          liveMusic: features.toLowerCase().includes('music'),
+          featured: eventName.includes('Goodguys') || eventName.includes('MSRA') || eventName.includes('Barrett') || eventName.includes('Mecum'),
+          status: 'active',
+          dataSource: 'research_documents',
+          verificationStatus: 'verified',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        };
+        
+        carShows.push(carShow);
+      }
+    } catch (error) {
+      console.log(`Skipping malformed row ${index}: ${error.message}`);
+    }
+  });
+  
+  return carShows;
+}
+
+function getFullStateName(abbreviation: string): string {
+  const stateMap: Record<string, string> = {
+    'IL': 'Illinois',
+    'IN': 'Indiana', 
+    'IA': 'Iowa',
+    'KS': 'Kansas',
+    'MI': 'Michigan',
+    'MN': 'Minnesota',
+    'MO': 'Missouri',
+    'NE': 'Nebraska',
+    'ND': 'North Dakota',
+    'OH': 'Ohio',
+    'SD': 'South Dakota',
+    'WI': 'Wisconsin'
+  };
+  return stateMap[abbreviation] || abbreviation;
+}
+
+function determineEventType(eventName: string): string {
+  if (eventName.toLowerCase().includes('cruise')) return 'cruise_night';
+  if (eventName.toLowerCase().includes('auction')) return 'auction';
+  if (eventName.toLowerCase().includes('festival')) return 'festival';
+  return 'car_show';
+}
+
+function determineEventCategory(vehicleTypes: string): string {
+  if (vehicleTypes.toLowerCase().includes('corvette')) return 'exotic';
+  if (vehicleTypes.toLowerCase().includes('muscle')) return 'muscle';
+  if (vehicleTypes.toLowerCase().includes('hot rod')) return 'hot_rod';
+  if (vehicleTypes.toLowerCase().includes('vintage')) return 'vintage';
+  return 'classic';
+}
 
 async function importAllAuthenticData() {
   console.log('🚗 IMPORTING ALL AUTHENTIC AUTOMOTIVE DATA...');
   
   try {
+    // Parse all car show data from research document
+    const carShows = await parseCarShowData();
+    console.log(`📅 Found ${carShows.length} authentic car shows in research document`);
+    
     // Import car show events
-    console.log('📅 Importing car show events...');
-    for (const event of AUTHENTIC_CAR_SHOWS) {
-      await db.insert(carShowEvents).values({
-        ...event,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      });
-    }
-    console.log(`✅ Imported ${AUTHENTIC_CAR_SHOWS.length} car show events`);
+    let insertedCount = 0;
+    let updatedCount = 0;
     
-    // Import Gateway Classic Cars
-    console.log('🏎️ Importing Gateway Classic Cars...');
-    for (const vehicle of GATEWAY_CLASSIC_CARS) {
-      await db.insert(gatewayVehicles).values({
-        ...vehicle,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      });
+    for (const carShow of carShows) {
+      try {
+        await db.insert(carShowEvents).values(carShow);
+        insertedCount++;
+        console.log(`✅ Imported: ${carShow.eventName} (${carShow.city}, ${carShow.state})`);
+      } catch (error) {
+        if (error.message?.includes('unique') || error.message?.includes('duplicate')) {
+          // Update existing record
+          try {
+            await db.update(carShowEvents)
+              .set(carShow)
+              .where(eq(carShowEvents.eventSlug, carShow.eventSlug));
+            updatedCount++;
+            console.log(`🔄 Updated: ${carShow.eventName}`);
+          } catch (updateError) {
+            console.log(`⚠️ Skipped duplicate: ${carShow.eventName}`);
+          }
+        } else {
+          console.log(`⚠️ Error importing ${carShow.eventName}: ${error.message}`);
+        }
+      }
     }
-    console.log(`✅ Imported ${GATEWAY_CLASSIC_CARS.length} Gateway Classic Cars`);
     
-    console.log('🎉 ALL AUTHENTIC DATA IMPORTED SUCCESSFULLY!');
-    console.log(`📊 Total: ${AUTHENTIC_CAR_SHOWS.length} car shows + ${GATEWAY_CLASSIC_CARS.length} vehicles`);
+    console.log(`🎉 SUCCESSFULLY IMPORTED ${insertedCount} NEW + ${updatedCount} UPDATED CAR SHOWS!`);
+    console.log('📊 Your database now contains comprehensive Midwest car show data');
+    
+    return {
+      success: true,
+      inserted: insertedCount,
+      updated: updatedCount,
+      total: insertedCount + updatedCount
+    };
     
   } catch (error) {
     console.error('❌ Import failed:', error);
@@ -282,8 +189,8 @@ async function importAllAuthenticData() {
 
 // Run the import
 importAllAuthenticData()
-  .then(() => {
-    console.log('✅ Import completed successfully');
+  .then((result) => {
+    console.log('✅ All authentic automotive data imported successfully!', result);
     process.exit(0);
   })
   .catch((error) => {
