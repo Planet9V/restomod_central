@@ -68,10 +68,22 @@ export default function CarShowEvents() {
         if (featuredOnly) params.append('featured', 'true');
         if (searchTerm.trim()) params.append('search', searchTerm.trim());
 
-        const response = await fetch(`/api/car-show-events?${params.toString()}`);
+        const response = await fetch(`/api/car-show-events?${params.toString()}`, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        });
         
         if (!response.ok) {
           throw new Error(`API Error: ${response.status} ${response.statusText}`);
+        }
+
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          console.error('❌ Received non-JSON response:', contentType);
+          throw new Error(`Expected JSON response but received: ${contentType}`);
         }
         
         const data = await response.json();
