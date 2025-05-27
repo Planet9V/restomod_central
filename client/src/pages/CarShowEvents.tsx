@@ -301,14 +301,11 @@ export default function CarShowEvents() {
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-600">
                     <SelectItem value="all">All Categories</SelectItem>
-                    <SelectItem value="classic_cars">Classic Cars</SelectItem>
-                    <SelectItem value="muscle_cars">Muscle Cars</SelectItem>
-                    <SelectItem value="hot_rods">Hot Rods</SelectItem>
-                    <SelectItem value="street_rods">Street Rods</SelectItem>
-                    <SelectItem value="antique_cars">Antique Cars</SelectItem>
-                    <SelectItem value="exotic_cars">Exotic Cars</SelectItem>
-                    <SelectItem value="trucks">Trucks</SelectItem>
-                    <SelectItem value="motorcycles">Motorcycles</SelectItem>
+                    {filterOptions.categories.map((category) => (
+                      <SelectItem key={category} value={category}>
+                        {category.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
 
