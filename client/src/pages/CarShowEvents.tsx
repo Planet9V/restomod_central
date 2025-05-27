@@ -81,27 +81,35 @@ export default function CarShowEvents() {
         if (searchTerm.trim()) filters.search = searchTerm.trim();
 
         const data = await fetchCarShowEvents(filters);
-        console.log('📥 API Response:', { success: data?.success, eventsCount: data?.events?.length, hasEvents: !!data?.events });
+        console.log('📥 Raw API Response:', data);
         
-        if (data?.success && data?.events) {
-          setEventsData({ events: data.events });
-          setError(null);
-          console.log(`✅ Loaded ${data.events.length} authentic car shows from Neon database`);
-          
-          // Extract unique filter options from your authentic data
-          const uniqueEventTypes = [...new Set(data.events.map(event => event.eventType).filter(Boolean))];
-          const uniqueStates = [...new Set(data.events.map(event => event.state).filter(Boolean))];
-          const uniqueCategories = [...new Set(data.events.map(event => event.eventCategory).filter(Boolean))];
-          
-          setFilterOptions({
-            eventTypes: uniqueEventTypes.sort(),
-            states: uniqueStates.sort(),
-            categories: uniqueCategories.sort()
-          });
+        // Handle different response formats
+        let events = [];
+        if (Array.isArray(data)) {
+          events = data;
+        } else if (data?.events && Array.isArray(data.events)) {
+          events = data.events;
+        } else if (data?.success && data?.data && Array.isArray(data.data)) {
+          events = data.data;
         } else {
-          console.log('❌ Response format issue:', data);
-          throw new Error('Failed to fetch authentic car show events - invalid response format');
+          console.error('❌ Unexpected response format:', data);
+          throw new Error('Invalid response format from API');
         }
+        
+        setEventsData({ events });
+        setError(null);
+        console.log(`✅ Loaded ${events.length} authentic car shows from database`);
+          
+        // Extract unique filter options from your authentic data
+        const uniqueEventTypes = Array.from(new Set(events.map((event: any) => event.eventType).filter(Boolean)));
+        const uniqueStates = Array.from(new Set(events.map((event: any) => event.state).filter(Boolean)));
+        const uniqueCategories = Array.from(new Set(events.map((event: any) => event.eventCategory).filter(Boolean)));
+        
+        setFilterOptions({
+          eventTypes: uniqueEventTypes.sort(),
+          states: uniqueStates.sort(),
+          categories: uniqueCategories.sort()
+        });
       } catch (err) {
         setError(err as Error);
         setEventsData(null);
