@@ -473,15 +473,13 @@ export async function seedCarShowEvents() {
   }
 }
 
-// Export for manual execution
-if (require.main === module) {
-  seedCarShowEvents()
-    .then((result) => {
-      console.log('Seeding completed:', result);
-      process.exit(0);
-    })
-    .catch((error) => {
-      console.error('Seeding failed:', error);
-      process.exit(1);
-    });
-}
+// Auto-run when executed directly
+seedCarShowEvents()
+  .then((result) => {
+    console.log('✅ Car show events seeding completed:', result);
+    process.exit(0);
+  })
+  .catch((error) => {
+    console.error('❌ Seeding failed:', error);
+    process.exit(1);
+  });
