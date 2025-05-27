@@ -1,6 +1,6 @@
 import { db } from "@db";
 import * as schema from "@shared/schema";
-import { eq, like, desc, asc, gte, lte } from "drizzle-orm";
+import { eq, like, desc, asc, gte, lte, and, or, ilike, inArray, sql } from "drizzle-orm";
 import { z } from "zod";
 import { createInsertSchema } from "drizzle-zod";
 
@@ -467,23 +467,76 @@ export const deleteCarShowEvent = async (id: number) => {
 export const getCarShowEvents = async (filters?: {
   eventType?: string;
   state?: string;
+  region?: string;
+  category?: string;
+  month?: string;
   featured?: boolean;
   status?: string;
+  search?: string;
   limit?: number;
 }) => {
   let query = db.select().from(schema.carShowEvents);
+  const conditions = [];
   
   if (filters?.eventType && filters.eventType !== 'all') {
-    query = query.where(eq(schema.carShowEvents.eventType, filters.eventType));
+    conditions.push(eq(schema.carShowEvents.eventType, filters.eventType));
   }
+  
   if (filters?.state && filters.state !== 'all') {
-    query = query.where(eq(schema.carShowEvents.state, filters.state));
+    conditions.push(eq(schema.carShowEvents.state, filters.state));
   }
+  
+  if (filters?.region && filters.region !== 'all') {
+    // Regional filtering based on state groupings
+    const regionStates = {
+      'midwest': ['Illinois', 'Wisconsin', 'Missouri', 'Iowa', 'Michigan', 'Indiana', 'Ohio', 'Minnesota', 'Kansas', 'Nebraska', 'North Dakota', 'South Dakota'],
+      'south': ['Texas', 'Florida', 'Georgia', 'North Carolina', 'South Carolina', 'Tennessee', 'Alabama', 'Mississippi', 'Louisiana', 'Arkansas', 'Kentucky', 'Virginia', 'West Virginia'],
+      'northeast': ['New York', 'Pennsylvania', 'New Jersey', 'Massachusetts', 'Connecticut', 'Rhode Island', 'Vermont', 'New Hampshire', 'Maine', 'Maryland', 'Delaware'],
+      'west': ['California', 'Nevada', 'Arizona', 'Utah', 'Colorado', 'New Mexico', 'Wyoming', 'Montana', 'Idaho', 'Washington', 'Oregon'],
+      'southeast': ['Florida', 'Georgia', 'South Carolina', 'North Carolina', 'Alabama', 'Tennessee'],
+      'southwest': ['Texas', 'Arizona', 'New Mexico', 'Nevada', 'Oklahoma']
+    };
+    
+    const statesInRegion = regionStates[filters.region as keyof typeof regionStates];
+    if (statesInRegion) {
+      conditions.push(inArray(schema.carShowEvents.state, statesInRegion));
+    }
+  }
+  
+  if (filters?.category && filters.category !== 'all') {
+    conditions.push(eq(schema.carShowEvents.eventCategory, filters.category));
+  }
+  
+  if (filters?.month && filters.month !== 'all') {
+    // Extract month from startDate and filter
+    const monthNum = parseInt(filters.month);
+    conditions.push(sql`EXTRACT(MONTH FROM ${schema.carShowEvents.startDate}) = ${monthNum}`);
+  }
+  
   if (filters?.featured !== undefined) {
-    query = query.where(eq(schema.carShowEvents.featured, filters.featured));
+    conditions.push(eq(schema.carShowEvents.featured, filters.featured));
   }
+  
   if (filters?.status && filters.status !== 'all') {
-    query = query.where(eq(schema.carShowEvents.status, filters.status));
+    conditions.push(eq(schema.carShowEvents.status, filters.status));
+  }
+  
+  if (filters?.search && filters.search.trim()) {
+    const searchTerm = `%${filters.search.toLowerCase()}%`;
+    conditions.push(
+      or(
+        ilike(schema.carShowEvents.eventName, searchTerm),
+        ilike(schema.carShowEvents.city, searchTerm),
+        ilike(schema.carShowEvents.state, searchTerm),
+        ilike(schema.carShowEvents.venue, searchTerm),
+        ilike(schema.carShowEvents.description, searchTerm)
+      )
+    );
+  }
+  
+  // Apply all conditions
+  if (conditions.length > 0) {
+    query = query.where(and(...conditions));
   }
   
   if (filters?.limit) {

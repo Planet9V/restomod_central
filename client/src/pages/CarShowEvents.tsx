@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, MapPin, Users, DollarSign, Clock, Filter, Search, Star, ExternalLink, TrendingUp, Globe, Car } from "lucide-react";
+import { Calendar, MapPin, Users, DollarSign, Clock, Filter, Search, Star, ExternalLink, TrendingUp, Globe, Car, ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -181,60 +181,175 @@ export default function CarShowEvents() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="bg-zinc-800/50 backdrop-blur-sm border border-zinc-700 rounded-xl p-6 mb-8"
         >
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="space-y-4">
+            {/* Primary Search Bar */}
             <div className="relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-zinc-400" />
+              <Search className="absolute left-3 top-3 h-5 w-5 text-zinc-400" />
               <Input
-                placeholder="Search events, cities, venues..."
+                placeholder="Search 193+ authentic car shows by name, city, venue, or state..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 bg-zinc-900/50 border-zinc-600 focus:border-orange-500"
+                className="pl-11 h-12 bg-zinc-900/50 border-zinc-600 focus:border-orange-500 text-base"
               />
             </div>
-            
-            <Select value={eventTypeFilter} onValueChange={setEventTypeFilter}>
-              <SelectTrigger className="bg-zinc-900/50 border-zinc-600 focus:border-orange-500">
-                <SelectValue placeholder="Event Type" />
-              </SelectTrigger>
-              <SelectContent className="bg-zinc-800 border-zinc-600">
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="auction">Auctions</SelectItem>
-                <SelectItem value="car_show">Car Shows</SelectItem>
-                <SelectItem value="concours">Concours</SelectItem>
-                <SelectItem value="cruise_in">Cruise-Ins</SelectItem>
-                <SelectItem value="swap_meet">Swap Meets</SelectItem>
-              </SelectContent>
-            </Select>
 
-            <Select value={stateFilter} onValueChange={setStateFilter}>
-              <SelectTrigger className="bg-zinc-900/50 border-zinc-600 focus:border-orange-500">
-                <SelectValue placeholder="State" />
-              </SelectTrigger>
-              <SelectContent className="bg-zinc-800 border-zinc-600">
-                <SelectItem value="all">All States</SelectItem>
-                <SelectItem value="California">California</SelectItem>
-                <SelectItem value="Texas">Texas</SelectItem>
-                <SelectItem value="Florida">Florida</SelectItem>
-                <SelectItem value="Arizona">Arizona</SelectItem>
-                <SelectItem value="Michigan">Michigan</SelectItem>
-                <SelectItem value="Pennsylvania">Pennsylvania</SelectItem>
-                <SelectItem value="New York">New York</SelectItem>
-                <SelectItem value="Nevada">Nevada</SelectItem>
-                <SelectItem value="Tennessee">Tennessee</SelectItem>
-              </SelectContent>
-            </Select>
+            {/* Filter Toggle */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-zinc-400">Showing {filteredEvents.length} of {events.length} events</span>
+                {(eventTypeFilter !== "all" || stateFilter !== "all" || regionFilter !== "all" || categoryFilter !== "all" || monthFilter !== "all" || featuredOnly) && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setEventTypeFilter("all");
+                      setStateFilter("all");
+                      setRegionFilter("all");
+                      setCategoryFilter("all");
+                      setMonthFilter("all");
+                      setFeaturedOnly(false);
+                    }}
+                    className="h-7 text-xs text-orange-400 hover:text-orange-300"
+                  >
+                    Clear filters
+                  </Button>
+                )}
+              </div>
+              <Button
+                variant="ghost"
+                onClick={() => setShowFilters(!showFilters)}
+                className="text-zinc-400 hover:text-zinc-300"
+              >
+                <Filter className="w-4 h-4 mr-2" />
+                Advanced Filters
+                {showFilters ? <ChevronUp className="w-4 h-4 ml-2" /> : <ChevronDown className="w-4 h-4 ml-2" />}
+              </Button>
+            </div>
 
-            <Button
-              variant={featuredOnly ? "default" : "outline"}
-              onClick={() => setFeaturedOnly(!featuredOnly)}
-              className={featuredOnly 
-                ? "bg-orange-500 hover:bg-orange-600" 
-                : "border-zinc-600 hover:bg-zinc-700"
-              }
-            >
-              <Star className="w-4 h-4 mr-2" />
-              Featured Only
-            </Button>
+            {/* Advanced Filters (Collapsible) */}
+            {showFilters && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3 pt-4 border-t border-zinc-700"
+              >
+                <Select value={eventTypeFilter} onValueChange={setEventTypeFilter}>
+                  <SelectTrigger className="bg-zinc-900/50 border-zinc-600 focus:border-orange-500">
+                    <SelectValue placeholder="Event Type" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-zinc-800 border-zinc-600">
+                    <SelectItem value="all">All Types</SelectItem>
+                    <SelectItem value="auction">Auctions</SelectItem>
+                    <SelectItem value="car_show">Car Shows</SelectItem>
+                    <SelectItem value="concours">Concours</SelectItem>
+                    <SelectItem value="cruise_in">Cruise-Ins</SelectItem>
+                    <SelectItem value="swap_meet">Swap Meets</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select value={regionFilter} onValueChange={setRegionFilter}>
+                  <SelectTrigger className="bg-zinc-900/50 border-zinc-600 focus:border-orange-500">
+                    <SelectValue placeholder="Region" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-zinc-800 border-zinc-600">
+                    <SelectItem value="all">All Regions</SelectItem>
+                    <SelectItem value="midwest">Midwest</SelectItem>
+                    <SelectItem value="south">South</SelectItem>
+                    <SelectItem value="northeast">Northeast</SelectItem>
+                    <SelectItem value="west">West</SelectItem>
+                    <SelectItem value="southeast">Southeast</SelectItem>
+                    <SelectItem value="southwest">Southwest</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select value={stateFilter} onValueChange={setStateFilter}>
+                  <SelectTrigger className="bg-zinc-900/50 border-zinc-600 focus:border-orange-500">
+                    <SelectValue placeholder="State" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-zinc-800 border-zinc-600">
+                    <SelectItem value="all">All States</SelectItem>
+                    <SelectItem value="California">California</SelectItem>
+                    <SelectItem value="Texas">Texas</SelectItem>
+                    <SelectItem value="Florida">Florida</SelectItem>
+                    <SelectItem value="Arizona">Arizona</SelectItem>
+                    <SelectItem value="Michigan">Michigan</SelectItem>
+                    <SelectItem value="Pennsylvania">Pennsylvania</SelectItem>
+                    <SelectItem value="New York">New York</SelectItem>
+                    <SelectItem value="Nevada">Nevada</SelectItem>
+                    <SelectItem value="Tennessee">Tennessee</SelectItem>
+                    <SelectItem value="Illinois">Illinois</SelectItem>
+                    <SelectItem value="Wisconsin">Wisconsin</SelectItem>
+                    <SelectItem value="Missouri">Missouri</SelectItem>
+                    <SelectItem value="Iowa">Iowa</SelectItem>
+                    <SelectItem value="Indiana">Indiana</SelectItem>
+                    <SelectItem value="Ohio">Ohio</SelectItem>
+                    <SelectItem value="Kentucky">Kentucky</SelectItem>
+                    <SelectItem value="Minnesota">Minnesota</SelectItem>
+                    <SelectItem value="Kansas">Kansas</SelectItem>
+                    <SelectItem value="Nebraska">Nebraska</SelectItem>
+                    <SelectItem value="North Carolina">North Carolina</SelectItem>
+                    <SelectItem value="South Carolina">South Carolina</SelectItem>
+                    <SelectItem value="Georgia">Georgia</SelectItem>
+                    <SelectItem value="Alabama">Alabama</SelectItem>
+                    <SelectItem value="Mississippi">Mississippi</SelectItem>
+                    <SelectItem value="Louisiana">Louisiana</SelectItem>
+                    <SelectItem value="Arkansas">Arkansas</SelectItem>
+                    <SelectItem value="Oklahoma">Oklahoma</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                  <SelectTrigger className="bg-zinc-900/50 border-zinc-600 focus:border-orange-500">
+                    <SelectValue placeholder="Category" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-zinc-800 border-zinc-600">
+                    <SelectItem value="all">All Categories</SelectItem>
+                    <SelectItem value="classic_cars">Classic Cars</SelectItem>
+                    <SelectItem value="muscle_cars">Muscle Cars</SelectItem>
+                    <SelectItem value="hot_rods">Hot Rods</SelectItem>
+                    <SelectItem value="street_rods">Street Rods</SelectItem>
+                    <SelectItem value="antique_cars">Antique Cars</SelectItem>
+                    <SelectItem value="exotic_cars">Exotic Cars</SelectItem>
+                    <SelectItem value="trucks">Trucks</SelectItem>
+                    <SelectItem value="motorcycles">Motorcycles</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select value={monthFilter} onValueChange={setMonthFilter}>
+                  <SelectTrigger className="bg-zinc-900/50 border-zinc-600 focus:border-orange-500">
+                    <SelectValue placeholder="Month" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-zinc-800 border-zinc-600">
+                    <SelectItem value="all">All Months</SelectItem>
+                    <SelectItem value="1">January</SelectItem>
+                    <SelectItem value="2">February</SelectItem>
+                    <SelectItem value="3">March</SelectItem>
+                    <SelectItem value="4">April</SelectItem>
+                    <SelectItem value="5">May</SelectItem>
+                    <SelectItem value="6">June</SelectItem>
+                    <SelectItem value="7">July</SelectItem>
+                    <SelectItem value="8">August</SelectItem>
+                    <SelectItem value="9">September</SelectItem>
+                    <SelectItem value="10">October</SelectItem>
+                    <SelectItem value="11">November</SelectItem>
+                    <SelectItem value="12">December</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Button
+                  variant={featuredOnly ? "default" : "outline"}
+                  onClick={() => setFeaturedOnly(!featuredOnly)}
+                  className={featuredOnly 
+                    ? "bg-orange-500 hover:bg-orange-600" 
+                    : "border-zinc-600 hover:bg-zinc-700"
+                  }
+                >
+                  <Star className="w-4 h-4 mr-2" />
+                  Featured Only
+                </Button>
+              </motion.div>
+            )}
           </div>
         </motion.div>
 
