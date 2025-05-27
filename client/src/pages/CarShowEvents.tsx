@@ -290,12 +290,12 @@ export default function CarShowEvents() {
               >
                 <Select value={eventTypeFilter} onValueChange={setEventTypeFilter}>
                   <SelectTrigger className="bg-zinc-900/50 border-zinc-600 focus:border-orange-500">
-                    <SelectValue placeholder="Event Type">
+                    <span className="text-zinc-300">
                       {eventTypeFilter === 'all_types' 
                         ? 'All Types' 
                         : eventTypeFilter.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
                       }
-                    </SelectValue>
+                    </span>
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-600">
                     <SelectItem value="all_types">All Types</SelectItem>
@@ -309,7 +309,12 @@ export default function CarShowEvents() {
 
                 <Select value={regionFilter} onValueChange={setRegionFilter}>
                   <SelectTrigger className="bg-zinc-900/50 border-zinc-600 focus:border-orange-500">
-                    <SelectValue placeholder="Region" />
+                    <span className="text-zinc-300">
+                      {regionFilter === 'all' 
+                        ? 'All Regions' 
+                        : regionFilter.charAt(0).toUpperCase() + regionFilter.slice(1)
+                      }
+                    </span>
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-600">
                     <SelectItem value="all">All Regions</SelectItem>
@@ -324,9 +329,9 @@ export default function CarShowEvents() {
 
                 <Select value={stateFilter} onValueChange={setStateFilter}>
                   <SelectTrigger className="bg-zinc-900/50 border-zinc-600 focus:border-orange-500">
-                    <SelectValue placeholder="State">
+                    <span className="text-zinc-300">
                       {stateFilter === 'all_states' ? 'All States' : stateFilter}
-                    </SelectValue>
+                    </span>
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-600">
                     <SelectItem value="all_states">All States</SelectItem>
@@ -340,12 +345,12 @@ export default function CarShowEvents() {
 
                 <Select value={categoryFilter} onValueChange={setCategoryFilter}>
                   <SelectTrigger className="bg-zinc-900/50 border-zinc-600 focus:border-orange-500">
-                    <SelectValue placeholder="Category">
+                    <span className="text-zinc-300">
                       {categoryFilter === 'all_categories' 
                         ? 'All Categories' 
                         : categoryFilter.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
                       }
-                    </SelectValue>
+                    </span>
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-600">
                     <SelectItem value="all_categories">All Categories</SelectItem>
