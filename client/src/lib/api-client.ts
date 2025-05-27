@@ -3,7 +3,7 @@
  * Ensures authentic car show events load properly from database
  */
 
-const API_BASE = import.meta.env.PROD ? '' : 'http://localhost:5000';
+const API_BASE = '';
 
 export async function fetchCarShowEvents(filters: Record<string, any> = {}) {
   try {
@@ -34,19 +34,6 @@ export async function fetchCarShowEvents(filters: Record<string, any> = {}) {
 
     const contentType = response.headers.get('content-type');
     if (!contentType?.includes('application/json')) {
-      // If we get HTML instead of JSON, try the direct server port
-      const directResponse = await fetch(`http://localhost:5000/api/car-show-events${params.toString() ? `?${params.toString()}` : ''}`, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }
-      });
-      
-      if (directResponse.ok && directResponse.headers.get('content-type')?.includes('application/json')) {
-        return await directResponse.json();
-      }
-      
       throw new Error(`Expected JSON but received: ${contentType}`);
     }
 
