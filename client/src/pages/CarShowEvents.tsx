@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Checkbox } from "@/components/ui/checkbox";
 import { SocialShare } from "@/components/SocialShare";
 import { directCarShowService } from "@/services/directCarShowData";
+import { fetchCarShowEvents } from "@/lib/api-client";
 
 interface CarShowEvent {
   id: number;
@@ -68,25 +69,17 @@ export default function CarShowEvents() {
         if (featuredOnly) params.append('featured', 'true');
         if (searchTerm.trim()) params.append('search', searchTerm.trim());
 
-        const response = await fetch(`/api/car-show-events?${params.toString()}`, {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        });
-        
-        if (!response.ok) {
-          throw new Error(`API Error: ${response.status} ${response.statusText}`);
-        }
+        // Use direct API client to bypass routing conflicts
+        const filters = {};
+        if (eventTypeFilter !== "all") filters.eventType = eventTypeFilter;
+        if (stateFilter !== "all") filters.state = stateFilter;
+        if (regionFilter !== "all") filters.region = regionFilter;
+        if (categoryFilter !== "all") filters.category = categoryFilter;
+        if (monthFilter !== "all") filters.month = monthFilter;
+        if (featuredOnly) filters.featured = 'true';
+        if (searchTerm.trim()) filters.search = searchTerm.trim();
 
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-          console.error('❌ Received non-JSON response:', contentType);
-          throw new Error(`Expected JSON response but received: ${contentType}`);
-        }
-        
-        const data = await response.json();
+        const data = await fetchCarShowEvents(filters);
         console.log('📥 API Response:', { success: data?.success, eventsCount: data?.events?.length, hasEvents: !!data?.events });
         
         if (data?.success && data?.events) {
