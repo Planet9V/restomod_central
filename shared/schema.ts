@@ -679,4 +679,90 @@ export const vendorPartnershipsInsertSchema = createInsertSchema(vendorPartnersh
 export type InsertVendorPartnership = z.infer<typeof vendorPartnershipsInsertSchema>;
 export type VendorPartnership = typeof vendorPartnerships.$inferSelect;
 
+// Gateway Classic Cars Inventory Table - Authentic vehicle listings
+export const gatewayVehicles = pgTable("gateway_vehicles", {
+  id: serial("id").primaryKey(),
+  stockNumber: text("stock_number").unique().notNull(),
+  year: integer("year").notNull(),
+  make: text("make").notNull(),
+  model: text("model").notNull(),
+  engine: text("engine"),
+  transmission: text("transmission"),
+  drivetrain: text("drivetrain"),
+  exterior: text("exterior"),
+  interior: text("interior"),
+  mileage: integer("mileage"),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  description: text("description"),
+  features: text("features").array(),
+  condition: text("condition").default("Excellent"),
+  location: text("location").default("St. Louis, Missouri"),
+  imageUrl: text("image_url"),
+  galleryImages: text("gallery_images").array(),
+  vin: text("vin"),
+  bodyStyle: text("body_style"),
+  fuelType: text("fuel_type"),
+  cylinders: integer("cylinders"),
+  displacement: text("displacement"),
+  horsepower: integer("horsepower"),
+  torque: integer("torque"),
+  acceleration: text("acceleration"),
+  topSpeed: text("top_speed"),
+  interiorColor: text("interior_color"),
+  exteriorColor: text("exterior_color"),
+  wheelSize: text("wheel_size"),
+  tireSize: text("tire_size"),
+  suspension: text("suspension"),
+  brakes: text("brakes"),
+  steering: text("steering"),
+  airConditioning: boolean("air_conditioning").default(false),
+  powerSteering: boolean("power_steering").default(false),
+  powerBrakes: boolean("power_brakes").default(false),
+  powerWindows: boolean("power_windows").default(false),
+  powerSeats: boolean("power_seats").default(false),
+  heatedSeats: boolean("heated_seats").default(false),
+  leatherSeats: boolean("leather_seats").default(false),
+  sunroof: boolean("sunroof").default(false),
+  convertible: boolean("convertible").default(false),
+  hardtop: boolean("hardtop").default(false),
+  tiltWheel: boolean("tilt_wheel").default(false),
+  cruiseControl: boolean("cruise_control").default(false),
+  amFmRadio: boolean("am_fm_radio").default(false),
+  cdPlayer: boolean("cd_player").default(false),
+  cassette: boolean("cassette").default(false),
+  premium_sound: boolean("premium_sound").default(false),
+  alarmsecurity: boolean("alarm_security").default(false),
+  keylessEntry: boolean("keyless_entry").default(false),
+  antiLockBrakes: boolean("anti_lock_brakes").default(false),
+  driverAirbag: boolean("driver_airbag").default(false),
+  passengerAirbag: boolean("passenger_airbag").default(false),
+  sideAirbags: boolean("side_airbags").default(false),
+  tractionControl: boolean("traction_control").default(false),
+  stabilityControl: boolean("stability_control").default(false),
+  category: text("category").default("classic"), // classic, muscle, exotic, hot_rod, vintage
+  investmentGrade: text("investment_grade"), // A+, A, B+, B, C+, C
+  appreciationPotential: text("appreciation_potential"), // High, Medium, Low
+  rarity: text("rarity"), // Very Rare, Rare, Uncommon, Common
+  restorationLevel: text("restoration_level"), // Concours, #1, #2, #3, #4, Project
+  marketTrend: text("market_trend"), // Rising, Stable, Declining
+  comparableListings: integer("comparable_listings"),
+  avgMarketPrice: decimal("avg_market_price", { precision: 10, scale: 2 }),
+  priceVariance: decimal("price_variance", { precision: 5, scale: 2 }),
+  daysOnMarket: integer("days_on_market"),
+  viewCount: integer("view_count").default(0),
+  inquiryCount: integer("inquiry_count").default(0),
+  featured: boolean("featured").default(false),
+  sold: boolean("sold").default(false),
+  soldDate: timestamp("sold_date"),
+  soldPrice: decimal("sold_price", { precision: 10, scale: 2 }),
+  dataSource: text("data_source").default("gateway_classics"),
+  lastUpdated: timestamp("last_updated").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+export const gatewayVehiclesInsertSchema = createInsertSchema(gatewayVehicles);
+export type InsertGatewayVehicle = z.infer<typeof gatewayVehiclesInsertSchema>;
+export type GatewayVehicle = typeof gatewayVehicles.$inferSelect;
+
 
