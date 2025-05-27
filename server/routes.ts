@@ -13,6 +13,7 @@ import * as articlesApi from "./api/articles";
 import * as marketResearchApi from "./api/market-research";
 import { getMarketTrends } from "./api/marketTrends";
 import { scheduleArticleGeneration } from "./services/scheduler";
+import { databaseHealthMonitor } from "./services/databaseHealthCheck";
 import { setupAuth, isAuthenticated, isAdmin } from "./auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -930,6 +931,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Research article not found" });
       }
       res.status(500).json({ message: "Failed to delete research article" });
+    }
+  });
+
+  // ========== DATABASE HEALTH MONITORING API ROUTES ==========
+  
+  // Get current database health status
+  app.get(`${apiPrefix}/database/health`, async (req, res) => {
+    try {
+      const health = await databaseHealthMonitor.performHealthCheck();
+      res.json(health);
+    } catch (error) {
+      res.status(500).json({ 
+        message: "Failed to check database health", 
+        error: (error as Error).message 
+      });
+    }
+  });
+
+  // Get database health report (detailed text format)
+  app.get(`${apiPrefix}/database/health-report`, async (req, res) => {
+    try {
+      const report = databaseHealthMonitor.generateHealthReport();
+      res.set('Content-Type', 'text/plain');
+      res.send(report);
+    } catch (error) {
+      res.status(500).json({ 
+        message: "Failed to generate health report", 
+        error: (error as Error).message 
+      });
+    }
+  });
+
+  // Get database health history
+  app.get(`${apiPrefix}/database/health-history`, async (req, res) => {
+    try {
+      const history = databaseHealthMonitor.getHealthHistory();
+      res.json({ history });
+    } catch (error) {
+      res.status(500).json({ 
+        message: "Failed to get health history", 
+        error: (error as Error).message 
+      });
     }
   });
 
