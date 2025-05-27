@@ -10,6 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { SocialShare } from "@/components/SocialShare";
 import { directCarShowService } from "@/services/directCarShowData";
 import { fetchCarShowEvents } from "@/lib/api-client";
+import { EventCardSkeletonGrid } from "@/components/EventCardSkeleton";
 
 interface CarShowEvent {
   id: number;
@@ -354,14 +355,24 @@ export default function CarShowEvents() {
           </div>
         </motion.div>
 
-        {/* Loading State */}
+        {/* Animated Loading Skeleton */}
         {isLoading && (
-          <div className="text-center py-12">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-500/20 rounded-full mb-4">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="space-y-6"
+          >
+            <div className="text-center py-6">
+              <motion.p 
+                className="text-zinc-400 text-lg font-medium"
+                animate={{ opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                Loading authentic car show events...
+              </motion.p>
             </div>
-            <p className="text-zinc-400">Loading authentic car show events...</p>
-          </div>
+            <EventCardSkeletonGrid count={6} />
+          </motion.div>
         )}
 
         {/* Error State */}
