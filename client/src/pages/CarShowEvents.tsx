@@ -69,7 +69,13 @@ export default function CarShowEvents() {
         if (searchTerm.trim()) params.append('search', searchTerm.trim());
 
         const response = await fetch(`/api/car-show-events?${params.toString()}`);
+        
+        if (!response.ok) {
+          throw new Error(`API Error: ${response.status} ${response.statusText}`);
+        }
+        
         const data = await response.json();
+        console.log('📥 API Response:', { success: data?.success, eventsCount: data?.events?.length, hasEvents: !!data?.events });
         
         if (data?.success && data?.events) {
           setEventsData({ events: data.events });
@@ -87,7 +93,8 @@ export default function CarShowEvents() {
             categories: uniqueCategories.sort()
           });
         } else {
-          throw new Error('Failed to fetch authentic car show events');
+          console.log('❌ Response format issue:', data);
+          throw new Error('Failed to fetch authentic car show events - invalid response format');
         }
       } catch (err) {
         setError(err as Error);

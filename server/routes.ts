@@ -327,7 +327,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get ALL car show events from PostgreSQL database (193+ authentic events with advanced filtering)
   app.get(`${apiPrefix}/car-show-events`, async (req, res) => {
     console.log('🎯 Car show events API called:', req.url);
+    
+    // Force JSON response and prevent HTML fallback
     res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Cache-Control', 'no-cache');
+    
+    // Prevent any potential routing conflicts
+    if (req.path !== '/api/car-show-events') {
+      return res.status(404).json({ error: 'Invalid API endpoint' });
+    }
     
     try {
       const { 
