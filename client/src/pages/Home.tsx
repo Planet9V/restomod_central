@@ -14,6 +14,7 @@ import ContactSection from "@/components/home/ContactSection";
 import ConfiguratorCTA from "@/components/home/ConfiguratorCTA";
 import LuxuryShowcasesSection from "@/components/home/LuxuryShowcasesSection";
 import { UpcomingEvents } from "@/components/home/UpcomingEvents";
+import { GatewayVehiclesSection } from "@/components/home/GatewayVehiclesSection";
 
 /**
  * Enhanced Home page with smooth transitions and optimized layout
@@ -238,6 +239,18 @@ const Home = () => {
           viewport={{ once: true, amount: 0.2 }}
         >
           <UpcomingEvents />
+        </motion.div>
+      </section>
+      
+      {/* Gateway Vehicles Valuation */}
+      <section id="valuations" className="relative z-10">
+        <motion.div
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          <GatewayVehiclesSection />
         </motion.div>
       </section>
       
