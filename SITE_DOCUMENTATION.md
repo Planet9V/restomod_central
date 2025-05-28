@@ -1,38 +1,29 @@
 # Skinny's Rod and Custom - Complete Platform Documentation
+*Updated: May 28, 2025 - Matches Current Codebase*
 
-## Database Architecture & Configuration
+## 🏗️ Database Architecture & Current Data Status
 
-### PostgreSQL Database Setup
-- **Database Provider**: Replit PostgreSQL (Native)
+### Active PostgreSQL Database (Neon)
+- **Database Provider**: Neon PostgreSQL
 - **ORM**: Drizzle ORM with TypeScript
-- **Schema Location**: `shared/schema.ts`
+- **Schema Location**: `shared/schema.ts` + `shared/configurator-schema.ts`
 - **Configuration**: `drizzle.config.ts`
+- **Health Status**: ✅ Connected (90 Gateway vehicles, 203 car show events, 9 projects, 32 research articles)
 
-### Required Environment Variables
-```bash
-DATABASE_URL=postgresql://user:password@host:port/database
-PGHOST=database_host
-PGPORT=5432
-PGDATABASE=database_name
-PGUSER=database_user
-PGPASSWORD=database_password
-```
-
-### Database Schema Structure
-
-#### Core Business Tables
+### Live Database Tables & Current Data
 ```sql
--- Projects showcase table
-projects (id, title, description, category, year, make, model, imageUrl, featured, completionDate, estimatedValue)
-
--- Client testimonials
-testimonials (id, clientName, rating, review, projectType, completionDate, vehicleDetails)
-
--- Team member profiles  
-team_members (id, name, role, bio, imageUrl, specialties, yearsExperience)
-
--- Company information
-companies (id, name, description, foundedYear, location, specialties)
+-- Current authentic data from Gateway Classic Cars
+gateway_vehicles (90 records) - Real inventory with pricing from Gateway Classic Cars St. Louis
+car_show_events (203 records) - Authentic car show events across Midwest, Southern, and Eastern US
+projects (9 records) - Completed restomod projects showcased on site
+research_articles (32 records) - AI-generated articles with real market data
+testimonials (3 records) - Client testimonials
+luxury_showcases (1 record) - Premium vehicle showcases
+team_members - Team profiles
+companies - Company information
+hero_content - Homepage hero content
+engineering_features - Technical capabilities
+process_steps - Build process information
 ```
 
 #### Authentic Research Data Tables (From Your Documents)
@@ -117,23 +108,44 @@ Skinny's Rod and Custom is a premium digital platform for restomod automotive en
 
 ## Codebase Structure
 
-### Frontend Architecture (`client/`)
+### Current Frontend Architecture (`client/`)
 ```
-client/
-├── src/
-│   ├── components/        # Reusable UI components
-│   │   ├── ui/           # Shadcn/ui components
-│   │   ├── home/         # Homepage components
-│   │   ├── market/       # Market analysis components
-│   │   └── layout/       # Layout components
-│   ├── pages/            # Route pages
-│   │   ├── Home.tsx
-│   │   ├── MarketAnalysis.tsx
-│   │   ├── Projects.tsx
-│   │   └── About.tsx
-│   ├── hooks/            # Custom React hooks
-│   ├── lib/              # Utilities and helpers
-│   └── App.tsx           # Main application router
+client/src/
+├── pages/                 # All available routes (19 pages)
+│   ├── Home.tsx          # Homepage with featured content
+│   ├── CarConfigurator.tsx # Step-by-step car configurator (✅ Restored)
+│   ├── CarShowEvents.tsx # 203 authentic car show events
+│   ├── GatewayVehicles.tsx # 90 real Gateway Classic Cars inventory
+│   ├── MarketAnalysis.tsx # Market data and insights
+│   ├── ModelValues.tsx   # Valuation analytics
+│   ├── ResearchArticles.tsx # 32 AI-generated research articles
+│   ├── ProjectsPage.tsx  # 9 completed restomod projects
+│   ├── VehicleArchive.tsx # Classic car archive
+│   ├── LuxuryShowcasePage.tsx # Premium vehicle showcases
+│   ├── MustangRestomods.tsx # Ford Mustang specialist page
+│   ├── Resources.tsx     # Educational resources
+│   ├── AdminDashboard.tsx # Admin management interface
+│   ├── AuthPage.tsx      # Authentication system
+│   ├── ProjectDetail.tsx # Individual project details
+│   ├── ArticleDetail.tsx # Research article details
+│   ├── CarShowGuide.tsx  # Car show guide
+│   ├── LuxuryShowcasesPage.tsx # Luxury showcases listing
+│   └── not-found.tsx     # 404 error page
+├── components/
+│   ├── ui/               # 39 Shadcn/ui components + custom components
+│   ├── home/             # Homepage sections (12 components)
+│   ├── market/           # Market analysis components (5 components)
+│   ├── layout/           # Navigation, header, footer (4 components)
+│   ├── configurator/     # Car configurator components (8 components)
+│   ├── admin/            # Admin dashboard components (7 components)
+│   ├── auth/             # Authentication components
+│   ├── animations/       # Framer Motion animations (4 components)
+│   └── showcase/         # Luxury showcase components
+├── hooks/                # Custom React hooks
+├── lib/                  # Utilities and helpers
+├── data/                 # Static data and configurations
+├── services/             # API service layers
+└── App.tsx               # Main router with all 19 routes
 ```
 
 ### Backend Architecture (`server/`)
@@ -167,16 +179,50 @@ db/
 └── seed.ts               # Database seeding
 ```
 
-## API Endpoints
+## 🔗 Current API Endpoints (All Active)
 
 ### Core Business APIs
 ```
-GET  /api/projects                    # All projects
-GET  /api/projects/featured           # Featured project
-GET  /api/projects/:slug              # Project by slug
-GET  /api/testimonials                # Client testimonials
-GET  /api/team-members                # Team profiles
+GET  /api/projects                    # All 9 restomod projects
+GET  /api/projects/featured           # Featured project showcase
+GET  /api/projects/:slug              # Individual project details
+GET  /api/testimonials                # 3 client testimonials
 GET  /api/about                       # Company information
+GET  /api/hero                        # Homepage hero content
+GET  /api/engineering                 # Engineering features
+GET  /api/process                     # Build process steps
+```
+
+### Authentic Car Data APIs (✅ Live Data)
+```
+GET  /api/gateway-vehicles            # 90 real Gateway Classic Cars with pricing
+GET  /api/car-show-events             # 203 authentic car show events
+GET  /api/car-show-events?featured=true&limit=6  # Featured events
+GET  /api/luxury-showcases            # Premium vehicle showcases
+GET  /api/luxury-showcases/featured   # Featured luxury showcases
+```
+
+### Car Configurator APIs (✅ Restored & Working)
+```
+GET  /api/configurator/car-models     # 20 authentic Gateway vehicles for configuration
+GET  /api/configurator/engines        # 3 engine options for customization
+GET  /api/configurator/transmissions  # 2 transmission options
+GET  /api/configurator/colors         # Color customization options
+GET  /api/configurator/wheels         # Wheel package options
+GET  /api/configurator/interiors      # Interior customization options
+```
+
+### Research & Articles APIs
+```
+GET  /api/research-articles           # 32 AI-generated research articles
+GET  /api/research-articles/:id       # Individual article details
+GET  /api/research-articles/category/:category # Articles by category
+```
+
+### Market Analysis APIs
+```
+GET  /api/market-insights             # Live market data and trends
+GET  /api/market-trends               # Real-time market analysis
 ```
 
 ### Authentic Research Data APIs
@@ -216,21 +262,38 @@ GET  /api/interior-options             # Interior packages
 POST /api/user-configurations          # Save customer configuration
 ```
 
-## Navigation Structure
+## 🧭 Current Site Navigation & Cursor Map
 
-### Main Navigation
-- **Our Projects**: Explore completed custom builds and restomods
-- **Process**: How we transform classics into modern masterpieces
-- **About Us**: Meet our team and discover our passion for automotive excellence
-- **Resources**: Educational articles and guides for restomod enthusiasts
-- **Archive**: Browse our historical collection of classic and custom builds
-- **Build Your Restomod**: AI-powered tool to create your dream custom build
+### Active Routes & Pages (19 Total)
+```
+/ (Home)                    # Homepage with featured content and gateway vehicles
+/projects                   # 9 completed restomod projects showcase
+/car-configurator          # ✅ Step-by-step car configuration (restored)
+/car-show-events           # 203 authentic car show events with search
+/gateway-vehicles          # 90 real Gateway Classic Cars inventory
+/market-analysis           # Market insights and trend analysis
+/model-values              # Vehicle valuation analytics
+/research-articles         # 32 AI-generated research articles
+/vehicle-archive           # Classic car archive and history
+/luxury-showcases          # Premium vehicle showcases
+/mustang-restomods         # Ford Mustang specialist builds
+/resources                 # Educational guides and resources
+/admin                     # Admin dashboard (protected route)
+/auth                      # Authentication system
+/projects/:slug            # Individual project detail pages
+/articles/:id              # Research article detail pages
+/car-show-guide           # Car show planning guide
+/luxury-showcase/:id      # Individual luxury showcase pages
+/404                      # Error page for invalid routes
+```
 
-### Market Research Navigation
-- **Market Insights**: Industry trends and investment data for the restomod market
-- **Restomod Valuations**: Detailed pricing analytics for specific restomod models
-- **Market Analysis**: Comprehensive data on restomod market growth and investment metrics
-- **Mustang Guide**: Expert guide to Ford Mustang restomod builds and valuations
+### Navigation Menu Structure
+**Main Categories:**
+- **Our Work**: Projects, Luxury Showcases, Vehicle Archive
+- **Build Tools**: Car Configurator, Resources, Mustang Guide
+- **Market Data**: Gateway Vehicles, Market Analysis, Model Values
+- **Events & Research**: Car Show Events, Research Articles, Car Show Guide
+- **Company**: About Us, Process, Team
 
 ## Key Pages
 
@@ -285,18 +348,36 @@ The site features several AI-powered components:
 - **Realtime Research**: Market data powered by Perplexity API
 - **Article Generation**: Automated content creation for car shows and events
 
-## Technology Stack
+## 🛠️ Current Technology Stack
 
-- **Frontend**: React with Vite
-- **State Management**: TanStack React Query
-- **Routing**: wouter
-- **Styling**: Tailwind CSS with shadcn/ui components
-- **Animations**: Framer Motion
-- **Data Visualization**: Recharts, D3.js
-- **Backend**: Express.js
-- **Database**: PostgreSQL with Drizzle ORM
-- **Authentication**: JWT with passport.js
-- **AI Integration**: Perplexity API, Google Gemini API
+### Frontend Technologies
+- **Framework**: React 18 with Vite
+- **State Management**: TanStack React Query v5
+- **Routing**: wouter (lightweight React routing)
+- **Styling**: Tailwind CSS + 39 shadcn/ui components
+- **Animations**: Framer Motion (staggered reveals, page transitions)
+- **Data Visualization**: Recharts + D3.js for market charts
+- **Forms**: React Hook Form with Zod validation
+- **Icons**: Lucide React + React Icons
+
+### Backend Technologies  
+- **Server**: Express.js with TypeScript
+- **Database**: Neon PostgreSQL with Drizzle ORM
+- **Authentication**: Session-based with Passport.js
+- **API Architecture**: RESTful endpoints with validation
+- **File Processing**: TypeScript execution with tsx
+
+### AI & External APIs
+- **Market Research**: Perplexity API for real-time data
+- **Content Generation**: Google Gemini API for articles
+- **Image Generation**: Gemini API for automotive imagery
+- **Data Sources**: Gateway Classic Cars, authentic car show databases
+
+### Development Tools
+- **Build Tool**: Vite with hot module replacement
+- **Package Manager**: npm with lock file
+- **Database Migration**: Drizzle Kit for schema management
+- **Type Safety**: TypeScript throughout entire stack
 
 ## Responsive Design
 
