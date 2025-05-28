@@ -98,30 +98,30 @@ const ResearchArticles = () => {
         >
           <Card className="text-center">
             <CardContent className="pt-6">
-              <Database className="h-8 w-8 mx-auto mb-2 text-blue-600" />
-              <div className="text-2xl font-bold">{articles?.length || 0}</div>
-              <p className="text-sm text-muted-foreground">Total Articles</p>
+              <FileText className="h-8 w-8 mx-auto mb-2 text-blue-600" />
+              <div className="text-2xl font-bold">{articles.length}</div>
+              <p className="text-sm text-muted-foreground">Research Articles</p>
             </CardContent>
           </Card>
           <Card className="text-center">
             <CardContent className="pt-6">
-              <Car className="h-8 w-8 mx-auto mb-2 text-orange-600" />
-              <div className="text-2xl font-bold">203</div>
-              <p className="text-sm text-muted-foreground">Car Show Events</p>
+              <BookOpen className="h-8 w-8 mx-auto mb-2 text-green-600" />
+              <div className="text-2xl font-bold">{featuredArticles.length}</div>
+              <p className="text-sm text-muted-foreground">Featured Articles</p>
             </CardContent>
           </Card>
           <Card className="text-center">
             <CardContent className="pt-6">
-              <DollarSign className="h-8 w-8 mx-auto mb-2 text-green-600" />
-              <div className="text-2xl font-bold">90</div>
-              <p className="text-sm text-muted-foreground">Vehicle Valuations</p>
-            </CardContent>
-          </Card>
-          <Card className="text-center">
-            <CardContent className="pt-6">
-              <TrendingUp className="h-8 w-8 mx-auto mb-2 text-purple-600" />
+              <Target className="h-8 w-8 mx-auto mb-2 text-purple-600" />
               <div className="text-2xl font-bold">{categories.length}</div>
-              <p className="text-sm text-muted-foreground">Research Categories</p>
+              <p className="text-sm text-muted-foreground">Categories</p>
+            </CardContent>
+          </Card>
+          <Card className="text-center">
+            <CardContent className="pt-6">
+              <BarChart3 className="h-8 w-8 mx-auto mb-2 text-orange-600" />
+              <div className="text-2xl font-bold">{filteredArticles.length}</div>
+              <p className="text-sm text-muted-foreground">Available Articles</p>
             </CardContent>
           </Card>
         </motion.div>
