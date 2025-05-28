@@ -3,6 +3,8 @@ import { createServer, type Server } from "http";
 import * as storage from "./storage";
 import { z } from "zod";
 import { contactSubmissionsInsertSchema } from "@shared/schema";
+import { db } from "@db";
+import * as schema from "@shared/schema";
 import * as aiApi from "./api/ai";
 import * as researchApi from "./api/research";
 import { generateCarImage } from "./api/gemini";
