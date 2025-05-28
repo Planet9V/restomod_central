@@ -3,8 +3,8 @@ import { Link } from 'wouter';
 import { Car, ChevronRight, DollarSign, Calendar, Gauge } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
+import { VehicleCardSkeleton, GridLoadingState } from '@/components/ui/loading-states';
 
 // Type for Gateway vehicles from database
 type GatewayVehicle = {
