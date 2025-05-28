@@ -10,9 +10,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Skeleton } from "@/components/ui/skeleton";
 import PageHeader from "@/components/ui/page-header";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { ArticleCardSkeleton, GridLoadingState, StatsCardSkeleton } from "@/components/ui/loading-states";
 
 // Types for research articles
 type ResearchArticle = {
@@ -109,34 +109,45 @@ const ResearchArticles = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <Card className="text-center">
-            <CardContent className="pt-6">
-              <FileText className="h-8 w-8 mx-auto mb-2 text-blue-600" />
-              <div className="text-2xl font-bold">{articles.length}</div>
-              <p className="text-sm text-muted-foreground">Research Articles</p>
-            </CardContent>
-          </Card>
-          <Card className="text-center">
-            <CardContent className="pt-6">
-              <BookOpen className="h-8 w-8 mx-auto mb-2 text-green-600" />
-              <div className="text-2xl font-bold">{featuredArticles.length}</div>
-              <p className="text-sm text-muted-foreground">Featured Articles</p>
-            </CardContent>
-          </Card>
-          <Card className="text-center">
-            <CardContent className="pt-6">
-              <Target className="h-8 w-8 mx-auto mb-2 text-purple-600" />
-              <div className="text-2xl font-bold">{categories.length}</div>
-              <p className="text-sm text-muted-foreground">Categories</p>
-            </CardContent>
-          </Card>
-          <Card className="text-center">
-            <CardContent className="pt-6">
-              <BarChart3 className="h-8 w-8 mx-auto mb-2 text-orange-600" />
-              <div className="text-2xl font-bold">{filteredArticles.length}</div>
-              <p className="text-sm text-muted-foreground">Available Articles</p>
-            </CardContent>
-          </Card>
+          {isLoading ? (
+            <>
+              <StatsCardSkeleton icon={FileText} />
+              <StatsCardSkeleton icon={BookOpen} />
+              <StatsCardSkeleton icon={Target} />
+              <StatsCardSkeleton icon={BarChart3} />
+            </>
+          ) : (
+            <>
+              <Card className="text-center">
+                <CardContent className="pt-6">
+                  <FileText className="h-8 w-8 mx-auto mb-2 text-blue-600" />
+                  <div className="text-2xl font-bold">{articles.length}</div>
+                  <p className="text-sm text-muted-foreground">Research Articles</p>
+                </CardContent>
+              </Card>
+              <Card className="text-center">
+                <CardContent className="pt-6">
+                  <BookOpen className="h-8 w-8 mx-auto mb-2 text-green-600" />
+                  <div className="text-2xl font-bold">{featuredArticles.length}</div>
+                  <p className="text-sm text-muted-foreground">Featured Articles</p>
+                </CardContent>
+              </Card>
+              <Card className="text-center">
+                <CardContent className="pt-6">
+                  <Target className="h-8 w-8 mx-auto mb-2 text-purple-600" />
+                  <div className="text-2xl font-bold">{categories.length}</div>
+                  <p className="text-sm text-muted-foreground">Categories</p>
+                </CardContent>
+              </Card>
+              <Card className="text-center">
+                <CardContent className="pt-6">
+                  <BarChart3 className="h-8 w-8 mx-auto mb-2 text-orange-600" />
+                  <div className="text-2xl font-bold">{filteredArticles.length}</div>
+                  <p className="text-sm text-muted-foreground">Available Articles</p>
+                </CardContent>
+              </Card>
+            </>
+          )}
         </motion.div>
 
         {/* Search and Filter */}
@@ -185,19 +196,7 @@ const ResearchArticles = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           {isLoading ? (
-            Array.from({ length: 6 }).map((_, i) => (
-              <Card key={i} className="overflow-hidden">
-                <Skeleton className="h-[200px] w-full" />
-                <CardHeader>
-                  <Skeleton className="h-6 w-3/4" />
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-4 w-2/3" />
-                </CardHeader>
-                <CardContent>
-                  <Skeleton className="h-4 w-1/2" />
-                </CardContent>
-              </Card>
-            ))
+            <GridLoadingState CardComponent={ArticleCardSkeleton} columns={3} rows={2} />
           ) : filteredArticles.length === 0 ? (
             <div className="col-span-full text-center py-12">
               <FileText className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
