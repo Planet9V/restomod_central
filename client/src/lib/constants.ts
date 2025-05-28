@@ -30,6 +30,12 @@ export const NAV_LINKS = [
     description: 'Discover premier car shows, auctions, and automotive events nationwide'
   },
   { 
+    name: 'Market Analysis', 
+    href: '/market-analysis',
+    isExternal: false,
+    description: 'Comprehensive classic car market data, pricing trends, and investment analysis'
+  },
+  { 
     name: 'About Us', 
     href: '/#about',
     isExternal: false,
