@@ -213,6 +213,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Market Trends API endpoint
   app.get(`${apiPrefix}/market-trends`, getMarketTrends);
   
+  // ========== CAR CONFIGURATOR API ROUTES ==========
+  // Initialize the car configurator API with step-by-step configuration
+  const { setupConfiguratorAPI } = await import('./api/configurator');
+  setupConfiguratorAPI(app);
+  
   // ========== RESEARCH DATA PROCESSING ROUTES ==========
   // Process authentic research documents and populate database
   const { processResearchDataHandler, getAuthenticDataHandler, getProcessingStatusHandler } = await import('./api/processResearchData');
