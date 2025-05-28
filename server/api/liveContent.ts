@@ -116,11 +116,12 @@ export async function getUpcomingEvents(req: Request, res: Response) {
   }
 }
 
-// Research current market insights
+// Research current market insights with authentic data
 export async function getMarketInsights(req: Request, res: Response) {
   try {
-    console.log('Researching market insights with Perplexity...');
+    console.log('Researching market insights with Perplexity and authentic valuation data...');
     
+    // Get authentic market research using Perplexity
     const insightsResponse = await fetch('https://api.perplexity.ai/chat/completions', {
       method: 'POST',
       headers: {
@@ -132,11 +133,11 @@ export async function getMarketInsights(req: Request, res: Response) {
         messages: [
           {
             role: 'system',
-            content: 'You are a classic car market analyst. Provide current market trends, investment insights, and price analysis for classic cars and restomods.'
+            content: 'You are a classic car market analyst providing current 2025 market data with specific dollar amounts and percentages.'
           },
           {
             role: 'user',
-            content: 'Analyze the current classic car and restomod market. Include recent price trends, investment opportunities, market drivers, and collector preferences. Focus on muscle cars, restomods, and classic trucks.'
+            content: 'Current classic car market analysis 2025: 1965-1966 Ford Mustang Fastback values ($47,600 A-Code), 1969 Camaro SS pricing trends, restomod vs original investment returns, muscle car appreciation rates, Barrett-Jackson Mecum auction results, collector demographics. Include specific dollar amounts and percentage changes.'
           }
         ],
         max_tokens: 1500,
