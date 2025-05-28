@@ -110,7 +110,7 @@ const Navigation = ({
           {NAV_LINKS.slice(0, 6).map((link, index) => (
             <div 
               key={link.href}
-              className="overflow-hidden"
+              className="overflow-hidden group/item"
               style={{ 
                 transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(-20px)',
                 opacity: isMobileMenuOpen ? 1 : 0,
@@ -119,25 +119,48 @@ const Navigation = ({
             >
               <Link 
                 href={link.href}
-                className="text-white text-2xl font-playfair font-bold hover:text-gold transition-all duration-300 group flex items-center"
+                className="text-white text-2xl font-playfair font-bold hover:text-gold transition-all duration-500 group flex items-center relative overflow-hidden"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <span className="relative">
-                  {link.name}
-                  <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
+                {/* Background hover effect */}
+                <span className="absolute inset-0 bg-gradient-to-r from-gold/10 to-gold/5 transform -translate-x-full transition-transform duration-500 group-hover:translate-x-0"></span>
+                
+                <span className="relative flex items-center">
+                  <span className="relative overflow-hidden">
+                    {/* Animated text reveal */}
+                    <span className="block transition-transform duration-500 group-hover:-translate-y-full">
+                      {link.name}
+                    </span>
+                    <span className="absolute top-full left-0 transition-transform duration-500 group-hover:-translate-y-full text-gold">
+                      {link.name}
+                    </span>
+                  </span>
+                  
+                  {/* Animated underline */}
+                  <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gradient-to-r from-gold to-gold/50 transition-all duration-500 group-hover:w-full"></span>
+                  
+                  {/* Arrow with bounce animation */}
+                  <svg 
+                    className="w-5 h-5 ml-3 transform transition-all duration-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:animate-bounce" 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </span>
-                <svg 
-                  className="w-5 h-5 ml-2 transform transition-transform duration-300 opacity-0 group-hover:opacity-100 group-hover:translate-x-1" 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
+                
+                {/* Ripple effect */}
+                <span className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-30 group-hover:animate-ping bg-gold/20"></span>
               </Link>
+              
               {link.description && (
-                <p className="text-white/60 text-sm mt-1 ml-1 mb-2">{link.description}</p>
+                <div className="ml-1 mt-2 mb-3 overflow-hidden">
+                  <p className="text-white/60 text-sm transition-all duration-500 transform translate-y-2 opacity-0 group-hover/item:translate-y-0 group-hover/item:opacity-100 group-hover/item:text-white/80">
+                    {link.description}
+                  </p>
+                </div>
               )}
             </div>
           ))}
@@ -148,7 +171,7 @@ const Navigation = ({
           {NAV_LINKS.slice(6).map((link, index) => (
             <div 
               key={link.href}
-              className="overflow-hidden"
+              className="overflow-hidden group/item"
               style={{ 
                 transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(-20px)',
                 opacity: isMobileMenuOpen ? 1 : 0,
@@ -157,25 +180,48 @@ const Navigation = ({
             >
               <Link 
                 href={link.href}
-                className="text-white text-2xl font-playfair font-bold hover:text-gold transition-all duration-300 group flex items-center"
+                className="text-white text-2xl font-playfair font-bold hover:text-gold transition-all duration-500 group flex items-center relative overflow-hidden"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <span className="relative">
-                  {link.name}
-                  <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
+                {/* Background hover effect with blue gradient for research links */}
+                <span className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/5 transform -translate-x-full transition-transform duration-500 group-hover:translate-x-0"></span>
+                
+                <span className="relative flex items-center">
+                  <span className="relative overflow-hidden">
+                    {/* Animated text reveal */}
+                    <span className="block transition-transform duration-500 group-hover:-translate-y-full">
+                      {link.name}
+                    </span>
+                    <span className="absolute top-full left-0 transition-transform duration-500 group-hover:-translate-y-full text-blue-400">
+                      {link.name}
+                    </span>
+                  </span>
+                  
+                  {/* Animated underline with blue gradient */}
+                  <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 transition-all duration-500 group-hover:w-full"></span>
+                  
+                  {/* Arrow with slide animation */}
+                  <svg 
+                    className="w-5 h-5 ml-3 transform transition-all duration-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:scale-110" 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </span>
-                <svg 
-                  className="w-5 h-5 ml-2 transform transition-transform duration-300 opacity-0 group-hover:opacity-100 group-hover:translate-x-1" 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
+                
+                {/* Pulse effect */}
+                <span className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-20 group-hover:animate-pulse bg-blue-400/30"></span>
               </Link>
+              
               {link.description && (
-                <p className="text-white/60 text-sm mt-1 ml-1 mb-2">{link.description}</p>
+                <div className="ml-1 mt-2 mb-3 overflow-hidden">
+                  <p className="text-white/60 text-sm transition-all duration-500 transform translate-y-2 opacity-0 group-hover/item:translate-y-0 group-hover/item:opacity-100 group-hover/item:text-blue-200">
+                    {link.description}
+                  </p>
+                </div>
               )}
             </div>
           ))}
