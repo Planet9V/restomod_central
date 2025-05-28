@@ -1,0 +1,1 @@
+// Backup of original schema before fixing configurator duplicates

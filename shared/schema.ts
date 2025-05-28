@@ -241,34 +241,7 @@ export const researchArticlesInsertSchema = createInsertSchema(researchArticles)
 export type InsertResearchArticle = z.infer<typeof researchArticlesInsertSchema>;
 export type ResearchArticle = typeof researchArticles.$inferSelect;
 
-// Car Configurator Schemas
-
-// Car Models table
-export const carModels = pgTable("car_models", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  slug: text("slug").notNull().unique(),
-  description: text("description").notNull(),
-  basePrice: decimal("base_price", { precision: 10, scale: 2 }).notNull(),
-  yearStart: integer("year_start").notNull(),
-  yearEnd: integer("year_end"),
-  manufacturer: text("manufacturer").notNull(),
-  bodyTypes: jsonb("body_types").notNull().$type<string[]>(),
-  mainImage: text("main_image").notNull(),
-  galleryImages: jsonb("gallery_images").notNull().$type<string[]>(),
-  featured: boolean("featured").default(false),
-  restomodCount: integer("restomod_count").default(0),
-  historicalInfo: text("historical_info"),
-  marketTrend: jsonb("market_trend").$type<{
-    year: number;
-    value: number;
-  }[]>(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
-export const carModelsInsertSchema = createInsertSchema(carModels);
-export type InsertCarModel = z.infer<typeof carModelsInsertSchema>;
-export type CarModel = typeof carModels.$inferSelect;
+// Car Configurator Schemas - Removed duplicates
 
 // Engine Options table
 export const engineOptions = pgTable("engine_options", {
@@ -764,5 +737,187 @@ export const gatewayVehicles = pgTable("gateway_vehicles", {
 export const gatewayVehiclesInsertSchema = createInsertSchema(gatewayVehicles);
 export type InsertGatewayVehicle = z.infer<typeof gatewayVehiclesInsertSchema>;
 export type GatewayVehicle = typeof gatewayVehicles.$inferSelect;
+
+// Car Configurator Tables
+
+// Available base vehicles
+export const carModels = pgTable("car_models", {
+  id: serial("id").primaryKey(),
+  make: text("make").notNull(),
+  model: text("model").notNull(),
+  yearStart: integer("year_start").notNull(),
+  yearEnd: integer("year_end").notNull(),
+  category: text("category").notNull(),
+  basePrice: decimal("base_price", { precision: 10, scale: 2 }).notNull(),
+  popularity: integer("popularity").default(0),
+  imageUrl: text("image_url"),
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+// Engine swap options
+export const engineOptions = pgTable("engine_options", {
+  id: serial("id").primaryKey(),
+  manufacturer: text("manufacturer").notNull(),
+  engineName: text("engine_name").notNull(),
+  displacement: text("displacement").notNull(),
+  horsepower: integer("horsepower").notNull(),
+  torque: integer("torque").notNull(),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  compatibility: jsonb("compatibility").notNull().$type<string[]>(),
+  fuelType: text("fuel_type").notNull(),
+  aspirationType: text("aspiration_type").notNull(),
+  imageUrl: text("image_url"),
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+// Transmission choices
+export const transmissionOptions = pgTable("transmission_options", {
+  id: serial("id").primaryKey(),
+  manufacturer: text("manufacturer").notNull(),
+  transmissionName: text("transmission_name").notNull(),
+  type: text("type").notNull(), // manual, automatic, dual-clutch
+  gears: integer("gears").notNull(),
+  torqueRating: integer("torque_rating").notNull(),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  compatibility: jsonb("compatibility").notNull().$type<string[]>(),
+  imageUrl: text("image_url"),
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+// Paint and finish options
+export const colorOptions = pgTable("color_options", {
+  id: serial("id").primaryKey(),
+  colorName: text("color_name").notNull(),
+  colorCode: text("color_code").notNull(),
+  finish: text("finish").notNull(), // metallic, pearl, matte, gloss
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  category: text("category").notNull(), // classic, modern, custom
+  manufacturer: text("manufacturer").notNull(),
+  popularity: integer("popularity").default(0),
+  imageUrl: text("image_url"),
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+// Wheel packages
+export const wheelOptions = pgTable("wheel_options", {
+  id: serial("id").primaryKey(),
+  brand: text("brand").notNull(),
+  wheelName: text("wheel_name").notNull(),
+  diameter: integer("diameter").notNull(),
+  width: decimal("width", { precision: 4, scale: 1 }).notNull(),
+  offset: integer("offset").notNull(),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  style: text("style").notNull(), // classic, modern, racing, luxury
+  material: text("material").notNull(), // steel, aluminum, forged
+  compatibility: jsonb("compatibility").notNull().$type<string[]>(),
+  imageUrl: text("image_url"),
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+// Interior packages
+export const interiorOptions = pgTable("interior_options", {
+  id: serial("id").primaryKey(),
+  packageName: text("package_name").notNull(),
+  description: text("description").notNull(),
+  materials: jsonb("materials").notNull().$type<string[]>(),
+  features: jsonb("features").notNull().$type<string[]>(),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  compatibility: jsonb("compatibility").notNull().$type<string[]>(),
+  manufacturer: text("manufacturer").notNull(),
+  imageUrl: text("image_url"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+// Customer configurations
+export const userConfigurations = pgTable("user_configurations", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id"), // Optional - can be null for anonymous configs
+  carModelId: integer("car_model_id").references(() => carModels.id).notNull(),
+  engineId: integer("engine_id").references(() => engineOptions.id),
+  transmissionId: integer("transmission_id").references(() => transmissionOptions.id),
+  colorId: integer("color_id").references(() => colorOptions.id),
+  wheelId: integer("wheel_id").references(() => wheelOptions.id),
+  interiorId: integer("interior_id").references(() => interiorOptions.id),
+  additionalOptions: jsonb("additional_options").$type<string[]>(),
+  totalPrice: decimal("total_price", { precision: 12, scale: 2 }).notNull(),
+  configurationName: text("configuration_name"),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+// Configurator relations
+export const carModelsRelations = relations(carModels, ({ many }) => ({
+  configurations: many(userConfigurations)
+}));
+
+export const engineOptionsRelations = relations(engineOptions, ({ many }) => ({
+  configurations: many(userConfigurations)
+}));
+
+export const transmissionOptionsRelations = relations(transmissionOptions, ({ many }) => ({
+  configurations: many(userConfigurations)
+}));
+
+export const colorOptionsRelations = relations(colorOptions, ({ many }) => ({
+  configurations: many(userConfigurations)
+}));
+
+export const wheelOptionsRelations = relations(wheelOptions, ({ many }) => ({
+  configurations: many(userConfigurations)
+}));
+
+export const interiorOptionsRelations = relations(interiorOptions, ({ many }) => ({
+  configurations: many(userConfigurations)
+}));
+
+export const userConfigurationsRelations = relations(userConfigurations, ({ one }) => ({
+  carModel: one(carModels, { fields: [userConfigurations.carModelId], references: [carModels.id] }),
+  engine: one(engineOptions, { fields: [userConfigurations.engineId], references: [engineOptions.id] }),
+  transmission: one(transmissionOptions, { fields: [userConfigurations.transmissionId], references: [transmissionOptions.id] }),
+  color: one(colorOptions, { fields: [userConfigurations.colorId], references: [colorOptions.id] }),
+  wheels: one(wheelOptions, { fields: [userConfigurations.wheelId], references: [wheelOptions.id] }),
+  interior: one(interiorOptions, { fields: [userConfigurations.interiorId], references: [interiorOptions.id] })
+}));
+
+// Configurator schemas
+export const carModelsInsertSchema = createInsertSchema(carModels);
+export type InsertCarModel = z.infer<typeof carModelsInsertSchema>;
+export type CarModel = typeof carModels.$inferSelect;
+
+export const engineOptionsInsertSchema = createInsertSchema(engineOptions);
+export type InsertEngineOption = z.infer<typeof engineOptionsInsertSchema>;
+export type EngineOption = typeof engineOptions.$inferSelect;
+
+export const transmissionOptionsInsertSchema = createInsertSchema(transmissionOptions);
+export type InsertTransmissionOption = z.infer<typeof transmissionOptionsInsertSchema>;
+export type TransmissionOption = typeof transmissionOptions.$inferSelect;
+
+export const colorOptionsInsertSchema = createInsertSchema(colorOptions);
+export type InsertColorOption = z.infer<typeof colorOptionsInsertSchema>;
+export type ColorOption = typeof colorOptions.$inferSelect;
+
+export const wheelOptionsInsertSchema = createInsertSchema(wheelOptions);
+export type InsertWheelOption = z.infer<typeof wheelOptionsInsertSchema>;
+export type WheelOption = typeof wheelOptions.$inferSelect;
+
+export const interiorOptionsInsertSchema = createInsertSchema(interiorOptions);
+export type InsertInteriorOption = z.infer<typeof interiorOptionsInsertSchema>;
+export type InteriorOption = typeof interiorOptions.$inferSelect;
+
+export const userConfigurationsInsertSchema = createInsertSchema(userConfigurations);
+export type InsertUserConfiguration = z.infer<typeof userConfigurationsInsertSchema>;
+export type UserConfiguration = typeof userConfigurations.$inferSelect;
 
 
