@@ -375,12 +375,12 @@ export const userConfigurations = pgTable("user_configurations", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").references(() => users.id, { onDelete: 'cascade' }),
   name: text("name").notNull(),
-  carModelId: integer("car_model_id").references(() => carModels.id, { onDelete: 'cascade' }).notNull(),
-  engineId: integer("engine_id").references(() => engineOptions.id, { onDelete: 'cascade' }),
-  transmissionId: integer("transmission_id").references(() => transmissionOptions.id, { onDelete: 'cascade' }),
-  colorId: integer("color_id").references(() => colorOptions.id, { onDelete: 'cascade' }),
-  wheelId: integer("wheel_id").references(() => wheelOptions.id, { onDelete: 'cascade' }),
-  interiorId: integer("interior_id").references(() => interiorOptions.id, { onDelete: 'cascade' }),
+  carModelId: integer("car_model_id").notNull(),
+  engineId: integer("engine_id"),
+  transmissionId: integer("transmission_id"),
+  colorId: integer("color_id"),
+  wheelId: integer("wheel_id"),
+  interiorId: integer("interior_id"),
   selectedAiOptions: jsonb("selected_ai_options").$type<number[]>(),
   selectedAdditionalOptions: jsonb("selected_additional_options").$type<number[]>(),
   aiRecommendations: text("ai_recommendations"),
@@ -738,10 +738,10 @@ export const gatewayVehiclesInsertSchema = createInsertSchema(gatewayVehicles);
 export type InsertGatewayVehicle = z.infer<typeof gatewayVehiclesInsertSchema>;
 export type GatewayVehicle = typeof gatewayVehicles.$inferSelect;
 
-// Car Configurator Tables
+// Car Configurator Tables - Comprehensive step-by-step configuration system
 
-// Available base vehicles
-export const carModels = pgTable("car_models", {
+// Available base vehicles for configurator
+export const configuratorCarModels = pgTable("configurator_car_models", {
   id: serial("id").primaryKey(),
   make: text("make").notNull(),
   model: text("model").notNull(),
@@ -756,8 +756,8 @@ export const carModels = pgTable("car_models", {
   updatedAt: timestamp("updated_at").defaultNow().notNull()
 });
 
-// Engine swap options
-export const engineOptions = pgTable("engine_options", {
+// Engine swap options for step-by-step configurator
+export const configuratorEngineOptions = pgTable("configurator_engine_options", {
   id: serial("id").primaryKey(),
   manufacturer: text("manufacturer").notNull(),
   engineName: text("engine_name").notNull(),
@@ -774,8 +774,8 @@ export const engineOptions = pgTable("engine_options", {
   updatedAt: timestamp("updated_at").defaultNow().notNull()
 });
 
-// Transmission choices
-export const transmissionOptions = pgTable("transmission_options", {
+// Transmission choices for step-by-step configurator
+export const configuratorTransmissionOptions = pgTable("configurator_transmission_options", {
   id: serial("id").primaryKey(),
   manufacturer: text("manufacturer").notNull(),
   transmissionName: text("transmission_name").notNull(),
@@ -790,8 +790,8 @@ export const transmissionOptions = pgTable("transmission_options", {
   updatedAt: timestamp("updated_at").defaultNow().notNull()
 });
 
-// Paint and finish options
-export const colorOptions = pgTable("color_options", {
+// Paint and finish options for step-by-step configurator
+export const configuratorColorOptions = pgTable("configurator_color_options", {
   id: serial("id").primaryKey(),
   colorName: text("color_name").notNull(),
   colorCode: text("color_code").notNull(),
@@ -806,8 +806,8 @@ export const colorOptions = pgTable("color_options", {
   updatedAt: timestamp("updated_at").defaultNow().notNull()
 });
 
-// Wheel packages
-export const wheelOptions = pgTable("wheel_options", {
+// Wheel packages for step-by-step configurator
+export const configuratorWheelOptions = pgTable("configurator_wheel_options", {
   id: serial("id").primaryKey(),
   brand: text("brand").notNull(),
   wheelName: text("wheel_name").notNull(),
@@ -824,8 +824,8 @@ export const wheelOptions = pgTable("wheel_options", {
   updatedAt: timestamp("updated_at").defaultNow().notNull()
 });
 
-// Interior packages
-export const interiorOptions = pgTable("interior_options", {
+// Interior packages for step-by-step configurator
+export const configuratorInteriorOptions = pgTable("configurator_interior_options", {
   id: serial("id").primaryKey(),
   packageName: text("package_name").notNull(),
   description: text("description").notNull(),
@@ -839,16 +839,16 @@ export const interiorOptions = pgTable("interior_options", {
   updatedAt: timestamp("updated_at").defaultNow().notNull()
 });
 
-// Customer configurations
-export const userConfigurations = pgTable("user_configurations", {
+// Customer configurations for step-by-step configurator
+export const configuratorUserConfigurations = pgTable("configurator_user_configurations", {
   id: serial("id").primaryKey(),
   userId: text("user_id"), // Optional - can be null for anonymous configs
-  carModelId: integer("car_model_id").references(() => carModels.id).notNull(),
-  engineId: integer("engine_id").references(() => engineOptions.id),
-  transmissionId: integer("transmission_id").references(() => transmissionOptions.id),
-  colorId: integer("color_id").references(() => colorOptions.id),
-  wheelId: integer("wheel_id").references(() => wheelOptions.id),
-  interiorId: integer("interior_id").references(() => interiorOptions.id),
+  carModelId: integer("car_model_id").references(() => configuratorCarModels.id).notNull(),
+  engineId: integer("engine_id").references(() => configuratorEngineOptions.id),
+  transmissionId: integer("transmission_id").references(() => configuratorTransmissionOptions.id),
+  colorId: integer("color_id").references(() => configuratorColorOptions.id),
+  wheelId: integer("wheel_id").references(() => configuratorWheelOptions.id),
+  interiorId: integer("interior_id").references(() => configuratorInteriorOptions.id),
   additionalOptions: jsonb("additional_options").$type<string[]>(),
   totalPrice: decimal("total_price", { precision: 12, scale: 2 }).notNull(),
   configurationName: text("configuration_name"),
@@ -857,67 +857,33 @@ export const userConfigurations = pgTable("user_configurations", {
   updatedAt: timestamp("updated_at").defaultNow().notNull()
 });
 
-// Configurator relations
-export const carModelsRelations = relations(carModels, ({ many }) => ({
-  configurations: many(userConfigurations)
-}));
-
-export const engineOptionsRelations = relations(engineOptions, ({ many }) => ({
-  configurations: many(userConfigurations)
-}));
-
-export const transmissionOptionsRelations = relations(transmissionOptions, ({ many }) => ({
-  configurations: many(userConfigurations)
-}));
-
-export const colorOptionsRelations = relations(colorOptions, ({ many }) => ({
-  configurations: many(userConfigurations)
-}));
-
-export const wheelOptionsRelations = relations(wheelOptions, ({ many }) => ({
-  configurations: many(userConfigurations)
-}));
-
-export const interiorOptionsRelations = relations(interiorOptions, ({ many }) => ({
-  configurations: many(userConfigurations)
-}));
-
-export const userConfigurationsRelations = relations(userConfigurations, ({ one }) => ({
-  carModel: one(carModels, { fields: [userConfigurations.carModelId], references: [carModels.id] }),
-  engine: one(engineOptions, { fields: [userConfigurations.engineId], references: [engineOptions.id] }),
-  transmission: one(transmissionOptions, { fields: [userConfigurations.transmissionId], references: [transmissionOptions.id] }),
-  color: one(colorOptions, { fields: [userConfigurations.colorId], references: [colorOptions.id] }),
-  wheels: one(wheelOptions, { fields: [userConfigurations.wheelId], references: [wheelOptions.id] }),
-  interior: one(interiorOptions, { fields: [userConfigurations.interiorId], references: [interiorOptions.id] })
-}));
-
 // Configurator schemas
-export const carModelsInsertSchema = createInsertSchema(carModels);
-export type InsertCarModel = z.infer<typeof carModelsInsertSchema>;
-export type CarModel = typeof carModels.$inferSelect;
+export const configuratorCarModelsInsertSchema = createInsertSchema(configuratorCarModels);
+export type InsertConfiguratorCarModel = z.infer<typeof configuratorCarModelsInsertSchema>;
+export type ConfiguratorCarModel = typeof configuratorCarModels.$inferSelect;
 
-export const engineOptionsInsertSchema = createInsertSchema(engineOptions);
-export type InsertEngineOption = z.infer<typeof engineOptionsInsertSchema>;
-export type EngineOption = typeof engineOptions.$inferSelect;
+export const configuratorEngineOptionsInsertSchema = createInsertSchema(configuratorEngineOptions);
+export type InsertConfiguratorEngineOption = z.infer<typeof configuratorEngineOptionsInsertSchema>;
+export type ConfiguratorEngineOption = typeof configuratorEngineOptions.$inferSelect;
 
-export const transmissionOptionsInsertSchema = createInsertSchema(transmissionOptions);
-export type InsertTransmissionOption = z.infer<typeof transmissionOptionsInsertSchema>;
-export type TransmissionOption = typeof transmissionOptions.$inferSelect;
+export const configuratorTransmissionOptionsInsertSchema = createInsertSchema(configuratorTransmissionOptions);
+export type InsertConfiguratorTransmissionOption = z.infer<typeof configuratorTransmissionOptionsInsertSchema>;
+export type ConfiguratorTransmissionOption = typeof configuratorTransmissionOptions.$inferSelect;
 
-export const colorOptionsInsertSchema = createInsertSchema(colorOptions);
-export type InsertColorOption = z.infer<typeof colorOptionsInsertSchema>;
-export type ColorOption = typeof colorOptions.$inferSelect;
+export const configuratorColorOptionsInsertSchema = createInsertSchema(configuratorColorOptions);
+export type InsertConfiguratorColorOption = z.infer<typeof configuratorColorOptionsInsertSchema>;
+export type ConfiguratorColorOption = typeof configuratorColorOptions.$inferSelect;
 
-export const wheelOptionsInsertSchema = createInsertSchema(wheelOptions);
-export type InsertWheelOption = z.infer<typeof wheelOptionsInsertSchema>;
-export type WheelOption = typeof wheelOptions.$inferSelect;
+export const configuratorWheelOptionsInsertSchema = createInsertSchema(configuratorWheelOptions);
+export type InsertConfiguratorWheelOption = z.infer<typeof configuratorWheelOptionsInsertSchema>;
+export type ConfiguratorWheelOption = typeof configuratorWheelOptions.$inferSelect;
 
-export const interiorOptionsInsertSchema = createInsertSchema(interiorOptions);
-export type InsertInteriorOption = z.infer<typeof interiorOptionsInsertSchema>;
-export type InteriorOption = typeof interiorOptions.$inferSelect;
+export const configuratorInteriorOptionsInsertSchema = createInsertSchema(configuratorInteriorOptions);
+export type InsertConfiguratorInteriorOption = z.infer<typeof configuratorInteriorOptionsInsertSchema>;
+export type ConfiguratorInteriorOption = typeof configuratorInteriorOptions.$inferSelect;
 
-export const userConfigurationsInsertSchema = createInsertSchema(userConfigurations);
-export type InsertUserConfiguration = z.infer<typeof userConfigurationsInsertSchema>;
-export type UserConfiguration = typeof userConfigurations.$inferSelect;
+export const configuratorUserConfigurationsInsertSchema = createInsertSchema(configuratorUserConfigurations);
+export type InsertConfiguratorUserConfiguration = z.infer<typeof configuratorUserConfigurationsInsertSchema>;
+export type ConfiguratorUserConfiguration = typeof configuratorUserConfigurations.$inferSelect;
 
 
