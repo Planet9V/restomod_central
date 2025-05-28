@@ -218,12 +218,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   app.get(`${apiPrefix}/configurator/car-models`, async (req, res) => {
     try {
-      // Get authentic Gateway vehicle data directly from storage
-      const vehicles = await storage.getGatewayVehicles({});
+      // Get authentic Gateway vehicle data using the same method as the working endpoint
+      const gatewayVehicles = await db.select().from(schema.gatewayVehicles)
+        .orderBy(schema.gatewayVehicles.year, schema.gatewayVehicles.make)
+        .limit(20);
       
-      if (vehicles && vehicles.length > 0) {
+      console.log(`🔧 Configurator: Retrieved ${gatewayVehicles.length} authentic Gateway vehicles for step-by-step configuration`);
+      
+      if (gatewayVehicles && gatewayVehicles.length > 0) {
         // Transform Gateway vehicles into configurator car models for step-by-step process
-        const carModels = vehicles.slice(0, 20).map((vehicle: any) => ({
+        const carModels = gatewayVehicles.map((vehicle: any) => ({
           id: vehicle.id,
           make: vehicle.make,
           model: vehicle.model,
@@ -236,14 +240,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
           description: `${vehicle.year} ${vehicle.make} ${vehicle.model} - Perfect for restomod builds`
         }));
         
-        console.log(`🔧 Configurator: Found ${carModels.length} authentic car models for step-by-step configuration`);
+        console.log(`✅ Configurator: Successfully created ${carModels.length} authentic car models`);
         res.json({ success: true, models: carModels });
       } else {
-        console.log("⚠️ Configurator: No Gateway vehicles found for configuration");
+        console.log("⚠️ Configurator: No Gateway vehicles found");
         res.json({ success: true, models: [] });
       }
     } catch (error) {
-      console.error("Error fetching car models for configurator:", error);
+      console.error("❌ Configurator error:", error);
       res.status(500).json({ error: "Failed to fetch car models" });
     }
   });
