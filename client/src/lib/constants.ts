@@ -36,6 +36,12 @@ export const NAV_LINKS = [
     description: 'Meet our team and discover our passion for automotive excellence'
   },
   { 
+    name: 'Research Articles', 
+    href: '/research-articles',
+    isExternal: false,
+    description: 'Comprehensive market research, valuations, and industry analysis'
+  },
+  { 
     name: 'Resources', 
     href: '/resources',
     isExternal: false,

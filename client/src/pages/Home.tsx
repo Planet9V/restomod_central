@@ -254,6 +254,95 @@ const Home = () => {
         </motion.div>
       </section>
       
+      {/* Comprehensive Research & Market Data CTA */}
+      <section id="research-cta" className="relative z-10 bg-gradient-to-r from-blue-900 via-purple-900 to-blue-800 py-16">
+        <motion.div
+          className="container mx-auto px-4 text-center"
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          <motion.h2 
+            className="text-3xl md:text-4xl font-playfair text-white font-bold mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+          >
+            Comprehensive Automotive Research & Market Analysis
+          </motion.h2>
+          <motion.p 
+            className="text-white/90 text-lg max-w-3xl mx-auto mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+          >
+            Access extensive industry research, historical pricing documents, market trend analysis, and investment insights. 
+            Our database includes detailed valuation reports, authentic car show event listings, and comprehensive market data 
+            compiled from authoritative automotive sources.
+          </motion.p>
+          
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 max-w-4xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+          >
+            <div className="text-center">
+              <div className="text-3xl font-bold text-white mb-2">29+</div>
+              <div className="text-white/80 text-sm">Research Articles</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-white mb-2">203</div>
+              <div className="text-white/80 text-sm">Car Show Events</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-white mb-2">90</div>
+              <div className="text-white/80 text-sm">Vehicle Valuations</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-white mb-2">5+</div>
+              <div className="text-white/80 text-sm">Market Categories</div>
+            </div>
+          </motion.div>
+          
+          <motion.div 
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5, duration: 0.6 }}
+          >
+            <Link href="/research-articles">
+              <motion.button 
+                className="bg-white text-blue-900 px-8 py-4 rounded-sm font-semibold flex items-center group relative overflow-hidden"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <span className="relative z-10">Explore Research Articles</span>
+                <ChevronRight className="ml-2 h-5 w-5 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
+                <span className="absolute inset-0 bg-gold transform translate-y-full transition-transform duration-300 group-hover:translate-y-0"></span>
+              </motion.button>
+            </Link>
+            <Link href="/market-analysis">
+              <motion.button 
+                className="border-2 border-white text-white px-8 py-4 rounded-sm font-semibold flex items-center group hover:bg-white hover:text-blue-900 transition-all duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <span>View Market Analysis</span>
+                <ChevronRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+              </motion.button>
+            </Link>
+          </motion.div>
+        </motion.div>
+      </section>
+      
       {/* About Section */}
       <section id="about" className="relative z-10">
         <motion.div

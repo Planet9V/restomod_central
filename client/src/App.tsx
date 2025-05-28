@@ -11,6 +11,7 @@ import Home from "@/pages/Home";
 import ProjectDetail from "@/pages/ProjectDetail";
 import ProjectsPage from "@/pages/ProjectsPage";
 import Resources from "@/pages/Resources";
+import ResearchArticles from "@/pages/ResearchArticles";
 import ArticleDetail from "@/pages/ArticleDetail";
 import VehicleArchive from "@/pages/VehicleArchive";
 import CarConfigurator from "@/pages/CarConfigurator";
@@ -55,6 +56,7 @@ function Router() {
         <Route path="/projects" component={ProjectsPage} />
         <Route path="/projects/:id" component={ProjectDetail} />
         <Route path="/resources" component={Resources} />
+        <Route path="/research-articles" component={ResearchArticles} />
         <Route path="/resources/:slug" component={ArticleDetail} />
         <Route path="/vehicle-archive" component={VehicleArchive} />
         <Route path="/car-configurator" component={CarConfigurator} />
