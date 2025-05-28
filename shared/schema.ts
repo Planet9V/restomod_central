@@ -395,29 +395,29 @@ export const userConfigurationsRelations = relations(userConfigurations, ({ one 
     fields: [userConfigurations.userId],
     references: [users.id],
   }),
-  carModel: one(carModels, {
+  carModel: one(configuratorCarModels, {
     fields: [userConfigurations.carModelId],
-    references: [carModels.id],
+    references: [configuratorCarModels.id],
   }),
-  engine: one(engineOptions, {
+  engine: one(configuratorEngineOptions, {
     fields: [userConfigurations.engineId],
-    references: [engineOptions.id],
+    references: [configuratorEngineOptions.id],
   }),
-  transmission: one(transmissionOptions, {
+  transmission: one(configuratorTransmissionOptions, {
     fields: [userConfigurations.transmissionId],
-    references: [transmissionOptions.id],
+    references: [configuratorTransmissionOptions.id],
   }),
-  color: one(colorOptions, {
+  color: one(configuratorColorOptions, {
     fields: [userConfigurations.colorId],
-    references: [colorOptions.id],
+    references: [configuratorColorOptions.id],
   }),
-  wheel: one(wheelOptions, {
+  wheel: one(configuratorWheelOptions, {
     fields: [userConfigurations.wheelId],
-    references: [wheelOptions.id],
+    references: [configuratorWheelOptions.id],
   }),
-  interior: one(interiorOptions, {
+  interior: one(configuratorInteriorOptions, {
     fields: [userConfigurations.interiorId],
-    references: [interiorOptions.id],
+    references: [configuratorInteriorOptions.id],
   }),
 }));
 

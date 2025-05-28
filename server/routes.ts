@@ -1208,41 +1208,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ========== CAR CONFIGURATOR API ROUTES ==========
-  
-  // Car Models API routes
-  app.get(`${apiPrefix}/configurator/car-models`, configuratorApi.getCarModels);
-  app.get(`${apiPrefix}/configurator/car-models/:id`, configuratorApi.getCarModelById);
-  app.post(`${apiPrefix}/configurator/car-models`, isAuthenticated, isAdmin, configuratorApi.createCarModel);
-  app.put(`${apiPrefix}/configurator/car-models/:id`, isAuthenticated, isAdmin, configuratorApi.updateCarModel);
-  app.delete(`${apiPrefix}/configurator/car-models/:id`, isAuthenticated, isAdmin, configuratorApi.deleteCarModel);
-  
-  // Engine Options API routes
-  app.get(`${apiPrefix}/configurator/engines`, configuratorApi.getEngineOptions);
-  app.get(`${apiPrefix}/configurator/engines/:id`, configuratorApi.getEngineOptionById);
-  app.post(`${apiPrefix}/configurator/engines`, isAuthenticated, isAdmin, configuratorApi.createEngineOption);
-  app.put(`${apiPrefix}/configurator/engines/:id`, isAuthenticated, isAdmin, configuratorApi.updateEngineOption);
-  app.delete(`${apiPrefix}/configurator/engines/:id`, isAuthenticated, isAdmin, configuratorApi.deleteEngineOption);
-  
-  // Transmission Options API routes
-  app.get(`${apiPrefix}/configurator/transmissions`, configuratorApi.getTransmissionOptions);
-  app.get(`${apiPrefix}/configurator/transmissions/:id`, configuratorApi.getTransmissionOptionById);
-  app.post(`${apiPrefix}/configurator/transmissions`, isAuthenticated, isAdmin, configuratorApi.createTransmissionOption);
-  app.put(`${apiPrefix}/configurator/transmissions/:id`, isAuthenticated, isAdmin, configuratorApi.updateTransmissionOption);
-  app.delete(`${apiPrefix}/configurator/transmissions/:id`, isAuthenticated, isAdmin, configuratorApi.deleteTransmissionOption);
-  
-  // Color Options API routes
-  app.get(`${apiPrefix}/configurator/colors`, configuratorApi.getColorOptions);
-  app.get(`${apiPrefix}/configurator/colors/:id`, configuratorApi.getColorOptionById);
-  app.post(`${apiPrefix}/configurator/colors`, isAuthenticated, isAdmin, configuratorApi.createColorOption);
-  app.put(`${apiPrefix}/configurator/colors/:id`, isAuthenticated, isAdmin, configuratorApi.updateColorOption);
-  app.delete(`${apiPrefix}/configurator/colors/:id`, isAuthenticated, isAdmin, configuratorApi.deleteColorOption);
-  
-  // Wheel Options API routes
-  app.get(`${apiPrefix}/configurator/wheels`, configuratorApi.getWheelOptions);
-  app.get(`${apiPrefix}/configurator/wheels/:id`, configuratorApi.getWheelOptionById);
-  app.post(`${apiPrefix}/configurator/wheels`, isAuthenticated, isAdmin, configuratorApi.createWheelOption);
-  app.put(`${apiPrefix}/configurator/wheels/:id`, isAuthenticated, isAdmin, configuratorApi.updateWheelOption);
-  app.delete(`${apiPrefix}/configurator/wheels/:id`, isAuthenticated, isAdmin, configuratorApi.deleteWheelOption);
+  // Step-by-step car configurator using authentic Gateway vehicle data (restored above)
   
   // Future API routes for interior options, AI options, additional options, and user configurations will be added later
 
