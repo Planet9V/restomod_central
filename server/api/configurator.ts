@@ -1,21 +1,115 @@
 import type { Express, Request, Response } from "express";
 import { db } from "@db";
-import { 
-  configuratorCarModels, 
-  configuratorEngineOptions, 
-  configuratorTransmissionOptions,
-  configuratorColorOptions,
-  configuratorWheelOptions,
-  configuratorInteriorOptions,
-  configuratorUserConfigurations,
-  type ConfiguratorCarModel,
-  type ConfiguratorEngineOption,
-  type ConfiguratorTransmissionOption,
-  type ConfiguratorColorOption,
-  type ConfiguratorWheelOption,
-  type ConfiguratorInteriorOption,
-  type ConfiguratorUserConfiguration
-} from "../../../shared/configurator-schema";
+// Mock types for immediate functionality
+type ConfiguratorCarModel = {
+  id: number;
+  make: string;
+  model: string;
+  yearStart: number;
+  yearEnd: number;
+  category: string;
+  basePrice: string;
+  popularity: number;
+  imageUrl: string | null;
+  description: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+type ConfiguratorEngineOption = {
+  id: number;
+  manufacturer: string;
+  engineName: string;
+  displacement: string;
+  horsepower: number;
+  torque: number;
+  price: string;
+  compatibility: string[];
+  fuelType: string;
+  aspirationType: string;
+  imageUrl: string | null;
+  description: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+type ConfiguratorTransmissionOption = {
+  id: number;
+  manufacturer: string;
+  transmissionName: string;
+  type: string;
+  gears: number;
+  torqueRating: number;
+  price: string;
+  compatibility: string[];
+  imageUrl: string | null;
+  description: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+type ConfiguratorColorOption = {
+  id: number;
+  colorName: string;
+  colorCode: string;
+  finish: string;
+  price: string;
+  category: string;
+  manufacturer: string;
+  popularity: number;
+  imageUrl: string | null;
+  description: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+type ConfiguratorWheelOption = {
+  id: number;
+  brand: string;
+  wheelName: string;
+  diameter: number;
+  width: string;
+  offset: number;
+  price: string;
+  style: string;
+  material: string;
+  compatibility: string[];
+  imageUrl: string | null;
+  description: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+type ConfiguratorInteriorOption = {
+  id: number;
+  packageName: string;
+  description: string;
+  materials: string[];
+  features: string[];
+  price: string;
+  compatibility: string[];
+  manufacturer: string;
+  imageUrl: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+type ConfiguratorUserConfiguration = {
+  id: number;
+  userId: string | null;
+  carModelId: number;
+  engineId: number | null;
+  transmissionId: number | null;
+  colorId: number | null;
+  wheelId: number | null;
+  interiorId: number | null;
+  additionalOptions: string[] | null;
+  totalPrice: string;
+  configurationName: string | null;
+  notes: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
 import { desc, eq } from "drizzle-orm";
 
 // Mock data for immediate functionality
