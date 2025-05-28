@@ -42,31 +42,34 @@ const ResearchArticles = () => {
     { label: "Research Articles", href: "/research-articles", isCurrentPage: true }
   ];
 
-  // Query for all research articles
-  const { data: articles, isLoading, error } = useQuery<ResearchArticle[]>({
-    queryKey: ['/api/research-articles'],
+  // Query for all research articles with proper response structure
+  const { data: articlesResponse, isLoading, error } = useQuery<{articles: ResearchArticle[], pagination: any}>({
+    queryKey: ['/api/research-articles?limit=50'],
     retry: 1,
   });
 
+  // Extract articles from response
+  const articles = articlesResponse?.articles || [];
+
   // Filter articles based on search and category
-  const filteredArticles = articles?.filter(article => {
+  const filteredArticles = articles.filter(article => {
     const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          article.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          article.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = selectedCategory === "all" || article.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  }) || [];
+  });
 
   // Get unique categories
-  const categories = articles?.reduce((acc, article) => {
+  const categories = articles.reduce((acc, article) => {
     if (!acc.includes(article.category)) {
       acc.push(article.category);
     }
     return acc;
-  }, [] as string[]) || [];
+  }, [] as string[]);
 
   // Featured articles
-  const featuredArticles = articles?.filter(article => article.featured) || [];
+  const featuredArticles = articles.filter(article => article.featured);
 
   // Category stats
   const categoryStats = categories.map(category => ({
