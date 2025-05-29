@@ -51,7 +51,7 @@ const CarConfigurator = () => {
   // Calculate final configuration
   const { data: calculationData } = useQuery({
     queryKey: ["/api/configurator/calculate"],
-    enabled: step === 5 && config.platformId && config.engineId,
+    enabled: step === 5 && !!config.platformId && !!config.engineId,
     queryFn: async () => {
       const response = await fetch("/api/configurator/calculate", {
         method: "POST",
