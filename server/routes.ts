@@ -861,7 +861,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         features: vehicle.features || null
       }));
       
-      console.log(`✅ Consolidated ${vehicles.length} Gateway vehicles with unified format and investment analysis`)
+      console.log(`✅ Consolidated ${vehicles.length} Gateway vehicles with unified format and investment analysis`);
       
       res.json({ 
         success: true, 
