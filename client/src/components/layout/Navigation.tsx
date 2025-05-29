@@ -98,14 +98,20 @@ const Navigation = ({
         </div>
       </div>
       
-      {/* Mobile menu overlay with premium micro-interactions */}
+      {/* Mobile menu overlay with improved contrast and positioning */}
       <div 
-        className={`fixed inset-0 bg-charcoal/95 z-50 flex flex-col pt-20 pb-8 px-6 transition-opacity duration-500 ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        className={`fixed inset-0 bg-black/98 backdrop-blur-lg z-50 flex flex-col pt-20 pb-8 px-6 transition-all duration-500 ${isMobileMenuOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full pointer-events-none'}`}
+        style={{
+          background: `linear-gradient(135deg, 
+            rgba(0, 0, 0, 0.98) 0%, 
+            rgba(34, 34, 34, 0.95) 50%, 
+            rgba(0, 0, 0, 0.98) 100%)`
+        }}
       >
         <div className="flex flex-col space-y-6 mt-8">
           {/* Group navigation links by categories */}
           {/* Main navigation links */}
-          <div className="text-white text-xs uppercase tracking-wider mb-4 opacity-60">Main</div>
+          <div className="text-white text-sm uppercase tracking-wider mb-6 opacity-80 font-semibold border-b border-white/20 pb-2">Navigation</div>
           
           {NAV_LINKS.slice(0, 6).map((link, index) => (
             <div 
@@ -119,29 +125,20 @@ const Navigation = ({
             >
               <Link 
                 href={link.href}
-                className="text-white text-2xl font-playfair font-bold hover:text-gold transition-all duration-500 group flex items-center relative overflow-hidden"
+                className="text-white text-3xl font-playfair font-bold hover:text-gold transition-all duration-300 group flex items-center relative p-4 -mx-4 rounded-lg hover:bg-white/10"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {/* Background hover effect */}
                 <span className="absolute inset-0 bg-gradient-to-r from-gold/10 to-gold/5 transform -translate-x-full transition-transform duration-500 group-hover:translate-x-0"></span>
                 
-                <span className="relative flex items-center">
-                  <span className="relative overflow-hidden">
-                    {/* Animated text reveal */}
-                    <span className="block transition-transform duration-500 group-hover:-translate-y-full">
-                      {link.name}
-                    </span>
-                    <span className="absolute top-full left-0 transition-transform duration-500 group-hover:-translate-y-full text-gold">
-                      {link.name}
-                    </span>
+                <span className="relative flex items-center w-full">
+                  <span className="text-white group-hover:text-gold transition-colors duration-300">
+                    {link.name}
                   </span>
                   
-                  {/* Animated underline */}
-                  <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gradient-to-r from-gold to-gold/50 transition-all duration-500 group-hover:w-full"></span>
-                  
-                  {/* Arrow with bounce animation */}
+                  {/* Simple arrow */}
                   <svg 
-                    className="w-5 h-5 ml-3 transform transition-all duration-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:animate-bounce" 
+                    className="w-6 h-6 ml-auto opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" 
                     xmlns="http://www.w3.org/2000/svg" 
                     fill="none" 
                     viewBox="0 0 24 24" 
@@ -156,8 +153,8 @@ const Navigation = ({
               </Link>
               
               {link.description && (
-                <div className="ml-1 mt-2 mb-3 overflow-hidden">
-                  <p className="text-white/60 text-sm transition-all duration-500 transform translate-y-2 opacity-0 group-hover/item:translate-y-0 group-hover/item:opacity-100 group-hover/item:text-white/80">
+                <div className="ml-4 mt-2 mb-4">
+                  <p className="text-white/80 text-sm leading-relaxed">
                     {link.description}
                   </p>
                 </div>
@@ -165,8 +162,8 @@ const Navigation = ({
             </div>
           ))}
           
-          {/* Market Analysis navigation links */}
-          <div className="text-white text-xs uppercase tracking-wider mt-8 mb-4 opacity-60">Market Research</div>
+          {/* Market Research navigation links */}
+          <div className="text-white text-sm uppercase tracking-wider mt-8 mb-6 opacity-80 font-semibold border-b border-blue-400/30 pb-2">Market Research</div>
           
           {NAV_LINKS.slice(6).map((link, index) => (
             <div 
@@ -180,7 +177,7 @@ const Navigation = ({
             >
               <Link 
                 href={link.href}
-                className="text-white text-2xl font-playfair font-bold hover:text-gold transition-all duration-500 group flex items-center relative overflow-hidden"
+                className="text-white text-3xl font-playfair font-bold hover:text-blue-400 transition-all duration-300 group flex items-center relative p-4 -mx-4 rounded-lg hover:bg-blue-500/10"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {/* Background hover effect with blue gradient for research links */}
