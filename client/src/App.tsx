@@ -33,6 +33,7 @@ import NotFound from "@/pages/not-found";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import PageTransition from "@/components/ui/page-transition";
+import { OptimizedNavigation } from "@/components/ui/optimized-navigation";
 
 function Router() {
   // Get current location for route-based transitions
