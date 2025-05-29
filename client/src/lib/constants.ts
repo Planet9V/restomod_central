@@ -9,67 +9,59 @@ export const COLORS = {
   silver: '#D0D0D0'
 };
 
-// Navigation links for header and footer
+// OPTIMIZED NAVIGATION - PREMIUM RESTOMOD BUILDER FOCUS
 export const NAV_LINKS = [
   { 
-    name: 'Custom Builds', 
+    name: 'Build With Us', 
     href: '/custom-builds',
     isExternal: false,
-    description: 'Investment-grade restomod services with proven ROI'
+    description: 'Premium investment-grade restomod services',
+    isDropdown: true,
+    dropdownItems: [
+      { name: 'Custom Build Services', href: '/custom-builds', description: 'Investment-grade restomod tiers' },
+      { name: 'AI Configurator', href: '/car-configurator', description: 'Design your dream build' },
+      { name: 'Our Process', href: '/#process', description: 'How we transform classics' }
+    ]
   },
   { 
-    name: 'Our Projects', 
+    name: 'Portfolio', 
     href: '/projects',
     isExternal: false,
-    description: 'Explore our completed custom builds and restomods'
+    description: 'See our completed masterpieces',
+    isDropdown: true,
+    dropdownItems: [
+      { name: 'Completed Builds', href: '/projects', description: 'Our project showcase' },
+      { name: 'Luxury Showcases', href: '/showcases', description: 'Premium featured builds' }
+    ]
   },
   { 
-    name: 'Process', 
-    href: '/#process',
-    isExternal: false,
-    description: 'Learn how we transform classics into modern masterpieces'
-  },
-  { 
-    name: 'Car Show Events', 
-    href: '/car-show-events',
-    isExternal: false,
-    description: 'Discover premier car shows, auctions, and automotive events nationwide'
-  },
-  { 
-    name: 'Market Analysis', 
+    name: 'Market Intelligence', 
     href: '/market-analysis',
     isExternal: false,
-    description: 'Comprehensive classic car market data, pricing trends, and investment analysis'
+    description: 'Investment data and market insights',
+    isDropdown: true,
+    dropdownItems: [
+      { name: 'Market Analysis', href: '/market-analysis', description: '$77.8B market trends' },
+      { name: 'Model Values', href: '/model-values', description: 'ROI projections' },
+      { name: 'Investment Vehicles', href: '/gateway-vehicles', description: '160+ classic cars database' }
+    ]
   },
   { 
-    name: 'About Us', 
+    name: 'Events & Community', 
+    href: '/car-show-events',
+    isExternal: false,
+    description: 'Connect with the classic car world',
+    isDropdown: true,
+    dropdownItems: [
+      { name: 'Car Show Calendar', href: '/car-show-events', description: '203+ nationwide events' },
+      { name: 'Research Library', href: '/research-articles', description: '71+ market articles' }
+    ]
+  },
+  { 
+    name: 'About', 
     href: '/#about',
     isExternal: false,
-    description: 'Meet our team and discover our passion for automotive excellence'
-  },
-  { 
-    name: 'Research Articles', 
-    href: '/research-articles',
-    isExternal: false,
-    description: 'Comprehensive market research, valuations, and industry analysis'
-  },
-  { 
-    name: 'Resources', 
-    href: '/resources',
-    isExternal: false,
-    description: 'Educational articles and guides for restomod enthusiasts'
-  },
-  { 
-    name: 'Archive', 
-    href: '/vehicle-archive',
-    isExternal: false,
-    description: 'Browse our historical collection of classic and custom builds'
-  },
-  { 
-    name: 'Build Your Restomod', 
-    href: '/car-configurator',
-    isExternal: false,
-    description: 'Use our AI-powered tool to create your dream custom build'
+    description: 'Our story and team'
   },
   { 
     name: 'Market Insights', 
