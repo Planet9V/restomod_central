@@ -15,6 +15,9 @@ import ConfiguratorCTA from "@/components/home/ConfiguratorCTA";
 import LuxuryShowcasesSection from "@/components/home/LuxuryShowcasesSection";
 import { UpcomingEvents } from "@/components/home/UpcomingEvents";
 import { GatewayVehiclesSection } from "@/components/home/GatewayVehiclesSection";
+import { QuickSearch } from "@/components/ui/quick-search";
+import { TestimonialsCarousel } from "@/components/ui/testimonials-carousel";
+import { InvestmentBadge } from "@/components/ui/investment-badge";
 
 /**
  * Enhanced Home page with smooth transitions and optimized layout
@@ -98,6 +101,16 @@ const Home = () => {
       <section id="hero">
         <HeroSection />
       </section>
+      
+      {/* Quick Search Section - NEW PRIORITY 1 FEATURE */}
+      <section className="relative z-10 -mt-16 px-4">
+        <div className="max-w-4xl mx-auto">
+          <QuickSearch />
+        </div>
+      </section>
+      
+      {/* Enhanced Testimonials Carousel - NEW PRIORITY 1 FEATURE */}
+      <TestimonialsCarousel />
       
       {/* Featured Project Section */}
       <section id="featured" className="relative z-10">
