@@ -5,7 +5,8 @@
  */
 
 import { db } from "../db";
-import * as schema from "@shared/schema";
+import { gatewayVehicles } from "../shared/schema";
+import { eq } from "drizzle-orm";
 
 interface VehicleListing {
   make: string;
@@ -148,10 +149,8 @@ function generateStockNumber(make: string, model: string, year: number, source: 
  * Check if vehicle already exists in database
  */
 async function vehicleExists(make: string, model: string, year: number): Promise<boolean> {
-  const existing = await db.select().from(schema.gatewayVehicles)
-    .where(schema.eq(schema.gatewayVehicles.make, make))
-    .where(schema.eq(schema.gatewayVehicles.model, model))
-    .where(schema.eq(schema.gatewayVehicles.year, year))
+  const existing = await db.select().from(gatewayVehicles)
+    .where(eq(gatewayVehicles.make, make))
     .limit(1);
   
   return existing.length > 0;
@@ -201,7 +200,7 @@ export async function importCompleteCarsDastaset(): Promise<{ success: boolean; 
         updatedAt: new Date()
       };
       
-      await db.insert(schema.gatewayVehicles).values(vehicleData);
+      await db.insert(gatewayVehicles).values(vehicleData);
       console.log(`✅ Imported: ${vehicle.year} ${vehicle.make} ${vehicle.model} from ${vehicle.source}`);
       imported++;
       
@@ -226,15 +225,13 @@ export async function importCompleteCarsDastaset(): Promise<{ success: boolean; 
   };
 }
 
-// Run the import if called directly
-if (require.main === module) {
-  importCompleteCarsDastaset()
-    .then((result) => {
-      console.log(`🎉 IMPORT COMPLETED SUCCESSFULLY!`, result);
-      process.exit(0);
-    })
-    .catch((error) => {
-      console.error(`❌ IMPORT FAILED:`, error);
-      process.exit(1);
-    });
-}
+// Run the import
+importCompleteCarsDastaset()
+  .then((result) => {
+    console.log(`🎉 IMPORT COMPLETED SUCCESSFULLY!`, result);
+    process.exit(0);
+  })
+  .catch((error) => {
+    console.error(`❌ IMPORT FAILED:`, error);
+    process.exit(1);
+  });
