@@ -395,30 +395,6 @@ export const userConfigurationsRelations = relations(userConfigurations, ({ one 
     fields: [userConfigurations.userId],
     references: [users.id],
   }),
-  carModel: one(configuratorCarModels, {
-    fields: [userConfigurations.carModelId],
-    references: [configuratorCarModels.id],
-  }),
-  engine: one(configuratorEngineOptions, {
-    fields: [userConfigurations.engineId],
-    references: [configuratorEngineOptions.id],
-  }),
-  transmission: one(configuratorTransmissionOptions, {
-    fields: [userConfigurations.transmissionId],
-    references: [configuratorTransmissionOptions.id],
-  }),
-  color: one(configuratorColorOptions, {
-    fields: [userConfigurations.colorId],
-    references: [configuratorColorOptions.id],
-  }),
-  wheel: one(configuratorWheelOptions, {
-    fields: [userConfigurations.wheelId],
-    references: [configuratorWheelOptions.id],
-  }),
-  interior: one(configuratorInteriorOptions, {
-    fields: [userConfigurations.interiorId],
-    references: [configuratorInteriorOptions.id],
-  }),
 }));
 
 export const userConfigurationsInsertSchema = createInsertSchema(userConfigurations);
