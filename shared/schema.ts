@@ -1023,36 +1023,10 @@ export const configuratorInteriorOptions = pgTable("configurator_interior_option
   updatedAt: timestamp("updated_at").defaultNow().notNull()
 });
 
-// Customer configurations for step-by-step configurator
-export const configuratorUserConfigurations = pgTable("configurator_user_configurations", {
-  id: serial("id").primaryKey(),
-  userId: text("user_id"), // Optional - can be null for anonymous configs
-  carModelId: integer("car_model_id").references(() => configuratorCarModels.id).notNull(),
-  engineId: integer("engine_id").references(() => configuratorEngines.id),
-  transmissionId: integer("transmission_id").references(() => configuratorTransmissions.id),
-  colorId: integer("color_id").references(() => configuratorColorOptions.id),
-  wheelId: integer("wheel_id").references(() => configuratorWheelOptions.id),
-  interiorId: integer("interior_id").references(() => configuratorInteriors.id),
-  additionalOptions: jsonb("additional_options").$type<string[]>(),
-  totalPrice: decimal("total_price", { precision: 12, scale: 2 }).notNull(),
-  configurationName: text("configuration_name"),
-  notes: text("notes"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull()
-});
-
-// Configurator schemas
+// Configurator schemas for existing tables
 export const configuratorCarModelsInsertSchema = createInsertSchema(configuratorCarModels);
 export type InsertConfiguratorCarModel = z.infer<typeof configuratorCarModelsInsertSchema>;
 export type ConfiguratorCarModel = typeof configuratorCarModels.$inferSelect;
-
-export const configuratorEnginesInsertSchema = createInsertSchema(configuratorEngines);
-export type InsertConfiguratorEngine = z.infer<typeof configuratorEnginesInsertSchema>;
-export type ConfiguratorEngine = typeof configuratorEngines.$inferSelect;
-
-export const configuratorTransmissionsInsertSchema = createInsertSchema(configuratorTransmissions);
-export type InsertConfiguratorTransmission = z.infer<typeof configuratorTransmissionsInsertSchema>;
-export type ConfiguratorTransmission = typeof configuratorTransmissions.$inferSelect;
 
 export const configuratorColorOptionsInsertSchema = createInsertSchema(configuratorColorOptions);
 export type InsertConfiguratorColorOption = z.infer<typeof configuratorColorOptionsInsertSchema>;
@@ -1066,8 +1040,6 @@ export const configuratorInteriorOptionsInsertSchema = createInsertSchema(config
 export type InsertConfiguratorInteriorOption = z.infer<typeof configuratorInteriorOptionsInsertSchema>;
 export type ConfiguratorInteriorOption = typeof configuratorInteriorOptions.$inferSelect;
 
-export const configuratorUserConfigurationsInsertSchema = createInsertSchema(configuratorUserConfigurations);
-export type InsertConfiguratorUserConfiguration = z.infer<typeof configuratorUserConfigurationsInsertSchema>;
-export type ConfiguratorUserConfiguration = typeof configuratorUserConfigurations.$inferSelect;
+// Schema exports cleaned up - using existing tables only
 
 
