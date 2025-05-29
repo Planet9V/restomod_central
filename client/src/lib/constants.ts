@@ -12,6 +12,12 @@ export const COLORS = {
 // Navigation links for header and footer
 export const NAV_LINKS = [
   { 
+    name: 'Custom Builds', 
+    href: '/custom-builds',
+    isExternal: false,
+    description: 'Investment-grade restomod services with proven ROI'
+  },
+  { 
     name: 'Our Projects', 
     href: '/projects',
     isExternal: false,

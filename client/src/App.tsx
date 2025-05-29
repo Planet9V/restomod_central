@@ -22,6 +22,7 @@ import LuxuryShowcasesPage from "@/pages/LuxuryShowcasesPage";
 import MustangRestomods from "@/pages/MustangRestomods";
 import MarketAnalysis from "@/pages/MarketAnalysis";
 import ModelValues from "@/pages/ModelValues";
+import CustomBuilds from "@/pages/CustomBuilds";
 import CarShowGuide from "@/pages/CarShowGuide";
 import CarShowEvents from "@/pages/CarShowEvents";
 import GatewayVehicles from "@/pages/GatewayVehicles";
@@ -66,6 +67,7 @@ function Router() {
         <Route path="/mustang-restomods" component={MustangRestomods} />
         <Route path="/market-analysis" component={MarketAnalysis} />
         <Route path="/model-values" component={ModelValues} />
+        <Route path="/custom-builds" component={CustomBuilds} />
         <Route path="/car-show-guide" component={CarShowGuide} />
         <Route path="/car-show-events" component={CarShowEvents} />
         <Route path="/gateway-vehicles" component={GatewayVehicles} />
