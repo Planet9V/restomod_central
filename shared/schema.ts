@@ -1028,11 +1028,11 @@ export const configuratorUserConfigurations = pgTable("configurator_user_configu
   id: serial("id").primaryKey(),
   userId: text("user_id"), // Optional - can be null for anonymous configs
   carModelId: integer("car_model_id").references(() => configuratorCarModels.id).notNull(),
-  engineId: integer("engine_id").references(() => configuratorEngineOptions.id),
-  transmissionId: integer("transmission_id").references(() => configuratorTransmissionOptions.id),
+  engineId: integer("engine_id").references(() => configuratorEngines.id),
+  transmissionId: integer("transmission_id").references(() => configuratorTransmissions.id),
   colorId: integer("color_id").references(() => configuratorColorOptions.id),
   wheelId: integer("wheel_id").references(() => configuratorWheelOptions.id),
-  interiorId: integer("interior_id").references(() => configuratorInteriorOptions.id),
+  interiorId: integer("interior_id").references(() => configuratorInteriors.id),
   additionalOptions: jsonb("additional_options").$type<string[]>(),
   totalPrice: decimal("total_price", { precision: 12, scale: 2 }).notNull(),
   configurationName: text("configuration_name"),
@@ -1046,13 +1046,13 @@ export const configuratorCarModelsInsertSchema = createInsertSchema(configurator
 export type InsertConfiguratorCarModel = z.infer<typeof configuratorCarModelsInsertSchema>;
 export type ConfiguratorCarModel = typeof configuratorCarModels.$inferSelect;
 
-export const configuratorEngineOptionsInsertSchema = createInsertSchema(configuratorEngineOptions);
-export type InsertConfiguratorEngineOption = z.infer<typeof configuratorEngineOptionsInsertSchema>;
-export type ConfiguratorEngineOption = typeof configuratorEngineOptions.$inferSelect;
+export const configuratorEnginesInsertSchema = createInsertSchema(configuratorEngines);
+export type InsertConfiguratorEngine = z.infer<typeof configuratorEnginesInsertSchema>;
+export type ConfiguratorEngine = typeof configuratorEngines.$inferSelect;
 
-export const configuratorTransmissionOptionsInsertSchema = createInsertSchema(configuratorTransmissionOptions);
-export type InsertConfiguratorTransmissionOption = z.infer<typeof configuratorTransmissionOptionsInsertSchema>;
-export type ConfiguratorTransmissionOption = typeof configuratorTransmissionOptions.$inferSelect;
+export const configuratorTransmissionsInsertSchema = createInsertSchema(configuratorTransmissions);
+export type InsertConfiguratorTransmission = z.infer<typeof configuratorTransmissionsInsertSchema>;
+export type ConfiguratorTransmission = typeof configuratorTransmissions.$inferSelect;
 
 export const configuratorColorOptionsInsertSchema = createInsertSchema(configuratorColorOptions);
 export type InsertConfiguratorColorOption = z.infer<typeof configuratorColorOptionsInsertSchema>;
