@@ -924,9 +924,9 @@ export const configuratorFuelSystemOptionsInsertSchema = createInsertSchema(conf
 export type ConfiguratorFuelSystemOptionInsert = z.infer<typeof configuratorFuelSystemOptionsInsertSchema>;
 export type ConfiguratorFuelSystemOption = typeof configuratorFuelSystemOptions.$inferSelect;
 
-export const configuratorInteriorOptionsInsertSchema = createInsertSchema(configuratorInteriorOptions);
-export type ConfiguratorInteriorOptionInsert = z.infer<typeof configuratorInteriorOptionsInsertSchema>;
-export type ConfiguratorInteriorOption = typeof configuratorInteriorOptions.$inferSelect;
+export const enhancedInteriorOptionsInsertSchema = createInsertSchema(enhancedInteriorOptions);
+export type EnhancedInteriorOptionInsert = z.infer<typeof enhancedInteriorOptionsInsertSchema>;
+export type EnhancedInteriorOption = typeof enhancedInteriorOptions.$inferSelect;
 
 export const configuratorBodyworkOptionsInsertSchema = createInsertSchema(configuratorBodyworkOptions);
 export type ConfiguratorBodyworkOptionInsert = z.infer<typeof configuratorBodyworkOptionsInsertSchema>;

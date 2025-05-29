@@ -215,6 +215,78 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Market Trends API endpoint
   app.get(`${apiPrefix}/market-trends`, getMarketTrends);
   
+  // ========== ENHANCED CAR CONFIGURATOR API ROUTES ==========
+  // Enhanced configurator with authentic Perplexity research data
+  app.get(`${apiPrefix}/configurator/platforms`, async (req, res) => {
+    try {
+      const { getVehiclePlatforms } = await import('./api/enhanced-configurator');
+      getVehiclePlatforms(req, res);
+    } catch (error) {
+      console.error('Error fetching vehicle platforms:', error);
+      res.status(500).json({ error: 'Failed to fetch vehicle platforms' });
+    }
+  });
+
+  app.get(`${apiPrefix}/configurator/engines`, async (req, res) => {
+    try {
+      const { getEngineOptions } = await import('./api/enhanced-configurator');
+      getEngineOptions(req, res);
+    } catch (error) {
+      console.error('Error fetching engine options:', error);
+      res.status(500).json({ error: 'Failed to fetch engine options' });
+    }
+  });
+
+  app.get(`${apiPrefix}/configurator/transmissions`, async (req, res) => {
+    try {
+      const { getTransmissionOptions } = await import('./api/enhanced-configurator');
+      getTransmissionOptions(req, res);
+    } catch (error) {
+      console.error('Error fetching transmission options:', error);
+      res.status(500).json({ error: 'Failed to fetch transmission options' });
+    }
+  });
+
+  app.get(`${apiPrefix}/configurator/suspension`, async (req, res) => {
+    try {
+      const { getSuspensionOptions } = await import('./api/enhanced-configurator');
+      getSuspensionOptions(req, res);
+    } catch (error) {
+      console.error('Error fetching suspension options:', error);
+      res.status(500).json({ error: 'Failed to fetch suspension options' });
+    }
+  });
+
+  app.get(`${apiPrefix}/configurator/fuel-systems`, async (req, res) => {
+    try {
+      const { getFuelSystemOptions } = await import('./api/enhanced-configurator');
+      getFuelSystemOptions(req, res);
+    } catch (error) {
+      console.error('Error fetching fuel system options:', error);
+      res.status(500).json({ error: 'Failed to fetch fuel system options' });
+    }
+  });
+
+  app.get(`${apiPrefix}/configurator/interiors`, async (req, res) => {
+    try {
+      const { getInteriorOptions } = await import('./api/enhanced-configurator');
+      getInteriorOptions(req, res);
+    } catch (error) {
+      console.error('Error fetching interior options:', error);
+      res.status(500).json({ error: 'Failed to fetch interior options' });
+    }
+  });
+
+  app.post(`${apiPrefix}/configurator/calculate`, async (req, res) => {
+    try {
+      const { calculateConfiguration } = await import('./api/enhanced-configurator');
+      calculateConfiguration(req, res);
+    } catch (error) {
+      console.error('Error calculating configuration:', error);
+      res.status(500).json({ error: 'Failed to calculate configuration' });
+    }
+  });
+  
   // ========== CAR CONFIGURATOR API ROUTES ==========
   // Step-by-step car configurator using authentic Gateway vehicle data
   
