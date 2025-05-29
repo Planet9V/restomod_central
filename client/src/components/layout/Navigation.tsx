@@ -98,15 +98,9 @@ const Navigation = ({
         </div>
       </div>
       
-      {/* Mobile menu overlay with improved contrast and positioning */}
+      {/* Mobile menu overlay with premium micro-interactions */}
       <div 
-        className={`fixed inset-0 bg-black/98 backdrop-blur-lg z-50 flex flex-col pt-20 pb-8 px-6 transition-all duration-500 ${isMobileMenuOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full pointer-events-none'}`}
-        style={{
-          background: `linear-gradient(135deg, 
-            rgba(0, 0, 0, 0.98) 0%, 
-            rgba(34, 34, 34, 0.95) 50%, 
-            rgba(0, 0, 0, 0.98) 100%)`
-        }}
+        className={`fixed inset-0 bg-charcoal/95 z-50 flex flex-col pt-20 pb-8 px-6 transition-opacity duration-500 ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
       >
         <div className="flex flex-col space-y-6 mt-8">
           {/* Group navigation links by categories */}
