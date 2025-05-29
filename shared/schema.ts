@@ -1040,6 +1040,61 @@ export const configuratorInteriorOptionsInsertSchema = createInsertSchema(config
 export type InsertConfiguratorInteriorOption = z.infer<typeof configuratorInteriorOptionsInsertSchema>;
 export type ConfiguratorInteriorOption = typeof configuratorInteriorOptions.$inferSelect;
 
-// Schema exports cleaned up - using existing tables only
+// UNIFIED CARS FOR SALE SYSTEM
+// Consolidates Gateway Classic Cars + Regional Research + Market Analysis
+export const carsForSale = pgTable("cars_for_sale", {
+  id: serial("id").primaryKey(),
+  
+  // Core Vehicle Data
+  make: text("make").notNull(),
+  model: text("model").notNull(),
+  year: integer("year").notNull(),
+  price: decimal("price", { precision: 12, scale: 2 }),
+  
+  // Source & Location Tracking
+  sourceType: text("source_type").notNull(), // 'gateway' | 'research' | 'import'
+  sourceName: text("source_name").notNull(), // 'Gateway Classic Cars' | 'Hemmings' | etc
+  locationCity: text("location_city"),
+  locationState: text("location_state"),
+  locationRegion: text("location_region"), // 'south' | 'midwest' | 'west' | 'northeast'
+  
+  // Vehicle Details
+  category: text("category"), // 'Muscle Cars' | 'Sports Cars' | etc
+  condition: text("condition"), // 'Excellent' | 'Good' | 'Driver' | etc
+  mileage: integer("mileage"),
+  exteriorColor: text("exterior_color"),
+  interiorColor: text("interior_color"),
+  engine: text("engine"),
+  transmission: text("transmission"),
+  
+  // Investment Analysis Integration
+  investmentGrade: text("investment_grade"), // 'A+' | 'A' | 'A-' | 'B+' | etc
+  appreciationRate: text("appreciation_rate"), // '35.2%/year'
+  marketTrend: text("market_trend"), // 'rising' | 'stable' | 'declining'
+  valuationConfidence: text("valuation_confidence"), // '0.85' = 85% confidence
+  
+  // Media & Documentation
+  imageUrl: text("image_url"),
+  description: text("description"),
+  features: jsonb("features"), // Flexible JSON for various features
+  
+  // Administrative
+  stockNumber: text("stock_number").unique(),
+  vin: text("vin"),
+  
+  // Research Integration
+  researchNotes: text("research_notes"),
+  marketData: jsonb("market_data"), // Pricing trends, comparable sales, etc
+  perplexityAnalysis: jsonb("perplexity_analysis"), // AI-generated market insights
+  
+  // Timestamps
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+// Unified Cars for Sale schema
+export const carsForSaleInsertSchema = createInsertSchema(carsForSale);
+export type InsertCarForSale = z.infer<typeof carsForSaleInsertSchema>;
+export type CarForSale = typeof carsForSale.$inferSelect;
 
 
