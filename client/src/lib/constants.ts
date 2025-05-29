@@ -35,6 +35,13 @@ export const NAV_LINKS = [
     ]
   },
   { 
+    name: 'Cars for Sale', 
+    href: '/gateway-vehicles',
+    isExternal: false,
+    description: '160+ authenticated classic cars with investment analysis',
+    isDropdown: false
+  },
+  { 
     name: 'Market Intelligence', 
     href: '/market-analysis',
     isExternal: false,
