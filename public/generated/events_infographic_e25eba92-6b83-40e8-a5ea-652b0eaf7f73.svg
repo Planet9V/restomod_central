@@ -1,0 +1,77 @@
+
+    <svg width="800" height="660" xmlns="http://www.w3.org/2000/svg">
+      <style>
+        .title { font-family: Arial, sans-serif; font-size: 24px; font-weight: bold; fill: #333; }
+        .event { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #333; }
+        .date { font-family: Arial, sans-serif; font-size: 14px; fill: #666; }
+        .location { font-family: Arial, sans-serif; font-size: 14px; fill: #666; }
+        .highlight { filter: drop-shadow(0px 0px 5px rgba(217, 37, 42, 0.5)); }
+        .event-box { fill: #fff; stroke: #ddd; stroke-width: 1; rx: 5; ry: 5; }
+        .event-highlight { fill: #fff; stroke: #D9252A; stroke-width: 2; rx: 5; ry: 5; }
+        .header { fill: #222; }
+      </style>
+      
+      <!-- Header background -->
+      <rect x="0" y="0" width="800" height="60" class="header" />
+      
+      <!-- Title -->
+      <text x="400" y="40" text-anchor="middle" class="title" fill="#fff">Upcoming Classic Car Events</text>
+      
+      <!-- Events -->
+    
+      <g class="highlight">
+        <rect x="50" y="70" width="700" height="70" class="event-highlight" />
+        <text x="70" y="100" class="event">1st Annual Bad Ass Classic Car and Craft Show</text>
+        <text x="70" y="120" class="date">📅 ** June 1st, 2025</text>
+        <text x="300" y="120" class="location">📍 ** Las Vegas, NV</text>
+        <text x="700" y="110" text-anchor="end" fill="#D9252A" font-weight="bold">★ FEATURED</text>
+      </g>
+      
+      <g class="highlight">
+        <rect x="50" y="150" width="700" height="70" class="event-highlight" />
+        <text x="70" y="180" class="event">HB Concours d'Elegance</text>
+        <text x="70" y="200" class="date">📅 ** Saturday, June 7th, through Sunday, June 8th, 2025</text>
+        <text x="300" y="200" class="location">📍 ** Huntington Beach, CA</text>
+        <text x="700" y="190" text-anchor="end" fill="#D9252A" font-weight="bold">★ FEATURED</text>
+      </g>
+      
+      <g class="highlight">
+        <rect x="50" y="230" width="700" height="70" class="event-highlight" />
+        <text x="70" y="260" class="event">London to Brighton Classic Car Run</text>
+        <text x="70" y="280" class="date">📅 ** June 1st, 2025</text>
+        <text x="300" y="280" class="location">📍 ** Starting from Brooklands Museum, ending at Brighton’s Madeira Drive</text>
+        <text x="700" y="270" text-anchor="end" fill="#D9252A" font-weight="bold">★ FEATURED</text>
+      </g>
+      
+      <g class="highlight">
+        <rect x="50" y="310" width="700" height="70" class="event-highlight" />
+        <text x="70" y="340" class="event">Hertfordshire Steam & Country Show</text>
+        <text x="70" y="360" class="date">📅 ** May 31st - June 1st, 2025</text>
+        <text x="300" y="360" class="location">📍 ** Standalone Farm, Letchworth Garden City, Hertfordshire</text>
+        <text x="700" y="350" text-anchor="end" fill="#D9252A" font-weight="bold">★ FEATURED</text>
+      </g>
+      
+      <g class="highlight">
+        <rect x="50" y="390" width="700" height="70" class="event-highlight" />
+        <text x="70" y="420" class="event">Vegas Classic Car Festival</text>
+        <text x="70" y="440" class="date">📅 ** June 27th - June 28th, 2025</text>
+        <text x="300" y="440" class="location">📍 ** Ahern Hotel, Boulder City Cruisin Association, Atomic Motors, Las Vegas</text>
+        <text x="700" y="430" text-anchor="end" fill="#D9252A" font-weight="bold">★ FEATURED</text>
+      </g>
+      
+      <g class="highlight">
+        <rect x="50" y="470" width="700" height="70" class="event-highlight" />
+        <text x="70" y="500" class="event">Greenwood Car Show</text>
+        <text x="70" y="520" class="date">📅 ** June 28th, 2025</text>
+        <text x="300" y="520" class="location">📍 ** Seattle, WA</text>
+        <text x="700" y="510" text-anchor="end" fill="#D9252A" font-weight="bold">★ FEATURED</text>
+      </g>
+      
+      <g class="highlight">
+        <rect x="50" y="550" width="700" height="70" class="event-highlight" />
+        <text x="70" y="580" class="event">The Beach Barons Car Club’s 41st Annual Rod Run to the End of the World</text>
+        <text x="70" y="600" class="date">📅 ** September 6th - September 7th, 2025</text>
+        <text x="300" y="600" class="location">📍 ** Near the end of the Peninsula (exact location not specified)</text>
+        <text x="700" y="590" text-anchor="end" fill="#D9252A" font-weight="bold">★ FEATURED</text>
+      </g>
+      </svg>

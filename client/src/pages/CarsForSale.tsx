@@ -41,11 +41,31 @@ interface CarForSale {
 interface CarsForSaleResponse {
   success: boolean;
   vehicles: CarForSale[];
-  total: number;
-  sources: {
+  organizedByRegion: {
+    west: CarForSale[];
+    south: CarForSale[];
+    midwest: CarForSale[];
+    northeast: CarForSale[];
+    europe: CarForSale[];
+    asia: CarForSale[];
+    oceania: CarForSale[];
+    worldwide: CarForSale[];
+  };
+  sourceBreakdown: {
     gateway: number;
+    rkMotors: number;
+    barrettJackson: number;
+    mecum: number;
+    rmSothebys: number;
     research: number;
-    import: number;
+  };
+  total: number;
+  summary: {
+    totalVehicles: number;
+    premiumGrades: number;
+    averagePrice: number;
+    regions: number;
+    sources: number;
   };
 }
 
