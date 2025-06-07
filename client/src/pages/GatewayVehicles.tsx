@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Car, DollarSign, Calendar, Filter, Search, Star, ExternalLink, MapPin } from "lucide-react";
+import { Car, DollarSign, Calendar, Filter, Search, Star, ExternalLink, MapPin, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -150,17 +150,17 @@ export default function GatewayVehicles() {
             className="text-center"
           >
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Gateway Classic Cars
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500"> Inventory</span>
+              Premium Classic Cars
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500"> Collection</span>
             </h1>
             <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
-              Authentic classic car inventory from Gateway Classic Cars St. Louis showroom. 
-              {vehicles.length} premium vehicles available for investment and collection.
+              Curated collection of investment-grade classic cars from authenticated auction houses, 
+              certified dealers, and private collections worldwide. {vehicles.length} vehicles with AI-powered market analysis.
             </p>
-            <div className="flex items-center justify-center gap-6 text-sm text-gray-400">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-400 max-w-4xl mx-auto">
               <div className="flex items-center gap-2">
                 <MapPin className="h-4 w-4" />
-                <span>St. Louis, Missouri</span>
+                <span>Global Inventory</span>
               </div>
               <div className="flex items-center gap-2">
                 <Car className="h-4 w-4" />
@@ -168,10 +168,90 @@ export default function GatewayVehicles() {
               </div>
               <div className="flex items-center gap-2">
                 <Star className="h-4 w-4" />
+                <span>AI Curated</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <TrendingUp className="h-4 w-4" />
                 <span>Investment Grade</span>
               </div>
             </div>
           </motion.div>
+        </div>
+      </div>
+
+      {/* Authenticated Sources & AI Features Section */}
+      <div className="bg-white py-8 border-b">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Authenticated Global Sources & AI Curation</h2>
+            <p className="text-gray-600 max-w-4xl mx-auto">
+              Our unified automotive database aggregates investment-grade vehicles from verified auction houses, 
+              certified dealers, and private collections. Advanced AI algorithms provide market analysis, 
+              investment recommendations, and personalized vehicle matching.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
+            <div className="text-center p-4 bg-gray-50 rounded-lg">
+              <div className="font-semibold text-sm text-gray-900">Barrett-Jackson</div>
+              <div className="text-xs text-gray-600">Scottsdale Auctions</div>
+            </div>
+            <div className="text-center p-4 bg-gray-50 rounded-lg">
+              <div className="font-semibold text-sm text-gray-900">Mecum Auctions</div>
+              <div className="text-xs text-gray-600">Premier Classic Cars</div>
+            </div>
+            <div className="text-center p-4 bg-gray-50 rounded-lg">
+              <div className="font-semibold text-sm text-gray-900">RM Sotheby's</div>
+              <div className="text-xs text-gray-600">Luxury Collections</div>
+            </div>
+            <div className="text-center p-4 bg-gray-50 rounded-lg">
+              <div className="font-semibold text-sm text-gray-900">Bonhams</div>
+              <div className="text-xs text-gray-600">European Classics</div>
+            </div>
+            <div className="text-center p-4 bg-gray-50 rounded-lg">
+              <div className="font-semibold text-sm text-gray-900">RK Motors</div>
+              <div className="text-xs text-gray-600">Performance Builds</div>
+            </div>
+            <div className="text-center p-4 bg-gray-50 rounded-lg">
+              <div className="font-semibold text-sm text-gray-900">Gateway Classic</div>
+              <div className="text-xs text-gray-600">St. Louis Showroom</div>
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
+            <div className="text-center">
+              <div className="bg-blue-100 rounded-full p-3 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
+                <Search className="h-6 w-6 text-blue-600" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">AI-Powered Search</h3>
+              <p className="text-sm text-gray-600">Intelligent vehicle matching based on preferences, budget, and investment goals</p>
+            </div>
+            <div className="text-center">
+              <div className="bg-green-100 rounded-full p-3 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
+                <TrendingUp className="h-6 w-6 text-green-600" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">Market Analysis</h3>
+              <p className="text-sm text-gray-600">Real-time valuation, appreciation trends, and investment grade scoring</p>
+            </div>
+            <div className="text-center">
+              <div className="bg-purple-100 rounded-full p-3 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
+                <Star className="h-6 w-6 text-purple-600" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">Expert Curation</h3>
+              <p className="text-sm text-gray-600">Authenticated provenance, condition reports, and investment recommendations</p>
+            </div>
+          </div>
+          
+          <div className="text-center">
+            <Button 
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 rounded-lg font-semibold"
+              onClick={() => window.open('/ai-assistant', '_blank')}
+            >
+              <Search className="h-5 w-5 mr-2" />
+              Get AI Vehicle Recommendations
+            </Button>
+            <p className="text-sm text-gray-500 mt-2">Chat with our AI assistant for personalized vehicle matching and investment advice</p>
+          </div>
         </div>
       </div>
 
