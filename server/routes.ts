@@ -972,71 +972,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { make, category, priceMin, priceMax, year, region, source, featured } = req.query;
       
       // Build dynamic query for ALL vehicles in unified database
-      let query = `
+      let baseQuery = `
         SELECT 
           id, make, model, year, price, source_type, source_name, location_city, 
           location_state, location_region, category, condition, investment_grade, 
           appreciation_rate, market_trend, valuation_confidence, image_url, 
-          description, stock_number, research_notes, mileage, exterior_color,
-          interior_color, engine, transmission, features
+          description, stock_number, research_notes
         FROM cars_for_sale 
         WHERE 1=1
       `;
-      const params: any[] = [];
-      let paramIndex = 1;
-
+      
+      const conditions: string[] = [];
+      
       if (make && make !== 'all') {
-        query += ` AND LOWER(make) = LOWER($${paramIndex})`;
-        params.push(make);
-        paramIndex++;
+        conditions.push(`LOWER(make) = '${make.toLowerCase()}'`);
       }
       
       if (category && category !== 'all') {
-        query += ` AND LOWER(category) = LOWER($${paramIndex})`;
-        params.push(category);
-        paramIndex++;
+        conditions.push(`LOWER(category) = '${category.toLowerCase()}'`);
       }
       
       if (region && region !== 'all') {
-        query += ` AND location_region = $${paramIndex}`;
-        params.push(region);
-        paramIndex++;
+        conditions.push(`location_region = '${region}'`);
       }
       
       if (source && source !== 'all') {
-        query += ` AND source_name = $${paramIndex}`;
-        params.push(source);
-        paramIndex++;
+        conditions.push(`source_name = '${source}'`);
       }
       
       if (priceMin) {
-        query += ` AND CAST(price as NUMERIC) >= $${paramIndex}`;
-        params.push(parseFloat(priceMin as string));
-        paramIndex++;
+        conditions.push(`CAST(price as NUMERIC) >= ${parseFloat(priceMin as string)}`);
       }
       
       if (priceMax) {
-        query += ` AND CAST(price as NUMERIC) <= $${paramIndex}`;
-        params.push(parseFloat(priceMax as string));
-        paramIndex++;
+        conditions.push(`CAST(price as NUMERIC) <= ${parseFloat(priceMax as string)}`);
       }
       
       if (year) {
-        query += ` AND year = $${paramIndex}`;
-        params.push(parseInt(year as string));
-        paramIndex++;
+        conditions.push(`year = ${parseInt(year as string)}`);
       }
 
       if (featured === 'true') {
-        query += ` AND investment_grade IN ('A+', 'A')`;
+        conditions.push(`investment_grade IN ('A+', 'A')`);
       }
 
-      query += ` ORDER BY investment_grade DESC, CAST(price as NUMERIC) DESC, year DESC LIMIT 100`;
+      const finalQuery = baseQuery + 
+        (conditions.length > 0 ? ' AND ' + conditions.join(' AND ') : '') +
+        ` ORDER BY investment_grade DESC, CAST(price as NUMERIC) DESC, year DESC LIMIT 100`;
 
-      const result = await db.execute(query, params);
+      const result = await db.execute(finalQuery);
       const unifiedVehicles = result.rows;
 
-      // Transform to match frontend interface
+      // Transform to match frontend interface using actual table columns
       const vehicles = unifiedVehicles.map((vehicle: any) => ({
         id: vehicle.id,
         stockNumber: vehicle.stock_number || `UNI${vehicle.id}`,
@@ -1044,11 +1031,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         make: vehicle.make,
         model: vehicle.model,
         price: vehicle.price,
-        mileage: vehicle.mileage,
-        engine: vehicle.engine,
-        transmission: vehicle.transmission,
-        exterior: vehicle.exterior_color,
-        interior: vehicle.interior_color,
+        mileage: null, // Not available in cars_for_sale table
+        engine: null, // Not available in cars_for_sale table
+        transmission: null, // Not available in cars_for_sale table
+        exterior: null, // Not available in cars_for_sale table
+        interior: null, // Not available in cars_for_sale table
         category: vehicle.category,
         condition: vehicle.condition,
         location: `${vehicle.location_city || 'Multiple'}, ${vehicle.location_state || 'Locations'}`,
@@ -1064,17 +1051,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
         researchNotes: vehicle.research_notes
       }));
 
+      const uniqueSources = vehicles.reduce((acc: string[], v) => {
+        if (!acc.includes(v.sourceName)) acc.push(v.sourceName);
+        return acc;
+      }, []);
+      
+      const uniqueRegions = vehicles.reduce((acc: string[], v) => {
+        if (!acc.includes(v.locationRegion)) acc.push(v.locationRegion);
+        return acc;
+      }, []);
+
       console.log(`✅ UNIFIED SUCCESS: Loaded ${vehicles.length} vehicles from complete 625+ vehicle database`);
-      console.log(`📊 Sources represented: ${[...new Set(vehicles.map(v => v.sourceName))].join(', ')}`);
-      console.log(`🌍 Regions covered: ${[...new Set(vehicles.map(v => v.locationRegion))].join(', ')}`);
+      console.log(`📊 Sources represented: ${uniqueSources.join(', ')}`);
+      console.log(`🌍 Regions covered: ${uniqueRegions.join(', ')}`);
       
       res.json({ 
         success: true, 
         vehicles,
         total: vehicles.length,
         database: 'unified_cars_for_sale',
-        sources: [...new Set(vehicles.map(v => v.sourceName))],
-        regions: [...new Set(vehicles.map(v => v.locationRegion))],
+        sources: uniqueSources,
+        regions: uniqueRegions,
         totalInDatabase: 625
       });
     } catch (error) {
