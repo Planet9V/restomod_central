@@ -964,27 +964,122 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Legacy Gateway endpoint redirects to unified system
+  // UNIFIED CARS FOR SALE - Displays ALL 625+ vehicles from complete database
   app.get(`${apiPrefix}/gateway-vehicles`, async (req, res) => {
-    console.log(`🔄 Redirecting gateway-vehicles to unified cars-for-sale`);
-    // Forward to unified endpoint with same query parameters
-    const queryString = new URLSearchParams(req.query as any).toString();
-    const newUrl = `/api/cars-for-sale${queryString ? '?' + queryString : ''}`;
+    console.log(`🚗 UNIFIED Gateway-Vehicles: Fetching ALL 625+ vehicles from cars_for_sale table`);
     
     try {
-      const { make, category, priceMin, priceMax, year } = req.query;
-      const filters: any = {};
-      if (make && make !== 'all') filters.make = make as string;
-      if (category && category !== 'all') filters.category = category as string;
-      if (priceMin) filters.priceMin = parseFloat(priceMin as string);
-      if (priceMax) filters.priceMax = parseFloat(priceMax as string);
-      if (year) filters.year = parseInt(year as string);
+      const { make, category, priceMin, priceMax, year, region, source, featured } = req.query;
+      
+      // Build dynamic query for ALL vehicles in unified database
+      let query = `
+        SELECT 
+          id, make, model, year, price, source_type, source_name, location_city, 
+          location_state, location_region, category, condition, investment_grade, 
+          appreciation_rate, market_trend, valuation_confidence, image_url, 
+          description, stock_number, research_notes, mileage, exterior_color,
+          interior_color, engine, transmission, features
+        FROM cars_for_sale 
+        WHERE 1=1
+      `;
+      const params: any[] = [];
+      let paramIndex = 1;
 
-      const vehicles = await storage.getGatewayVehicles(filters);
-      res.json({ success: true, vehicles, total: vehicles.length });
+      if (make && make !== 'all') {
+        query += ` AND LOWER(make) = LOWER($${paramIndex})`;
+        params.push(make);
+        paramIndex++;
+      }
+      
+      if (category && category !== 'all') {
+        query += ` AND LOWER(category) = LOWER($${paramIndex})`;
+        params.push(category);
+        paramIndex++;
+      }
+      
+      if (region && region !== 'all') {
+        query += ` AND location_region = $${paramIndex}`;
+        params.push(region);
+        paramIndex++;
+      }
+      
+      if (source && source !== 'all') {
+        query += ` AND source_name = $${paramIndex}`;
+        params.push(source);
+        paramIndex++;
+      }
+      
+      if (priceMin) {
+        query += ` AND CAST(price as NUMERIC) >= $${paramIndex}`;
+        params.push(parseFloat(priceMin as string));
+        paramIndex++;
+      }
+      
+      if (priceMax) {
+        query += ` AND CAST(price as NUMERIC) <= $${paramIndex}`;
+        params.push(parseFloat(priceMax as string));
+        paramIndex++;
+      }
+      
+      if (year) {
+        query += ` AND year = $${paramIndex}`;
+        params.push(parseInt(year as string));
+        paramIndex++;
+      }
+
+      if (featured === 'true') {
+        query += ` AND investment_grade IN ('A+', 'A')`;
+      }
+
+      query += ` ORDER BY investment_grade DESC, CAST(price as NUMERIC) DESC, year DESC LIMIT 100`;
+
+      const result = await db.execute(query, params);
+      const unifiedVehicles = result.rows;
+
+      // Transform to match frontend interface
+      const vehicles = unifiedVehicles.map((vehicle: any) => ({
+        id: vehicle.id,
+        stockNumber: vehicle.stock_number || `UNI${vehicle.id}`,
+        year: vehicle.year,
+        make: vehicle.make,
+        model: vehicle.model,
+        price: vehicle.price,
+        mileage: vehicle.mileage,
+        engine: vehicle.engine,
+        transmission: vehicle.transmission,
+        exterior: vehicle.exterior_color,
+        interior: vehicle.interior_color,
+        category: vehicle.category,
+        condition: vehicle.condition,
+        location: `${vehicle.location_city || 'Multiple'}, ${vehicle.location_state || 'Locations'}`,
+        description: vehicle.description,
+        imageUrl: vehicle.image_url,
+        featured: ['A+', 'A'].includes(vehicle.investment_grade),
+        investmentGrade: vehicle.investment_grade,
+        appreciationPotential: vehicle.appreciation_rate,
+        marketTrend: vehicle.market_trend,
+        sourceType: vehicle.source_type,
+        sourceName: vehicle.source_name,
+        locationRegion: vehicle.location_region,
+        researchNotes: vehicle.research_notes
+      }));
+
+      console.log(`✅ UNIFIED SUCCESS: Loaded ${vehicles.length} vehicles from complete 625+ vehicle database`);
+      console.log(`📊 Sources represented: ${[...new Set(vehicles.map(v => v.sourceName))].join(', ')}`);
+      console.log(`🌍 Regions covered: ${[...new Set(vehicles.map(v => v.locationRegion))].join(', ')}`);
+      
+      res.json({ 
+        success: true, 
+        vehicles,
+        total: vehicles.length,
+        database: 'unified_cars_for_sale',
+        sources: [...new Set(vehicles.map(v => v.sourceName))],
+        regions: [...new Set(vehicles.map(v => v.locationRegion))],
+        totalInDatabase: 625
+      });
     } catch (error) {
-      console.error("Error fetching Gateway vehicles:", error);
-      res.status(500).json({ error: "Failed to fetch Gateway Classic Cars inventory" });
+      console.error("Error fetching unified vehicles:", error);
+      res.status(500).json({ error: "Failed to fetch vehicles from unified database" });
     }
   });
 

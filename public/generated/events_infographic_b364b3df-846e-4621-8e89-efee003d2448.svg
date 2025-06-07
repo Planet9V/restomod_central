@@ -1,0 +1,45 @@
+
+    <svg width="800" height="400" xmlns="http://www.w3.org/2000/svg">
+      <style>
+        .title { font-family: Arial, sans-serif; font-size: 24px; font-weight: bold; fill: #333; }
+        .event { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #333; }
+        .date { font-family: Arial, sans-serif; font-size: 14px; fill: #666; }
+        .location { font-family: Arial, sans-serif; font-size: 14px; fill: #666; }
+        .highlight { filter: drop-shadow(0px 0px 5px rgba(217, 37, 42, 0.5)); }
+        .event-box { fill: #fff; stroke: #ddd; stroke-width: 1; rx: 5; ry: 5; }
+        .event-highlight { fill: #fff; stroke: #D9252A; stroke-width: 2; rx: 5; ry: 5; }
+        .header { fill: #222; }
+      </style>
+      
+      <!-- Header background -->
+      <rect x="0" y="0" width="800" height="60" class="header" />
+      
+      <!-- Title -->
+      <text x="400" y="40" text-anchor="middle" class="title" fill="#fff">Upcoming Classic Car Events</text>
+      
+      <!-- Events -->
+    
+      <g class="highlight">
+        <rect x="50" y="70" width="700" height="70" class="event-highlight" />
+        <text x="70" y="100" class="event">June 2025 Classic Car & Bike Auction - WB & Sons</text>
+        <text x="70" y="120" class="date">📅 ** June 7, 2025</text>
+        <text x="300" y="120" class="location">📍 ** [WB & Sons Auction House](https</text>
+        <text x="700" y="110" text-anchor="end" fill="#D9252A" font-weight="bold">★ FEATURED</text>
+      </g>
+      
+      <g class="highlight">
+        <rect x="50" y="150" width="700" height="70" class="event-highlight" />
+        <text x="70" y="180" class="event">Tulsa 2025 - Mecum Auctions</text>
+        <text x="70" y="200" class="date">📅 ** June 6-7, 2025</text>
+        <text x="300" y="200" class="location">📍 ** SageNet Center at Expo Square, Tulsa, OK</text>
+        <text x="700" y="190" text-anchor="end" fill="#D9252A" font-weight="bold">★ FEATURED</text>
+      </g>
+      
+      <g class="highlight">
+        <rect x="50" y="230" width="700" height="70" class="event-highlight" />
+        <text x="70" y="260" class="event">GRAND AUCTION THIS SUNDAY – Al Qaryah Auctions</text>
+        <text x="70" y="280" class="date">📅 ** Sunday, June 8, 2025</text>
+        <text x="300" y="280" class="location">📍 ** Emirates Industrial City, Sajaa</text>
+        <text x="700" y="270" text-anchor="end" fill="#D9252A" font-weight="bold">★ FEATURED</text>
+      </g>
+      </svg>
