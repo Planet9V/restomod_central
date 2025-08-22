@@ -90,3 +90,34 @@ export async function removeFromItinerary(eventId: number) {
   if (!response.ok) throw new Error('Failed to remove from itinerary');
   return response.json();
 }
+
+export async function getEventBySlug(slug: string) {
+  const response = await fetch(`${API_BASE}/api/car-show-events/slug/${slug}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch event');
+  }
+  const result = await response.json();
+  return result.event; // The route wraps the event in an 'event' property
+}
+
+export async function getCommentsForEvent(eventId: number) {
+  const response = await fetch(`${API_BASE}/api/comments/event/${eventId}`);
+  if (!response.ok) throw new Error('Failed to fetch comments');
+  return response.json();
+}
+
+export async function postComment(eventId: number, content: string) {
+  const response = await fetch(`${API_BASE}/api/comments/event/${eventId}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': getAuthToken(),
+    },
+    body: JSON.stringify({ content }),
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to post comment');
+  }
+  return response.json();
+}

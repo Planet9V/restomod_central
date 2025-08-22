@@ -474,8 +474,16 @@ export const getCarShowEvents = async (filters?: {
   status?: string;
   search?: string;
   limit?: number;
+  userId?: number;
 }) => {
   try {
+    let userPreferences: schema.UserPreference | undefined;
+    if (filters?.userId) {
+      userPreferences = await db.query.userPreferences.findFirst({
+        where: eq(schema.userPreferences.userId, filters.userId),
+      });
+    }
+
     let query = db.select().from(schema.carShowEvents);
     const conditions: any[] = [];
     
@@ -511,13 +519,20 @@ export const getCarShowEvents = async (filters?: {
       );
     }
     
-    // Apply all conditions
     if (conditions.length > 0) {
       query = query.where(and(...conditions));
     }
     
-    // Order by start date descending
-    query = query.orderBy(desc(schema.carShowEvents.startDate));
+    // Personalization Logic
+    if (userPreferences?.homeLocation?.state) {
+      const userState = userPreferences.homeLocation.state;
+      query = query.orderBy(
+        sql`CASE WHEN state = ${userState} THEN 0 ELSE 1 END`,
+        desc(schema.carShowEvents.startDate)
+      );
+    } else {
+      query = query.orderBy(desc(schema.carShowEvents.startDate));
+    }
     
     if (filters?.limit) {
       query = query.limit(filters.limit);
@@ -571,7 +586,15 @@ export const getGatewayVehicles = async (filters?: {
   priceMax?: number;
   year?: number;
   search?: string;
+  userId?: number;
 }) => {
+  let userPreferences: schema.UserPreference | undefined;
+  if (filters?.userId) {
+    userPreferences = await db.query.userPreferences.findFirst({
+      where: eq(schema.userPreferences.userId, filters.userId),
+    });
+  }
+
   let query = db.select().from(schema.gatewayVehicles);
   const conditions: any[] = [];
 
@@ -605,13 +628,31 @@ export const getGatewayVehicles = async (filters?: {
     query = query.where(and(...conditions));
   }
   
-  const vehicles = await query.orderBy(desc(schema.gatewayVehicles.year), asc(schema.gatewayVehicles.make));
+  if (userPreferences?.preferredCategories && userPreferences.preferredCategories.length > 0) {
+    const categories = userPreferences.preferredCategories;
+    // This creates a CASE statement that orders preferred categories first.
+    const caseStatement = sql`CASE ${
+      categories.map((category, index) => sql`WHEN lower(category) = ${category.toLowerCase()} THEN ${index}`)
+    } ELSE ${categories.length} END`;
+    query = query.orderBy(caseStatement, desc(schema.gatewayVehicles.year));
+  } else {
+    query = query.orderBy(desc(schema.gatewayVehicles.year), asc(schema.gatewayVehicles.make));
+  }
+
+  const vehicles = await query;
   return vehicles;
 };
 
 export const getGatewayVehicleById = async (id: number) => {
-  const [vehicle] = await db.select().from(schema.gatewayVehicles).where(eq(schema.gatewayVehicles.id, id)).limit(1);
+  const vehicles = await query;
   return vehicle;
+};
+
+export const getCarsByState = async (state: string, limit: number = 3) => {
+  return await db.select()
+    .from(schema.gatewayVehicles)
+    .where(like(schema.gatewayVehicles.location, `%${state}%`))
+    .limit(limit);
 };
 
 export const getFeaturedGatewayVehicles = async (limit: number = 6) => {
