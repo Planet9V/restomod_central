@@ -75,7 +75,14 @@ To enhance the global appreciation and market value of classic cars and restomod
 - **Premium Events**: Concours d'Elegance, international auctions, specialty shows
 - **Integration**: Vehicle recommendations based on nearby events
 
-### 4. Interactive AI Assistant (K.I.T.T.)
+### 4. User-Centric Features
+- **Personal Itinerary**: Authenticated users can save events to a personal itinerary for future reference.
+- **User Preferences**: Users can save their home location and preferred vehicle categories.
+- **Content Personalization**: Event and car listings are automatically sorted and prioritized based on a user's saved preferences.
+- **Community Commenting**: Users can post comments on event pages to share information and engage with the community.
+- **Event & Car Synergy**: Event detail pages display a list of relevant cars for sale in the same geographic area.
+
+### 5. Interactive AI Assistant (K.I.T.T.)
 - **Personalized Recommendations**: Vehicle matching based on preferences and budget
 - **Market Analysis**: Real-time valuation and investment advice
 - **Historical Context**: Vehicle provenance and automotive history
@@ -83,13 +90,13 @@ To enhance the global appreciation and market value of classic cars and restomod
 - **Investment Guidance**: Portfolio diversification and market timing advice
 
 ### 5. Advanced Search & Filtering
-- **Multi-Parameter Search**: Make, model, year, price, region, source
+- **Multi-Parameter Search**: Free-text search for cars and events, plus multi-parameter filtering for make, model, year, price, region, source.
 - **Investment Filters**: Grade, appreciation rate, market trend
 - **Geographic Filters**: Regional inventory browsing
 - **Source Filters**: Auction house, dealer, private collection
 - **Advanced Analytics**: Price ranges, market segments, rarity scoring
 
-### 6. Educational Resources
+### 7. Educational Resources
 - **Research Articles**: 136+ automotive market analyses and guides
 - **Historical Documentation**: Vehicle provenance and restoration records
 - **Market Reports**: Investment trends and collector insights
@@ -108,18 +115,22 @@ To enhance the global appreciation and market value of classic cars and restomod
 
 ### Backend Infrastructure
 - **Node.js/Express** server with TypeScript
-- **PostgreSQL** via Neon for scalable data storage
-- **Drizzle ORM** for type-safe database operations
+- **SQLite** for portable, file-based data storage
+- **Drizzle ORM** with `better-sqlite3` driver for type-safe database operations
 - **AI Integration**: Anthropic Claude, Google Gemini, Perplexity AI
 - **Session Management** with secure authentication
 - **RESTful APIs** with comprehensive error handling
 
 ### Database Schema
-- **cars_for_sale**: 625+ vehicle records with investment analysis
-- **car_show_events**: 223+ global automotive events
-- **research_articles**: 136+ educational content pieces
-- **projects**: Featured restomod builds and showcases
-- **testimonials**: Customer experiences and success stories
+- **cars_for_sale**: Vehicle listings with investment analysis data.
+- **car_show_events**: Global automotive event information.
+- **research_articles**: Educational content and market analysis.
+- **projects**: Featured restomod builds and showcases.
+- **testimonials**: Customer experiences and success stories.
+- **users**: User account and authentication information.
+- **user_itineraries**: Stores events saved by users.
+- **user_preferences**: Stores user settings for personalization.
+- **event_comments**: Stores user comments on events.
 
 ### AI & Analytics
 - **Market Analysis Engine**: Real-time valuation and trend analysis

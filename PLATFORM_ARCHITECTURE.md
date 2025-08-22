@@ -172,6 +172,10 @@ research_articles (136+ records)
 - `POST /api/market-research/search` - Perplexity integration
 - `GET /api/market-trends` - Investment analytics
 - `POST /api/perplexity/configuration` - AI recommendations
+- `GET, POST, DELETE /api/itinerary` - User Itinerary Management
+- `GET, PUT /api/user/preferences` - User Preferences Management
+- `GET, POST /api/comments/event/:eventId` - Event Commenting
+- `GET /api/analytics/events` - Event Data Aggregation
 
 ## Technology Stack
 
@@ -185,8 +189,8 @@ research_articles (136+ records)
 
 ### Backend Infrastructure
 - **Node.js/Express** with TypeScript
-- **PostgreSQL** via Neon for scalable data storage
-- **Drizzle ORM** for type-safe database operations
+- **SQLite** for portable, file-based data storage
+- **Drizzle ORM** with `better-sqlite3` driver for type-safe database operations
 - **Anthropic Claude** for intelligent AI assistance
 - **Google Gemini** for image analysis and generation
 - **Perplexity AI** for real-time market research
@@ -229,8 +233,8 @@ research_articles (136+ records)
 ## Deployment & DevOps
 
 ### Development Environment
-- **Local Development**: Replit workspace with live preview
-- **Database**: Neon PostgreSQL with automated backups
+- **Local Development**: Node.js/Vite development server (`npm run dev`)
+- **Database**: Local SQLite database file (`db/local.db`)
 - **Version Control**: Git with automated deployment
 - **Testing**: Comprehensive feature testing suite
 
