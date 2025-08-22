@@ -46,6 +46,14 @@ export function isAdmin(req: Request, res: Response, next: NextFunction) {
   next();
 }
 
+// Optional authentication middleware
+export const maybeIsAuthenticated = (req: Request, res: Response, next: NextFunction) => {
+  if (req.headers.authorization) {
+    return isAuthenticated(req, res, next);
+  }
+  return next();
+};
+
 // Setup authentication routes
 export function setupAuth(app: Express) {
   // Create initial admin user if none exists

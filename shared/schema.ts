@@ -20,6 +20,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
     fields: [users.id],
     references: [userPreferences.userId],
   }),
+  comments: many(eventComments),
 }));
 
 export const insertUserSchema = createInsertSchema(users).pick({
@@ -626,6 +627,7 @@ export type InsertMarketValuation = z.infer<typeof marketValuationsInsertSchema>
 
 export const carShowEventsRelations = relations(carShowEvents, ({ many }) => ({
   itineraryItems: many(userItineraries),
+  comments: many(eventComments),
 }));
 
 export const carShowEventsInsertSchema = createInsertSchema(carShowEvents);
@@ -1148,4 +1150,24 @@ export const carsForSaleInsertSchema = createInsertSchema(carsForSale);
 export type InsertCarForSale = z.infer<typeof carsForSaleInsertSchema>;
 export type CarForSale = typeof carsForSale.$inferSelect;
 
+// Event Comments table
+export const eventComments = sqliteTable("event_comments", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  content: text("content").notNull(),
+  userId: integer("user_id").notNull().references(() => users.id, { onDelete: 'cascade' }),
+  eventId: integer("event_id").notNull().references(() => carShowEvents.id, { onDelete: 'cascade' }),
+  createdAt: integer("created_at", { mode: 'timestamp' }).notNull(),
+});
 
+export const eventCommentsRelations = relations(eventComments, ({ one }) => ({
+  user: one(users, {
+    fields: [eventComments.userId],
+    references: [users.id],
+  }),
+  event: one(carShowEvents, {
+    fields: [eventComments.eventId],
+    references: [carShowEvents.id],
+  }),
+}));
+
+export type EventComment = typeof eventComments.$inferSelect;

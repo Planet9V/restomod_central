@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "wouter";
 import { Calendar, MapPin, Users, DollarSign, Clock, Filter, Search, Star, ExternalLink, TrendingUp, Globe, Car, ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -250,6 +251,12 @@ export default function CarShowEvents() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="text-sm text-zinc-400">Showing {filteredEvents.length} of {events.length} events</span>
+                {isAuthenticated && (
+                  <Badge variant="secondary" className="bg-green-500/20 text-green-300 border-green-500/30">
+                    <Star className="w-3 h-3 mr-1" />
+                    Personalized For You
+                  </Badge>
+                )}
                 {(eventTypeFilter !== "all_types" || stateFilter !== "all_states" || regionFilter !== "all" || categoryFilter !== "all_categories" || monthFilter !== "all" || featuredOnly) && (
                   <Button
                     variant="ghost"
@@ -444,15 +451,16 @@ export default function CarShowEvents() {
             <AnimatePresence>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredEvents.map((event: CarShowEvent, index: number) => (
-                  <motion.div
-                    key={event.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    layout
-                  >
-                    <Card className="h-full bg-zinc-800/50 border-zinc-700 hover:border-orange-500/50 transition-all duration-300 group">
-                      <CardHeader className="pb-3">
+                  <Link key={event.id} href={`/car-show-events/${event.eventSlug}`}>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      layout
+                      className="cursor-pointer"
+                    >
+                      <Card className="h-full bg-zinc-800/50 border-zinc-700 hover:border-orange-500/50 transition-all duration-300 group">
+                        <CardHeader className="pb-3">
                         <div className="flex justify-between items-start mb-2">
                           <Badge className={`${getEventTypeColor(event.eventType)} text-white`}>
                             {getEventTypeLabel(event.eventType)}

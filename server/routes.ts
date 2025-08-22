@@ -19,9 +19,10 @@ import carsRouter from './api/cars';
 import itineraryRouter from './api/itinerary';
 import userRouter from './api/user';
 import analyticsRouter from './api/analytics';
+import commentsRouter from './api/comments';
 import { scheduleArticleGeneration } from "./services/scheduler";
 import { databaseHealthMonitor } from "./services/databaseHealthCheck";
-import { setupAuth, isAuthenticated, isAdmin } from "./auth";
+import { setupAuth, isAuthenticated, isAdmin, maybeIsAuthenticated } from "./auth";
 
 // Helper functions for investment analysis
 function getInvestmentGrade(make: string, model: string, year: number, category?: string): string {
@@ -885,6 +886,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use(`${apiPrefix}/itinerary`, itineraryRouter);
   app.use(`${apiPrefix}/user`, userRouter);
   app.use(`${apiPrefix}/analytics`, analyticsRouter);
+  app.use(`${apiPrefix}/comments`, commentsRouter);
 
   app.get(`${apiPrefix}/car-show-events/:id`, async (req, res) => {
     try {
@@ -921,13 +923,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // UNIFIED CARS FOR SALE - Single endpoint consolidating ALL vehicles (364+ authentic)
-  app.get(`${apiPrefix}/cars-for-sale`, async (req, res) => {
+  app.get(`${apiPrefix}/cars-for-sale`, maybeIsAuthenticated, async (req, res) => {
     try {
       console.log(`🚗 Unified cars-for-sale API called: ${req.originalUrl}`);
       
       const { make, category, priceMin, priceMax, year, region, sourceType, search, page = '1', limit = '20' } = req.query;
-      
-      const filters: any = {};
+      const userId = res.locals.user?.userId;
+
+      const filters: any = { userId };
       if (make && make !== 'all') filters.make = make as string;
       if (category && category !== 'all') filters.category = category as string;
       if (priceMin) filters.priceMin = parseFloat(priceMin as string);

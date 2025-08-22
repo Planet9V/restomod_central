@@ -130,3 +130,26 @@ describe('Analytics API', () => {
         expect(response.body.eventsByState.length).toBeGreaterThan(0);
     });
 });
+
+describe('Comments API', () => {
+    it('should post a new comment on an event', async () => {
+        const response = await request(app)
+            .post(`/api/comments/event/${testEvent.id}`)
+            .set('Authorization', `Bearer ${authToken}`)
+            .send({ content: 'This is a test comment.' })
+            .expect(201);
+
+        expect(response.body.content).toBe('This is a test comment.');
+        expect(response.body.user.username).toBe(testUser.username);
+    });
+
+    it('should retrieve comments for an event', async () => {
+        const response = await request(app)
+            .get(`/api/comments/event/${testEvent.id}`)
+            .expect(200);
+
+        expect(Array.isArray(response.body)).toBe(true);
+        expect(response.body.length).toBe(1);
+        expect(response.body[0].content).toBe('This is a test comment.');
+    });
+});

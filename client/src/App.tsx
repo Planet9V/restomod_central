@@ -25,6 +25,7 @@ import ModelValues from "@/pages/ModelValues";
 import CustomBuilds from "@/pages/CustomBuilds";
 import CarShowGuide from "@/pages/CarShowGuide";
 import CarShowEvents from "@/pages/CarShowEvents";
+import EventDetailsPage from "@/pages/EventDetailsPage";
 import GatewayVehicles from "@/pages/GatewayVehicles";
 import CarsForSale from "@/pages/CarsForSale";
 import NotFound from "@/pages/not-found";
@@ -72,6 +73,7 @@ function Router() {
         <Route path="/custom-builds" component={CustomBuilds} />
         <Route path="/car-show-guide" component={CarShowGuide} />
         <Route path="/car-show-events" component={CarShowEvents} />
+        <Route path="/car-show-events/:slug" component={EventDetailsPage} />
         <Route path="/cars-for-sale" component={CarsForSale} />
         <Route path="/gateway-vehicles" component={GatewayVehicles} />
         <Route path="/auth" component={AuthPage} />

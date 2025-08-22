@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Search, Filter, MapPin, Calendar, DollarSign, TrendingUp, Award, Eye } from "lucide-react";
 import { motion } from "framer-motion";
+import { useAuth } from "@/hooks/use-auth";
 
 interface CarForSale {
   id: number;
@@ -82,6 +83,7 @@ export default function CarsForSale() {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilters, setShowFilters] = useState(false);
+  const { isAuthenticated } = useAuth();
 
   const { data: vehiclesData, isLoading, error } = useQuery<CarsForSaleResponse>({
     queryKey: ['/api/cars-for-sale', filters, searchTerm],
@@ -284,11 +286,17 @@ export default function CarsForSale() {
         </div>
 
         {/* Results */}
-        <div className="mb-4 text-gray-300">
+        <div className="mb-4 text-gray-300 flex items-center gap-4">
           {isLoading ? (
             <div>Loading vehicles...</div>
           ) : (
             <div>Showing {filteredVehicles.length} vehicles</div>
+          )}
+          {isAuthenticated && (
+            <Badge variant="secondary" className="bg-green-500/20 text-green-300 border-green-500/30">
+              <Star className="w-3 h-3 mr-1" />
+              Personalized For You
+            </Badge>
           )}
         </div>
 
