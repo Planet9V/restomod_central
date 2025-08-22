@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getCarShowEvents } from '../storage';
+import { getCarShowEvents } from '@server/storage';
 
 const eventsRouter = Router();
 

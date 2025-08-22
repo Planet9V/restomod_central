@@ -237,6 +237,39 @@ const Navigation = ({
           >
             {isAuthenticated ? (
               <div className="flex flex-col space-y-4">
+                <Link
+                  href="/profile"
+                  className="text-white text-2xl font-playfair font-bold hover:text-gold transition-all duration-300 group flex items-center"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <User className="mr-2" />
+                  <span className="relative">
+                    My Profile
+                    <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
+                  </span>
+                </Link>
+                <Link
+                  href="/my-itinerary"
+                  className="text-white text-2xl font-playfair font-bold hover:text-gold transition-all duration-300 group flex items-center"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <User className="mr-2" />
+                  <span className="relative">
+                    My Itinerary
+                    <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
+                  </span>
+                </Link>
+                <Link
+                  href="/event-analytics"
+                  className="text-white text-2xl font-playfair font-bold hover:text-gold transition-all duration-300 group flex items-center"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <User className="mr-2" />
+                  <span className="relative">
+                    Event Analytics
+                    <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
+                  </span>
+                </Link>
                 {isAdmin && (
                   <Link 
                     href="/admin"

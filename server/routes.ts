@@ -16,6 +16,9 @@ import * as marketResearchApi from "./api/market-research";
 import { getMarketTrends } from "./api/marketTrends";
 import eventsRouter from './api/events';
 import carsRouter from './api/cars';
+import itineraryRouter from './api/itinerary';
+import userRouter from './api/user';
+import analyticsRouter from './api/analytics';
 import { scheduleArticleGeneration } from "./services/scheduler";
 import { databaseHealthMonitor } from "./services/databaseHealthCheck";
 import { setupAuth, isAuthenticated, isAdmin } from "./auth";
@@ -879,6 +882,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get single car show event by ID
   app.use(`${apiPrefix}/events`, eventsRouter);
   app.use(`${apiPrefix}/cars`, carsRouter);
+  app.use(`${apiPrefix}/itinerary`, itineraryRouter);
+  app.use(`${apiPrefix}/user`, userRouter);
+  app.use(`${apiPrefix}/analytics`, analyticsRouter);
 
   app.get(`${apiPrefix}/car-show-events/:id`, async (req, res) => {
     try {

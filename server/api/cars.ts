@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getGatewayVehicles } from '../storage';
+import { getGatewayVehicles } from '@server/storage';
 
 const carsRouter = Router();
 

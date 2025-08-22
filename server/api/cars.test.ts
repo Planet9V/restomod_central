@@ -2,7 +2,7 @@ import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import request from 'supertest';
 import { createServer, type Server } from 'http';
 import express from 'express';
-import { registerRoutes } from '../routes';
+import { registerRoutes } from '@server/routes';
 
 let server: Server;
 let app: express.Express;
