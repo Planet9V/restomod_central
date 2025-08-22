@@ -3,7 +3,7 @@
  * Tests all Priority 1 & 2 features with 517-vehicle unified database
  */
 
-import { db } from "../db";
+import { db, sqlite } from "../db";
 
 interface TestResult {
   feature: string;
@@ -52,21 +52,21 @@ class ComprehensiveFeatureTester {
       const startTime = Date.now();
       
       // Test total vehicle count
-      const totalResult = await db.execute('SELECT COUNT(*) as total FROM cars_for_sale');
-      const totalVehicles = totalResult.rows[0]?.total || 0;
+      const totalResult = await sqlite.prepare('SELECT COUNT(*) as total FROM cars_for_sale').all();
+      const totalVehicles = totalResult[0]?.total || 0;
       
       // Test data integrity
-      const integrityResult = await db.execute(`
+      const integrityResult = await sqlite.prepare(`
         SELECT 
           COUNT(*) as valid_vehicles,
-          COUNT(*) FILTER (WHERE investment_grade IS NOT NULL) as with_grades,
-          COUNT(*) FILTER (WHERE appreciation_rate IS NOT NULL) as with_rates,
+          SUM(CASE WHEN investment_grade IS NOT NULL THEN 1 ELSE 0 END) as with_grades,
+          SUM(CASE WHEN appreciation_rate IS NOT NULL THEN 1 ELSE 0 END) as with_rates,
           COUNT(DISTINCT make) as unique_makes,
           COUNT(DISTINCT category) as unique_categories
         FROM cars_for_sale
-      `);
+      `).all();
       
-      const integrity = integrityResult.rows[0];
+      const integrity = integrityResult[0];
       const duration = Date.now() - startTime;
       
       if (totalVehicles >= 500 && integrity.with_grades > 500 && integrity.with_rates > 500) {
@@ -97,7 +97,7 @@ class ComprehensiveFeatureTester {
       const startTime = Date.now();
       
       // Test investment grade distribution
-      const gradeResult = await db.execute(`
+      const gradeResult = await sqlite.prepare(`
         SELECT 
           investment_grade,
           COUNT(*) as count,
@@ -106,9 +106,9 @@ class ComprehensiveFeatureTester {
         WHERE investment_grade IS NOT NULL
         GROUP BY investment_grade
         ORDER BY investment_grade
-      `);
+      `).all();
       
-      const grades = gradeResult.rows;
+      const grades = gradeResult;
       const hasAllGrades = grades.some(g => g.investment_grade === 'A+') &&
                           grades.some(g => g.investment_grade === 'A') &&
                           grades.some(g => g.investment_grade === 'A-') &&
@@ -144,18 +144,18 @@ class ComprehensiveFeatureTester {
       const startTime = Date.now();
       
       // Test category filtering
-      const muscleCarsResult = await db.execute(`
+      const muscleCarsResult = await sqlite.prepare(`
         SELECT COUNT(*) as count FROM cars_for_sale 
         WHERE category = 'Muscle Cars'
-      `);
+      `).all();
       
-      const sportsCarsResult = await db.execute(`
+      const sportsCarsResult = await sqlite.prepare(`
         SELECT COUNT(*) as count FROM cars_for_sale 
         WHERE category = 'Sports Cars'
-      `);
+      `).all();
       
-      const muscleCars = muscleCarsResult.rows[0]?.count || 0;
-      const sportsCars = sportsCarsResult.rows[0]?.count || 0;
+      const muscleCars = muscleCarsResult[0]?.count || 0;
+      const sportsCars = sportsCarsResult[0]?.count || 0;
       const duration = Date.now() - startTime;
       
       if (muscleCars > 50 && sportsCars > 50) {
@@ -185,8 +185,8 @@ class ComprehensiveFeatureTester {
     try {
       const startTime = Date.now();
       
-      const testimonialsResult = await db.execute('SELECT COUNT(*) as count FROM testimonials');
-      const count = testimonialsResult.rows[0]?.count || 0;
+      const testimonialsResult = await sqlite.prepare('SELECT COUNT(*) as count FROM testimonials').all();
+      const count = testimonialsResult[0]?.count || 0;
       const duration = Date.now() - startTime;
       
       if (count >= 3) {
@@ -257,11 +257,11 @@ class ComprehensiveFeatureTester {
       const startTime = Date.now();
       
       // Test API response time
-      const apiResult = await db.execute(`
+      const apiResult = await sqlite.prepare(`
         SELECT COUNT(*) as count FROM cars_for_sale 
         WHERE investment_grade = 'A+' 
         LIMIT 10
-      `);
+      `).all();
       
       const duration = Date.now() - startTime;
       
@@ -292,16 +292,16 @@ class ComprehensiveFeatureTester {
     try {
       const startTime = Date.now();
       
-      const regionResult = await db.execute(`
+      const regionResult = await sqlite.prepare(`
         SELECT 
           location_region,
           COUNT(*) as count
         FROM cars_for_sale 
         WHERE location_region IS NOT NULL
         GROUP BY location_region
-      `);
+      `).all();
       
-      const regions = regionResult.rows;
+      const regions = regionResult;
       const duration = Date.now() - startTime;
       
       if (regions.length >= 4) {
@@ -331,16 +331,16 @@ class ComprehensiveFeatureTester {
     try {
       const startTime = Date.now();
       
-      const categoryResult = await db.execute(`
+      const categoryResult = await sqlite.prepare(`
         SELECT 
           category,
           COUNT(*) as count
         FROM cars_for_sale 
         GROUP BY category
         ORDER BY count DESC
-      `);
+      `).all();
       
-      const categories = categoryResult.rows;
+      const categories = categoryResult;
       const duration = Date.now() - startTime;
       
       if (categories.length >= 5) {
@@ -370,15 +370,15 @@ class ComprehensiveFeatureTester {
     try {
       const startTime = Date.now();
       
-      const analysisResult = await db.execute(`
+      const analysisResult = await sqlite.prepare(`
         SELECT 
           AVG(CAST(price as NUMERIC)) as avg_price,
-          COUNT(*) FILTER (WHERE investment_grade = 'A+') as premium_count,
+          SUM(CASE WHEN investment_grade = 'A+' THEN 1 ELSE 0 END) as premium_count,
           COUNT(DISTINCT make) as unique_makes
         FROM cars_for_sale
-      `);
+      `).all();
       
-      const analysis = analysisResult.rows[0];
+      const analysis = analysisResult[0];
       const duration = Date.now() - startTime;
       
       if (analysis.avg_price > 100000 && analysis.premium_count > 50) {

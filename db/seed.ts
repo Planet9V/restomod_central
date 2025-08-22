@@ -34,12 +34,12 @@ async function seed() {
         description: "Our 1953 Ford F100 restomod masterfully blends the iconic styling of this legendary American truck with state-of-the-art engineering and premium craftsmanship. Introduced during Ford's 50th anniversary celebrations, the F100 marked a pivotal shift in truck design with its wider cab, improved suspension, and robust frame. Our restoration honors this historical significance while integrating modern performance, luxury, and technology.",
         category: "trucks-4x4s",
         imageUrl: "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=1600&auto=format&fit=crop",
-        galleryImages: [
+        galleryImages: JSON.stringify([
           "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?q=80&w=1600&auto=format&fit=crop",
           "https://images.unsplash.com/photo-1531086623190-a3bd615e55b5?q=80&w=1600&auto=format&fit=crop",
           "https://images.unsplash.com/photo-1596649299486-4cdea56fd59d?q=80&w=1600&auto=format&fit=crop"
-        ],
-        specs: {
+        ]),
+        specs: JSON.stringify({
           engine: "Ford 5.0L Coyote V8, 460 HP",
           transmission: "6-Speed Automatic with Overdrive",
           suspension: "Custom Fat Man Fabrications Mustang II Front, 4-Link Rear",
@@ -49,8 +49,8 @@ async function seed() {
           tires: "Michelin Pilot Sport",
           paint: "Custom Metallic Lunar Blue with Clear Coat",
           interior: "Tan Bridge of Weir Scottish Leather"
-        },
-        features: [
+        }),
+        features: JSON.stringify([
           "Custom Art Morrison chassis with modern coilover suspension",
           "Power rack-and-pinion steering with modern geometry",
           "Vintage Air climate control system with digital controls",
@@ -62,17 +62,17 @@ async function seed() {
           "Sound deadening and thermal insulation throughout",
           "Power windows and central locking with remote",
           "Modern fuel injection with custom ECU mapping"
-        ],
+        ]),
         clientQuote: "This F100 is everything I dreamed of - pure American classic styling with modern driving characteristics. The level of detail throughout is astonishing, and it drives like a modern vehicle while maintaining all the character of the original. It's a masterpiece that turns heads everywhere it goes.",
         clientName: "Thomas Richardson",
         clientLocation: "Austin, Texas",
-        historicalInfo: {
+        historicalInfo: JSON.stringify({
           significance: "The 1953 Ford F100 marked the beginning of the F100 series and was part of Ford's 50th anniversary celebration. It replaced the post-war F1 model with a modernized pickup that combined durability with comfort and style.",
           originalSpecs: "Originally offered with a 239 cubic-inch flathead V8 or 239 cubic-inch inline-six engine, three-speed manual transmission, and drum brakes. The truck featured a wider cab, improved suspension, and increased payload capacity compared to its predecessors.",
           designElements: "The F100's bold front end, clamshell bonnet, and clean body lines have influenced truck design for decades. Its styling themes have been adopted by numerous automotive companies worldwide, including Nissan, Mitsubishi, GMC, and Toyota.",
           productionNumbers: "Over 1 million first-generation F100 trucks (1953-1956) were produced, making it one of the most successful truck launches in automotive history.",
           collectability: "Pristine original F100s can fetch $20,000 to $100,000 depending on condition and authenticity, while premium restomods like ours can exceed $200,000 due to their meticulous craftsmanship and modern upgrades."
-        },
+        }),
         featured: true
       });
       
@@ -157,19 +157,19 @@ async function seed() {
       await db.insert(schema.companies).values([
         {
           name: "McKenney Engineering & Design",
-          description: [
+          description: JSON.stringify([
             "Founded by James McKenney, a mechanical engineer with a passion for automotive design, McKenney Engineering brings rigorous engineering principles to classic vehicle design.",
             "Their expertise in systems integration, performance optimization, and advanced CAD/CAM techniques ensures every vehicle performs as good as it looks."
-          ],
+          ]),
           image: "https://images.unsplash.com/photo-1560253023-3ec5d502959f?q=80&w=1600&auto=format&fit=crop",
           order: 1
         },
         {
           name: "Skinny's Rod and Custom",
-          description: [
+          description: JSON.stringify([
             "With over 25 years in the hot rod and custom car industry, Dave \"Skinny\" Johnson has built a reputation for exceptional craftsmanship and attention to detail.",
             "Skinny's team of artisans specializes in bodywork, fabrication, paint, and interior work that showcases the soul and character of classic vehicles while achieving concourse-level finishes."
-          ],
+          ]),
           image: "https://images.unsplash.com/photo-1559760434-0981df057e83?q=80&w=1600&auto=format&fit=crop",
           order: 2
         }
@@ -243,34 +243,34 @@ async function seed() {
     const existingMarketData = await db.query.marketData.findFirst();
     if (!existingMarketData) {
       await db.insert(schema.marketData).values({
-        marketGrowthData: [
+        marketGrowthData: JSON.stringify([
           { year: 2018, value: 100 },
           { year: 2019, value: 115 },
           { year: 2020, value: 132 },
           { year: 2021, value: 152 },
           { year: 2022, value: 175 },
           { year: 2023, value: 201 }
-        ],
-        demographicData: [
+        ]),
+        demographicData: JSON.stringify([
           { name: "Baby Boomers", value: 45 },
           { name: "Gen X", value: 35 },
           { name: "Millennials", value: 18 },
           { name: "Gen Z", value: 2 }
-        ],
-        platforms: [
+        ]),
+        platforms: JSON.stringify([
           "1960s-70s American Muscle (Mustang, Camaro, Challenger)",
           "Classic European Sports Cars (Porsche 911, Jaguar E-Type)",
           "Classic 4x4s (Bronco, Land Cruiser, Defender)",
           "1950s American Icons (Bel Air, Thunderbird)",
           "Classic Pickup Trucks (F-100, C10)"
-        ],
-        modifications: [
+        ]),
+        modifications: JSON.stringify([
           "Modern fuel-injected engines (LS/LT, Coyote)",
           "Advanced suspension systems (IRS, coilovers)",
           "Modern HVAC and comfort features",
           "Integrated infotainment and connectivity",
           "Upgraded braking systems (Wilwood, Brembo)"
-        ],
+        ]),
         roi: "+42%"
       });
     }
