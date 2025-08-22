@@ -84,7 +84,7 @@ export default function CarsForSale() {
   const [showFilters, setShowFilters] = useState(false);
 
   const { data: vehiclesData, isLoading, error } = useQuery<CarsForSaleResponse>({
-    queryKey: ['/api/cars-for-sale', filters],
+    queryKey: ['/api/cars-for-sale', filters, searchTerm],
     queryFn: async () => {
       const params = new URLSearchParams();
       if (filters.make && filters.make !== 'all') params.set('make', filters.make);
@@ -94,6 +94,7 @@ export default function CarsForSale() {
       if (filters.year) params.set('year', filters.year);
       if (filters.region && filters.region !== 'all') params.set('region', filters.region);
       if (filters.sourceType && filters.sourceType !== 'all') params.set('sourceType', filters.sourceType);
+      if (searchTerm) params.set('search', searchTerm);
       
       const response = await fetch(`/api/cars-for-sale?${params}`);
       if (!response.ok) throw new Error('Failed to fetch vehicles');
@@ -101,12 +102,7 @@ export default function CarsForSale() {
     },
   });
 
-  // Filter vehicles by search term
-  const filteredVehicles = vehiclesData?.vehicles?.filter(vehicle =>
-    searchTerm === '' || 
-    `${vehicle.year} ${vehicle.make} ${vehicle.model}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    vehicle.description?.toLowerCase().includes(searchTerm.toLowerCase())
-  ) || [];
+  const filteredVehicles = vehiclesData?.vehicles || [];
 
   const formatPrice = (price: string | number) => {
     const numPrice = typeof price === 'string' ? parseFloat(price) : price;

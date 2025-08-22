@@ -14,6 +14,8 @@ import * as assistantApi from "./api/assistant";
 import * as articlesApi from "./api/articles";
 import * as marketResearchApi from "./api/market-research";
 import { getMarketTrends } from "./api/marketTrends";
+import eventsRouter from './api/events';
+import carsRouter from './api/cars';
 import { scheduleArticleGeneration } from "./services/scheduler";
 import { databaseHealthMonitor } from "./services/databaseHealthCheck";
 import { setupAuth, isAuthenticated, isAdmin } from "./auth";
@@ -875,6 +877,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get single car show event by ID
+  app.use(`${apiPrefix}/events`, eventsRouter);
+  app.use(`${apiPrefix}/cars`, carsRouter);
+
   app.get(`${apiPrefix}/car-show-events/:id`, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
@@ -914,7 +919,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       console.log(`🚗 Unified cars-for-sale API called: ${req.originalUrl}`);
       
-      const { make, category, priceMin, priceMax, year, region, sourceType, page = '1', limit = '20' } = req.query;
+      const { make, category, priceMin, priceMax, year, region, sourceType, search, page = '1', limit = '20' } = req.query;
       
       const filters: any = {};
       if (make && make !== 'all') filters.make = make as string;
@@ -924,6 +929,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (year) filters.year = parseInt(year as string);
       if (region && region !== 'all') filters.region = region as string;
       if (sourceType && sourceType !== 'all') filters.sourceType = sourceType as string;
+      if (search) filters.search = search as string;
       
       console.log(`🔍 Fetching unified vehicles with filters:`, filters);
 

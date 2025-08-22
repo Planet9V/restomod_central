@@ -13,7 +13,8 @@ async function seed() {
       await db.insert(schema.heroContent).values({
         title: "Engineering Meets Artistry",
         subtitle: "Meticulously crafted restomods that combine precision engineering with concourse-level aesthetics. The perfect fusion of classic soul and modern performance.",
-        imageUrl: "https://images.unsplash.com/photo-1611566026373-c6c8da0945b8?q=80&w=2000&auto=format&fit=crop"
+        imageUrl: "https://images.unsplash.com/photo-1611566026373-c6c8da0945b8?q=80&w=2000&auto=format&fit=crop",
+        createdAt: new Date(),
       });
     }
 
@@ -73,7 +74,8 @@ async function seed() {
           productionNumbers: "Over 1 million first-generation F100 trucks (1953-1956) were produced, making it one of the most successful truck launches in automotive history.",
           collectability: "Pristine original F100s can fetch $20,000 to $100,000 depending on condition and authenticity, while premium restomods like ours can exceed $200,000 due to their meticulous craftsmanship and modern upgrades."
         },
-        featured: true
+        featured: true,
+        createdAt: new Date(),
       });
       
       // Update the other featured project to non-featured
@@ -97,19 +99,22 @@ async function seed() {
           quote: "The attention to detail and engineering excellence that McKenney & Skinny's put into my '67 Mustang exceeded all expectations. It's the perfect blend of classic style and modern performance.",
           authorName: "Robert Maxwell",
           authorLocation: "Portland, Oregon",
-          authorImage: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop"
+          authorImage: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop",
+          createdAt: new Date(),
         },
         {
           quote: "After researching numerous builders, I chose McKenney & Skinny's for their transparent process and engineering-first approach. They transformed my Bronco into the perfect weekend adventure vehicle.",
           authorName: "Jennifer Harmon",
           authorLocation: "Austin, Texas",
-          authorImage: "https://images.unsplash.com/photo-1614283233556-f35b0c801ef1?q=80&w=200&auto=format&fit=crop"
+          authorImage: "https://images.unsplash.com/photo-1614283233556-f35b0c801ef1?q=80&w=200&auto=format&fit=crop",
+          createdAt: new Date(),
         },
         {
           quote: "The level of communication and collaboration throughout the build was exceptional. They made my vision for a modern classic Porsche 911 a reality, with performance that rivals modern sports cars.",
           authorName: "David Kawecki",
           authorLocation: "Chicago, Illinois",
-          authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop"
+          authorImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop",
+          createdAt: new Date(),
         }
       ]);
     }
@@ -124,28 +129,32 @@ async function seed() {
           position: "Founder & Engineering Director",
           image: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=300&auto=format&fit=crop",
           bio: "Mechanical engineer with a passion for automotive design and over 20 years of experience in systems integration and performance optimization.",
-          order: 1
+          order: 1,
+          createdAt: new Date(),
         },
         {
           name: "Dave \"Skinny\" Johnson",
           position: "Founder & Master Builder",
           image: "https://images.unsplash.com/photo-1566753323558-f4e0952af115?q=80&w=300&auto=format&fit=crop",
           bio: "With over 25 years in the hot rod and custom car industry, Skinny has built a reputation for exceptional craftsmanship and attention to detail.",
-          order: 2
+          order: 2,
+          createdAt: new Date(),
         },
         {
           name: "Sarah Chen",
           position: "Systems Engineering Lead",
           image: "https://images.unsplash.com/photo-1557862921-37829c790f19?q=80&w=300&auto=format&fit=crop",
           bio: "Automotive systems specialist with expertise in integrating modern technology with classic vehicles. Leads our electrical and electronic systems team.",
-          order: 3
+          order: 3,
+          createdAt: new Date(),
         },
         {
           name: "Mike Reyes",
           position: "Master Fabricator",
           image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=300&auto=format&fit=crop",
           bio: "Metal fabrication artist with 15 years of experience creating custom panels, brackets, and components. Specializes in aluminum and stainless steel work.",
-          order: 4
+          order: 4,
+          createdAt: new Date(),
         }
       ]);
     }
@@ -162,7 +171,8 @@ async function seed() {
             "Their expertise in systems integration, performance optimization, and advanced CAD/CAM techniques ensures every vehicle performs as good as it looks."
           ],
           image: "https://images.unsplash.com/photo-1560253023-3ec5d502959f?q=80&w=1600&auto=format&fit=crop",
-          order: 1
+          order: 1,
+          createdAt: new Date(),
         },
         {
           name: "Skinny's Rod and Custom",
@@ -171,7 +181,8 @@ async function seed() {
             "Skinny's team of artisans specializes in bodywork, fabrication, paint, and interior work that showcases the soul and character of classic vehicles while achieving concourse-level finishes."
           ],
           image: "https://images.unsplash.com/photo-1559760434-0981df057e83?q=80&w=1600&auto=format&fit=crop",
-          order: 2
+          order: 2,
+          createdAt: new Date(),
         }
       ]);
     }
@@ -185,19 +196,22 @@ async function seed() {
           title: "Engineering Excellence",
           description: "Advanced chassis design, systems integration, and performance optimization using cutting-edge tools and methodologies. Every vehicle is virtually prototyped before fabrication begins.",
           icon: "Settings",
-          order: 1
+          order: 1,
+          createdAt: new Date(),
         },
         {
           title: "Master Craftsmanship",
           description: "Decades of hands-on expertise in metal fabrication, bodywork, paint, and interior craftsmanship. Each panel is hand-shaped and fitted with precision that exceeds factory standards.",
           icon: "Mic",
-          order: 2
+          order: 2,
+          createdAt: new Date(),
         },
         {
           title: "Collaborative Process",
           description: "Our transparent, client-centered approach combines your vision with our expertise. Regular updates and consultations ensure your dream vehicle evolves exactly as you imagine.",
           icon: "Users",
-          order: 3
+          order: 3,
+          createdAt: new Date(),
         }
       ]);
     }
@@ -212,28 +226,32 @@ async function seed() {
           description: "We begin with in-depth discussions about your dream vehicle. What inspires you? What level of performance do you desire? How will you use the vehicle? This crucial phase sets the foundation for our design approach.",
           image: "https://images.unsplash.com/photo-1581093588401-fbb62a02f120?q=80&w=1600&auto=format&fit=crop",
           alt: "Initial consultation",
-          order: 1
+          order: 1,
+          createdAt: new Date(),
         },
         {
           title: "Design & Engineering",
           description: "Our engineering team creates detailed specifications and 3D models to optimize performance, ergonomics, and aesthetics. We collaborate with you to refine the design until every detail meets our exacting standards.",
           image: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=1600&auto=format&fit=crop",
           alt: "Design and engineering",
-          order: 2
+          order: 2,
+          createdAt: new Date(),
         },
         {
           title: "Fabrication & Assembly",
           description: "Our master craftsmen begin the meticulous process of building your vehicle. From chassis modifications to custom bodywork, every component is fabricated or modified with precision and care.",
           image: "https://images.unsplash.com/photo-1621905251918-48416bd8575a?q=80&w=1600&auto=format&fit=crop",
           alt: "Fabrication and assembly",
-          order: 3
+          order: 3,
+          createdAt: new Date(),
         },
         {
           title: "Finishing & Delivery",
           description: "After rigorous testing and quality assurance, your vehicle receives its final detailing. We provide comprehensive documentation, maintenance guidance, and a thorough handover to ensure you get the most from your bespoke creation.",
           image: "https://images.unsplash.com/photo-1601055903647-ddf1ee9701b5?q=80&w=1600&auto=format&fit=crop",
           alt: "Finishing and delivery",
-          order: 4
+          order: 4,
+          createdAt: new Date(),
         }
       ]);
     }
@@ -271,7 +289,8 @@ async function seed() {
           "Integrated infotainment and connectivity",
           "Upgraded braking systems (Wilwood, Brembo)"
         ],
-        roi: "+42%"
+        roi: "+42%",
+        createdAt: new Date(),
       });
     }
 
