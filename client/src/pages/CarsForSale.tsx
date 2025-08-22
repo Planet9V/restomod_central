@@ -70,6 +70,7 @@ interface CarsForSaleResponse {
 }
 
 export default function CarsForSale() {
+  console.log("CarsForSale component rendering");
   const [filters, setFilters] = useState({
     make: 'all',
     category: 'all',
@@ -101,12 +102,16 @@ export default function CarsForSale() {
     },
   });
 
+  console.log("vehiclesData:", vehiclesData);
+
   // Filter vehicles by search term
   const filteredVehicles = vehiclesData?.vehicles?.filter(vehicle =>
     searchTerm === '' || 
     `${vehicle.year} ${vehicle.make} ${vehicle.model}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
     vehicle.description?.toLowerCase().includes(searchTerm.toLowerCase())
   ) || [];
+
+  console.log("filteredVehicles:", filteredVehicles);
 
   const formatPrice = (price: string | number) => {
     const numPrice = typeof price === 'string' ? parseFloat(price) : price;
@@ -317,6 +322,7 @@ export default function CarsForSale() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
+                data-testid="car-card"
               >
                 <Card className="bg-slate-800/80 backdrop-blur border-slate-700 hover:border-slate-600 transition-all duration-300 hover:shadow-xl">
                   <CardHeader className="p-0">

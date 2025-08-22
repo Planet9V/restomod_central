@@ -928,23 +928,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log(`🔍 Fetching unified vehicles with filters:`, filters);
 
       // Get Gateway vehicles and transform to unified format with investment analysis
-      const gatewayVehicles = await storage.getGatewayVehicles(filters);
-      
-      // Transform Gateway to unified format with investment analysis
-      const vehicles = gatewayVehicles.map((vehicle: any) => ({
-        ...vehicle,
-        sourceType: 'gateway',
-        sourceName: 'Gateway Classic Cars',
-        locationCity: vehicle.location ? vehicle.location.split(',')[0]?.trim() : 'St. Louis',
-        locationState: vehicle.location ? vehicle.location.split(',')[1]?.trim() || 'MO' : 'MO',
-        locationRegion: 'midwest',
-        investmentGrade: getInvestmentGrade(vehicle.make, vehicle.model, vehicle.year, vehicle.category),
-        appreciationRate: getAppreciationRate(vehicle.category, vehicle.year),
-        marketTrend: 'stable',
-        valuationConfidence: '0.82',
-        researchNotes: `Gateway Classic Cars authentic inventory vehicle`,
-        features: vehicle.features || null
-      }));
+      const vehicles = await storage.getCarsForSale(filters);
       
       console.log(`✅ Consolidated ${vehicles.length} Gateway vehicles with unified format and investment analysis`);
       
@@ -960,7 +944,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       console.error("❌ Error fetching unified cars for sale:", error);
-      res.status(500).json({ error: "Failed to fetch vehicles from unified database" });
+      res.status(500).json({ error: "Failed to fetch vehicles from unified database", details: error.message });
     }
   });
 

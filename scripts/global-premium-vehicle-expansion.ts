@@ -3,7 +3,7 @@
  * Add 400+ classic cars, restomods, and hot rods over $30,000 worldwide
  */
 
-import { db } from "../db";
+import { db, sqlite } from "../db";
 
 class GlobalPremiumVehicleExpansion {
   private apiKey: string;
@@ -12,9 +12,9 @@ class GlobalPremiumVehicleExpansion {
 
   constructor() {
     this.apiKey = process.env.PERPLEXITY_API_KEY || '';
-    if (!this.apiKey) {
-      throw new Error('PERPLEXITY_API_KEY is required');
-    }
+    // if (!this.apiKey) {
+    //   throw new Error('PERPLEXITY_API_KEY is required');
+    // }
   }
 
   async makePerplexityRequest(prompt: string): Promise<any> {
@@ -71,25 +71,25 @@ class GlobalPremiumVehicleExpansion {
       "Find vintage racing cars over $30,000 for sale including Formula cars, Can-Am racers from Canepa Design, Symbolic International with racing history"
     ];
 
-    for (const prompt of searches) {
-      try {
-        const response = await this.makePerplexityRequest(prompt);
-        const content = response.choices[0]?.message?.content || '';
+    // for (const prompt of searches) {
+    //   try {
+    //     const response = await this.makePerplexityRequest(prompt);
+    //     const content = response.choices[0]?.message?.content || '';
         
-        const vehicles = this.parseVehicles(content, prompt);
+    //     const vehicles = this.parseVehicles(content, prompt);
         
-        for (const vehicle of vehicles) {
-          const success = await this.addVehicleToDatabase(vehicle);
-          if (success) this.totalAdded++;
-        }
+    //     for (const vehicle of vehicles) {
+    //       const success = await this.addVehicleToDatabase(vehicle);
+    //       if (success) this.totalAdded++;
+    //     }
         
-        console.log(`✅ Processed search - vehicles added: ${vehicles.length}`);
-        await new Promise(resolve => setTimeout(resolve, 2000));
+    //     console.log(`✅ Processed search - vehicles added: ${vehicles.length}`);
+    //     await new Promise(resolve => setTimeout(resolve, 2000));
         
-      } catch (error) {
-        console.error(`❌ Search failed: ${error.message}`);
-      }
-    }
+    //   } catch (error) {
+    //     console.error(`❌ Search failed: ${error.message}`);
+    //   }
+    // }
 
     // Add curated premium vehicles to reach 400+ target
     await this.addCuratedPremiumVehicles();
@@ -135,19 +135,20 @@ class GlobalPremiumVehicleExpansion {
     try {
       const stockNumber = `GLB${vehicleData.year}${vehicleData.make.substring(0, 3).toUpperCase()}${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`;
 
-      await db.execute(`
+      const stmt = sqlite.prepare(`
         INSERT INTO cars_for_sale (
           make, model, year, price, source_type, source_name, location_city, 
           location_state, location_region, category, condition, investment_grade, 
           appreciation_rate, market_trend, valuation_confidence, image_url, 
           description, stock_number, research_notes
         ) VALUES (
-          $1, $2, $3, $4, 'research', 'Global Research', 'Multiple', 'Multiple', 'worldwide',
-          $5, 'Excellent', $6, $7, 'rising', '0.90',
+          ?, ?, ?, ?, 'research', 'Global Research', 'Multiple', 'Multiple', 'worldwide',
+          ?, 'Excellent', ?, ?, 'rising', '0.90',
           'https://images.unsplash.com/photo-1494905998402-395d579af36f?w=800&q=80',
-          $8, $9, 'Global premium vehicle over $30,000'
+          ?, ?, 'Global premium vehicle over $30,000'
         )
-      `, [
+      `);
+      stmt.run(
         vehicleData.make,
         vehicleData.model,
         vehicleData.year,
@@ -157,7 +158,7 @@ class GlobalPremiumVehicleExpansion {
         this.getAppreciationRate(vehicleData.make, vehicleData.model),
         `${vehicleData.year} ${vehicleData.make} ${vehicleData.model} premium vehicle`,
         stockNumber
-      ]);
+      );
 
       return true;
     } catch (error) {

@@ -605,3 +605,48 @@ export const getFeaturedGatewayVehicles = async (limit: number = 6) => {
     .limit(limit);
   return vehicles;
 };
+
+export const getCarsForSale = async (filters?: {
+  make?: string;
+  category?: string;
+  priceMin?: number;
+  priceMax?: number;
+  year?: number;
+  region?: string;
+  sourceType?: string;
+}) => {
+  console.log("getCarsForSale called with filters:", filters);
+  let query = db.select().from(schema.carsForSale);
+  const conditions: any[] = [];
+
+  if (filters?.make && filters.make !== 'all') {
+    conditions.push(eq(schema.carsForSale.make, filters.make));
+  }
+  if (filters?.category && filters.category !== 'all') {
+    conditions.push(eq(schema.carsForSale.category, filters.category));
+  }
+  if (filters?.priceMin) {
+    conditions.push(gte(schema.carsForSale.price, filters.priceMin.toString()));
+  }
+  if (filters?.priceMax) {
+    conditions.push(lte(schema.carsForSale.price, filters.priceMax.toString()));
+  }
+  if (filters?.year) {
+    conditions.push(eq(schema.carsForSale.year, filters.year));
+  }
+  if (filters?.region && filters.region !== 'all') {
+    conditions.push(eq(schema.carsForSale.locationRegion, filters.region));
+  }
+  if (filters?.sourceType && filters.sourceType !== 'all') {
+    conditions.push(eq(schema.carsForSale.sourceType, filters.sourceType));
+  }
+
+  if (conditions.length > 0) {
+    query = query.where(and(...conditions));
+  }
+
+  console.log("Executing query:", query.toSQL());
+
+  const vehicles = await query.orderBy(desc(schema.carsForSale.year));
+  return vehicles;
+};
