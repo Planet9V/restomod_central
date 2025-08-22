@@ -133,7 +133,8 @@ async function createInitialAdmin() {
         username: 'admin',
         email: 'jims67mustang@gmail.com',
         password: hashedPassword,
-        isAdmin: true
+        isAdmin: true,
+        createdAt: new Date(),
       });
       
       console.log('Initial admin user created');

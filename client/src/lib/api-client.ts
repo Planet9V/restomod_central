@@ -47,3 +47,46 @@ export async function fetchCarShowEvents(filters: Record<string, any> = {}) {
     throw error;
   }
 }
+
+// Helper to get auth token from local storage
+function getAuthToken() {
+  const token = localStorage.getItem('auth_token');
+  return token ? `Bearer ${token}` : '';
+}
+
+// GET user's itinerary
+export async function getItinerary() {
+  const response = await fetch(`${API_BASE}/api/itinerary`, {
+    headers: {
+      'Authorization': getAuthToken(),
+    },
+  });
+  if (!response.ok) throw new Error('Failed to fetch itinerary');
+  return response.json();
+}
+
+// POST to add an event to the itinerary
+export async function addToItinerary(eventId: number) {
+  const response = await fetch(`${API_BASE}/api/itinerary`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': getAuthToken(),
+    },
+    body: JSON.stringify({ eventId }),
+  });
+  if (!response.ok) throw new Error('Failed to add to itinerary');
+  return response.json();
+}
+
+// DELETE to remove an event from the itinerary
+export async function removeFromItinerary(eventId: number) {
+  const response = await fetch(`${API_BASE}/api/itinerary/${eventId}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': getAuthToken(),
+    },
+  });
+  if (!response.ok) throw new Error('Failed to remove from itinerary');
+  return response.json();
+}

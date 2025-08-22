@@ -570,26 +570,42 @@ export const getGatewayVehicles = async (filters?: {
   priceMin?: number;
   priceMax?: number;
   year?: number;
+  search?: string;
 }) => {
   let query = db.select().from(schema.gatewayVehicles);
-  
+  const conditions: any[] = [];
+
   if (filters?.make && filters.make !== 'all') {
-    query = query.where(eq(schema.gatewayVehicles.make, filters.make));
+    conditions.push(eq(schema.gatewayVehicles.make, filters.make));
   }
   if (filters?.category && filters.category !== 'all') {
-    query = query.where(eq(schema.gatewayVehicles.category, filters.category));
+    conditions.push(eq(schema.gatewayVehicles.category, filters.category));
   }
   if (filters?.priceMin) {
-    query = query.where(gte(schema.gatewayVehicles.price, filters.priceMin.toString()));
+    conditions.push(gte(schema.gatewayVehicles.price, filters.priceMin.toString()));
   }
   if (filters?.priceMax) {
-    query = query.where(lte(schema.gatewayVehicles.price, filters.priceMax.toString()));
+    conditions.push(lte(schema.gatewayVehicles.price, filters.priceMax.toString()));
   }
   if (filters?.year) {
-    query = query.where(eq(schema.gatewayVehicles.year, filters.year));
+    conditions.push(eq(schema.gatewayVehicles.year, filters.year));
+  }
+  if (filters?.search && filters.search.trim()) {
+    const searchTerm = `%${filters.search.toLowerCase()}%`;
+    conditions.push(
+      or(
+        like(schema.gatewayVehicles.make, searchTerm),
+        like(schema.gatewayVehicles.model, searchTerm),
+        like(schema.gatewayVehicles.description, searchTerm)
+      )
+    );
+  }
+
+  if (conditions.length > 0) {
+    query = query.where(and(...conditions));
   }
   
-  const vehicles = await query.orderBy(schema.gatewayVehicles.year, schema.gatewayVehicles.make);
+  const vehicles = await query.orderBy(desc(schema.gatewayVehicles.year), asc(schema.gatewayVehicles.make));
   return vehicles;
 };
 

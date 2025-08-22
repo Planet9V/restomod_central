@@ -11,6 +11,8 @@ import { SocialShare } from "@/components/SocialShare";
 import { directCarShowService } from "@/services/directCarShowData";
 import { fetchCarShowEvents } from "@/lib/api-client";
 import { EventCardSkeletonGrid } from "@/components/EventCardSkeleton";
+import { useAuth } from "@/hooks/use-auth";
+import { useItinerary } from "@/hooks/use-itinerary";
 
 interface CarShowEvent {
   id: number;
@@ -36,6 +38,9 @@ interface CarShowEvent {
 }
 
 export default function CarShowEvents() {
+  const { isAuthenticated } = useAuth();
+  const { addEvent, removeEvent, isEventInItinerary } = useItinerary();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [eventTypeFilter, setEventTypeFilter] = useState("all_types");
   const [stateFilter, setStateFilter] = useState("all_states");
@@ -143,13 +148,7 @@ export default function CarShowEvents() {
 
   const events = eventsData?.events || [];
 
-  // Filter events by search term
-  const filteredEvents = events.filter((event: CarShowEvent) =>
-    event.eventName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    event.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    event.state.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    event.venue.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredEvents = events;
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -544,6 +543,25 @@ export default function CarShowEvents() {
                           >
                             <ExternalLink className="w-4 h-4 mr-2" />
                             Visit Website
+                          </Button>
+                        )}
+
+                        {isAuthenticated && (
+                          <Button
+                            variant={isEventInItinerary(event.id) ? "secondary" : "default"}
+                            size="sm"
+                            className="w-full bg-orange-600 hover:bg-orange-700 disabled:opacity-50"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (isEventInItinerary(event.id)) {
+                                removeEvent(event.id);
+                              } else {
+                                addEvent(event.id);
+                              }
+                            }}
+                          >
+                            <Star className={`w-4 h-4 mr-2 ${isEventInItinerary(event.id) ? 'text-yellow-400 fill-current' : ''}`} />
+                            {isEventInItinerary(event.id) ? 'In Itinerary' : 'Add to Itinerary'}
                           </Button>
                         )}
                       </CardContent>
