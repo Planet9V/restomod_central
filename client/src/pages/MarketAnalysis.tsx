@@ -25,10 +25,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { ModelValueAnalysis } from "@/components/market/ModelValueAnalysis";
-import { RealtimeResearch } from "@/components/market/RealtimeResearch";
-import { MarketTrendMoodBoard } from "@/components/market/MarketTrendMoodBoard";
 import { EnhancedMarketCharts } from "@/components/market/EnhancedMarketCharts";
-import { GatewayDataCharts } from "@/components/market/GatewayDataCharts";
 import { MODEL_SPECIFIC_VALUATIONS } from "@/data/specific-model-data";
 import gatewayClassicsService from "@/services/gatewayClassicsData";
 
