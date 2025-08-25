@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getGatewayVehicles } from '@server/storage';
+import { getCarsForSale } from '@server/storage';
 
 const carsRouter = Router();
 
@@ -16,7 +16,7 @@ carsRouter.get('/', async (req, res) => {
   };
 
   try {
-    const vehicleList = await getGatewayVehicles(filters);
+    const vehicleList = await getCarsForSale(filters);
     res.json(vehicleList);
   } catch (error) {
     console.error('Error fetching vehicles:', error);

@@ -4,12 +4,12 @@
  */
 
 import { db } from '../db/index.js';
-import { gatewayVehicles } from '../shared/schema.js';
+import { carsForSale } from '../shared/schema.js';
 import fs from 'fs';
 import path from 'path';
 
-async function importGatewayVehicles() {
-  console.log('🚗 IMPORTING ALL GATEWAY CLASSIC CARS INVENTORY...');
+async function importCarsForSale() {
+  console.log('🚗 IMPORTING ALL CARS FOR SALE...');
   
   try {
     // Read authentic Gateway Classic Cars inventory data
@@ -97,34 +97,31 @@ async function importGatewayVehicles() {
             price: price.toFixed(2),
             description: `Authentic ${year} ${make} ${model} from Gateway Classic Cars St. Louis showroom`,
             condition: 'Excellent',
-            location: 'St. Louis, Missouri',
+            locationCity: 'St. Louis',
+            locationState: 'Missouri',
             category: category,
             investmentGrade: investmentGrade,
-            appreciationPotential: investmentGrade.includes('A') ? 'High' : 'Medium',
-            rarity: year < 1950 ? 'Very Rare' : year < 1970 ? 'Rare' : 'Uncommon',
-            restorationLevel: '#2',
+            appreciationRate: investmentGrade.includes('A') ? 'High' : 'Medium',
             marketTrend: 'Stable',
-            daysOnMarket: Math.floor(Math.random() * 120) + 30,
-            viewCount: Math.floor(Math.random() * 500) + 50,
-            inquiryCount: Math.floor(Math.random() * 25) + 3,
             featured: ['corvette', 'mustang', 'gto', 'viper', 'shelby'].some(keyword => 
               model.toLowerCase().includes(keyword) || make.toLowerCase().includes(keyword)),
-            dataSource: 'gateway_classics',
+            sourceType: 'gateway',
+            sourceName: 'Gateway Classic Cars',
             createdAt: new Date(),
             updatedAt: new Date()
           };
           
           try {
-            await db.insert(gatewayVehicles).values(vehicleData);
+            await db.insert(carsForSale).values(vehicleData);
             imported++;
             console.log(`✅ Imported: ${year} ${make} ${model} (${stockNumber})`);
           } catch (error: any) {
             if (error.message?.includes('unique') || error.message?.includes('duplicate')) {
               try {
                 const { eq } = await import('drizzle-orm');
-                await db.update(gatewayVehicles)
+                await db.update(carsForSale)
                   .set(vehicleData)
-                  .where(eq(gatewayVehicles.stockNumber, stockNumber));
+                  .where(eq(carsForSale.stockNumber, stockNumber));
                 updated++;
                 console.log(`🔄 Updated: ${year} ${make} ${model}`);
               } catch (updateError) {
@@ -142,25 +139,24 @@ async function importGatewayVehicles() {
     }
     
     const total = imported + updated;
-    console.log(`🎉 GATEWAY CLASSIC CARS IMPORT COMPLETE!`);
+    console.log(`🎉 CARS FOR SALE IMPORT COMPLETE!`);
     console.log(`✅ NEW: ${imported} authentic vehicles`);
     console.log(`🔄 UPDATED: ${updated} existing vehicles`);
     console.log(`⚠️ SKIPPED: ${skipped} duplicates`);
     console.log(`📊 TOTAL PROCESSED: ${total} authentic vehicles`);
-    console.log(`🎯 YOUR DATABASE NOW HAS COMPLETE GATEWAY CLASSIC CARS INVENTORY!`);
     
     return { success: true, imported, updated, skipped, total };
     
   } catch (error: any) {
-    console.error('❌ GATEWAY IMPORT FAILED:', error);
+    console.error('❌ CARS FOR SALE IMPORT FAILED:', error);
     throw error;
   }
 }
 
 // Execute the import
-importGatewayVehicles()
+importCarsForSale()
   .then((result) => {
-    console.log('🎉 ALL GATEWAY CLASSIC CARS INVENTORY IMPORTED!', result);
+    console.log('🎉 ALL CARS FOR SALE IMPORTED!', result);
     process.exit(0);
   })
   .catch((error) => {

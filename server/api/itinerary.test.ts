@@ -4,8 +4,9 @@ import { createServer, type Server } from 'http';
 import express from 'express';
 import { registerRoutes } from '@server/routes';
 import { db } from '@db';
-import { users, carShowEvents } from '@shared/schema';
+import { users, carShowEvents, userItineraries as itinerary } from '@shared/schema';
 import jwt from 'jsonwebtoken';
+import { eq } from 'drizzle-orm';
 
 let server: Server;
 let app: express.Express;
@@ -21,38 +22,25 @@ beforeAll(async () => {
   server = await registerRoutes(app);
   await new Promise(resolve => server.listen(0, resolve as () => void));
 
-  // Create a test user
-  [testUser] = await db.insert(users).values({
-    username: 'testuser',
-    email: 'test@example.com',
-    password: 'password', // Hashing not needed for this test scope
-    isAdmin: false,
-    createdAt: new Date(),
-  }).returning();
+  // Fetch a user and an event from the seeded database
+  testUser = await db.query.users.findFirst();
+  if (!testUser) {
+    throw new Error('Test setup failed: No user found in the database. Was the database seeded correctly?');
+  }
 
-  // Create a test event
-  [testEvent] = await db.insert(carShowEvents).values({
-    eventName: 'Test Event',
-    eventSlug: 'test-event',
-    venue: 'Test Venue',
-    city: 'Test City',
-    state: 'TS',
-    startDate: new Date(),
-    eventType: 'car_show',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  }).returning();
+  testEvent = await db.query.carShowEvents.findFirst();
+  if (!testEvent) {
+    throw new Error('Test setup failed: No event found in the database. Was the database seeded correctly?');
+  }
 
   // Generate a token for the test user
-  authToken = jwt.sign({ userId: testUser.id, isAdmin: testUser.isAdmin }, JWT_SECRET);
+  authToken = jwt.sign({ userId: testUser.id, isAdmin: testUser.isAdmin }, JWT_SECRET, { expiresIn: '1h' });
+
+  // Ensure itinerary is clean before tests
+  await db.delete(itinerary).where(eq(itinerary.userId, testUser.id));
 });
 
-import { eq } from 'drizzle-orm';
-
-afterAll(async (done) => {
-  // Clean up test data
-  await db.delete(users).where(eq(users.id, testUser.id));
-  await db.delete(carShowEvents).where(eq(carShowEvents.id, testEvent.id));
+afterAll((done) => {
   server.close(done);
 });
 

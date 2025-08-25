@@ -137,15 +137,21 @@ async function createInitialAdmin() {
     if (!adminExists) {
       const hashedPassword = await hashPassword('Jimmy123$');
       
-      await db.insert(users).values({
-        username: 'admin',
-        email: 'jims67mustang@gmail.com',
-        password: hashedPassword,
-        isAdmin: true,
-        createdAt: new Date(),
-      });
-      
-      console.log('Initial admin user created');
+      try {
+        await db.insert(users).values({
+          username: 'admin',
+          email: 'jims67mustang@gmail.com',
+          password: hashedPassword,
+          isAdmin: true,
+          createdAt: new Date(),
+        });
+        console.log('Initial admin user created');
+      } catch (error: any) {
+        // Gracefully handle race condition in parallel tests
+        if (error.code !== 'SQLITE_CONSTRAINT_UNIQUE') {
+          throw error;
+        }
+      }
     }
   } catch (error) {
     console.error('Error creating initial admin user:', error);

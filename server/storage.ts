@@ -578,8 +578,8 @@ export const getCarShowEventsByState = async (state: string) => {
   return events;
 };
 
-// Gateway Classic Cars Inventory Functions
-export const getGatewayVehicles = async (filters?: {
+// Cars for Sale Functions
+export const getCarsForSale = async (filters?: {
   make?: string;
   category?: string;
   priceMin?: number;
@@ -595,31 +595,31 @@ export const getGatewayVehicles = async (filters?: {
     });
   }
 
-  let query = db.select().from(schema.gatewayVehicles);
+  let query = db.select().from(schema.carsForSale);
   const conditions: any[] = [];
 
   if (filters?.make && filters.make !== 'all') {
-    conditions.push(eq(schema.gatewayVehicles.make, filters.make));
+    conditions.push(eq(schema.carsForSale.make, filters.make));
   }
   if (filters?.category && filters.category !== 'all') {
-    conditions.push(eq(schema.gatewayVehicles.category, filters.category));
+    conditions.push(eq(schema.carsForSale.category, filters.category));
   }
   if (filters?.priceMin) {
-    conditions.push(gte(schema.gatewayVehicles.price, filters.priceMin.toString()));
+    conditions.push(gte(schema.carsForSale.price, filters.priceMin.toString()));
   }
   if (filters?.priceMax) {
-    conditions.push(lte(schema.gatewayVehicles.price, filters.priceMax.toString()));
+    conditions.push(lte(schema.carsForSale.price, filters.priceMax.toString()));
   }
   if (filters?.year) {
-    conditions.push(eq(schema.gatewayVehicles.year, filters.year));
+    conditions.push(eq(schema.carsForSale.year, filters.year));
   }
   if (filters?.search && filters.search.trim()) {
     const searchTerm = `%${filters.search.toLowerCase()}%`;
     conditions.push(
       or(
-        like(schema.gatewayVehicles.make, searchTerm),
-        like(schema.gatewayVehicles.model, searchTerm),
-        like(schema.gatewayVehicles.description, searchTerm)
+        like(schema.carsForSale.make, searchTerm),
+        like(schema.carsForSale.model, searchTerm),
+        like(schema.carsForSale.description, searchTerm)
       )
     );
   }
@@ -634,31 +634,31 @@ export const getGatewayVehicles = async (filters?: {
     const caseStatement = sql`CASE ${
       categories.map((category, index) => sql`WHEN lower(category) = ${category.toLowerCase()} THEN ${index}`)
     } ELSE ${categories.length} END`;
-    query = query.orderBy(caseStatement, desc(schema.gatewayVehicles.year));
+    query = query.orderBy(caseStatement, desc(schema.carsForSale.year));
   } else {
-    query = query.orderBy(desc(schema.gatewayVehicles.year), asc(schema.gatewayVehicles.make));
+    query = query.orderBy(desc(schema.carsForSale.year), asc(schema.carsForSale.make));
   }
 
   const vehicles = await query;
   return vehicles;
 };
 
-export const getGatewayVehicleById = async (id: number) => {
-  const vehicles = await query;
+export const getCarForSaleById = async (id: number) => {
+  const [vehicle] = await db.select().from(schema.carsForSale).where(eq(schema.carsForSale.id, id)).limit(1);
   return vehicle;
 };
 
 export const getCarsByState = async (state: string, limit: number = 3) => {
   return await db.select()
-    .from(schema.gatewayVehicles)
-    .where(like(schema.gatewayVehicles.location, `%${state}%`))
+    .from(schema.carsForSale)
+    .where(like(schema.carsForSale.locationState, `%${state}%`))
     .limit(limit);
 };
 
-export const getFeaturedGatewayVehicles = async (limit: number = 6) => {
-  const vehicles = await db.select().from(schema.gatewayVehicles)
-    .where(eq(schema.gatewayVehicles.featured, true))
-    .orderBy(schema.gatewayVehicles.year)
+export const getFeaturedCarsForSale = async (limit: number = 6) => {
+  const vehicles = await db.select().from(schema.carsForSale)
+    .where(eq(schema.carsForSale.featured, true))
+    .orderBy(schema.carsForSale.year)
     .limit(limit);
   return vehicles;
 };
