@@ -136,7 +136,7 @@ export function GatewayDataCharts() {
             </div>
           </CardContent>
         </Card>
-      </div>
+      </motion.div>
 
       {/* Gateway Pricing Trends */}
       <motion.div
