@@ -20,6 +20,7 @@ import itineraryRouter from './api/itinerary';
 import userRouter from './api/user';
 import analyticsRouter from './api/analytics';
 import commentsRouter from './api/comments';
+import vehicleAnalyticsRouter from './api/vehicle-analytics';
 import { scheduleArticleGeneration } from "./services/scheduler";
 import { databaseHealthMonitor } from "./services/databaseHealthCheck";
 import { setupAuth, isAuthenticated, isAdmin, maybeIsAuthenticated } from "./auth";
@@ -886,6 +887,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use(`${apiPrefix}/itinerary`, itineraryRouter);
   app.use(`${apiPrefix}/user`, userRouter);
   app.use(`${apiPrefix}/analytics`, analyticsRouter);
+  app.use(`${apiPrefix}/vehicle-analytics`, vehicleAnalyticsRouter);
   app.use(`${apiPrefix}/comments`, commentsRouter);
 
   app.get(`${apiPrefix}/car-show-events/:id`, async (req, res) => {
