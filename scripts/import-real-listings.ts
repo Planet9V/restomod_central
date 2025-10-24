@@ -14,8 +14,9 @@ async function importRealListings() {
   console.log('🔥 Importing REAL Classic Car Listings\n');
   console.log('='.repeat(60));
 
-  // Read the real listings file
-  const rawData = readFileSync('data/real-listings-found.json', 'utf-8');
+  // Read the real listings file (supports command line argument)
+  const filename = process.argv[2] || 'data/real-listings-found.json';
+  const rawData = readFileSync(filename, 'utf-8');
   const listings = JSON.parse(rawData);
 
   console.log(`\n📊 Found ${listings.length} REAL listings to import`);

@@ -1,0 +1,86 @@
+[
+  {
+    "stockNumber": "CC-1939237",
+    "year": 1967,
+    "make": "Pontiac",
+    "model": "GTO",
+    "price": "$54,900",
+    "location": "Newfield, New Jersey",
+    "dealer": "South Jersey Classics",
+    "dealerPhone": "856-521-0832",
+    "scrapedDate": "2025-10-24",
+    "url": "https://classiccars.com/listings/view/1939237",
+    "exteriorColor": "Tyrol Blue",
+    "description": "Built at Framingham MA, sold new at Maxon Pontiac Inc of Union NJ"
+  },
+  {
+    "stockNumber": "CC-1649045",
+    "year": 1969,
+    "make": "Dodge",
+    "model": "Charger",
+    "price": "$119,995",
+    "location": "Green Brook, New Jersey",
+    "scrapedDate": "2025-10-24",
+    "url": "https://classiccars.com/listings/view/1649045",
+    "exteriorColor": "Kona Blue",
+    "interiorColor": "Black",
+    "mileage": 73685,
+    "engine": "383 Big Block",
+    "transmission": "Automatic",
+    "description": "Numbers matching Mopar 383 Big Block with correct Torqueflite 727 automatic"
+  },
+  {
+    "stockNumber": "CC-1514851",
+    "year": 1970,
+    "make": "Chevrolet",
+    "model": "Chevelle SS",
+    "location": "Winter Garden, Florida",
+    "scrapedDate": "2025-10-24",
+    "url": "https://classiccars.com/listings/view/1514851",
+    "price": "$75,000"
+  },
+  {
+    "stockNumber": "CC-886833",
+    "year": 1968,
+    "make": "Oldsmobile",
+    "model": "442",
+    "location": "Clarksburg, Maryland",
+    "scrapedDate": "2025-10-24",
+    "url": "https://classiccars.com/listings/view/886833",
+    "price": "$65,000"
+  },
+  {
+    "stockNumber": "CC-1920323",
+    "year": 1967,
+    "make": "Chevrolet",
+    "model": "Corvette",
+    "price": "$139,500",
+    "location": "Sarasota, Florida",
+    "mileage": 68051,
+    "transmission": "Manual",
+    "scrapedDate": "2025-10-24",
+    "url": "https://classiccars.com/listings/view/1920323",
+    "exteriorColor": "Black",
+    "interiorColor": "Black"
+  },
+  {
+    "stockNumber": "CC-1516179",
+    "year": 1967,
+    "make": "Chevrolet",
+    "model": "Corvette",
+    "location": "Sarasota, Florida",
+    "scrapedDate": "2025-10-24",
+    "url": "https://classiccars.com/listings/view/1516179",
+    "price": "$95,000"
+  },
+  {
+    "stockNumber": "CC-1389223",
+    "year": 1967,
+    "make": "Chevrolet",
+    "model": "Corvette",
+    "location": "Sarasota, Florida",
+    "scrapedDate": "2025-10-24",
+    "url": "https://classiccars.com/listings/view/1389223",
+    "price": "$85,000"
+  }
+]
