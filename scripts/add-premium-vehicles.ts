@@ -4,7 +4,7 @@
  */
 
 import { db } from "../db";
-import { carsForSale } from "../shared/schema";
+import { carsForSale, priceHistory } from "../shared/schema";
 
 const premiumVehicles = [
   // High-End Restomods (California/West Coast)
@@ -121,11 +121,25 @@ async function addPremiumVehiclesToDatabase(): Promise<{ success: boolean; added
         researchNotes: `Premium vehicle added from ${vehicle.source} research data`
       };
 
-      await db.insert(carsForSale).values(unifiedVehicle);
+      // Phase 2 Task 2.4: Insert vehicle and record initial price history
+      const [insertedVehicle] = await db.insert(carsForSale).values(unifiedVehicle).returning();
+
+      // Record initial price in price history
+      if (insertedVehicle && vehicle.price) {
+        await db.insert(priceHistory).values({
+          vehicleId: insertedVehicle.id,
+          price: vehicle.price.toString(),
+          sourceType: 'import',
+          sourceName: vehicle.source,
+          recordedDate: new Date(),
+          createdAt: new Date()
+        });
+      }
+
       added++;
-      
+
       if (added % 10 === 0) {
-        console.log(`✅ Added ${added} vehicles...`);
+        console.log(`✅ Added ${added} vehicles with price history...`);
       }
       
     } catch (error) {
