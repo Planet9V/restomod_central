@@ -3,8 +3,14 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { scheduleArticleGeneration, cleanupScheduledTasks } from "./services/scheduler";
 import { databaseHealthMonitor } from "./services/databaseHealthCheck";
+import { configureSecurity, setupHealthCheck } from "./middleware/security";
 
 const app = express();
+
+// Security middleware (CORS, Helmet, Rate Limiting)
+console.log('🔒 Configuring security middleware...');
+configureSecurity(app);
+setupHealthCheck(app);
 
 // Ensure API routes are handled before Vite middleware
 app.use(express.json());
