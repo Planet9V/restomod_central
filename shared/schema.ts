@@ -1171,3 +1171,22 @@ export const eventCommentsRelations = relations(eventComments, ({ one }) => ({
 }));
 
 export type EventComment = typeof eventComments.$inferSelect;
+
+/**
+ * Phase 2 Task 2.1: Price History Table
+ * Tracks price changes over time for trend analysis
+ * Enables real appreciation rate calculations
+ */
+export const priceHistory = sqliteTable("price_history", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  vehicleId: integer("vehicle_id").notNull().references(() => carsForSale.id, { onDelete: 'cascade' }),
+  price: text("price").notNull(), // Stored as text for consistency with carsForSale
+  sourceType: text("source_type").notNull(), // 'import', 'update', 'market_analysis'
+  sourceName: text("source_name"), // e.g., 'Perplexity Discovery', 'Manual Import'
+  recordedDate: integer("recorded_date", { mode: 'timestamp' }).notNull(),
+  createdAt: integer("created_at", { mode: 'timestamp' }).notNull(),
+});
+
+export const priceHistoryInsertSchema = createInsertSchema(priceHistory);
+export type InsertPriceHistory = z.infer<typeof priceHistoryInsertSchema>;
+export type PriceHistory = typeof priceHistory.$inferSelect;

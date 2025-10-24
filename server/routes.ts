@@ -20,6 +20,9 @@ import itineraryRouter from './api/itinerary';
 import userRouter from './api/user';
 import analyticsRouter from './api/analytics';
 import commentsRouter from './api/comments';
+import vehicleAnalyticsRouter from './api/vehicle-analytics';
+import priceTrendsRouter from './api/price-trends';
+import vehicleSearchRouter from './api/vehicle-search';
 import { scheduleArticleGeneration } from "./services/scheduler";
 import { databaseHealthMonitor } from "./services/databaseHealthCheck";
 import { setupAuth, isAuthenticated, isAdmin, maybeIsAuthenticated } from "./auth";
@@ -886,6 +889,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use(`${apiPrefix}/itinerary`, itineraryRouter);
   app.use(`${apiPrefix}/user`, userRouter);
   app.use(`${apiPrefix}/analytics`, analyticsRouter);
+  app.use(`${apiPrefix}/vehicle-analytics`, vehicleAnalyticsRouter);
+  app.use(`${apiPrefix}/price-trends`, priceTrendsRouter);
+  app.use(`${apiPrefix}/vehicle-search`, vehicleSearchRouter);
   app.use(`${apiPrefix}/comments`, commentsRouter);
 
   app.get(`${apiPrefix}/car-show-events/:id`, async (req, res) => {
