@@ -575,6 +575,7 @@ export default function CarShowEvents() {
                       </CardContent>
                     </Card>
                   </motion.div>
+                  </Link>
                 ))}
               </div>
             </AnimatePresence>

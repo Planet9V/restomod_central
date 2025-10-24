@@ -617,6 +617,14 @@ export const carShowEvents = sqliteTable("car_show_events", {
   dataSource: text("data_source").default("research_documents"), // 'research_documents', 'gemini_processed', 'manual'
   verificationStatus: text("verification_status").default("pending"), // 'pending', 'verified', 'needs_update'
   lastVerified: integer("last_verified", { mode: 'timestamp' }),
+
+  // Phase 5: Event-Vehicle Cross-Linking fields
+  vehicleMakes: text("vehicle_makes"), // JSON array: ['Ford', 'Chevrolet', 'Dodge']
+  vehicleModels: text("vehicle_models"), // JSON array: ['Mustang', 'Camaro', 'Charger']
+  primaryVehicleFocus: text("primary_vehicle_focus"), // 'make' | 'model' | 'category' | 'era' | 'general'
+  expectedAttendanceMin: integer("expected_attendance_min"),
+  expectedAttendanceMax: integer("expected_attendance_max"),
+
   createdAt: integer("created_at", { mode: 'timestamp' }).notNull(),
   updatedAt: integer("updated_at", { mode: 'timestamp' }).notNull()
 });

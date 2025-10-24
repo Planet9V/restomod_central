@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import { EventVehicleLinks } from '@/components/events/EventVehicleLinks';
 
 const API_BASE = '';
 
@@ -101,6 +102,13 @@ export default function EventDetailsPage() {
                                 <p className="text-gray-300 pt-4">{event.description}</p>
                             </CardContent>
                         </Card>
+
+                        {/* Phase 5: Event-Vehicle Cross-Linking */}
+                        <EventVehicleLinks
+                            eventId={event.id}
+                            eventName={event.eventName}
+                            eventCategory={event.eventCategory}
+                        />
                     </div>
 
                     <div className="space-y-6">
