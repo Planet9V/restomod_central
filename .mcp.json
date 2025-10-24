@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp"],
+      "description": "Browser automation for web scraping classic car listings"
+    },
+    "crawl4ai": {
+      "command": "npx",
+      "args": ["-y", "crawl4ai-mcp-server"],
+      "description": "Self-hosted web scraping (free Firecrawl alternative)"
+    }
+  }
+}
