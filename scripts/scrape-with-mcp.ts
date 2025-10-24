@@ -280,16 +280,5 @@ async function exampleUsage() {
   // await importScrapedVehicles(exampleScrapedData);
 }
 
-// If run directly (for testing)
-if (require.main === module) {
-  console.log('🔍 Scraping Script Framework Ready\n');
-  console.log('This script is meant to be used with Playwright MCP or Crawl4AI MCP.');
-  console.log('\nTo use:');
-  console.log('1. Ensure .mcp.json is configured');
-  console.log('2. Run Claude Code in this project');
-  console.log('3. Ask Claude to scrape ClassicCars.com using Playwright MCP');
-  console.log('4. Import the scraped data using this script\n');
-  console.log('Example prompt:');
-  console.log('  "Use Playwright MCP to scrape 50 Corvettes from ClassicCars.com,');
-  console.log('   then import using scripts/scrape-with-mcp.ts"\n');
-}
+// Export for use in other scripts
+export default { transformToSchema, importScrapedVehicles };
