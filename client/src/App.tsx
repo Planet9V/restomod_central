@@ -28,6 +28,8 @@ import CarShowEvents from "@/pages/CarShowEvents";
 import EventDetailsPage from "@/pages/EventDetailsPage";
 import GatewayVehicles from "@/pages/GatewayVehicles";
 import CarsForSale from "@/pages/CarsForSale";
+import VehicleDetailPage from "@/pages/VehicleDetailPage";
+import MakeHubPage from "@/pages/MakeHubPage";
 import NotFound from "@/pages/not-found";
 
 // Layout components
@@ -74,8 +76,19 @@ function Router() {
         <Route path="/car-show-guide" component={CarShowGuide} />
         <Route path="/car-show-events" component={CarShowEvents} />
         <Route path="/car-show-events/:slug" component={EventDetailsPage} />
+        <Route path="/events" component={CarShowEvents} />
+        <Route path="/events/:slug" component={EventDetailsPage} />
         <Route path="/cars-for-sale" component={CarsForSale} />
+        <Route path="/vehicles/:id" component={VehicleDetailPage} />
         <Route path="/gateway-vehicles" component={GatewayVehicles} />
+
+        {/* Phase 5: Make/Model Hub Pages */}
+        <Route path="/mustang" component={MakeHubPage} />
+        <Route path="/corvette" component={MakeHubPage} />
+        <Route path="/camaro" component={MakeHubPage} />
+        <Route path="/ford" component={MakeHubPage} />
+        <Route path="/chevrolet" component={MakeHubPage} />
+
         <Route path="/auth" component={AuthPage} />
         <Route path="/admin" component={() => <ProtectedRoute component={AdminDashboard} adminOnly />} />
         <Route component={NotFound} />
