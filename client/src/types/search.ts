@@ -51,6 +51,11 @@ export interface SearchResponse {
   queryTime: string;
   performance: string;
   engine: string;
+  facets?: SearchFacets;
+  stats?: {
+    categories: FacetCount[];
+    regions: FacetCount[];
+  };
 }
 
 export interface AutocompleteResponse {
