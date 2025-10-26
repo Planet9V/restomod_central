@@ -11,6 +11,10 @@
     "firecrawl": {
       "command": "npx",
       "args": ["-y", "firecrawl-mcp"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@executeautomation/playwright-mcp-server"]
     }
   }
 }
