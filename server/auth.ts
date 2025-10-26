@@ -5,8 +5,13 @@ import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-// JWT secret key
-const JWT_SECRET = process.env.JWT_SECRET || 'skinnyrod-secret-key';
+// JWT secret key (⚠️ DEVELOPMENT ENVIRONMENT)
+const JWT_SECRET = process.env.JWT_SECRET || (() => {
+  console.warn('⚠️  WARNING: JWT_SECRET not set! Using default development secret.');
+  console.warn('   This is INSECURE for production. Set JWT_SECRET environment variable.');
+  console.warn('   Generate one with: openssl rand -base64 32');
+  return 'DEV_JWT_SECRET_CHANGE_IN_PRODUCTION_' + Math.random().toString(36);
+})();
 
 // Password hashing
 async function hashPassword(password: string): Promise<string> {
@@ -127,25 +132,42 @@ export function setupAuth(app: Express) {
   });
 }
 
-// Create initial admin user
+// Create initial admin user (⚠️ DEVELOPMENT ENVIRONMENT ONLY)
 async function createInitialAdmin() {
   try {
+    // Get admin credentials from environment or use dev defaults
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@restomod.local';
+    const adminPassword = process.env.ADMIN_PASSWORD || 'ChangeMe123!';
+    const adminUsername = process.env.ADMIN_USERNAME || 'admin';
+
+    // Warn about development credentials
+    if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD) {
+      console.warn('\n' + '='.repeat(70));
+      console.warn('⚠️  WARNING: Using default development admin credentials!');
+      console.warn('   Email: ' + adminEmail);
+      console.warn('   Password: ' + adminPassword);
+      console.warn('   CHANGE THESE IMMEDIATELY IN PRODUCTION!');
+      console.warn('   Set ADMIN_EMAIL and ADMIN_PASSWORD environment variables.');
+      console.warn('='.repeat(70) + '\n');
+    }
+
     const adminExists = await db.query.users.findFirst({
-      where: eq(users.email, 'jims67mustang@gmail.com')
+      where: eq(users.email, adminEmail)
     });
-    
+
     if (!adminExists) {
-      const hashedPassword = await hashPassword('Jimmy123$');
-      
+      const hashedPassword = await hashPassword(adminPassword);
+
       await db.insert(users).values({
-        username: 'admin',
-        email: 'jims67mustang@gmail.com',
+        username: adminUsername,
+        email: adminEmail,
         password: hashedPassword,
         isAdmin: true,
         createdAt: new Date(),
       });
-      
-      console.log('Initial admin user created');
+
+      console.log(`✅ Initial admin user created: ${adminEmail}`);
+      console.log('   Please change the password after first login!');
     }
   } catch (error) {
     console.error('Error creating initial admin user:', error);

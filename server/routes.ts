@@ -23,6 +23,8 @@ import commentsRouter from './api/comments';
 import vehicleAnalyticsRouter from './api/vehicle-analytics';
 import priceTrendsRouter from './api/price-trends';
 import vehicleSearchRouter from './api/vehicle-search';
+import scraperRouter from './api/scraper';
+import playwrightScraperRouter from './api/playwright-scraper';
 import { scheduleArticleGeneration } from "./services/scheduler";
 import { databaseHealthMonitor } from "./services/databaseHealthCheck";
 import { setupAuth, isAuthenticated, isAdmin, maybeIsAuthenticated } from "./auth";
@@ -892,6 +894,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use(`${apiPrefix}/vehicle-analytics`, vehicleAnalyticsRouter);
   app.use(`${apiPrefix}/price-trends`, priceTrendsRouter);
   app.use(`${apiPrefix}/vehicle-search`, vehicleSearchRouter);
+  app.use(`${apiPrefix}/scraper`, scraperRouter);
+  app.use(`${apiPrefix}/playwright-scraper`, playwrightScraperRouter);
   app.use(`${apiPrefix}/comments`, commentsRouter);
 
   app.get(`${apiPrefix}/car-show-events/:id`, async (req, res) => {

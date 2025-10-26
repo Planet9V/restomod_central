@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
-import { PlusCircle, Car, Users, Settings, LogOut, Home, Loader2, Edit, Trash2, AlertCircle, Star, FileText, Sliders } from 'lucide-react';
+import { PlusCircle, Car, Users, Settings, LogOut, Home, Loader2, Edit, Trash2, AlertCircle, Star, FileText, Sliders, Search, TrendingUp } from 'lucide-react';
 import { LuxuryShowcasesTab } from '@/components/admin/LuxuryShowcasesTab';
 import { ResearchArticleManager } from '@/components/admin/ResearchArticleManager';
 import { ConfiguratorManager } from '@/components/admin/ConfiguratorManager';
@@ -240,7 +240,7 @@ export default function AdminDashboard() {
             <span>Research Articles</span>
           </button>
 
-          <button 
+          <button
             className={`admin-sidebar-link ${activeTab === 'car-configurator' ? 'active' : ''}`}
             onClick={() => setActiveTab('car-configurator')}
           >
@@ -248,7 +248,15 @@ export default function AdminDashboard() {
             <span>Car Configurator</span>
           </button>
 
-          <button 
+          <button
+            className={`admin-sidebar-link ${activeTab === 'scraper' ? 'active' : ''}`}
+            onClick={() => setActiveTab('scraper')}
+          >
+            <Search className="h-5 w-5" />
+            <span>Scraper Management</span>
+          </button>
+
+          <button
             className={`admin-sidebar-link ${activeTab === 'team' ? 'active' : ''}`}
             onClick={() => setActiveTab('team')}
           >
@@ -300,6 +308,251 @@ export default function AdminDashboard() {
               </div>
             </div>
             <ConfiguratorManager />
+          </TabsContent>
+
+          <TabsContent value="scraper" className="mt-0 h-full">
+            <div className="admin-section-header">
+              <div>
+                <h1 className="text-3xl font-bold tracking-tight">Scraper Management</h1>
+                <p className="text-[var(--admin-muted)]">Manage car searches, scraping jobs, and automation schedules</p>
+              </div>
+              <button className="admin-button-primary flex items-center">
+                <Search className="mr-2 h-4 w-4" />
+                Start New Scrape
+              </button>
+            </div>
+
+            {/* Statistics Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+              <div className="admin-card">
+                <div className="admin-card-header">
+                  <h3 className="admin-card-title text-sm font-medium">Total Cars Found</h3>
+                </div>
+                <div className="admin-card-content">
+                  <div className="text-3xl font-bold text-[var(--admin-primary)]">625</div>
+                  <p className="text-xs text-[var(--admin-muted)] mt-1">From all sources</p>
+                </div>
+              </div>
+
+              <div className="admin-card">
+                <div className="admin-card-header">
+                  <h3 className="admin-card-title text-sm font-medium">Scheduled Jobs</h3>
+                </div>
+                <div className="admin-card-content">
+                  <div className="text-3xl font-bold text-[var(--admin-accent)]">3</div>
+                  <p className="text-xs text-[var(--admin-muted)] mt-1">Active schedules</p>
+                </div>
+              </div>
+
+              <div className="admin-card">
+                <div className="admin-card-header">
+                  <h3 className="admin-card-title text-sm font-medium">Completed Jobs</h3>
+                </div>
+                <div className="admin-card-content">
+                  <div className="text-3xl font-bold text-green-600">47</div>
+                  <p className="text-xs text-[var(--admin-muted)] mt-1">Last 30 days</p>
+                </div>
+              </div>
+
+              <div className="admin-card">
+                <div className="admin-card-header">
+                  <h3 className="admin-card-title text-sm font-medium">Active Tools</h3>
+                </div>
+                <div className="admin-card-content">
+                  <div className="text-3xl font-bold text-orange-600">5</div>
+                  <p className="text-xs text-[var(--admin-muted)] mt-1">Scraping services</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Top 5 Source Websites */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+              <div className="admin-card">
+                <div className="admin-card-header">
+                  <h3 className="admin-card-title">Top 5 Source Websites</h3>
+                  <p className="admin-card-description">Most vehicles scraped from these sources</p>
+                </div>
+                <div className="admin-card-content">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-[var(--admin-primary)]/10 rounded-full flex items-center justify-center text-[var(--admin-primary)] font-bold text-sm">1</div>
+                        <div>
+                          <p className="font-medium">Bring a Trailer</p>
+                          <p className="text-xs text-[var(--admin-muted)]">bringatrailer.com</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-[var(--admin-primary)]">178</p>
+                        <p className="text-xs text-[var(--admin-muted)]">vehicles</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-[var(--admin-accent)]/10 rounded-full flex items-center justify-center text-[var(--admin-accent)] font-bold text-sm">2</div>
+                        <div>
+                          <p className="font-medium">Hemmings</p>
+                          <p className="text-xs text-[var(--admin-muted)]">hemmings.com</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-[var(--admin-accent)]">142</p>
+                        <p className="text-xs text-[var(--admin-muted)]">vehicles</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-orange-600/10 rounded-full flex items-center justify-center text-orange-600 font-bold text-sm">3</div>
+                        <div>
+                          <p className="font-medium">Classic Cars</p>
+                          <p className="text-xs text-[var(--admin-muted)]">classiccars.com</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-orange-600">98</p>
+                        <p className="text-xs text-[var(--admin-muted)]">vehicles</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-zinc-400/10 rounded-full flex items-center justify-center text-zinc-600 font-bold text-sm">4</div>
+                        <div>
+                          <p className="font-medium">eBay Motors</p>
+                          <p className="text-xs text-[var(--admin-muted)]">ebay.com/motors</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-zinc-600">76</p>
+                        <p className="text-xs text-[var(--admin-muted)]">vehicles</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-zinc-400/10 rounded-full flex items-center justify-center text-zinc-600 font-bold text-sm">5</div>
+                        <div>
+                          <p className="font-medium">Cars & Bids</p>
+                          <p className="text-xs text-[var(--admin-muted)]">carsandbids.com</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-zinc-600">131</p>
+                        <p className="text-xs text-[var(--admin-muted)]">vehicles</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Trends Chart Placeholder */}
+              <div className="admin-card">
+                <div className="admin-card-header">
+                  <h3 className="admin-card-title">Scraping Trends</h3>
+                  <p className="admin-card-description">Vehicles found over the last 30 days</p>
+                </div>
+                <div className="admin-card-content">
+                  <div className="flex items-center justify-center h-64 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
+                    <div className="text-center">
+                      <TrendingUp className="w-12 h-12 text-[var(--admin-muted)] mx-auto mb-2" />
+                      <p className="text-[var(--admin-muted)]">Chart visualization coming soon</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Scheduled Jobs */}
+            <div className="admin-card mb-6">
+              <div className="admin-card-header">
+                <h3 className="admin-card-title">Scheduled Scraping Jobs</h3>
+                <p className="admin-card-description">Automated scraping schedules</p>
+              </div>
+              <div className="admin-card-content">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                      <div>
+                        <p className="font-medium">Daily Classic Car Scan</p>
+                        <p className="text-xs text-[var(--admin-muted)]">Runs every day at 2:00 AM</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-green-500/10 text-green-600">Active</span>
+                      <button className="admin-button-outline py-1 px-3 text-sm">Edit</button>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                      <div>
+                        <p className="font-medium">Weekly Auction Monitor</p>
+                        <p className="text-xs text-[var(--admin-muted)]">Runs every Monday at 6:00 AM</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-green-500/10 text-green-600">Active</span>
+                      <button className="admin-button-outline py-1 px-3 text-sm">Edit</button>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-zinc-400 rounded-full"></div>
+                      <div>
+                        <p className="font-medium">Hourly Price Updates</p>
+                        <p className="text-xs text-[var(--admin-muted)]">Runs every hour</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-zinc-400/10 text-zinc-600">Paused</span>
+                      <button className="admin-button-outline py-1 px-3 text-sm">Edit</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Recent Jobs */}
+            <div className="admin-card">
+              <div className="admin-card-header">
+                <h3 className="admin-card-title">Recent Scraping Jobs</h3>
+                <p className="admin-card-description">Latest completed scraping operations</p>
+              </div>
+              <div className="admin-card-content">
+                <div className="space-y-2">
+                  {[
+                    { id: 1, query: 'Mustang Fastback', results: 23, time: '2 hours ago', status: 'completed' },
+                    { id: 2, query: 'Chevelle SS', results: 18, time: '5 hours ago', status: 'completed' },
+                    { id: 3, query: 'Corvette C2', results: 31, time: '8 hours ago', status: 'completed' },
+                    { id: 4, query: 'Camaro Z28', results: 15, time: '12 hours ago', status: 'completed' },
+                    { id: 5, query: 'GTO Judge', results: 9, time: '1 day ago', status: 'completed' },
+                  ].map((job) => (
+                    <div key={job.id} className="flex items-center justify-between p-3 border border-[var(--admin-card-border)] rounded-lg">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-[var(--admin-accent)]/10 rounded flex items-center justify-center">
+                          <Search className="w-4 h-4 text-[var(--admin-accent)]" />
+                        </div>
+                        <div>
+                          <p className="font-medium">{job.query}</p>
+                          <p className="text-xs text-[var(--admin-muted)]">{job.time} • {job.results} results</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-green-500/10 text-green-600">
+                          {job.status}
+                        </span>
+                        <button className="admin-button-outline py-1 px-3 text-sm">View</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </TabsContent>
 
           <TabsContent value="projects" className="mt-0 h-full">
