@@ -6,6 +6,46 @@
 
 ---
 
+## 🔑 Development API Key Preservation (Constitutional Requirement)
+
+**MANDATE:** During active development, API keys shall be preserved and available in the `.env` file for continuous use. This is a constitutional requirement to enable rapid, AI-assisted development.
+
+### Development Key Management Policy
+
+**For Development Environment:**
+- ✅ **API keys stored in `.env` file** - All development keys preserved in one location
+- ✅ **`.env` file is gitignored** - Never committed to repository (added to .gitignore)
+- ✅ **Keys documented** - Each key labeled with service name and purpose
+- ✅ **Keys remain active** - Preserved for duration of development sprint
+- ✅ **AI-accessible** - Keys available to AI assistants and development tools
+- ✅ **Dated** - Keys marked with "Current as of [date]" for tracking
+
+**For Production Environment:**
+- ⚠️ **NEVER use development keys in production**
+- ⚠️ **Generate separate production keys** with strict scoping
+- ⚠️ **Use cloud secret management** (Railway, Vercel, AWS Secrets Manager)
+- ⚠️ **Implement access controls** with role-based permissions
+
+**Key Rotation Strategy:**
+- 📅 **Development keys:** Rotate quarterly or when development phase ends
+- 📅 **Production keys:** Rotate monthly or immediately after security incident
+- 📅 **Documentation:** Update `.env` comments with last rotation date
+
+**Current Development Keys Location:**
+```bash
+/home/user/restomod_central/.env
+```
+
+**Gitignore Protection:**
+```bash
+# Verified in .gitignore:
+.env
+.env.local
+.env.*.local
+```
+
+---
+
 ## 🚨 Critical Security Rules
 
 ### Rule 1: NEVER Commit Secrets to Git
