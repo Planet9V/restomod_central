@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "title": "Engineering Excellence",
+    "description": "Advanced chassis design, systems integration, and performance optimization using cutting-edge tools and methodologies. Every vehicle is virtually prototyped before fabrication begins.",
+    "icon": "Settings",
+    "order": 1,
+    "created_at": "2025-08-22T04:06:41.000Z"
+  },
+  {
+    "id": 2,
+    "title": "Master Craftsmanship",
+    "description": "Decades of hands-on expertise in metal fabrication, bodywork, paint, and interior craftsmanship. Each panel is hand-shaped and fitted with precision that exceeds factory standards.",
+    "icon": "Mic",
+    "order": 2,
+    "created_at": "2025-08-22T04:06:41.000Z"
+  },
+  {
+    "id": 3,
+    "title": "Collaborative Process",
+    "description": "Our transparent, client-centered approach combines your vision with our expertise. Regular updates and consultations ensure your dream vehicle evolves exactly as you imagine.",
+    "icon": "Users",
+    "order": 3,
+    "created_at": "2025-08-22T04:06:41.000Z"
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "name": "McKenney Engineering & Design",
+    "description": [
+      "Founded by James McKenney, a mechanical engineer with a passion for automotive design, McKenney Engineering brings rigorous engineering principles to classic vehicle design.",
+      "Their expertise in systems integration, performance optimization, and advanced CAD/CAM techniques ensures every vehicle performs as good as it looks."
+    ],
+    "image": "https://images.unsplash.com/photo-1560253023-3ec5d502959f?q=80&w=1600&auto=format&fit=crop",
+    "order": 1,
+    "created_at": "2025-08-22T04:06:41.000Z"
+  },
+  {
+    "id": 2,
+    "name": "Skinny's Rod and Custom",
+    "description": [
+      "With over 25 years in the hot rod and custom car industry, Dave \"Skinny\" Johnson has built a reputation for exceptional craftsmanship and attention to detail.",
+      "Skinny's team of artisans specializes in bodywork, fabrication, paint, and interior work that showcases the soul and character of classic vehicles while achieving concourse-level finishes."
+    ],
+    "image": "https://images.unsplash.com/photo-1559760434-0981df057e83?q=80&w=1600&auto=format&fit=crop",
+    "order": 2,
+    "created_at": "2025-08-22T04:06:41.000Z"
+  }
+]

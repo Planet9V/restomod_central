@@ -9,9 +9,20 @@ if (!process.env.DATABASE_URL) {
 const isPostgres = process.env.DATABASE_URL.startsWith('postgresql://') ||
                    process.env.DATABASE_URL.startsWith('postgres://');
 
+// Use POSTGRES_SCHEMA environment variable to select schema (default to SQLite for backward compatibility)
+const usePostgresSchema = process.env.POSTGRES_SCHEMA === "true" || isPostgres;
+
+// Select schema file based on database type
+const schemaFile = usePostgresSchema ? "./shared/postgres-schema.ts" : "./shared/schema.ts";
+
+console.log(`🔧 Drizzle Config:`);
+console.log(`   Database Type: ${isPostgres ? 'PostgreSQL' : 'SQLite'}`);
+console.log(`   Schema File: ${schemaFile}`);
+console.log(`   Output Dir: ./db/migrations`);
+
 export default defineConfig({
   out: "./db/migrations",
-  schema: "./shared/schema.ts",
+  schema: schemaFile,
   dialect: isPostgres ? "postgresql" : "sqlite",
   dbCredentials: isPostgres ? {
     url: process.env.DATABASE_URL,
@@ -19,4 +30,5 @@ export default defineConfig({
     url: process.env.DATABASE_URL,
   },
   verbose: true,
+  strict: true,
 });

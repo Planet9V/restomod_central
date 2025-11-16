@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "quote": "The attention to detail and engineering excellence that McKenney & Skinny's put into my '67 Mustang exceeded all expectations. It's the perfect blend of classic style and modern performance.",
+    "author_name": "Robert Maxwell",
+    "author_location": "Portland, Oregon",
+    "author_image": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop",
+    "created_at": "2025-08-22T04:06:41.000Z"
+  },
+  {
+    "id": 2,
+    "quote": "After researching numerous builders, I chose McKenney & Skinny's for their transparent process and engineering-first approach. They transformed my Bronco into the perfect weekend adventure vehicle.",
+    "author_name": "Jennifer Harmon",
+    "author_location": "Austin, Texas",
+    "author_image": "https://images.unsplash.com/photo-1614283233556-f35b0c801ef1?q=80&w=200&auto=format&fit=crop",
+    "created_at": "2025-08-22T04:06:41.000Z"
+  },
+  {
+    "id": 3,
+    "quote": "The level of communication and collaboration throughout the build was exceptional. They made my vision for a modern classic Porsche 911 a reality, with performance that rivals modern sports cars.",
+    "author_name": "David Kawecki",
+    "author_location": "Chicago, Illinois",
+    "author_image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop",
+    "created_at": "2025-08-22T04:06:41.000Z"
+  }
+]

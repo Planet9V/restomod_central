@@ -1,0 +1,311 @@
+{
+  "timestamp": "2025-11-16T23:37:14.444Z",
+  "database": "/home/user/restomod_central/db/local.db",
+  "tables": {
+    "users": {
+      "count": 1,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/users.json"
+    },
+    "projects": {
+      "count": 1,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/projects.json"
+    },
+    "testimonials": {
+      "count": 3,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/testimonials.json"
+    },
+    "team_members": {
+      "count": 4,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/team_members.json"
+    },
+    "companies": {
+      "count": 2,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/companies.json"
+    },
+    "newsletter_subscribers": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/newsletter_subscribers.json"
+    },
+    "contact_submissions": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/contact_submissions.json"
+    },
+    "hero_content": {
+      "count": 1,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/hero_content.json"
+    },
+    "engineering_features": {
+      "count": 3,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/engineering_features.json"
+    },
+    "market_data": {
+      "count": 1,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/market_data.json"
+    },
+    "process_steps": {
+      "count": 4,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/process_steps.json"
+    },
+    "luxury_showcases": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/luxury_showcases.json"
+    },
+    "research_articles": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/research_articles.json"
+    },
+    "engine_options": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/engine_options.json"
+    },
+    "transmission_options": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/transmission_options.json"
+    },
+    "color_options": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/color_options.json"
+    },
+    "wheel_options": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/wheel_options.json"
+    },
+    "interior_options": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/interior_options.json"
+    },
+    "ai_options": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/ai_options.json"
+    },
+    "additional_options": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/additional_options.json"
+    },
+    "user_configurations": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/user_configurations.json"
+    },
+    "user_preferences": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/user_preferences.json"
+    },
+    "market_valuations": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/market_valuations.json"
+    },
+    "builder_profiles": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/builder_profiles.json"
+    },
+    "technical_specifications": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/technical_specifications.json"
+    },
+    "event_venues": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/event_venues.json"
+    },
+    "build_guides": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/build_guides.json"
+    },
+    "investment_analytics": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/investment_analytics.json"
+    },
+    "vendor_partnerships": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/vendor_partnerships.json"
+    },
+    "car_show_events": {
+      "count": 17,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/car_show_events.json"
+    },
+    "gateway_vehicles": {
+      "count": 90,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/gateway_vehicles.json"
+    },
+    "enhanced_vehicle_platforms": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/enhanced_vehicle_platforms.json"
+    },
+    "enhanced_engine_options": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/enhanced_engine_options.json"
+    },
+    "enhanced_transmission_options": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/enhanced_transmission_options.json"
+    },
+    "configurator_suspension_options": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/configurator_suspension_options.json"
+    },
+    "configurator_rear_axle_options": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/configurator_rear_axle_options.json"
+    },
+    "configurator_fuel_system_options": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/configurator_fuel_system_options.json"
+    },
+    "enhanced_interior_options": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/enhanced_interior_options.json"
+    },
+    "configurator_bodywork_options": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/configurator_bodywork_options.json"
+    },
+    "configurator_glass_options": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/configurator_glass_options.json"
+    },
+    "configurator_customer_configurations": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/configurator_customer_configurations.json"
+    },
+    "configurator_car_models": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/configurator_car_models.json"
+    },
+    "simple_transmission_options": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/simple_transmission_options.json"
+    },
+    "configurator_color_options": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/configurator_color_options.json"
+    },
+    "configurator_wheel_options": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/configurator_wheel_options.json"
+    },
+    "configurator_interior_options": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/configurator_interior_options.json"
+    },
+    "cars_for_sale": {
+      "count": 512,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/cars_for_sale.json"
+    },
+    "user_itineraries": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/user_itineraries.json"
+    },
+    "event_comments": {
+      "count": 0,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/event_comments.json"
+    },
+    "price_history": {
+      "count": 5648,
+      "status": "success",
+      "file": "/home/user/restomod_central/data/migration/price_history.json"
+    }
+  },
+  "totalRecords": 6287,
+  "summary": [
+    {
+      "table": "price_history",
+      "count": 5648
+    },
+    {
+      "table": "cars_for_sale",
+      "count": 512
+    },
+    {
+      "table": "gateway_vehicles",
+      "count": 90
+    },
+    {
+      "table": "car_show_events",
+      "count": 17
+    },
+    {
+      "table": "team_members",
+      "count": 4
+    },
+    {
+      "table": "process_steps",
+      "count": 4
+    },
+    {
+      "table": "testimonials",
+      "count": 3
+    },
+    {
+      "table": "engineering_features",
+      "count": 3
+    },
+    {
+      "table": "companies",
+      "count": 2
+    },
+    {
+      "table": "users",
+      "count": 1
+    },
+    {
+      "table": "projects",
+      "count": 1
+    },
+    {
+      "table": "hero_content",
+      "count": 1
+    },
+    {
+      "table": "market_data",
+      "count": 1
+    }
+  ]
+}

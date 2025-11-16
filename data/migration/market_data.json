@@ -1,0 +1,65 @@
+[
+  {
+    "id": 1,
+    "market_growth_data": [
+      {
+        "year": 2018,
+        "value": 100
+      },
+      {
+        "year": 2019,
+        "value": 115
+      },
+      {
+        "year": 2020,
+        "value": 132
+      },
+      {
+        "year": 2021,
+        "value": 152
+      },
+      {
+        "year": 2022,
+        "value": 175
+      },
+      {
+        "year": 2023,
+        "value": 201
+      }
+    ],
+    "demographic_data": [
+      {
+        "name": "Baby Boomers",
+        "value": 45
+      },
+      {
+        "name": "Gen X",
+        "value": 35
+      },
+      {
+        "name": "Millennials",
+        "value": 18
+      },
+      {
+        "name": "Gen Z",
+        "value": 2
+      }
+    ],
+    "platforms": [
+      "1960s-70s American Muscle (Mustang, Camaro, Challenger)",
+      "Classic European Sports Cars (Porsche 911, Jaguar E-Type)",
+      "Classic 4x4s (Bronco, Land Cruiser, Defender)",
+      "1950s American Icons (Bel Air, Thunderbird)",
+      "Classic Pickup Trucks (F-100, C10)"
+    ],
+    "modifications": [
+      "Modern fuel-injected engines (LS/LT, Coyote)",
+      "Advanced suspension systems (IRS, coilovers)",
+      "Modern HVAC and comfort features",
+      "Integrated infotainment and connectivity",
+      "Upgraded braking systems (Wilwood, Brembo)"
+    ],
+    "roi": "+42%",
+    "created_at": "2025-08-22T04:06:41.000Z"
+  }
+]

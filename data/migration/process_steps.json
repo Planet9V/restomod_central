@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "title": "Initial Consultation & Vision",
+    "description": "We begin with in-depth discussions about your dream vehicle. What inspires you? What level of performance do you desire? How will you use the vehicle? This crucial phase sets the foundation for our design approach.",
+    "image": "https://images.unsplash.com/photo-1581093588401-fbb62a02f120?q=80&w=1600&auto=format&fit=crop",
+    "alt": "Initial consultation",
+    "order": 1,
+    "created_at": "2025-08-22T04:06:41.000Z"
+  },
+  {
+    "id": 2,
+    "title": "Design & Engineering",
+    "description": "Our engineering team creates detailed specifications and 3D models to optimize performance, ergonomics, and aesthetics. We collaborate with you to refine the design until every detail meets our exacting standards.",
+    "image": "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=1600&auto=format&fit=crop",
+    "alt": "Design and engineering",
+    "order": 2,
+    "created_at": "2025-08-22T04:06:41.000Z"
+  },
+  {
+    "id": 3,
+    "title": "Fabrication & Assembly",
+    "description": "Our master craftsmen begin the meticulous process of building your vehicle. From chassis modifications to custom bodywork, every component is fabricated or modified with precision and care.",
+    "image": "https://images.unsplash.com/photo-1621905251918-48416bd8575a?q=80&w=1600&auto=format&fit=crop",
+    "alt": "Fabrication and assembly",
+    "order": 3,
+    "created_at": "2025-08-22T04:06:41.000Z"
+  },
+  {
+    "id": 4,
+    "title": "Finishing & Delivery",
+    "description": "After rigorous testing and quality assurance, your vehicle receives its final detailing. We provide comprehensive documentation, maintenance guidance, and a thorough handover to ensure you get the most from your bespoke creation.",
+    "image": "https://images.unsplash.com/photo-1601055903647-ddf1ee9701b5?q=80&w=1600&auto=format&fit=crop",
+    "alt": "Finishing and delivery",
+    "order": 4,
+    "created_at": "2025-08-22T04:06:41.000Z"
+  }
+]
