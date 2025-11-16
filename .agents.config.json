@@ -1,0 +1,606 @@
+{
+  "version": "1.0",
+  "orchestrationMode": "parallel-collaborative",
+  "maxConcurrentAgents": 7,
+  "agentTypes": {
+    "taskmaster": {
+      "role": "orchestrator",
+      "priority": 1,
+      "capabilities": [
+        "task-decomposition",
+        "agent-assignment",
+        "progress-tracking",
+        "resource-allocation"
+      ],
+      "ai_model": "claude-3-5-sonnet-20241022",
+      "max_tokens": 4000,
+      "tools": ["all"]
+    },
+
+    "spec-analyst": {
+      "role": "analysis",
+      "priority": 2,
+      "capabilities": [
+        "spec-validation",
+        "requirement-analysis",
+        "gap-detection",
+        "compliance-checking"
+      ],
+      "ai_model": "claude-3-5-sonnet-20241022",
+      "max_tokens": 8000,
+      "tools": ["read", "grep", "web_search"],
+      "contextFiles": [
+        "docs/SPEC_*.md",
+        "docs/SPECIFICATIONS_SUMMARY.md"
+      ]
+    },
+
+    "database-architect": {
+      "role": "implementation",
+      "priority": 3,
+      "capabilities": [
+        "schema-design",
+        "migration-generation",
+        "query-optimization",
+        "index-strategy"
+      ],
+      "ai_model": "claude-3-5-sonnet-20241022",
+      "max_tokens": 6000,
+      "tools": ["read", "write", "edit", "bash"],
+      "contextFiles": [
+        "docs/SPEC_01_DATABASE_SCHEMA.md",
+        "shared/schema.ts",
+        "db/**/*.ts"
+      ]
+    },
+
+    "api-engineer": {
+      "role": "implementation",
+      "priority": 3,
+      "capabilities": [
+        "endpoint-creation",
+        "validation-logic",
+        "auth-implementation",
+        "api-documentation"
+      ],
+      "ai_model": "claude-3-5-sonnet-20241022",
+      "max_tokens": 6000,
+      "tools": ["read", "write", "edit", "bash"],
+      "contextFiles": [
+        "docs/SPEC_02_API_ENDPOINTS.md",
+        "server/routes.ts",
+        "server/api/**/*.ts"
+      ]
+    },
+
+    "ui-designer": {
+      "role": "implementation",
+      "priority": 3,
+      "capabilities": [
+        "component-creation",
+        "styling-implementation",
+        "responsive-design",
+        "accessibility-compliance"
+      ],
+      "ai_model": "claude-3-5-sonnet-20241022",
+      "max_tokens": 6000,
+      "tools": ["read", "write", "edit", "glob"],
+      "contextFiles": [
+        "docs/SPEC_03_UI_UX_DESIGN.md",
+        "client/src/components/**/*.tsx",
+        "client/src/pages/**/*.tsx"
+      ]
+    },
+
+    "ai-specialist": {
+      "role": "implementation",
+      "priority": 4,
+      "capabilities": [
+        "embedding-generation",
+        "vector-search",
+        "llm-integration",
+        "prompt-engineering"
+      ],
+      "ai_model": "claude-3-5-sonnet-20241022",
+      "max_tokens": 6000,
+      "tools": ["read", "write", "edit", "web_search"],
+      "contextFiles": [
+        "docs/SPEC_04_AI_CHAT_SYSTEM.md",
+        "server/services/ai/**/*.ts"
+      ]
+    },
+
+    "scraper-engineer": {
+      "role": "implementation",
+      "priority": 4,
+      "capabilities": [
+        "playwright-setup",
+        "anti-bot-bypass",
+        "data-extraction",
+        "scraping-orchestration"
+      ],
+      "ai_model": "claude-3-5-sonnet-20241022",
+      "max_tokens": 6000,
+      "tools": ["read", "write", "edit", "bash", "web_search"],
+      "contextFiles": [
+        "docs/SPEC_05_SCRAPING_SYSTEM.md",
+        "server/services/scraping/**/*.ts"
+      ]
+    },
+
+    "test-engineer": {
+      "role": "quality-assurance",
+      "priority": 5,
+      "capabilities": [
+        "unit-test-creation",
+        "integration-testing",
+        "e2e-testing",
+        "test-coverage-analysis"
+      ],
+      "ai_model": "claude-3-5-sonnet-20241022",
+      "max_tokens": 4000,
+      "tools": ["read", "write", "edit", "bash"],
+      "contextFiles": [
+        "**/*.test.ts",
+        "**/*.spec.ts"
+      ]
+    },
+
+    "documentation-writer": {
+      "role": "documentation",
+      "priority": 6,
+      "capabilities": [
+        "api-docs-generation",
+        "code-documentation",
+        "readme-updates",
+        "changelog-generation"
+      ],
+      "ai_model": "claude-3-5-sonnet-20241022",
+      "max_tokens": 4000,
+      "tools": ["read", "write", "edit", "glob"],
+      "contextFiles": [
+        "docs/**/*.md",
+        "README.md",
+        "CHANGELOG.md"
+      ]
+    },
+
+    "code-reviewer": {
+      "role": "quality-assurance",
+      "priority": 7,
+      "capabilities": [
+        "code-review",
+        "best-practices-checking",
+        "security-analysis",
+        "performance-optimization"
+      ],
+      "ai_model": "claude-3-5-sonnet-20241022",
+      "max_tokens": 4000,
+      "tools": ["read", "grep", "glob"],
+      "contextFiles": ["**/*.ts", "**/*.tsx"]
+    }
+  },
+
+  "workflows": {
+    "full-implementation": {
+      "description": "Complete implementation from spec to deployment",
+      "agents": [
+        {
+          "type": "taskmaster",
+          "phase": "planning",
+          "tasks": [
+            "Analyze all specifications",
+            "Create detailed task breakdown",
+            "Assign agents to tasks",
+            "Create dependency graph"
+          ]
+        },
+        {
+          "type": "spec-analyst",
+          "phase": "validation",
+          "parallel": false,
+          "tasks": [
+            "Validate all specs are complete",
+            "Check for conflicts",
+            "Generate implementation checklist"
+          ]
+        },
+        {
+          "type": "database-architect",
+          "phase": "implementation",
+          "parallel": true,
+          "parallelGroup": 1,
+          "tasks": [
+            "Create schema based on SPEC_01",
+            "Generate migrations",
+            "Set up pgvector",
+            "Create indexes"
+          ]
+        },
+        {
+          "type": "api-engineer",
+          "phase": "implementation",
+          "parallel": true,
+          "parallelGroup": 1,
+          "tasks": [
+            "Create auth endpoints",
+            "Implement car endpoints",
+            "Implement event endpoints",
+            "Set up SSE streaming"
+          ]
+        },
+        {
+          "type": "ui-designer",
+          "phase": "implementation",
+          "parallel": true,
+          "parallelGroup": 1,
+          "tasks": [
+            "Implement Rolls-Royce theme",
+            "Create core components",
+            "Build page layouts",
+            "Add responsive design"
+          ]
+        },
+        {
+          "type": "ai-specialist",
+          "phase": "implementation",
+          "parallel": true,
+          "parallelGroup": 2,
+          "tasks": [
+            "Set up embedding service",
+            "Implement vector search",
+            "Create AI chat service",
+            "Integrate Claude streaming"
+          ]
+        },
+        {
+          "type": "scraper-engineer",
+          "phase": "implementation",
+          "parallel": true,
+          "parallelGroup": 2,
+          "tasks": [
+            "Set up Playwright stealth",
+            "Create scraping configs",
+            "Implement anti-bot bypass",
+            "Build job queue system"
+          ]
+        },
+        {
+          "type": "test-engineer",
+          "phase": "testing",
+          "parallel": true,
+          "parallelGroup": 3,
+          "tasks": [
+            "Write unit tests",
+            "Create integration tests",
+            "Set up E2E tests",
+            "Run test coverage analysis"
+          ]
+        },
+        {
+          "type": "documentation-writer",
+          "phase": "documentation",
+          "parallel": true,
+          "parallelGroup": 3,
+          "tasks": [
+            "Generate API docs",
+            "Update README",
+            "Create deployment guide",
+            "Write changelog"
+          ]
+        },
+        {
+          "type": "code-reviewer",
+          "phase": "review",
+          "parallel": false,
+          "tasks": [
+            "Review all code changes",
+            "Check spec compliance",
+            "Analyze security",
+            "Optimize performance"
+          ]
+        }
+      ]
+    },
+
+    "quick-feature": {
+      "description": "Rapid feature implementation with parallel agents",
+      "maxAgents": 5,
+      "agents": [
+        {
+          "type": "taskmaster",
+          "phase": "planning",
+          "tasks": ["Analyze feature request", "Create task plan"]
+        },
+        {
+          "type": "database-architect",
+          "phase": "implementation",
+          "parallel": true,
+          "condition": "requiresDatabase"
+        },
+        {
+          "type": "api-engineer",
+          "phase": "implementation",
+          "parallel": true,
+          "condition": "requiresAPI"
+        },
+        {
+          "type": "ui-designer",
+          "phase": "implementation",
+          "parallel": true,
+          "condition": "requiresUI"
+        },
+        {
+          "type": "test-engineer",
+          "phase": "testing",
+          "parallel": true
+        },
+        {
+          "type": "code-reviewer",
+          "phase": "review",
+          "parallel": false
+        }
+      ]
+    },
+
+    "spec-creation": {
+      "description": "Create comprehensive spec before implementation",
+      "agents": [
+        {
+          "type": "taskmaster",
+          "phase": "planning",
+          "tasks": ["Analyze requirements", "Identify spec components"]
+        },
+        {
+          "type": "spec-analyst",
+          "phase": "analysis",
+          "parallel": false,
+          "tasks": [
+            "Research best practices",
+            "Analyze similar systems",
+            "Create spec outline"
+          ]
+        },
+        {
+          "type": "database-architect",
+          "phase": "spec-writing",
+          "parallel": true,
+          "condition": "requiresDatabase",
+          "tasks": ["Write database spec section"]
+        },
+        {
+          "type": "api-engineer",
+          "phase": "spec-writing",
+          "parallel": true,
+          "condition": "requiresAPI",
+          "tasks": ["Write API spec section"]
+        },
+        {
+          "type": "ui-designer",
+          "phase": "spec-writing",
+          "parallel": true,
+          "condition": "requiresUI",
+          "tasks": ["Write UI/UX spec section"]
+        },
+        {
+          "type": "documentation-writer",
+          "phase": "finalization",
+          "tasks": ["Compile complete spec", "Format for review"]
+        },
+        {
+          "type": "code-reviewer",
+          "phase": "review",
+          "tasks": ["Review spec completeness", "Check feasibility"]
+        }
+      ]
+    },
+
+    "bug-fix": {
+      "description": "Rapid bug identification and fix",
+      "maxAgents": 4,
+      "agents": [
+        {
+          "type": "taskmaster",
+          "phase": "investigation",
+          "tasks": ["Analyze bug report", "Identify affected components"]
+        },
+        {
+          "type": "code-reviewer",
+          "phase": "investigation",
+          "parallel": true,
+          "tasks": ["Review related code", "Identify root cause"]
+        },
+        {
+          "type": "test-engineer",
+          "phase": "investigation",
+          "parallel": true,
+          "tasks": ["Create reproduction test"]
+        },
+        {
+          "type": "api-engineer",
+          "phase": "fix",
+          "parallel": false,
+          "condition": "backendBug",
+          "tasks": ["Implement fix", "Add regression test"]
+        },
+        {
+          "type": "ui-designer",
+          "phase": "fix",
+          "parallel": false,
+          "condition": "frontendBug",
+          "tasks": ["Implement fix", "Add regression test"]
+        },
+        {
+          "type": "code-reviewer",
+          "phase": "review",
+          "tasks": ["Verify fix", "Check for side effects"]
+        }
+      ]
+    }
+  },
+
+  "parallelProcessing": {
+    "enabled": true,
+    "maxConcurrent": 7,
+    "strategy": "dynamic",
+    "resourceAllocation": {
+      "cpu": "auto",
+      "memory": "auto",
+      "priority": "balanced"
+    },
+    "dependencies": {
+      "trackAutomatically": true,
+      "resolveConflicts": "queue",
+      "waitForDependencies": true
+    },
+    "optimization": {
+      "enabled": true,
+      "balanceLoad": true,
+      "minimizeWaitTime": true,
+      "parallelizeIndependentTasks": true
+    }
+  },
+
+  "communication": {
+    "protocol": "event-driven",
+    "channels": [
+      {
+        "name": "agent-coordination",
+        "type": "broadcast",
+        "subscribers": ["all"]
+      },
+      {
+        "name": "task-completion",
+        "type": "pubsub",
+        "subscribers": ["taskmaster", "code-reviewer"]
+      },
+      {
+        "name": "error-reporting",
+        "type": "direct",
+        "subscribers": ["taskmaster"]
+      }
+    ],
+    "statusUpdates": {
+      "frequency": "real-time",
+      "format": "json",
+      "destination": "logs/agent-activity.json"
+    }
+  },
+
+  "personas": {
+    "taskmaster": {
+      "name": "Commander",
+      "description": "Strategic orchestrator with military precision",
+      "traits": ["analytical", "decisive", "organized", "efficient"],
+      "communication_style": "direct and clear"
+    },
+    "spec-analyst": {
+      "name": "Architect",
+      "description": "Meticulous planner who ensures perfection",
+      "traits": ["detailed", "thorough", "precise", "methodical"],
+      "communication_style": "comprehensive and structured"
+    },
+    "database-architect": {
+      "name": "Foundation Expert",
+      "description": "Builds rock-solid data foundations",
+      "traits": ["reliable", "efficient", "scalable-minded", "optimizing"],
+      "communication_style": "technical and precise"
+    },
+    "api-engineer": {
+      "name": "Bridge Builder",
+      "description": "Connects systems with elegant interfaces",
+      "traits": ["pragmatic", "RESTful", "secure", "documented"],
+      "communication_style": "clear and specification-driven"
+    },
+    "ui-designer": {
+      "name": "Experience Crafter",
+      "description": "Creates beautiful, intuitive interfaces",
+      "traits": ["aesthetic", "user-focused", "responsive", "accessible"],
+      "communication_style": "visual and empathetic"
+    },
+    "ai-specialist": {
+      "name": "Intelligence Architect",
+      "description": "Harnesses AI for powerful capabilities",
+      "traits": ["innovative", "research-driven", "precise", "adaptive"],
+      "communication_style": "technical and forward-thinking"
+    },
+    "scraper-engineer": {
+      "name": "Data Hunter",
+      "description": "Ethically acquires valuable data",
+      "traits": ["creative", "persistent", "ethical", "problem-solver"],
+      "communication_style": "solution-oriented"
+    },
+    "test-engineer": {
+      "name": "Quality Guardian",
+      "description": "Ensures reliability and correctness",
+      "traits": ["thorough", "skeptical", "meticulous", "automated"],
+      "communication_style": "evidence-based"
+    },
+    "documentation-writer": {
+      "name": "Knowledge Keeper",
+      "description": "Makes complex systems understandable",
+      "traits": ["clear", "comprehensive", "organized", "helpful"],
+      "communication_style": "explanatory and accessible"
+    },
+    "code-reviewer": {
+      "name": "Quality Sentinel",
+      "description": "Maintains high standards and best practices",
+      "traits": ["critical", "constructive", "experienced", "balanced"],
+      "communication_style": "analytical and educational"
+    }
+  },
+
+  "tools": {
+    "internetSearch": {
+      "enabled": true,
+      "engines": ["brave", "perplexity", "websearch"],
+      "useCases": [
+        "best-practices-research",
+        "library-documentation",
+        "problem-solving",
+        "technology-trends"
+      ]
+    },
+    "codeAnalysis": {
+      "enabled": true,
+      "tools": ["grep", "glob", "read"],
+      "patterns": ["**/*.ts", "**/*.tsx", "**/*.json"]
+    },
+    "hooks": {
+      "enabled": true,
+      "types": [
+        "pre-commit",
+        "post-commit",
+        "pre-push",
+        "post-merge"
+      ],
+      "customHooks": {
+        "spec-validation": {
+          "trigger": "pre-commit",
+          "command": "npm run docs:validate-specs"
+        },
+        "auto-docs": {
+          "trigger": "post-commit",
+          "command": "npm run docs:update"
+        }
+      }
+    }
+  },
+
+  "monitoring": {
+    "enabled": true,
+    "metrics": [
+      "task-completion-time",
+      "agent-utilization",
+      "parallel-efficiency",
+      "error-rate",
+      "spec-compliance"
+    ],
+    "logging": {
+      "level": "info",
+      "destination": "logs/agents/",
+      "format": "json",
+      "includeContext": true
+    }
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "version": "1.0",
+  "project": {
+    "name": "Luxury Classic Car Marketplace",
+    "description": "Rolls-Royce themed automotive platform with AI capabilities",
+    "type": "fullstack",
+    "framework": "react-express"
+  },
+
+  "commit": {
+    "interactive": true,
+    "specDriven": true,
+    "requireSpecReference": true,
+    "template": {
+      "prefix": "[SPEC-{{spec_id}}]",
+      "types": [
+        "feat",
+        "fix",
+        "docs",
+        "style",
+        "refactor",
+        "test",
+        "chore",
+        "spec"
+      ],
+      "scopes": [
+        "database",
+        "api",
+        "ui",
+        "ai-chat",
+        "scraping",
+        "admin",
+        "auth"
+      ]
+    },
+    "hooks": {
+      "preCommit": [
+        "npm run check",
+        "npm run test"
+      ],
+      "postCommit": [
+        "npm run docs:update"
+      ]
+    }
+  },
+
+  "changelog": {
+    "output": "CHANGELOG.md",
+    "groupBy": "scope",
+    "includeSpecs": true,
+    "template": "## {{version}} ({{date}})\n\n### Spec Implementations\n{{spec_items}}\n\n### Features\n{{features}}\n\n### Fixes\n{{fixes}}\n\n### Documentation\n{{docs}}"
+  },
+
+  "readme": {
+    "output": "README.md",
+    "sections": [
+      "project-overview",
+      "tech-stack",
+      "features",
+      "getting-started",
+      "specifications",
+      "api-docs",
+      "deployment",
+      "contributing"
+    ],
+    "autoGenerateApiDocs": true,
+    "includeSpecLinks": true
+  },
+
+  "review": {
+    "verbose": true,
+    "checklist": [
+      "Spec compliance",
+      "TypeScript types",
+      "Error handling",
+      "Test coverage",
+      "Documentation",
+      "Performance",
+      "Security"
+    ],
+    "autoFix": {
+      "enabled": true,
+      "types": ["formatting", "imports", "types"]
+    },
+    "aiModels": {
+      "primary": "claude-3-5-sonnet-20241022",
+      "fallback": "gpt-4-turbo"
+    }
+  },
+
+  "docs": {
+    "output": "docs/",
+    "autoGenerate": true,
+    "formats": ["markdown", "json"],
+    "includes": [
+      "api-endpoints",
+      "database-schema",
+      "component-hierarchy",
+      "ai-system",
+      "scraping-system"
+    ],
+    "syncWithSpecs": true,
+    "specDirectory": "docs/",
+    "specPattern": "SPEC_*.md"
+  },
+
+  "specDriven": {
+    "enabled": true,
+    "directory": "docs/",
+    "pattern": "SPEC_*.md",
+    "requireApprovalBeforeImplementation": true,
+    "trackImplementationStatus": true,
+    "statusFile": "docs/SPEC_STATUS.json",
+    "validation": {
+      "enforceSpecReference": true,
+      "requireTestsForSpecs": true,
+      "requireDocsForSpecs": true
+    }
+  },
+
+  "agentOrchestration": {
+    "enabled": true,
+    "maxParallelAgents": 7,
+    "configFile": ".agents.config.json",
+    "orchestrator": {
+      "type": "taskmaster",
+      "strategy": "intelligent",
+      "autoOptimize": true
+    }
+  }
+}
