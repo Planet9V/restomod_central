@@ -27,6 +27,9 @@ import eventVehicleLinksRouter from './api/event-vehicle-links';
 import { scheduleArticleGeneration } from "./services/scheduler";
 import { databaseHealthMonitor } from "./services/databaseHealthCheck";
 import { setupAuth, isAuthenticated, isAdmin, maybeIsAuthenticated } from "./auth";
+import authRouter from './routes/auth';
+import newCarsRouter from './routes/cars';
+import { requireAuth, requireAdmin, optionalAuth } from './middleware/authMiddleware';
 
 // Helper functions for investment analysis
 function getInvestmentGrade(make: string, model: string, year: number, category?: string): string {
@@ -50,9 +53,12 @@ function getAppreciationRate(category?: string, year?: number): string {
 export async function registerRoutes(app: Express): Promise<Server> {
   // API routes prefix
   const apiPrefix = "/api";
-  
-  // Setup authentication routes
+
+  // Setup authentication routes (legacy)
   setupAuth(app);
+
+  // New enhanced authentication routes (SPEC_02 compliant)
+  app.use(`${apiPrefix}/auth`, authRouter);
 
   // Hero content
   app.get(`${apiPrefix}/hero`, async (req, res) => {
@@ -886,7 +892,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Get single car show event by ID
   app.use(`${apiPrefix}/events`, eventsRouter);
-  app.use(`${apiPrefix}/cars`, carsRouter);
+
+  // New SPEC_02 compliant cars API (replaces old carsRouter)
+  app.use(`${apiPrefix}/cars`, newCarsRouter);
+  // app.use(`${apiPrefix}/cars`, carsRouter); // Legacy - commented out
+
   app.use(`${apiPrefix}/itinerary`, itineraryRouter);
   app.use(`${apiPrefix}/user`, userRouter);
   app.use(`${apiPrefix}/analytics`, analyticsRouter);
