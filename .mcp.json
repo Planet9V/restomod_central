@@ -9,6 +9,16 @@
       "command": "npx",
       "args": ["-y", "crawl4ai-mcp-server"],
       "description": "Self-hosted web scraping (free Firecrawl alternative)"
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "description": "Up-to-date code documentation for LLMs - prevents hallucinated APIs"
+    },
+    "spec-driven": {
+      "command": "npx",
+      "args": ["-y", "mcp-server-spec-driven-development@latest"],
+      "description": "Spec-driven development MCP server - enforces specification-first development"
     }
   }
 }
