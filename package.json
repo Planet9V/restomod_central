@@ -21,6 +21,9 @@
     "db:seed": "tsx db/seed.ts",
     "import:events": "tsx scripts/import-midwest-shows.js",
     "import:cars": "tsx scripts/import-gateway-vehicles.ts",
+    "import:1000-cars": "tsx scripts/import-1000-cars.ts",
+    "import:batch": "tsx scripts/import-scraped-batch.ts",
+    "cars:report": "tsx scripts/daily-report.ts",
     "test": "vitest run"
   },
   "dependencies": {
