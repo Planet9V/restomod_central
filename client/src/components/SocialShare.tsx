@@ -65,8 +65,8 @@ export function SocialShare({
     window.open(shareUrl, '_blank', 'width=600,height=400,scrollbars=yes,resizable=yes');
     
     // Track sharing event for analytics
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'share', {
+    if (typeof window !== 'undefined' && 'gtag' in window) {
+      (window as any).gtag('event', 'share', {
         method: platform,
         content_type: 'article',
         item_id: url

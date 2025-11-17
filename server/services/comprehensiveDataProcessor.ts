@@ -1,12 +1,35 @@
 import fs from 'fs';
 import path from 'path';
 
+// Type definitions for all data structures
+interface AllDataStructure {
+  marketValuations: Record<string, unknown>[];
+  builderProfiles: Record<string, unknown>[];
+  technicalSpecs: Record<string, unknown>[];
+  eventVenues: Record<string, unknown>[];
+  vendorPartnerships: Record<string, unknown>[];
+  buildGuides: Record<string, unknown>[];
+  investmentAnalytics: Record<string, unknown>[];
+  carModels: Record<string, unknown>[];
+  engineOptions: Record<string, unknown>[];
+  transmissionOptions: Record<string, unknown>[];
+  colorOptions: Record<string, unknown>[];
+  wheelOptions: Record<string, unknown>[];
+  interiorOptions: Record<string, unknown>[];
+  projects: Record<string, unknown>[];
+  testimonials: Record<string, unknown>[];
+  processSteps: Record<string, unknown>[];
+  engineeringFeatures: Record<string, unknown>[];
+}
+
+type ExtractedDataKey = keyof AllDataStructure;
+
 /**
  * Comprehensive Data Processor for ALL Automotive Research Documents
  * Extracts every piece of valuable data from your extensive research files
  */
 export class ComprehensiveDataProcessor {
-  
+
   private documentPaths = [
     'attached_assets/Classic restomod valuations .txt',
     'attached_assets/1960s ford restomod how to .md',
@@ -21,9 +44,9 @@ export class ComprehensiveDataProcessor {
    * Process ALL research documents comprehensively
    */
   async processAllDocuments() {
-    console.log('🚀 Processing ALL automotive research documents comprehensively...');
-    
-    let allData = {
+    console.log('Processing ALL automotive research documents comprehensively...');
+
+    const allData: AllDataStructure = {
       marketValuations: [],
       builderProfiles: [],
       technicalSpecs: [],
@@ -48,14 +71,16 @@ export class ComprehensiveDataProcessor {
         const fullPath = path.join(process.cwd(), docPath);
         if (fs.existsSync(fullPath)) {
           const content = fs.readFileSync(fullPath, 'utf-8');
-          console.log(`📄 Processing: ${docPath} (${content.length} characters)`);
-          
+          console.log(`Processing: ${docPath} (${content.length} characters)`);
+
           const extractedData = await this.extractDataFromDocument(content, docPath);
-          
+
           // Merge all extracted data
-          Object.keys(extractedData).forEach(key => {
-            if (allData[key] && Array.isArray(allData[key])) {
-              allData[key] = [...allData[key], ...extractedData[key]];
+          Object.keys(extractedData).forEach((key) => {
+            const typedKey = key as ExtractedDataKey;
+            const extractedArray = extractedData[typedKey];
+            if (allData[typedKey] && Array.isArray(allData[typedKey]) && Array.isArray(extractedArray)) {
+              allData[typedKey] = [...allData[typedKey], ...extractedArray];
             }
           });
         }
@@ -65,11 +90,11 @@ export class ComprehensiveDataProcessor {
     }
 
     // Store in global for API access
-    (global as any).authenticData = allData;
-    
-    const totalRecords = Object.values(allData).reduce((sum, arr: any[]) => sum + arr.length, 0);
-    console.log(`✅ Comprehensive processing complete! Total records: ${totalRecords}`);
-    
+    (global as typeof globalThis & { authenticData: AllDataStructure }).authenticData = allData;
+
+    const totalRecords = Object.values(allData).reduce((sum, arr) => sum + arr.length, 0);
+    console.log(`Comprehensive processing complete! Total records: ${totalRecords}`);
+
     return {
       success: true,
       data: allData,
@@ -81,7 +106,7 @@ export class ComprehensiveDataProcessor {
   /**
    * Extract structured data from each document based on content type
    */
-  private async extractDataFromDocument(content: string, docPath: string) {
+  private async extractDataFromDocument(content: string, docPath: string): Promise<Partial<AllDataStructure>> {
     const filename = path.basename(docPath);
     
     if (filename.includes('Classic restomod valuations')) {
@@ -99,16 +124,16 @@ export class ComprehensiveDataProcessor {
     } else if (filename.includes('Interactive-Car-Configurator')) {
       return this.extractConfiguratorData(content);
     }
-    
-    return {};
+
+    return {} as Partial<AllDataStructure>;
   }
 
   /**
    * Extract comprehensive valuation data
    */
-  private extractValuationData(content: string) {
-    const marketValuations = [];
-    const builderProfiles = [];
+  private extractValuationData(content: string): Partial<AllDataStructure> {
+    const marketValuations: Record<string, unknown>[] = [];
+    const builderProfiles: Record<string, unknown>[] = [];
     
     // Extract Ford Mustang valuations
     const mustangMatches = content.match(/1965 Ford Mustang.*?\$[\d,]+/g) || [];
@@ -180,10 +205,10 @@ export class ComprehensiveDataProcessor {
   /**
    * Extract technical specifications and build guides
    */
-  private extractTechnicalData(content: string) {
-    const technicalSpecs = [];
-    const buildGuides = [];
-    const engineOptions = [];
+  private extractTechnicalData(content: string): Partial<AllDataStructure> {
+    const technicalSpecs: Record<string, unknown>[] = [];
+    const buildGuides: Record<string, unknown>[] = [];
+    const engineOptions: Record<string, unknown>[] = [];
 
     // Extract Coyote engine data
     if (content.includes('Coyote') || content.includes('5.0L')) {
@@ -265,8 +290,8 @@ export class ComprehensiveDataProcessor {
   /**
    * Extract event venues and car show data
    */
-  private extractEventData(content: string) {
-    const eventVenues = [];
+  private extractEventData(content: string): Partial<AllDataStructure> {
+    const eventVenues: Record<string, unknown>[] = [];
 
     eventVenues.push(
       {
@@ -313,8 +338,8 @@ export class ComprehensiveDataProcessor {
   /**
    * Extract vendor partnerships and affiliate data
    */
-  private extractVendorData(content: string) {
-    const vendorPartnerships = [];
+  private extractVendorData(content: string): Partial<AllDataStructure> {
+    const vendorPartnerships: Record<string, unknown>[] = [];
 
     vendorPartnerships.push(
       {
@@ -353,8 +378,8 @@ export class ComprehensiveDataProcessor {
   /**
    * Extract market research and investment data
    */
-  private extractMarketData(content: string) {
-    const investmentAnalytics = [];
+  private extractMarketData(content: string): Partial<AllDataStructure> {
+    const investmentAnalytics: Record<string, unknown>[] = [];
 
     investmentAnalytics.push(
       {
@@ -389,9 +414,9 @@ export class ComprehensiveDataProcessor {
   /**
    * Extract project and portfolio data
    */
-  private extractProjectData(content: string) {
-    const projects = [];
-    const processSteps = [];
+  private extractProjectData(content: string): Partial<AllDataStructure> {
+    const projects: Record<string, unknown>[] = [];
+    const processSteps: Record<string, unknown>[] = [];
 
     projects.push({
       id: 'joe_rogan_camaro',
@@ -432,10 +457,10 @@ export class ComprehensiveDataProcessor {
   /**
    * Extract car configurator data
    */
-  private extractConfiguratorData(content: string) {
-    const carModels = [];
-    const colorOptions = [];
-    const wheelOptions = [];
+  private extractConfiguratorData(content: string): Partial<AllDataStructure> {
+    const carModels: Record<string, unknown>[] = [];
+    const colorOptions: Record<string, unknown>[] = [];
+    const wheelOptions: Record<string, unknown>[] = [];
 
     carModels.push(
       {
@@ -486,7 +511,7 @@ export class ComprehensiveDataProcessor {
     return match ? match[0] : '1960s';
   }
 
-  private getDataStats(data: any) {
+  private getDataStats(data: AllDataStructure) {
     return {
       marketValuations: data.marketValuations?.length || 0,
       builderProfiles: data.builderProfiles?.length || 0,

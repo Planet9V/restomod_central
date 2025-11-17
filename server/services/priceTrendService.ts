@@ -15,7 +15,18 @@ export class PriceTrendService {
    * @param timeframeMonths - Number of months to analyze (default: 12)
    * @returns Appreciation data or null if insufficient data
    */
-  async calculateAppreciation(vehicleId: number, timeframeMonths: number = 12) {
+  async calculateAppreciation(vehicleId: number, timeframeMonths: number = 12): Promise<{
+    vehicleId: number;
+    startPrice: number;
+    currentPrice: number;
+    percentageChange: number;
+    annualizedRate: string;
+    dataPoints: number;
+    trend: 'rising' | 'stable' | 'declining';
+    timeframe: string;
+    oldestDate: Date;
+    newestDate: Date;
+  } | null> {
     try {
       // Calculate cutoff date
       const cutoffDate = new Date();
@@ -81,7 +92,11 @@ export class PriceTrendService {
    * @param model - Vehicle model (e.g., "Camaro")
    * @returns Historical price data points
    */
-  async calculateMakeModelTrends(make: string, model: string) {
+  async calculateMakeModelTrends(make: string, model: string): Promise<Array<{
+    date: string;
+    avgPrice: number;
+    dataPoints: number;
+  }>> {
     try {
       // Get all vehicles matching make/model
       const vehicles = await db
@@ -98,7 +113,7 @@ export class PriceTrendService {
         return [];
       }
 
-      const vehicleIds = vehicles.map(v => v.id);
+      const vehicleIds = vehicles.map((v: { id: number }) => v.id);
 
       // Get price history for all matching vehicles, grouped by date
       const history = await db
@@ -108,11 +123,11 @@ export class PriceTrendService {
           count: sql<number>`COUNT(*)`.as('count')
         })
         .from(priceHistory)
-        .where(sql`${priceHistory.vehicleId} IN (${sql.join(vehicleIds.map(id => sql`${id}`), sql`, `)})`)
+        .where(sql`${priceHistory.vehicleId} IN (${sql.join(vehicleIds.map((id: number) => sql`${id}`), sql`, `)})`)
         .groupBy(sql`DATE(${priceHistory.recordedDate})`)
         .orderBy(sql`DATE(${priceHistory.recordedDate})`);
 
-      return history.map(h => ({
+      return history.map((h: { recordedDate: string; avgPrice: number; count: number }) => ({
         date: h.recordedDate,
         avgPrice: parseFloat(h.avgPrice.toFixed(2)),
         dataPoints: h.count
@@ -128,7 +143,16 @@ export class PriceTrendService {
    * @param limit - Number of recent changes to return
    * @returns Recent price updates
    */
-  async getRecentPriceChanges(limit: number = 20) {
+  async getRecentPriceChanges(limit: number = 20): Promise<Array<{
+    vehicleId: number;
+    price: string;
+    sourceType: string;
+    sourceName: string | null;
+    recordedDate: Date;
+    make: string | null;
+    model: string | null;
+    year: number | null;
+  }>> {
     try {
       const changes = await db
         .select({

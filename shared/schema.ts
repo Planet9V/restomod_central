@@ -423,6 +423,10 @@ export const userPreferencesRelations = relations(userPreferences, ({ one }) => 
   }),
 }));
 
+export const userPreferencesInsertSchema = createInsertSchema(userPreferences);
+export type InsertUserPreference = z.infer<typeof userPreferencesInsertSchema>;
+export type UserPreference = typeof userPreferences.$inferSelect;
+
 export const userConfigurationsInsertSchema = createInsertSchema(userConfigurations);
 export type InsertUserConfiguration = z.infer<typeof userConfigurationsInsertSchema>;
 export type UserConfiguration = typeof userConfigurations.$inferSelect;

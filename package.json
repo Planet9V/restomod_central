@@ -1,8 +1,15 @@
 {
-  "name": "rest-express",
+  "name": "restomod-central",
   "version": "1.0.0",
+  "description": "A comprehensive platform for classic car enthusiasts, builders, and collectors",
   "type": "module",
   "license": "MIT",
+  "author": "Planet9V",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Planet9V/restomod_central.git"
+  },
+  "keywords": ["classic-cars", "restomod", "car-shows", "automotive", "react", "typescript", "drizzle-orm"],
   "scripts": {
     "dev": "tsx server/index.ts",
     "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",

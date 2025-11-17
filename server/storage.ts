@@ -644,7 +644,9 @@ export const getGatewayVehicles = async (filters?: {
 };
 
 export const getGatewayVehicleById = async (id: number) => {
-  const vehicles = await query;
+  const vehicle = await db.query.gatewayVehicles.findFirst({
+    where: eq(schema.gatewayVehicles.id, id),
+  });
   return vehicle;
 };
 

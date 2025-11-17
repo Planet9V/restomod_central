@@ -4,19 +4,19 @@
  */
 
 import { db } from "@db";
-import { carShowEvents, carsForSale } from "@shared/schema";
+import { carShowEvents, carsForSale, type CarForSale, type CarShowEvent } from "@shared/schema";
 import { and, gte, lte, like, or, desc, asc, sql, eq } from "drizzle-orm";
 
 export interface VehicleMatch {
-  vehicle: any;
+  vehicle: CarForSale;
   matchType: 'exact_make' | 'exact_model' | 'category' | 'geographic' | 'general';
   matchScore: number;
   distance?: number;
 }
 
 export interface EventMatch {
-  event: any;
-  matchType: 'exact_make' | 'exact_model' | 'category' | 'geographic' | 'temporal';
+  event: CarShowEvent;
+  matchType: 'exact_make' | 'exact_model' | 'category' | 'geographic' | 'temporal' | 'general';
   matchScore: number;
   daysUntilEvent: number;
 }
@@ -51,7 +51,7 @@ export class EventVehicleMatchingService {
           orderBy: desc(carsForSale.investmentGrade)
         });
 
-        vehicles.forEach(v => {
+        vehicles.forEach((v: CarForSale) => {
           matches.push({
             vehicle: v,
             matchType: 'exact_make',
@@ -79,7 +79,7 @@ export class EventVehicleMatchingService {
         orderBy: desc(carsForSale.investmentGrade)
       });
 
-      categoryVehicles.forEach(v => {
+      categoryVehicles.forEach((v: CarForSale) => {
         if (!matches.find(m => m.vehicle.id === v.id)) {
           matches.push({
             vehicle: v,
@@ -98,7 +98,7 @@ export class EventVehicleMatchingService {
         orderBy: desc(carsForSale.createdAt)
       });
 
-      localVehicles.forEach(v => {
+      localVehicles.forEach((v: CarForSale) => {
         if (!matches.find(m => m.vehicle.id === v.id)) {
           matches.push({
             vehicle: v,
@@ -121,7 +121,7 @@ export class EventVehicleMatchingService {
         orderBy: desc(carsForSale.price)
       });
 
-      investmentVehicles.forEach(v => {
+      investmentVehicles.forEach((v: CarForSale) => {
         if (!matches.find(m => m.vehicle.id === v.id)) {
           matches.push({
             vehicle: v,
@@ -227,7 +227,11 @@ export class EventVehicleMatchingService {
    * Get vehicle statistics for a specific make
    * Used for make/model hub pages
    */
-  async getMakeStatistics(make: string) {
+  async getMakeStatistics(make: string): Promise<{
+    totalListings: number;
+    averagePrice: number;
+    investmentGradeDistribution: Array<{ grade: string | null; count: number }>;
+  }> {
     const totalListings = await db
       .select({ count: sql<number>`count(*)` })
       .from(carsForSale)
@@ -258,7 +262,7 @@ export class EventVehicleMatchingService {
    * Get upcoming events for a specific make
    * Used for make/model hub pages
    */
-  async getEventsForMake(make: string, limit: number = 6) {
+  async getEventsForMake(make: string, limit: number = 6): Promise<CarShowEvent[]> {
     const now = new Date();
     const sixMonthsFromNow = new Date();
     sixMonthsFromNow.setMonth(sixMonthsFromNow.getMonth() + 6);
