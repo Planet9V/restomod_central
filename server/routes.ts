@@ -29,6 +29,7 @@ import { databaseHealthMonitor } from "./services/databaseHealthCheck";
 import { setupAuth, isAuthenticated, isAdmin, maybeIsAuthenticated } from "./auth";
 import authRouter from './routes/auth';
 import newCarsRouter from './routes/cars';
+import bookmarksRouter from './routes/bookmarks';
 import { requireAuth, requireAdmin, optionalAuth } from './middleware/authMiddleware';
 
 // Helper functions for investment analysis
@@ -896,6 +897,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // New SPEC_02 compliant cars API (replaces old carsRouter)
   app.use(`${apiPrefix}/cars`, newCarsRouter);
   // app.use(`${apiPrefix}/cars`, carsRouter); // Legacy - commented out
+
+  // Bookmarks API (SPEC_02 Phase 2.4)
+  app.use(`${apiPrefix}/bookmarks`, bookmarksRouter);
 
   app.use(`${apiPrefix}/itinerary`, itineraryRouter);
   app.use(`${apiPrefix}/user`, userRouter);
