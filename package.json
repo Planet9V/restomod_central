@@ -26,6 +26,7 @@
     "import:parallel": "tsx scripts/parallel-batch-import.ts",
     "scraping:plan": "tsx scripts/scraping-coordinator.ts",
     "cars:report": "tsx scripts/daily-report.ts",
+    "demo:parallel": "tsx scripts/demo-parallel-import.ts",
     "test": "vitest run"
   },
   "dependencies": {

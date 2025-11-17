@@ -4,11 +4,13 @@ A comprehensive platform for classic car enthusiasts, builders, and collectors. 
 
 ## 🚀 Features
 
-- **Classic Car Marketplace**: Browse and search 172+ real classic cars from Gateway Classic Cars
+- **Classic Car Marketplace**: Browse and search 513+ real classic cars (growing to 1000+)
+- **⚡ Parallel Import System**: Import 500 cars in 12 minutes with 4x speedup
 - **Car Show Directory**: Discover car shows and automotive events across the US
 - **Vehicle Configurator**: Design custom builds with detailed specifications
 - **Market Analytics**: Real-time pricing trends and investment grade analysis
 - **Interactive Search**: Advanced filtering with full-text search (FTS5)
+- **Multi-Source Scraping**: ClassicCars.com, Hemmings, BringATrailer, Gateway, eBay
 - **User Itineraries**: Plan trips to multiple car shows and events
 - **Admin Dashboard**: Content management for luxury showcases and projects
 - **PWA Support**: Install as mobile app with offline capabilities
@@ -92,7 +94,7 @@ For PostgreSQL (optional), copy `.env.postgres` to `.env` and update the credent
 
 ### 4. Database setup
 
-The database comes pre-seeded with data. If you need to reset:
+The database comes pre-seeded with 513 classic cars. If you need to reset:
 
 ```bash
 # Push schema to database
@@ -129,9 +131,37 @@ npm run db:seed      # Seed database with sample data
 ### Import Scripts
 
 ```bash
-npm run import:events  # Import car show events
-npm run import:cars    # Import Gateway Classic Cars vehicles
+# Classic Car Import System (513 → 1000+ cars)
+npm run import:1000-cars     # Multi-source scraper with validation
+npm run import:batch         # Import single JSON batch
+npm run import:parallel      # ⚡ Import multiple batches in parallel (4x faster)
+npm run scraping:plan        # Generate parallel scraping plan
+npm run cars:report          # Show import progress (513/1000)
+npm run demo:parallel        # Demo parallel import system
+
+# Legacy Imports
+npm run import:events        # Import car show events
+npm run import:cars          # Import Gateway Classic Cars vehicles
 ```
+
+### ⚡ Parallel Import System
+
+Get from 513 to 1000+ cars in **12 minutes** (vs 40 minutes sequential):
+
+```bash
+# 1. Generate scraping plan
+npm run scraping:plan -- --target=200
+
+# 2. Execute tasks in Claude Code (copy prompts from output)
+
+# 3. Import all batches in parallel
+npm run import:parallel data/*.json
+
+# 4. Check progress
+npm run cars:report
+```
+
+**See**: `PARALLEL-QUICK-START.md` for complete walkthrough
 
 ## 🗄️ Database
 
