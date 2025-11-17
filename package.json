@@ -23,6 +23,8 @@
     "import:cars": "tsx scripts/import-gateway-vehicles.ts",
     "import:1000-cars": "tsx scripts/import-1000-cars.ts",
     "import:batch": "tsx scripts/import-scraped-batch.ts",
+    "import:parallel": "tsx scripts/parallel-batch-import.ts",
+    "scraping:plan": "tsx scripts/scraping-coordinator.ts",
     "cars:report": "tsx scripts/daily-report.ts",
     "test": "vitest run"
   },
