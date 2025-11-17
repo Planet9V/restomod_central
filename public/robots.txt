@@ -1,0 +1,30 @@
+# robots.txt for Restomod Central
+
+User-agent: *
+Allow: /
+
+# Disallow admin and auth pages
+Disallow: /admin
+Disallow: /auth
+Disallow: /api/
+
+# Disallow query parameters that don't change content
+Disallow: /*?*utm_source=
+Disallow: /*?*utm_medium=
+Disallow: /*?*utm_campaign=
+
+# Sitemap location
+Sitemap: https://restomodcentral.com/sitemap.xml
+
+# Crawl-delay for bots
+Crawl-delay: 1
+
+# Google
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+# Bing
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
