@@ -9,7 +9,15 @@
     "type": "git",
     "url": "https://github.com/Planet9V/restomod_central.git"
   },
-  "keywords": ["classic-cars", "restomod", "car-shows", "automotive", "react", "typescript", "drizzle-orm"],
+  "keywords": [
+    "classic-cars",
+    "restomod",
+    "car-shows",
+    "automotive",
+    "react",
+    "typescript",
+    "drizzle-orm"
+  ],
   "scripts": {
     "dev": "tsx server/index.ts",
     "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
@@ -72,6 +80,7 @@
     "bcryptjs": "^3.0.2",
     "better-sqlite3": "^9.6.0",
     "chart.js": "^4.4.9",
+    "cheerio": "^1.1.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",

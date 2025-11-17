@@ -27,8 +27,9 @@ async function dailyReport() {
 
   // Progress bar
   const barLength = 50;
-  const filledLength = Math.floor((total / goal) * barLength);
-  const bar = '█'.repeat(filledLength) + '░'.repeat(barLength - filledLength);
+  const filledLength = Math.min(Math.floor((total / goal) * barLength), barLength);
+  const emptyLength = Math.max(0, barLength - filledLength);
+  const bar = '█'.repeat(filledLength) + '░'.repeat(emptyLength);
   console.log(`📈 Progress: [${bar}] ${percentage.toFixed(1)}%\n`);
 
   // By source
