@@ -7,6 +7,7 @@ import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { LoadingFallback } from "@/components/ui/loading-fallback";
+import { SkipToContent, RouteAnnouncer } from "@/components/ui/accessibility";
 
 // Eagerly load critical pages (for first visit performance)
 import Home from "@/pages/Home";
@@ -47,6 +48,7 @@ function Router() {
   const [location] = useLocation();
   const [prevLocation, setPrevLocation] = useState("");
   const [transitionKey, setTransitionKey] = useState(0);
+  const [pageTitle, setPageTitle] = useState("Home");
 
   // Track route changes to trigger transitions
   useEffect(() => {
@@ -56,13 +58,20 @@ function Router() {
 
       // Scroll to top on page change for better UX
       window.scrollTo(0, 0);
+
+      // Update page title for screen readers
+      const title = location === "/" ? "Home" :
+        location.split("/").filter(Boolean).pop()?.replace(/-/g, " ") || "Page";
+      setPageTitle(title.charAt(0).toUpperCase() + title.slice(1));
     }
   }, [location, prevLocation]);
 
   return (
-    <Suspense fallback={<LoadingFallback />}>
-      <PageTransition key={transitionKey}>
-        <Switch>
+    <>
+      <RouteAnnouncer>{`Navigated to ${pageTitle}`}</RouteAnnouncer>
+      <Suspense fallback={<LoadingFallback />}>
+        <PageTransition key={transitionKey}>
+          <Switch>
           <Route path="/" component={Home} />
           <Route path="/projects" component={ProjectsPage} />
           <Route path="/projects/:id" component={ProjectDetail} />
@@ -97,9 +106,10 @@ function Router() {
           <Route path="/auth" component={AuthPage} />
           <Route path="/admin" component={() => <ProtectedRoute component={AdminDashboard} adminOnly />} />
           <Route component={NotFound} />
-        </Switch>
-      </PageTransition>
-    </Suspense>
+          </Switch>
+        </PageTransition>
+      </Suspense>
+    </>
   );
 }
 
@@ -108,10 +118,11 @@ function App() {
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
+          <SkipToContent />
           <div className="relative">
             <div className="grain-overlay"></div>
             <Header />
-            <main>
+            <main id="main-content" tabIndex={-1}>
               <Router />
             </main>
             <Footer />
