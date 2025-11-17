@@ -30,6 +30,7 @@ import { setupAuth, isAuthenticated, isAdmin, maybeIsAuthenticated } from "./aut
 import authRouter from './routes/auth';
 import newCarsRouter from './routes/cars';
 import bookmarksRouter from './routes/bookmarks';
+import aiRouter from './routes/ai';
 import { requireAuth, requireAdmin, optionalAuth } from './middleware/authMiddleware';
 
 // Helper functions for investment analysis
@@ -900,6 +901,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Bookmarks API (SPEC_02 Phase 2.4)
   app.use(`${apiPrefix}/bookmarks`, bookmarksRouter);
+
+  // AI Chat API (SPEC_04 Phase 3.3)
+  app.use(`${apiPrefix}/ai`, aiRouter);
 
   app.use(`${apiPrefix}/itinerary`, itineraryRouter);
   app.use(`${apiPrefix}/user`, userRouter);
