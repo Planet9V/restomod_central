@@ -5,8 +5,12 @@ import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-// JWT secret key
-const JWT_SECRET = process.env.JWT_SECRET || 'skinnyrod-secret-key';
+// JWT secret key - MUST be set in environment variables
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET || JWT_SECRET.length < 32) {
+  throw new Error('JWT_SECRET must be set in environment variables and be at least 32 characters long');
+}
 
 // Password hashing
 async function hashPassword(password: string): Promise<string> {
@@ -127,25 +131,44 @@ export function setupAuth(app: Express) {
   });
 }
 
-// Create initial admin user
+// Create initial admin user from environment variables
 async function createInitialAdmin() {
   try {
+    const adminEmail = process.env.ADMIN_EMAIL;
+    const adminPassword = process.env.ADMIN_PASSWORD;
+    const adminUsername = process.env.ADMIN_USERNAME || 'admin';
+
+    // Only create admin if credentials are provided
+    if (!adminEmail || !adminPassword) {
+      console.log('Skipping admin creation - ADMIN_EMAIL or ADMIN_PASSWORD not set');
+      return;
+    }
+
+    // Validate password strength
+    if (adminPassword.length < 8 ||
+        !/[A-Z]/.test(adminPassword) ||
+        !/[a-z]/.test(adminPassword) ||
+        !/[0-9]/.test(adminPassword)) {
+      console.error('ADMIN_PASSWORD must be at least 8 characters with uppercase, lowercase, and numbers');
+      return;
+    }
+
     const adminExists = await db.query.users.findFirst({
-      where: eq(users.email, 'jims67mustang@gmail.com')
+      where: eq(users.email, adminEmail)
     });
-    
+
     if (!adminExists) {
-      const hashedPassword = await hashPassword('Jimmy123$');
-      
+      const hashedPassword = await hashPassword(adminPassword);
+
       await db.insert(users).values({
-        username: 'admin',
-        email: 'jims67mustang@gmail.com',
+        username: adminUsername,
+        email: adminEmail,
         password: hashedPassword,
         isAdmin: true,
         createdAt: new Date(),
       });
-      
-      console.log('Initial admin user created');
+
+      console.log(`Initial admin user created: ${adminEmail}`);
     }
   } catch (error) {
     console.error('Error creating initial admin user:', error);

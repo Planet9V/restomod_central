@@ -79,40 +79,40 @@ export class VehicleSearchService {
         WHERE cars_for_sale_fts MATCH ${sanitizedQuery}
       `;
 
-      // Apply additional filters if provided
-      const conditions: string[] = [];
+      // Apply additional filters if provided using parameterized queries
+      const sqlConditions: any[] = [];
 
       if (filters?.category) {
-        conditions.push(`c.category = '${filters.category}'`);
+        sqlConditions.push(sql`c.category = ${filters.category}`);
       }
 
       if (filters?.region) {
-        conditions.push(`c.location_region = '${filters.region}'`);
+        sqlConditions.push(sql`c.location_region = ${filters.region}`);
       }
 
       if (filters?.priceMin !== undefined) {
-        conditions.push(`CAST(c.price AS NUMERIC) >= ${filters.priceMin}`);
+        sqlConditions.push(sql`CAST(c.price AS NUMERIC) >= ${filters.priceMin}`);
       }
 
       if (filters?.priceMax !== undefined) {
-        conditions.push(`CAST(c.price AS NUMERIC) <= ${filters.priceMax}`);
+        sqlConditions.push(sql`CAST(c.price AS NUMERIC) <= ${filters.priceMax}`);
       }
 
       if (filters?.yearMin !== undefined) {
-        conditions.push(`c.year >= ${filters.yearMin}`);
+        sqlConditions.push(sql`c.year >= ${filters.yearMin}`);
       }
 
       if (filters?.yearMax !== undefined) {
-        conditions.push(`c.year <= ${filters.yearMax}`);
+        sqlConditions.push(sql`c.year <= ${filters.yearMax}`);
       }
 
       if (filters?.investmentGrade) {
-        conditions.push(`c.investment_grade = '${filters.investmentGrade}'`);
+        sqlConditions.push(sql`c.investment_grade = ${filters.investmentGrade}`);
       }
 
-      // Combine filters
-      if (conditions.length > 0) {
-        searchQuery = sql`${searchQuery} AND ${sql.raw(conditions.join(' AND '))}`;
+      // Combine filters using SQL fragments (safe from injection)
+      if (sqlConditions.length > 0) {
+        searchQuery = sql`${searchQuery} AND ${sql.join(sqlConditions, sql` AND `)}`;
       }
 
       // Add ordering by relevance rank and pagination
@@ -133,8 +133,8 @@ export class VehicleSearchService {
         WHERE cars_for_sale_fts MATCH ${sanitizedQuery}
       `;
 
-      if (conditions.length > 0) {
-        countQuery = sql`${countQuery} AND ${sql.raw(conditions.join(' AND '))}`;
+      if (sqlConditions.length > 0) {
+        countQuery = sql`${countQuery} AND ${sql.join(sqlConditions, sql` AND `)}`;
       }
 
       const countResult = (await db.execute(countQuery)).rows[0] as { total: number };

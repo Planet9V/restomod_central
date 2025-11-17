@@ -14,8 +14,12 @@ import { db } from '../../db';
 import { users } from '../../shared/schema';
 import { eq } from 'drizzle-orm';
 
-// JWT Configuration
-const JWT_SECRET = process.env.JWT_SECRET || 'skinnyrod-secret-key';
+// JWT Configuration - MUST be set in environment variables
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET || JWT_SECRET.length < 32) {
+  throw new Error('JWT_SECRET must be set in environment variables and be at least 32 characters long');
+}
 
 /**
  * Extend Express Request to include user
@@ -111,7 +115,7 @@ export async function requireAuth(
         email: user.email,
         username: user.username,
         isAdmin: user.isAdmin,
-        isSuperAdmin: user.email === 'jims67mustang@gmail.com' // Hardcoded superadmin
+        isSuperAdmin: process.env.SUPERADMIN_EMAIL ? user.email === process.env.SUPERADMIN_EMAIL : false
       };
 
       next();
@@ -267,7 +271,7 @@ export async function optionalAuth(
           email: user.email,
           username: user.username,
           isAdmin: user.isAdmin,
-          isSuperAdmin: user.email === 'jims67mustang@gmail.com'
+          isSuperAdmin: process.env.SUPERADMIN_EMAIL ? user.email === process.env.SUPERADMIN_EMAIL : false
         };
       }
 

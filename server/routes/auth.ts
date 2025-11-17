@@ -37,9 +37,13 @@ setInterval(() => {
   }
 }, 3600000); // 1 hour
 
-// JWT Configuration
-const JWT_SECRET = process.env.JWT_SECRET || 'skinnyrod-secret-key';
+// JWT Configuration - MUST be set in environment variables
+const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRY = '7d'; // 7 days as per SPEC_02
+
+if (!JWT_SECRET || JWT_SECRET.length < 32) {
+  throw new Error('JWT_SECRET must be set in environment variables and be at least 32 characters long');
+}
 
 /**
  * Validation Schemas
