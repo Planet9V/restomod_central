@@ -31,6 +31,8 @@ import authRouter from './routes/auth';
 import newCarsRouter from './routes/cars';
 import bookmarksRouter from './routes/bookmarks';
 import aiRouter from './routes/ai';
+import vinRouter from './routes/api/vin';
+import mapboxRouter from './routes/mapbox';
 import { requireAuth, requireAdmin, optionalAuth } from './middleware/authMiddleware';
 
 // Helper functions for investment analysis
@@ -904,6 +906,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // AI Chat API (SPEC_04 Phase 3.3)
   app.use(`${apiPrefix}/ai`, aiRouter);
+
+  // VIN Decoder API (SPEC_07 NHTSA Integration)
+  app.use(`${apiPrefix}/vin`, vinRouter);
+
+  // Mapbox Geospatial API (SPEC_07 Mapbox Integration)
+  app.use(`${apiPrefix}/mapbox`, mapboxRouter);
 
   app.use(`${apiPrefix}/itinerary`, itineraryRouter);
   app.use(`${apiPrefix}/user`, userRouter);
